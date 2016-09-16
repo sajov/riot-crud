@@ -1,0 +1,1498 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "increment_id": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "coupon_code": {
+      "type": "null"
+    },
+    "protect_code": {
+      "type": "string"
+    },
+    "shipping_description": {
+      "type": "string"
+    },
+    "is_virtual": {
+      "type": "integer"
+    },
+    "store_id": {
+      "type": "null"
+    },
+    "customer_id": {
+      "type": "null"
+    },
+    "base_discount_amount": {
+      "type": "integer"
+    },
+    "base_discount_canceled": {
+      "type": "null"
+    },
+    "base_discount_invoiced": {
+      "type": "null"
+    },
+    "base_discount_refunded": {
+      "type": "null"
+    },
+    "base_grand_total": {
+      "type": "number"
+    },
+    "base_shipping_amount": {
+      "type": "number"
+    },
+    "base_shipping_canceled": {
+      "type": "null"
+    },
+    "base_shipping_invoiced": {
+      "type": "null"
+    },
+    "base_shipping_refunded": {
+      "type": "null"
+    },
+    "base_shipping_tax_amount": {
+      "type": "number"
+    },
+    "base_shipping_tax_refunded": {
+      "type": "null"
+    },
+    "base_subtotal": {
+      "type": "number"
+    },
+    "base_subtotal_canceled": {
+      "type": "null"
+    },
+    "base_subtotal_invoiced": {
+      "type": "null"
+    },
+    "base_subtotal_refunded": {
+      "type": "null"
+    },
+    "base_tax_amount": {
+      "type": "number"
+    },
+    "base_tax_canceled": {
+      "type": "null"
+    },
+    "base_tax_invoiced": {
+      "type": "null"
+    },
+    "base_tax_refunded": {
+      "type": "null"
+    },
+    "base_to_global_rate": {
+      "type": "integer"
+    },
+    "base_to_order_rate": {
+      "type": "integer"
+    },
+    "base_total_canceled": {
+      "type": "null"
+    },
+    "base_total_invoiced": {
+      "type": "null"
+    },
+    "base_total_invoiced_cost": {
+      "type": "null"
+    },
+    "base_total_offline_refunded": {
+      "type": "null"
+    },
+    "base_total_online_refunded": {
+      "type": "null"
+    },
+    "base_total_paid": {
+      "type": "null"
+    },
+    "base_total_qty_ordered": {
+      "type": "null"
+    },
+    "base_total_refunded": {
+      "type": "null"
+    },
+    "discount_amount": {
+      "type": "integer"
+    },
+    "discount_canceled": {
+      "type": "null"
+    },
+    "discount_invoiced": {
+      "type": "null"
+    },
+    "discount_refunded": {
+      "type": "null"
+    },
+    "grand_total": {
+      "type": "number"
+    },
+    "shipping_amount": {
+      "type": "number"
+    },
+    "shipping_canceled": {
+      "type": "null"
+    },
+    "shipping_invoiced": {
+      "type": "null"
+    },
+    "shipping_refunded": {
+      "type": "null"
+    },
+    "shipping_tax_amount": {
+      "type": "number"
+    },
+    "shipping_tax_refunded": {
+      "type": "null"
+    },
+    "store_to_base_rate": {
+      "type": "integer"
+    },
+    "store_to_order_rate": {
+      "type": "integer"
+    },
+    "subtotal": {
+      "type": "number"
+    },
+    "subtotal_canceled": {
+      "type": "null"
+    },
+    "subtotal_invoiced": {
+      "type": "null"
+    },
+    "subtotal_refunded": {
+      "type": "null"
+    },
+    "tax_amount": {
+      "type": "number"
+    },
+    "tax_canceled": {
+      "type": "null"
+    },
+    "tax_invoiced": {
+      "type": "null"
+    },
+    "tax_refunded": {
+      "type": "null"
+    },
+    "total_canceled": {
+      "type": "null"
+    },
+    "total_invoiced": {
+      "type": "null"
+    },
+    "total_offline_refunded": {
+      "type": "null"
+    },
+    "total_online_refunded": {
+      "type": "null"
+    },
+    "total_paid": {
+      "type": "null"
+    },
+    "total_qty_ordered": {
+      "type": "integer"
+    },
+    "total_refunded": {
+      "type": "null"
+    },
+    "can_ship_partially": {
+      "type": "null"
+    },
+    "can_ship_partially_item": {
+      "type": "null"
+    },
+    "customer_is_guest": {
+      "type": "integer"
+    },
+    "customer_note_notify": {
+      "type": "integer"
+    },
+    "billing_address_id": {
+      "type": "integer"
+    },
+    "customer_group_id": {
+      "type": "integer"
+    },
+    "edit_increment": {
+      "type": "null"
+    },
+    "email_sent": {
+      "type": "null"
+    },
+    "forced_shipment_with_invoice": {
+      "type": "null"
+    },
+    "gift_message_id": {
+      "type": "null"
+    },
+    "payment_auth_expiration": {
+      "type": "null"
+    },
+    "paypal_ipn_customer_notified": {
+      "type": "null"
+    },
+    "quote_address_id": {
+      "type": "null"
+    },
+    "quote_id": {
+      "type": "integer"
+    },
+    "shipping_address_id": {
+      "type": "integer"
+    },
+    "adjustment_negative": {
+      "type": "null"
+    },
+    "adjustment_positive": {
+      "type": "null"
+    },
+    "base_adjustment_negative": {
+      "type": "null"
+    },
+    "base_adjustment_positive": {
+      "type": "null"
+    },
+    "base_shipping_discount_amount": {
+      "type": "integer"
+    },
+    "base_subtotal_incl_tax": {
+      "type": "number"
+    },
+    "base_total_due": {
+      "type": "null"
+    },
+    "payment_authorization_amount": {
+      "type": "null"
+    },
+    "shipping_discount_amount": {
+      "type": "integer"
+    },
+    "subtotal_incl_tax": {
+      "type": "number"
+    },
+    "total_due": {
+      "type": "null"
+    },
+    "weight": {
+      "type": "integer"
+    },
+    "customer_dob": {
+      "type": "null"
+    },
+    "applied_rule_ids": {
+      "type": "null"
+    },
+    "base_currency_code": {
+      "type": "string"
+    },
+    "customer_email": {
+      "type": "string"
+    },
+    "customer_firstname": {
+      "type": "string"
+    },
+    "customer_lastname": {
+      "type": "string"
+    },
+    "customer_middlename": {
+      "type": "null"
+    },
+    "customer_prefix": {
+      "type": "null"
+    },
+    "customer_suffix": {
+      "type": "null"
+    },
+    "customer_taxvat": {
+      "type": "null"
+    },
+    "discount_description": {
+      "type": "null"
+    },
+    "ext_customer_id": {
+      "type": "null"
+    },
+    "ext_order_id": {
+      "type": "null"
+    },
+    "global_currency_code": {
+      "type": "string"
+    },
+    "hold_before_state": {
+      "type": "null"
+    },
+    "hold_before_status": {
+      "type": "null"
+    },
+    "order_currency_code": {
+      "type": "string"
+    },
+    "original_increment_id": {
+      "type": "null"
+    },
+    "relation_child_id": {
+      "type": "null"
+    },
+    "relation_child_real_id": {
+      "type": "null"
+    },
+    "relation_parent_id": {
+      "type": "null"
+    },
+    "relation_parent_real_id": {
+      "type": "null"
+    },
+    "remote_ip": {
+      "type": "string"
+    },
+    "shipping_method": {
+      "title": "Versandart",
+      "type": "string",
+      "enum": [
+                "Flat Rate - Fixed",
+                "DHL",
+                "Andere"
+              ],
+      "default": "Andere"
+    },
+    "store_currency_code": {
+      "type": "string"
+    },
+    "store_name": {
+      "type": "string"
+    },
+    "x_forwarded_for": {
+      "type": "null"
+    },
+    "customer_note": {
+      "type": "null"
+    },
+    "total_item_count": {
+      "type": "integer"
+    },
+    "customer_gender": {
+      "type": "null"
+    },
+    "hidden_tax_amount": {
+      "type": "integer"
+    },
+    "base_hidden_tax_amount": {
+      "type": "integer"
+    },
+    "shipping_hidden_tax_amount": {
+      "type": "integer"
+    },
+    "base_shipping_hidden_tax_amnt": {
+      "type": "integer"
+    },
+    "hidden_tax_invoiced": {
+      "type": "null"
+    },
+    "base_hidden_tax_invoiced": {
+      "type": "null"
+    },
+    "hidden_tax_refunded": {
+      "type": "null"
+    },
+    "base_hidden_tax_refunded": {
+      "type": "null"
+    },
+    "shipping_incl_tax": {
+      "type": "number"
+    },
+    "base_shipping_incl_tax": {
+      "type": "number"
+    },
+    "cod_fee": {
+      "type": "null"
+    },
+    "base_cod_fee": {
+      "type": "null"
+    },
+    "cod_fee_invoiced": {
+      "type": "null"
+    },
+    "base_cod_fee_invoiced": {
+      "type": "null"
+    },
+    "cod_tax_amount": {
+      "type": "null"
+    },
+    "base_cod_tax_amount": {
+      "type": "null"
+    },
+    "cod_tax_amount_invoiced": {
+      "type": "null"
+    },
+    "base_cod_tax_amount_invoiced": {
+      "type": "null"
+    },
+    "coupon_rule_name": {
+      "type": "null"
+    },
+    "giftcert_code": {
+      "type": "null"
+    },
+    "giftcert_amount": {
+      "type": "null"
+    },
+    "base_giftcert_amount": {
+      "type": "null"
+    },
+    "giftcert_amount_invoiced": {
+      "type": "null"
+    },
+    "base_giftcert_amount_invoiced": {
+      "type": "null"
+    },
+    "giftcert_amount_credited": {
+      "type": "null"
+    },
+    "base_giftcert_amount_credited": {
+      "type": "null"
+    },
+    "payment_authorization_expiration": {
+      "type": "null"
+    },
+    "forced_do_shipment_with_invoice": {
+      "type": "null"
+    },
+    "base_shipping_hidden_tax_amount": {
+      "type": "integer"
+    },
+    "shipping_address": {
+      "type": "object",
+      "properties": {
+        "parent_id": {
+          "type": "string"
+        },
+        "customer_address_id": {
+          "type": "null"
+        },
+        "quote_address_id": {
+          "type": "null"
+        },
+        "region_id": {
+          "type": "null"
+        },
+        "customer_id": {
+          "type": "null"
+        },
+        "fax": {
+          "type": "null"
+        },
+        "region": {
+          "type": "null"
+        },
+        "postcode": {
+          "type": "string"
+        },
+        "lastname": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "telephone": {
+          "type": "string"
+        },
+        "country_id": {
+          "type": "string"
+        },
+        "firstname": {
+          "type": "string"
+        },
+        "address_type": {
+          "type": "string"
+        },
+        "prefix": {
+          "type": "null"
+        },
+        "middlename": {
+          "type": "null"
+        },
+        "suffix": {
+          "type": "null"
+        },
+        "company": {
+          "type": "null"
+        },
+        "vat_id": {
+          "type": "null"
+        },
+        "vat_is_valid": {
+          "type": "null"
+        },
+        "vat_request_id": {
+          "type": "null"
+        },
+        "vat_request_date": {
+          "type": "null"
+        },
+        "vat_request_success": {
+          "type": "null"
+        },
+        "address_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "parent_id",
+        "customer_address_id",
+        "quote_address_id",
+        "region_id",
+        "customer_id",
+        "fax",
+        "region",
+        "postcode",
+        "lastname",
+        "street",
+        "city",
+        "email",
+        "telephone",
+        "country_id",
+        "firstname",
+        "address_type",
+        "prefix",
+        "middlename",
+        "suffix",
+        "company",
+        "vat_id",
+        "vat_is_valid",
+        "vat_request_id",
+        "vat_request_date",
+        "vat_request_success",
+        "address_id"
+      ]
+    },
+    "billing_address": {
+      "type": "object",
+      "properties": {
+        "parent_id": {
+          "type": "string"
+        },
+        "customer_address_id": {
+          "type": "null"
+        },
+        "quote_address_id": {
+          "type": "null"
+        },
+        "region_id": {
+          "type": "null"
+        },
+        "customer_id": {
+          "type": "null"
+        },
+        "fax": {
+          "type": "null"
+        },
+        "region": {
+          "type": "null"
+        },
+        "postcode": {
+          "type": "string"
+        },
+        "lastname": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "telephone": {
+          "type": "string"
+        },
+        "country_id": {
+          "type": "string"
+        },
+        "firstname": {
+          "type": "string"
+        },
+        "address_type": {
+          "type": "string"
+        },
+        "prefix": {
+          "type": "null"
+        },
+        "middlename": {
+          "type": "null"
+        },
+        "suffix": {
+          "type": "null"
+        },
+        "company": {
+          "type": "null"
+        },
+        "vat_id": {
+          "type": "null"
+        },
+        "vat_is_valid": {
+          "type": "null"
+        },
+        "vat_request_id": {
+          "type": "null"
+        },
+        "vat_request_date": {
+          "type": "null"
+        },
+        "vat_request_success": {
+          "type": "null"
+        },
+        "address_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "parent_id",
+        "customer_address_id",
+        "quote_address_id",
+        "region_id",
+        "customer_id",
+        "fax",
+        "region",
+        "postcode",
+        "lastname",
+        "street",
+        "city",
+        "email",
+        "telephone",
+        "country_id",
+        "firstname",
+        "address_type",
+        "prefix",
+        "middlename",
+        "suffix",
+        "company",
+        "vat_id",
+        "vat_is_valid",
+        "vat_request_id",
+        "vat_request_date",
+        "vat_request_success",
+        "address_id"
+      ]
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item_id": {
+            "type": "string"
+          },
+          "order_id": {
+            "type": "string"
+          },
+          "parent_item_id": {
+            "type": "null"
+          },
+          "quote_item_id": {
+            "type": "string"
+          },
+          "store_id": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          },
+          "product_id": {
+            "type": "string"
+          },
+          "product_type": {
+            "type": "string"
+          },
+          "product_options": {
+            "type": "string"
+          },
+          "weight": {
+            "type": "string"
+          },
+          "is_virtual": {
+            "type": "string"
+          },
+          "sku": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "null"
+          },
+          "applied_rule_ids": {
+            "type": "null"
+          },
+          "additional_data": {
+            "type": "null"
+          },
+          "free_shipping": {
+            "type": "string"
+          },
+          "is_qty_decimal": {
+            "type": "string"
+          },
+          "no_discount": {
+            "type": "string"
+          },
+          "qty_backordered": {
+            "type": "null"
+          },
+          "qty_canceled": {
+            "type": "string"
+          },
+          "qty_invoiced": {
+            "type": "string"
+          },
+          "qty_ordered": {
+            "type": "integer"
+          },
+          "qty_refunded": {
+            "type": "string"
+          },
+          "qty_shipped": {
+            "type": "string"
+          },
+          "base_cost": {
+            "type": "null"
+          },
+          "price": {
+            "type": "string"
+          },
+          "base_price": {
+            "type": "string"
+          },
+          "original_price": {
+            "type": "string"
+          },
+          "base_original_price": {
+            "type": "string"
+          },
+          "tax_percent": {
+            "type": "string"
+          },
+          "tax_amount": {
+            "type": "string"
+          },
+          "base_tax_amount": {
+            "type": "string"
+          },
+          "tax_invoiced": {
+            "type": "string"
+          },
+          "base_tax_invoiced": {
+            "type": "string"
+          },
+          "discount_percent": {
+            "type": "string"
+          },
+          "discount_amount": {
+            "type": "string"
+          },
+          "base_discount_amount": {
+            "type": "string"
+          },
+          "discount_invoiced": {
+            "type": "string"
+          },
+          "base_discount_invoiced": {
+            "type": "string"
+          },
+          "amount_refunded": {
+            "type": "string"
+          },
+          "base_amount_refunded": {
+            "type": "string"
+          },
+          "row_total": {
+            "type": "string"
+          },
+          "base_row_total": {
+            "type": "string"
+          },
+          "row_invoiced": {
+            "type": "string"
+          },
+          "base_row_invoiced": {
+            "type": "string"
+          },
+          "row_weight": {
+            "type": "string"
+          },
+          "gift_message_id": {
+            "type": "null"
+          },
+          "gift_message_available": {
+            "type": "string"
+          },
+          "base_tax_before_discount": {
+            "type": "null"
+          },
+          "tax_before_discount": {
+            "type": "null"
+          },
+          "ext_order_item_id": {
+            "type": "null"
+          },
+          "weee_tax_applied": {
+            "type": "string"
+          },
+          "weee_tax_applied_amount": {
+            "type": "string"
+          },
+          "weee_tax_applied_row_amount": {
+            "type": "string"
+          },
+          "base_weee_tax_applied_amount": {
+            "type": "string"
+          },
+          "base_weee_tax_applied_row_amnt": {
+            "type": "string"
+          },
+          "base_weee_tax_applied_row_amount": {
+            "type": "string"
+          },
+          "weee_tax_disposition": {
+            "type": "string"
+          },
+          "weee_tax_row_disposition": {
+            "type": "string"
+          },
+          "base_weee_tax_disposition": {
+            "type": "string"
+          },
+          "base_weee_tax_row_disposition": {
+            "type": "string"
+          },
+          "locked_do_invoice": {
+            "type": "null"
+          },
+          "locked_do_ship": {
+            "type": "null"
+          },
+          "price_incl_tax": {
+            "type": "string"
+          },
+          "base_price_incl_tax": {
+            "type": "string"
+          },
+          "row_total_incl_tax": {
+            "type": "string"
+          },
+          "base_row_total_incl_tax": {
+            "type": "string"
+          },
+          "hidden_tax_amount": {
+            "type": "null"
+          },
+          "base_hidden_tax_amount": {
+            "type": "null"
+          },
+          "hidden_tax_invoiced": {
+            "type": "null"
+          },
+          "base_hidden_tax_invoiced": {
+            "type": "null"
+          },
+          "hidden_tax_refunded": {
+            "type": "null"
+          },
+          "base_hidden_tax_refunded": {
+            "type": "null"
+          },
+          "is_nominal": {
+            "type": "string"
+          },
+          "tax_canceled": {
+            "type": "null"
+          },
+          "hidden_tax_canceled": {
+            "type": "null"
+          },
+          "tax_refunded": {
+            "type": "null"
+          },
+          "base_tax_refunded": {
+            "type": "null"
+          },
+          "discount_refunded": {
+            "type": "null"
+          },
+          "base_discount_refunded": {
+            "type": "null"
+          },
+          "img": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "item_id",
+          "order_id",
+          "parent_item_id",
+          "quote_item_id",
+          "store_id",
+          "created_at",
+          "updated_at",
+          "product_id",
+          "product_type",
+          "product_options",
+          "weight",
+          "is_virtual",
+          "sku",
+          "name",
+          "description",
+          "applied_rule_ids",
+          "additional_data",
+          "free_shipping",
+          "is_qty_decimal",
+          "no_discount",
+          "qty_backordered",
+          "qty_canceled",
+          "qty_invoiced",
+          "qty_ordered",
+          "qty_refunded",
+          "qty_shipped",
+          "base_cost",
+          "price",
+          "base_price",
+          "original_price",
+          "base_original_price",
+          "tax_percent",
+          "tax_amount",
+          "base_tax_amount",
+          "tax_invoiced",
+          "base_tax_invoiced",
+          "discount_percent",
+          "discount_amount",
+          "base_discount_amount",
+          "discount_invoiced",
+          "base_discount_invoiced",
+          "amount_refunded",
+          "base_amount_refunded",
+          "row_total",
+          "base_row_total",
+          "row_invoiced",
+          "base_row_invoiced",
+          "row_weight",
+          "gift_message_id",
+          "gift_message_available",
+          "base_tax_before_discount",
+          "tax_before_discount",
+          "ext_order_item_id",
+          "weee_tax_applied",
+          "weee_tax_applied_amount",
+          "weee_tax_applied_row_amount",
+          "base_weee_tax_applied_amount",
+          "base_weee_tax_applied_row_amnt",
+          "base_weee_tax_applied_row_amount",
+          "weee_tax_disposition",
+          "weee_tax_row_disposition",
+          "base_weee_tax_disposition",
+          "base_weee_tax_row_disposition",
+          "locked_do_invoice",
+          "locked_do_ship",
+          "price_incl_tax",
+          "base_price_incl_tax",
+          "row_total_incl_tax",
+          "base_row_total_incl_tax",
+          "hidden_tax_amount",
+          "base_hidden_tax_amount",
+          "hidden_tax_invoiced",
+          "base_hidden_tax_invoiced",
+          "hidden_tax_refunded",
+          "base_hidden_tax_refunded",
+          "is_nominal",
+          "tax_canceled",
+          "hidden_tax_canceled",
+          "tax_refunded",
+          "base_tax_refunded",
+          "discount_refunded",
+          "base_discount_refunded",
+          "img"
+        ]
+      }
+    },
+    "payment": {
+      "type": "object",
+      "properties": {
+        "parent_id": {
+          "type": "string"
+        },
+        "base_shipping_captured": {
+          "type": "null"
+        },
+        "shipping_captured": {
+          "type": "null"
+        },
+        "amount_refunded": {
+          "type": "null"
+        },
+        "base_amount_paid": {
+          "type": "null"
+        },
+        "amount_canceled": {
+          "type": "null"
+        },
+        "base_amount_authorized": {
+          "type": "null"
+        },
+        "base_amount_paid_online": {
+          "type": "null"
+        },
+        "base_amount_refunded_online": {
+          "type": "null"
+        },
+        "base_shipping_amount": {
+          "type": "string"
+        },
+        "shipping_amount": {
+          "type": "string"
+        },
+        "amount_paid": {
+          "type": "null"
+        },
+        "amount_authorized": {
+          "type": "null"
+        },
+        "base_amount_ordered": {
+          "type": "string"
+        },
+        "base_shipping_refunded": {
+          "type": "null"
+        },
+        "shipping_refunded": {
+          "type": "null"
+        },
+        "base_amount_refunded": {
+          "type": "null"
+        },
+        "amount_ordered": {
+          "type": "string"
+        },
+        "base_amount_canceled": {
+          "type": "null"
+        },
+        "ideal_transaction_checked": {
+          "type": "null"
+        },
+        "quote_payment_id": {
+          "type": "null"
+        },
+        "additional_data": {
+          "type": "null"
+        },
+        "cc_exp_month": {
+          "type": "string"
+        },
+        "cc_ss_start_year": {
+          "type": "string"
+        },
+        "echeck_bank_name": {
+          "type": "null"
+        },
+        "method": {
+          "type": "string"
+        },
+        "cc_debug_request_body": {
+          "type": "null"
+        },
+        "cc_secure_verify": {
+          "type": "null"
+        },
+        "cybersource_token": {
+          "type": "null"
+        },
+        "ideal_issuer_title": {
+          "type": "null"
+        },
+        "protection_eligibility": {
+          "type": "null"
+        },
+        "cc_approval": {
+          "type": "null"
+        },
+        "cc_last4": {
+          "type": "null"
+        },
+        "cc_status_description": {
+          "type": "null"
+        },
+        "echeck_type": {
+          "type": "null"
+        },
+        "paybox_question_number": {
+          "type": "null"
+        },
+        "cc_debug_response_serialized": {
+          "type": "null"
+        },
+        "cc_ss_start_month": {
+          "type": "string"
+        },
+        "echeck_account_type": {
+          "type": "null"
+        },
+        "last_trans_id": {
+          "type": "null"
+        },
+        "cc_cid_status": {
+          "type": "null"
+        },
+        "cc_owner": {
+          "type": "null"
+        },
+        "cc_type": {
+          "type": "null"
+        },
+        "ideal_issuer_id": {
+          "type": "null"
+        },
+        "po_number": {
+          "type": "null"
+        },
+        "cc_exp_year": {
+          "type": "string"
+        },
+        "cc_status": {
+          "type": "null"
+        },
+        "echeck_routing_number": {
+          "type": "null"
+        },
+        "account_status": {
+          "type": "null"
+        },
+        "anet_trans_method": {
+          "type": "null"
+        },
+        "cc_debug_response_body": {
+          "type": "null"
+        },
+        "cc_ss_issue": {
+          "type": "null"
+        },
+        "echeck_account_name": {
+          "type": "null"
+        },
+        "cc_avs_status": {
+          "type": "null"
+        },
+        "cc_number_enc": {
+          "type": "null"
+        },
+        "cc_trans_id": {
+          "type": "null"
+        },
+        "flo2cash_account_id": {
+          "type": "null"
+        },
+        "paybox_request_number": {
+          "type": "null"
+        },
+        "address_status": {
+          "type": "null"
+        },
+        "additional_information": {
+          "type": "array",
+          "items": {}
+        },
+        "payment_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "parent_id",
+        "base_shipping_captured",
+        "shipping_captured",
+        "amount_refunded",
+        "base_amount_paid",
+        "amount_canceled",
+        "base_amount_authorized",
+        "base_amount_paid_online",
+        "base_amount_refunded_online",
+        "base_shipping_amount",
+        "shipping_amount",
+        "amount_paid",
+        "amount_authorized",
+        "base_amount_ordered",
+        "base_shipping_refunded",
+        "shipping_refunded",
+        "base_amount_refunded",
+        "amount_ordered",
+        "base_amount_canceled",
+        "ideal_transaction_checked",
+        "quote_payment_id",
+        "additional_data",
+        "cc_exp_month",
+        "cc_ss_start_year",
+        "echeck_bank_name",
+        "method",
+        "cc_debug_request_body",
+        "cc_secure_verify",
+        "cybersource_token",
+        "ideal_issuer_title",
+        "protection_eligibility",
+        "cc_approval",
+        "cc_last4",
+        "cc_status_description",
+        "echeck_type",
+        "paybox_question_number",
+        "cc_debug_response_serialized",
+        "cc_ss_start_month",
+        "echeck_account_type",
+        "last_trans_id",
+        "cc_cid_status",
+        "cc_owner",
+        "cc_type",
+        "ideal_issuer_id",
+        "po_number",
+        "cc_exp_year",
+        "cc_status",
+        "echeck_routing_number",
+        "account_status",
+        "anet_trans_method",
+        "cc_debug_response_body",
+        "cc_ss_issue",
+        "echeck_account_name",
+        "cc_avs_status",
+        "cc_number_enc",
+        "cc_trans_id",
+        "flo2cash_account_id",
+        "paybox_request_number",
+        "address_status",
+        "additional_information",
+        "payment_id"
+      ]
+    },
+    "status_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "parent_id": {
+            "type": "string"
+          },
+          "is_customer_notified": {
+            "type": "string"
+          },
+          "is_visible_on_front": {
+            "type": "string"
+          },
+          "comment": {
+            "type": "null"
+          },
+          "status": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "entity_name": {
+            "type": "string"
+          },
+          "store_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "parent_id",
+          "is_customer_notified",
+          "is_visible_on_front",
+          "comment",
+          "status",
+          "created_at",
+          "entity_name",
+          "store_id"
+        ]
+      }
+    },
+    "createdAt": {
+      "type": "string"
+    },
+    "updatedAt": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "increment_id",
+    "state",
+    "status",
+    "coupon_code",
+    "protect_code",
+    "shipping_description",
+    "is_virtual",
+    "store_id",
+    "customer_id",
+    "base_discount_amount",
+    "base_discount_canceled",
+    "base_discount_invoiced",
+    "base_discount_refunded",
+    "base_grand_total",
+    "base_shipping_amount",
+    "base_shipping_canceled",
+    "base_shipping_invoiced",
+    "base_shipping_refunded",
+    "base_shipping_tax_amount",
+    "base_shipping_tax_refunded",
+    "base_subtotal",
+    "base_subtotal_canceled",
+    "base_subtotal_invoiced",
+    "base_subtotal_refunded",
+    "base_tax_amount",
+    "base_tax_canceled",
+    "base_tax_invoiced",
+    "base_tax_refunded",
+    "base_to_global_rate",
+    "base_to_order_rate",
+    "base_total_canceled",
+    "base_total_invoiced",
+    "base_total_invoiced_cost",
+    "base_total_offline_refunded",
+    "base_total_online_refunded",
+    "base_total_paid",
+    "base_total_qty_ordered",
+    "base_total_refunded",
+    "discount_amount",
+    "discount_canceled",
+    "discount_invoiced",
+    "discount_refunded",
+    "grand_total",
+    "shipping_amount",
+    "shipping_canceled",
+    "shipping_invoiced",
+    "shipping_refunded",
+    "shipping_tax_amount",
+    "shipping_tax_refunded",
+    "store_to_base_rate",
+    "store_to_order_rate",
+    "subtotal",
+    "subtotal_canceled",
+    "subtotal_invoiced",
+    "subtotal_refunded",
+    "tax_amount",
+    "tax_canceled",
+    "tax_invoiced",
+    "tax_refunded",
+    "total_canceled",
+    "total_invoiced",
+    "total_offline_refunded",
+    "total_online_refunded",
+    "total_paid",
+    "total_qty_ordered",
+    "total_refunded",
+    "can_ship_partially",
+    "can_ship_partially_item",
+    "customer_is_guest",
+    "customer_note_notify",
+    "billing_address_id",
+    "customer_group_id",
+    "edit_increment",
+    "email_sent",
+    "forced_shipment_with_invoice",
+    "gift_message_id",
+    "payment_auth_expiration",
+    "paypal_ipn_customer_notified",
+    "quote_address_id",
+    "quote_id",
+    "shipping_address_id",
+    "adjustment_negative",
+    "adjustment_positive",
+    "base_adjustment_negative",
+    "base_adjustment_positive",
+    "base_shipping_discount_amount",
+    "base_subtotal_incl_tax",
+    "base_total_due",
+    "payment_authorization_amount",
+    "shipping_discount_amount",
+    "subtotal_incl_tax",
+    "total_due",
+    "weight",
+    "customer_dob",
+    "applied_rule_ids",
+    "base_currency_code",
+    "customer_email",
+    "customer_firstname",
+    "customer_lastname",
+    "customer_middlename",
+    "customer_prefix",
+    "customer_suffix",
+    "customer_taxvat",
+    "discount_description",
+    "ext_customer_id",
+    "ext_order_id",
+    "global_currency_code",
+    "hold_before_state",
+    "hold_before_status",
+    "order_currency_code",
+    "original_increment_id",
+    "relation_child_id",
+    "relation_child_real_id",
+    "relation_parent_id",
+    "relation_parent_real_id",
+    "remote_ip",
+    "shipping_method",
+    "store_currency_code",
+    "store_name",
+    "x_forwarded_for",
+    "customer_note",
+    "total_item_count",
+    "customer_gender",
+    "hidden_tax_amount",
+    "base_hidden_tax_amount",
+    "shipping_hidden_tax_amount",
+    "base_shipping_hidden_tax_amnt",
+    "hidden_tax_invoiced",
+    "base_hidden_tax_invoiced",
+    "hidden_tax_refunded",
+    "base_hidden_tax_refunded",
+    "shipping_incl_tax",
+    "base_shipping_incl_tax",
+    "cod_fee",
+    "base_cod_fee",
+    "cod_fee_invoiced",
+    "base_cod_fee_invoiced",
+    "cod_tax_amount",
+    "base_cod_tax_amount",
+    "cod_tax_amount_invoiced",
+    "base_cod_tax_amount_invoiced",
+    "coupon_rule_name",
+    "giftcert_code",
+    "giftcert_amount",
+    "base_giftcert_amount",
+    "giftcert_amount_invoiced",
+    "base_giftcert_amount_invoiced",
+    "giftcert_amount_credited",
+    "base_giftcert_amount_credited",
+    "payment_authorization_expiration",
+    "forced_do_shipment_with_invoice",
+    "base_shipping_hidden_tax_amount",
+    "shipping_address",
+    "billing_address",
+    "items",
+    "payment",
+    "status_history",
+    "createdAt",
+    "updatedAt"
+  ]
+}

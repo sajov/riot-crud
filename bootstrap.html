@@ -1,0 +1,72 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riot Foundation Admin</title>
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css">
+    <style type="text/css">
+        /* This is a compiled file, you should be editing the file in the templates directory */
+        .pace {
+          -webkit-pointer-events: none;
+          pointer-events: none;
+
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          user-select: none;
+
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+
+          -webkit-transform: translate3d(0, -50px, 0);
+          -ms-transform: translate3d(0, -50px, 0);
+          transform: translate3d(0, -50px, 0);
+
+          -webkit-transition: -webkit-transform .5s ease-out;
+          -ms-transition: -webkit-transform .5s ease-out;
+          transition: transform .5s ease-out;
+        }
+
+        .pace.pace-active {
+          -webkit-transform: translate3d(0, 0, 0);
+          -ms-transform: translate3d(0, 0, 0);
+          transform: translate3d(0, 0, 0);
+        }
+
+        .pace .pace-progress {
+          display: block;
+          position: fixed;
+          z-index: 10010;
+          top: 0;
+          right: 100%;
+          width: 100%;
+          height: 100px;
+          background: #2299dd;
+
+          pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="pace"></div>
+    <layout></layout>
+
+    <script src="bower_components/PACE/pace.min.js"></script>
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="bower_components/script.js/dist/script.min.js"></script>
+    <script src="bower_components/riot/riot+compiler.min.js"></script>
+    <script src="bower_components/riotux/riotux.js"></script>
+    <script src="bower_components/qwest/qwest.min.js"></script>
+    <script src="js/riotcrud.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
+
+
+

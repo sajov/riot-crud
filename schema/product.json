@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "title": "Products",
+  "properties": {
+    "id": {
+      "type": "number"
+    },
+    "sku": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "image": {
+      "type": "string",
+      "links": [
+              {
+                "href": "https://www.medic-world.com/img/130x130/{{self}}",
+                "mediaType": "image/*"
+              }
+            ]
+    },
+    "price_euro": {
+      "type": "number"
+    },
+    "price_dollar": {
+      "type": "number"
+    },
+    "active": {
+      "type": "number"
+    },
+    "category": {
+      "type": "string",
+      "format": "html",
+          "options": {
+          "wysiwyg": true
+      }
+    },
+    "colors": {
+      "type": "string",
+      "format": "color"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "datetime-local"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "datetime-local"
+    }
+  },
+  "required": [
+    "id",
+    "sku",
+    "name",
+    "image",
+    "price_euro",
+    "price_dollar",
+    "active",
+    "category",
+    "colors",
+    "createdAt",
+    "updatedAt"
+  ]
+}
