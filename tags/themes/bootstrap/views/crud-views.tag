@@ -137,10 +137,10 @@
             // console.log(this.opts);
             // console.log('tag modal this.opts',typeof this.opts.id);
             if(typeof this.opts.id !== 'undefined' && this.state) {
-              $('#destroyModal').foundation('open');
+              // $('#destroyModal').foundation('open');
               this.state = false;
             } else {
-                $('#destroyModal').foundation('close');
+                // $('#destroyModal').foundation('close');
             }
         });
 
@@ -161,8 +161,8 @@
         this.on('updated', function(){
             console.log('modal updated');
             console.log(this.opts);
-            if(typeof this.opts.id !== 'undefined')
-              $('#addedModal').foundation('open');
+            // if(typeof this.opts.id !== 'undefined')
+              // $('#addedModal').foundation('open');
         });
 
     </script>

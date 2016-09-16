@@ -40,6 +40,51 @@ $script.ready('layout', function() {
 
     });
 
+    // RiotCrud.defaults({
+    //     baseUrl: 'http://localhost:3030',
+    //     target: 'div#content',
+    //     requestFn: function(collection, view, id, params) {return {}},
+    //     responseFn: function(collection, view, id, params, response) {};       ,
+    // });
+
+    // RiotCrud.addModel({
+    //     title: 'Products',
+    //     schema: 'product.json', // string || object ?? || array [{list:'list-tag'}] ?? default
+    //     target: 'div#content', // optional
+    //     endpoint: '/api/product',
+    //     tag: 'product-view'
+    //     views: { // mixed object || array ['list','show','create','update','delete'] ???
+    //         list: {
+    //             // optional
+    //             // title: 'Products',
+    //             // schema: 'product.json', // string || object ?? || array [{list:'list-tag'}] ?? default
+    //             // target: 'div#content', // optional
+    //             // endpoint: '/api/product/list',
+    //             // tag: 'product-view'
+    //         },
+    //         view:{
+
+    //         }
+
+    //     },
+    // });
+
+    // riot.mount('side-menu', {
+    //     routes: riotCrudController.getRoutes()
+    // });
+
+    // RiotCrud.baseUrl('http://localhost:3030');
+    // RiotCrud.target('div#content');
+    // RiotCrud.requestFn(function(collection, view, id, params) {return {};});
+    // RiotCrud.responseFn(function(collection, view, id, params, response) {});
+
+    // RiotCrud
+    //     .addModel('product')
+    //     .schama('schema.json') // string || object ?? || array [{list:'list-tag'}] ?? default
+    //     .title('Custom Product view') // title || schamatitle
+    //     .endpoint('/api/products') // baseUrl + rest || schamatitle
+    //     .views(['list','show','create','update','delete'])
+    //     .tags('custom-product') // string || {list:'list-tag'} ?? default
 
     /**
      * Riot crud model api
@@ -53,10 +98,12 @@ $script.ready('layout', function() {
             console.info('Schema result.title', result);
 
             var Products = riotCrudModel.entity('products');
-            Products.schema(result);
+            Products.schema(result)
+                    .restname('api/products')
+                    .requestFn(function (){alert(1)})
+                    .responseFn(function (){alert(1)});
 
             Products.listView()
-                .restname('/api/products')
                 .title('product list')
                 .description('product list description')
                 .perPage(30).fields([
@@ -65,8 +112,8 @@ $script.ready('layout', function() {
                         .attributes("width",100)
                         .isDetailLink(false)
                         .filter(true)
-                        // .template('{ opts.id }<img src="https://www.medic-world.com/img/30x30/{ opts.image }" />'),
-                        .fn(function(field, data){return data.id + '<img src="https://www.medic-world.com/img/30x30/' + data.image + '" />'})
+                        // .template('{ opts.id }<img src="https://placeholder/img/30x30/{ opts.image }" />'),
+                        .fn(function(field, data){return data.id + '<img src="https://placeholder/img/30x30/' + data.image + '" />'})
                         ,
                     riotCrudField('sku', 'date')
                         .isDetailLink()
@@ -83,7 +130,7 @@ $script.ready('layout', function() {
                     riotCrudField('price_euro', 'number')
                         .attributes("width",120)
                         .filter(true),
-                    // riotCrudField('image', 'text').template('{ opts.data.id }<img src="https://www.medic-world.com/img/30x30/{ opts.data[opts.field.name] }" />'),
+                    // riotCrudField('image', 'text').template('{ opts.data.id }<img src="https://placeholder/img/30x30/{ opts.data[opts.field.name] }" />'),
                     // riotCrudField('category', 'number').fn(function(field, data){return 'john'+data[field.name]+'dudeu'}),
                 ]);
             Products.editView()

@@ -605,6 +605,8 @@
             };
 
             riotux.on(tag.VM.modelStore, tag.VM.model + '-list', function(response){
+                console.log('tag.VM',tag.VM);
+
                 //TODO: remove heade logic to VM.response
                 // if(xhr.getResponseHeader('X-Total-Count')) {
                 //     cb({total:xhr.getResponseHeader('X-Total-Count'), rows:response})
@@ -942,6 +944,7 @@
         },
 
         run: function() {
+            console.log('riotCrud models', config);
             for (var model in config.models) {
                 var views = Object.keys(config.models[model]);
                 for (var view in config.models[model]) {
@@ -964,12 +967,25 @@
     function Entity(model, alias) {
         config.models[model] = {};
         config.schemas[model] = {};
+        config.restname = false;
         this.model = model;
     }
 
     Entity.prototype = {
         schema: function(schema) {
             config.schemas[this.model] = schema;
+            return this;
+        },
+        restname: function(r) {
+            config.restname = r;
+            return this;
+        },
+        requestFn: function(r) {
+            config.requestFn = r;
+            return this;
+        },
+        responseFn: function(r) {
+            config.rresponseFn = r;
             return this;
         },
         listView: function() {

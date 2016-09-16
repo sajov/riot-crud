@@ -36,10 +36,10 @@ riot.tag2('crud-modal-destroy', '<div class="reveal" id="destroyModal" data-id="
             this.state = true;
 
             if(typeof this.opts.id !== 'undefined' && this.state) {
-              $('#destroyModal').foundation('open');
+
               this.state = false;
             } else {
-                $('#destroyModal').foundation('close');
+
             }
         });
 
@@ -49,8 +49,7 @@ riot.tag2('crud-modal-added', '<div class="reveal" id="addedModal" data-id="{opt
         this.on('updated', function(){
             console.log('modal updated');
             console.log(this.opts);
-            if(typeof this.opts.id !== 'undefined')
-              $('#addedModal').foundation('open');
+
         });
 
 });
