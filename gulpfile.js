@@ -7,7 +7,7 @@ var reload = browserSync.reload;
 gulp.task('sass', function() {
 
   gulp.src('scss/guentella.scss')
-    .pipe(gulp.dest('css'));
+    .pipe(gulp.dest('css/guentella.css'));
     reload();
 });
 

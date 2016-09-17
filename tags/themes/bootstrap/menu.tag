@@ -38,16 +38,28 @@
           </ul>
 
           <ul class="nav child_menu" style="display: block;">
-            <li class="title">Riotjs CRUD</li>
-            <li>
+          <li>
+            <a>
+                Riotjs CRUD<span class="fa fa-chevron-down"></span>
+              </a>
                 <ul class="nav child_menu" style="display: block;">
-                    <li each={route in routes} class={ selected: state }>
-                        <a onclick="{ routeTo }" style="" view="{ route.view }"><raw content="{ route.name }" /></a>
+                    <li each={key,route in routes} class={ selected: state }>
+                        <a href="#/{ route.route }" onclick="{ routeTo }" style="" view="#/{ route.route }"><raw content="{ route.title }" /></a>
                     </li>
                 </ul>
+                <small>this menu part ist auto generated</small>
             </li>
+            <li class="title">
+              <a>
+                Riotjs CRUD <small>(custom views)</small><span class="fa fa-chevron-down"></span>
+              </a>
+               <ul class="nav child_menu" style="display: block;">
+                    <li><a href="#product/list" style="">Product <small>list</small><span class="state" show={ state }>ACTIVE</span></a></li>
+                    <li><a href="#product/show/345?test=1&filter=2" style="">Product <small>custom view</small><span class="state" show={ state }>ACTIVE</span></a></li>
+                </ul>
+            </li>
+
             <li><a href="#product/show/345?test=1&filter=2" style="">Product <small>custom view</small><span class="state" show={ state }>ACTIVE</span></a></li>
-            <li><a href="https://bitbucket.org/riotfoundation/riot-crud" class="button">code on bitbucket</a></li>
         </ul>
 
         </li>
@@ -96,11 +108,14 @@
 
 	<script>
     this.routes = opts.routes;
+
+    console.info('Menu this.routes',this.routes);
 		var thisTag = this;
 		thisTag.chosenTagName = "";
 
     this.routeTo = function(e) {
         console.log(e.item)
+        alert(e.item.route.route);
         riot.route(e.item.route.view || e.item.route.route);
     }
 
