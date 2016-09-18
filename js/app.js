@@ -69,7 +69,7 @@ $script.ready('layout', function() {
 
     RiotCrudModel.addModel('product',{
             title: 'Products',
-            schema: 'product.json', // string || object ?? || array [{list:'list-tag'}] ?? default
+            schema: 'http://localhost:3030/schema/product.json', // string || object ?? || array [{list:'list-tag'}] ?? default
             target: 'div#content', // optional
             endpoint: '/api/product',
             tag: 'product-view',
@@ -77,13 +77,12 @@ $script.ready('layout', function() {
         },{ // mixed object || array ['list','show','create','update','delete'] ???
             list: {
                 // optional
-                tag: 'crud-view-datatables', // default
+                tag: 'crud-datatables', // default
                 title: 'Products',
-                schema: 'product.json', // string || object ?? || array [{list:'list-tag'}] ?? default
+                schema: 'http://localhost:3030/schema/product.json', // string || object ?? || array [{list:'list-tag'}] ?? default
                 target: 'div#content', // optional
                 endpoint: '/api/product/list',
-                tag: 'product-view',
-                dependencies: '' // string || array
+                dependencies: [riotCrudTheme + '/views/crud-datatables.js'] // string || array
             },
             view:{
 
@@ -92,7 +91,7 @@ $script.ready('layout', function() {
 
     RiotCrudModel.addModel('category',{
         title: 'Category',
-        schema: 'category.json', // string || object ?? || array [{list:'list-tag'}] ?? default
+        schema: 'http://localhost:3030/schema/order.json', // string || object ?? || array [{list:'list-tag'}] ?? default
         target: 'div#content', // optional
         endpoint: '/api/category',
         tag: 'category-view',
@@ -124,7 +123,11 @@ $script.ready('layout', function() {
         }
     );
 
-    RiotCrudController.start('dashboard');
+    if(window.location.hash === "") {
+       riot.route('dashboard');
+    }
+
+    RiotCrudController.start();
 
 
 

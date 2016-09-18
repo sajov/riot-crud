@@ -1,11 +1,13 @@
-riot.tag2('crud-view-datatables', '<div class="container"> <crud-top-bar></crud-top-bar> <br> <br> <table id="ajaxdatatables" class="display" cellspacing="0" width="100%"> <thead><tr></tr></thead> <tfoot><tr></tr></tfoot> </table> </div> <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/zf/dt-1.10.12/datatables.min.css">', '', '', function(opts) {
+riot.tag2('crud-datatables', '<div class="container"> dsadas <crud-top-bar></crud-top-bar> <br> <br> <table id="ajaxdatatables" class="display" cellspacing="0" width="100%"> <thead><tr></tr></thead> <tfoot><tr></tr></tfoot> </table> </div> <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/zf/dt-1.10.12/datatables.min.css">', '', '', function(opts) {
         var tag = this;
 
-        riotux.on(tag.VM.modelStore, tag.VM.model + '-list', function(response){
-            console.log('disbale mount')
-        })
+        tag.refresh = function(params, options) {
+            alert('refresh',params, options);
 
-        this.on('mount', function() {
+        }
+
+        tag.on('mount', function() {
+            console.log('datatables mount', tag);
 
             if(typeof this.VM.rows === 'undefined') {
                 return true;
@@ -61,7 +63,7 @@ console.log('datatablesColumns',datatablesColumns);
 
                     $.ajax({
                        type: 'get',
-                       url:'http://slocalhost:3030/api/product',
+                       url:'http://localhost:3030/api/products',
 
                        data: query,
                        success: function(data, textStatus, request){

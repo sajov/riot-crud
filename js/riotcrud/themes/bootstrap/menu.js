@@ -6,9 +6,7 @@ riot.tag2('side-menu', '<div class="navbar nav_title" style="border: 0;"> <a hre
 		thisTag.chosenTagName = "";
 
     this.routeTo = function(e) {
-        console.log(e.item)
-        alert(e.item.route.route);
-        riot.route(e.item.route.view || e.item.route.route);
+        riot.route(e.item.route.route || e.item.route.view);
     }
 
     this.mountPage = function(page) {

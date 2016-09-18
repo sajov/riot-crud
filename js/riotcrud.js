@@ -73,10 +73,12 @@
     }
 
     function mount(target, tag, options, query) {
+        console.log('view',target, tag, options, query);
         if(currentTag!=null && tag == currentTag.root.getAttribute('riot-tag')) {
             currentTag.refresh(query, options);
         } else {
             currentTag && currentTag.unmount(true)
+
             currentTag = riot.mount(target, tag, options)[0]
             currentName = tag
         }
@@ -99,12 +101,9 @@
             });
             return;
         }
- console.info('RiotCrudController route found',{
-                collection: collection,
-                action: action,
-                param: param
-            });
+
         var route = routes[collection];
+        console.info('route',route)
         // route.options.param = param || {};
         // route.options.query = riot.route.query();
         var _target = route.target || target;
@@ -222,12 +221,29 @@
         addModel: function(name, config, views) {
 
             var model = $.extend({}, this.opts, config || {} );
-
             var modelViews = {};
+
             for (var view in views) {
-                modelViews[view] = $.extend({
-                    route: name + '/' + view
-                }, model, views[view]);
+
+                modelViews[view] = $.extend(
+                                        {route: '/' + name + '/' + view},
+                                        model,
+                                        views[view]
+                                    );
+
+                if(modelViews[view].schema && typeof modelViews[view].schema === 'string') {
+
+                    $.ajax({
+                      url: modelViews[view].schema,
+                      dataType: "json",
+                      async: false,
+                      cache: false,
+                      success: function(data){
+                        console.info(data)
+                        modelViews[view].schema = data;
+                        }
+                    });
+                }
             }
             model.views = modelViews;
 
@@ -285,15 +301,7 @@
 
         RiotCrudController.addRoute(
             model,
-            {
-                title: models[model].title,
-                view: 'list',
-                route: models[model].views.list.route,
-                dependencies: [riotCrudTheme + '/dashboard.js'],
-                fn: function(id, action) {
-                    riot.mount('#content', 'dashboard');
-                }
-            }
+            models[model].views.list
         );
     }
 

@@ -1,6 +1,6 @@
-<crud-view-datatables>
+<crud-datatables>
     <div class="container">
-
+dsadas
         <crud-top-bar></crud-top-bar>
 
         <br>
@@ -22,19 +22,18 @@
     <script>
         var tag = this;
 
-        /* overwrite ?!?!? */
-        riotux.on(tag.VM.modelStore, tag.VM.model + '-list', function(response){
-            console.log('disbale mount')
-        })
+        tag.refresh = function(params, options) {
+            alert('refresh',params, options);
+            // tag.mergeParams(params);
+            // riotux.trigger(tag.VM.modelStore,'list',{tag:tag.root.getAttribute('riot-tag'), params:params});
+        }
 
-
-
-        this.on('mount', function() {
+        tag.on('mount', function() {
+            console.log('datatables mount', tag);
 
             if(typeof this.VM.rows === 'undefined') {
                 return true;
             }
-            // console.log(tag.VM);
             // console.log(tag.VM.config.fields);
 
             datatablesColumns = [];
@@ -92,7 +91,7 @@ console.log('datatablesColumns',datatablesColumns);
 
                     $.ajax({
                        type: 'get',
-                       url:'http://slocalhost:3030/api/product',
+                       url:'http://localhost:3030/api/products',
                        // url: tag.VM.config.baseUrl + '/' + tag.VM.model,
                        data: query,
                        success: function(data, textStatus, request){
@@ -117,4 +116,4 @@ console.log('datatablesColumns',datatablesColumns);
 
     </script>
 
-</crud-view-datatables>
+</crud-datatables>
