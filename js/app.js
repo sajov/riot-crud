@@ -73,7 +73,7 @@ $script.ready('layout', function() {
             target: 'div#content', // optional
             endpoint: '/api/product',
             tag: 'product-view',
-            dependencies: 'product-view-plugin.js',
+            // dependencies: 'product-view-plugin.js',
         },{ // mixed object || array ['list','show','create','update','delete'] ???
             list: {
                 // optional
@@ -82,10 +82,33 @@ $script.ready('layout', function() {
                 schema: 'http://localhost:3030/schema/product.json', // string || object ?? || array [{list:'list-tag'}] ?? default
                 target: 'div#content', // optional
                 endpoint: '/api/product/list',
-                dependencies: [riotCrudTheme + '/views/crud-datatables.js'] // string || array
+                dependencies: [
+                    riotCrudTheme + '/views/crud-datatables.js',
+                    '/bower_components/datatables.net/js/jquery.dataTables.min.js',
+                    '/bower_components/gentelella/vendors/datatables.net/js/jquery.dataTables.min.js',
+                    '/bower_components/gentelella/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
+                    '/bower_components/gentelella/vendors/datatables.net-buttons/js/dataTables.buttons.min.js',
+                    '/bower_components/gentelella/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js',
+                    '/bower_components/gentelella/vendors/datatables.net-buttons/js/buttons.flash.min.js',
+                    '/bower_components/gentelella/vendors/datatables.net-buttons/js/buttons.html5.min.js',
+                    '/bower_components/gentelella/vendors/datatables.net-buttons/js/buttons.print.min.js',
+                    '/bower_components/gentelella/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js',
+                    '/bower_components/gentelella/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js',
+                    '/bower_components/gentelella/vendors/datatables.net-responsive/js/dataTables.responsive.min.js',
+                    '/bower_components/gentelella/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js',
+                    '/bower_components/gentelella/vendors/datatables.net-scroller/js/datatables.scroller.min.js',
+                    '/bower_components/gentelella/vendors/jszip/dist/jszip.min.js',
+                    '/bower_components/gentelella/vendors/pdfmake/build/pdfmake.min.js',
+                    '/bower_components/gentelella/vendors/pdfmake/build/vfs_fonts.js',
+                ] // string || array
             },
             view:{
-
+                 tag: 'crud-view-show-custom-product', // default
+                title: 'Products',
+                schema: 'http://localhost:3030/schema/product.json', // string || object ?? || array [{list:'list-tag'}] ?? default
+                target: 'div#content', // optional
+                endpoint: '/api/product/view',
+                dependencies: [riotCrudTheme + '/views/crud-view-products.js'] // string || array
             }
         });
 
@@ -95,7 +118,7 @@ $script.ready('layout', function() {
         target: 'div#content', // optional
         endpoint: '/api/category',
         tag: 'category-view',
-        dependencies: 'category-view-plugin.js',
+        // dependencies: 'category-view-plugin.js',
         }, {
             list: {
             },
@@ -106,7 +129,7 @@ $script.ready('layout', function() {
     );
 
     RiotCrudModel.run();
-
+    console.info('routes: RiotCrudController.getRoutes()',RiotCrudController.getRoutes());
     // mount menu here will ignore following addRoute
     riot.mount('side-menu','side-menu', {
         routes: RiotCrudController.getRoutes()
@@ -115,7 +138,7 @@ $script.ready('layout', function() {
     RiotCrudController.addRoute('dashboard',
         {
             title: 'Dashboard',
-            // target: '???',
+            route: '/dashboard',
             dependencies: [riotCrudTheme + '/dashboard.js'],
             fn: function(id, action) {
                 riot.mount('#content', 'dashboard');
@@ -128,8 +151,6 @@ $script.ready('layout', function() {
     }
 
     RiotCrudController.start();
-
-
 
     // RiotCrudModel
     // RiotCrudRoute.start(RiotCrudModel.getRoutes())

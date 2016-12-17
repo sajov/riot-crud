@@ -73,10 +73,13 @@
     }
 
     function mount(target, tag, options, query) {
-        console.log('view',target, tag, options, query);
+        // console.clear();
+        // alert(tag);
         if(currentTag!=null && tag == currentTag.root.getAttribute('riot-tag')) {
+            console.warn('riotcrud.mount if currentTag!=null');
             currentTag.refresh(query, options);
         } else {
+            console.warn('riotcrud.mount else', target, tag, options);
             currentTag && currentTag.unmount(true)
 
             currentTag = riot.mount(target, tag, options)[0]
@@ -104,19 +107,21 @@
 
         var route = routes[collection];
         console.info('route',route)
+        console.info('riot.route.query()',riot.route.query())
         // route.options.param = param || {};
         // route.options.query = riot.route.query();
         var _target = route.target || target;
         var _tag = route.tag || collection + '-' + action;
-        var _opt = route.options;
+        var _opt = route;
 
         loadDependencies(collection, action, function() {
             if (typeof route === 'function') {
                 currentName = null;
                 fn(collection, param, action);
-            } else if (typeof route.fn === 'function') {
-                route.fn(collection, action, param, currentTag,_target, _tag, _opt);
+            // } else if (typeof route.fn === 'function') {
+            //     route.fn(collection, action, param, currentTag,_target, _tag, _opt);
             } else {
+                console.warn(_target, _tag, _opt, riot.route.query());
                 mount(_target, _tag, _opt, riot.route.query());
             }
         })
@@ -129,12 +134,17 @@
      */
     function loadDependencies(collection, action, cb) {
         var dep = [];
-        if(routes[collection].dependencies[action])
+        console.log(collection, action,routes);
+        if(typeof routes[collection].dependencies[action] != 'undefined')
             dep = routes[collection].dependencies[action];
-        if(routes[collection].dependencies.length > 0)
+        if(typeof routes[collection].dependencies != 'undefined' && routes[collection].dependencies.length > 0)
             dep = routes[collection].dependencies;
         if(dependencies[collection + '/' + action] && dependencies[collection + '/' + action].length > 0)
             dep = dependencies[collection + '/' + action];
+
+        if (typeof routes[collection].fn == 'function') {
+            routes[collection].fn();
+        }
 
         if ($script && dep.length > 0) {
             $script(dep, collection + action, function() {
@@ -162,30 +172,33 @@
 ;
 (function(window, riot) {
 
-    var ScopeMixin = {
-        init: function() {
-            this.VM = this.getVM();
-        },
+    // var ScopeMixin = {
+    //     init: function() {
+    //         alert('init');
+    //         this.VM = this.getVM();
+    //     },
 
-        getVM: function() {
-            var root = this
-            while (root.parent) {
-                root = root.parent
-            }
-            return root.VM || root._riot_id
-        },
+    //     getVM: function() {
+    //         alert('init');
+    //         var root = this
+    //         while (root.parent) {
+    //             root = root.parent
+    //         }
+    //         return root.VM || root._riot_id
+    //     },
 
-        getScope: function() {
-            var root = this
-            while (root.parent) {
-                root = root.parent
-            }
+    //     getScope: function() {
+    //         alert('init');
+    //         var root = this
+    //         while (root.parent) {
+    //             root = root.parent
+    //         }
 
-            return root.opts.scope || root._riot_id
-        }
-    }
+    //         return root.opts.scope || root._riot_id
+    //     }
+    // }
 
-    riot.mixin(ScopeMixin);
+    // riot.mixin(ScopeMixin);
 
 }(window, riot));
 
@@ -298,10 +311,9 @@
     }
 
     function addRoute(model) {
-
         RiotCrudController.addRoute(
             model,
-            models[model].views.list
+            models[model].views.list || 'view'
         );
     }
 
