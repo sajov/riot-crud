@@ -31,46 +31,9 @@
             <i class="fa fa-edit"></i> Riotjs Tags native <span class="fa fa-chevron-down"></span>
           </a>
           <ul class="nav child_menu" style="display: block;">
-            <li><a href="index.html">Table</a></li>
-            <li><a href="index.html">Show</a></li>
-            <li><a href="index.html">Edit</a></li>
-            <li><a href="index3.html">Create</a></li>
-          </ul>
-
-          <ul class="nav child_menu" style="display: block;">
-          <li>
-            <a>
-                Riotjs CRUD<span class="fa fa-chevron-down"></span>
-              </a>
-                <ul class="nav child_menu" style="display: block;">
-                    <li each={key,route in routes} class={ selected: state }>
-                        <a href="#/{ route.route }" onclick="{ routeTo }" style="" view="#/{ route.route }"><raw content="{ route.title }" /></a>
-                    </li>
-                </ul>
-                <small>this menu part ist auto generated</small>
+            <li each={key,route in routes} class={ selected: state }>
+                <a if={route.menu} href="#/{ route.route }" onclick="{ routeTo }" style="" view="#/{ route.route }"><raw content="{ route.title }" /></a>
             </li>
-            <li class="title">
-              <a>
-                Riotjs CRUD <small>(custom views)</small><span class="fa fa-chevron-down"></span>
-              </a>
-               <ul class="nav child_menu" style="display: block;">
-                    <li><a href="#product/list" style="">Product <small>list</small><span class="state" show={ state }>ACTIVE</span></a></li>
-                    <li><a href="#product/show/345?test=1&filter=2" style="">Product <small>custom view</small><span class="state" show={ state }>ACTIVE</span></a></li>
-                </ul>
-            </li>
-
-            <li><a href="#product/show/345?test=1&filter=2" style="">Product <small>custom view</small><span class="state" show={ state }>ACTIVE</span></a></li>
-        </ul>
-
-        </li>
-        <li class="active">
-          <a>
-            <i class="fa fa-edit"></i> Riotjs Tags with Pugins <span class="fa fa-chevron-down"></span>
-          </a>
-          <ul class="nav child_menu" style="display: block;">
-            <li><a href="index2.html">Datatables</a></li>
-            <li><a href="index3.html">Json-Editor</a></li>
-            <li><a href="index3.html">josdejong/jsoneditor</a></li>
           </ul>
         </li>
         <li>

@@ -46,13 +46,11 @@
         },
 
         getRoutes: function() {
-             console.log('RiotCrudController getRoutes',routes);
              return routes;
         },
 
         addDependencies: function(view, d) {
             dependencies[view] = d;
-            // console.log('addDependencies', dependencies);
             return this;
         },
 
@@ -63,18 +61,13 @@
             if (route)
                 riot.route(route);
 
-            console.log('RiotCrudController start',dependencies,
-            routes,
-            routeNames,
-            target);
             return this;
         },
 
     }
 
     function mount(target, tag, options, query) {
-        // console.clear();
-        // alert(tag);
+
         if(currentTag!=null && tag == currentTag.root.getAttribute('riot-tag')) {
             console.warn('riotcrud.mount if currentTag!=null');
             currentTag.refresh(query, options);
@@ -96,8 +89,9 @@
      * - exec fn
      */
     function handler(collection, action, param) {
+
         if (typeof routes[collection] == 'undefined' && typeof routes[collection+action] == 'undefined') {
-            console.warn('RiotCrudController no route found',{
+            console.error('RiotCrudController no route found',{
                 collection: collection,
                 action: action,
                 param: param
@@ -106,23 +100,18 @@
         }
 
         var route = routes[collection] || routes[collection+action];
-        console.info('riotCrudController.handler route',route)
-        console.info('riotCrudController.handler riot.route.query()',riot.route.query())
-        // route.options.param = param || {};
-        // route.options.query = riot.route.query();
-        var _target = route.target || target;
-        var _tag = route.tag || collection + '-' + action;
-        var _opt = route;
 
         loadDependencies(route, function() {
-            if (typeof route === 'function') {
+            if (typeof route.fn === 'function') {
                 currentName = null;
-                fn(collection, param, action);
-            // } else if (typeof route.fn === 'function') {
-            //     route.fn(collection, action, param, currentTag,_target, _tag, _opt);
+                route.fn(collection, param, action);
             } else {
-                console.warn(_target, _tag, _opt, riot.route.query());
-                mount(_target, _tag, _opt, riot.route.query());
+                mount(
+                    route.target || target,
+                    route.tag || collection + '-' + action,
+                    route,
+                    riot.route.query()
+                );
             }
         })
     }
@@ -133,7 +122,6 @@
      * @param  {function} cb         Callback function
      */
     function loadDependencies(route, cb) {
-
         var dep = [];
 
         if(typeof route.dependencies != 'undefined')
@@ -211,25 +199,20 @@
     'use strict';
 
     function riotCrudModel() {
-
         this.opts = {
             title:'old',
             test:'default'
         };
-
     }
 
     riotCrudModel.prototype = {
 
         defaults: function(o) {
-
             this.opts = $.extend( this.opts, o || {} );
-
             return this;
         },
 
         addModel: function(name, config, views) {
-
             var options = $.extend({}, this.opts, config || {} );
 
             for (var view in views) {

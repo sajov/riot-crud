@@ -55,6 +55,22 @@ $script.ready('layout', function() {
         target: '#content'
     });
 
+    RiotCrudController.addRoute('dashboard',
+        {
+            title: 'Dashboard',
+            menu: true,
+            route: '/dashboard',
+            dependencies: [riotCrudTheme + '/dashboard.js'],
+            fn: function(id, action) {
+                riot.mount('#content', 'dashboard');
+            }
+        }
+    );
+
+    RiotCrudController.addRoute('table-demo',{title: 'Table',menu: true, route: '/product/list'});
+    RiotCrudController.addRoute('table-view',{title: 'Show',menu: true, route:'/product/view'});
+    RiotCrudController.addRoute('table-edit',{title: 'Edit',menu: true, route:'/product/edit'});
+    RiotCrudController.addRoute('table-create',{title: 'Create',menu: true, route:'/product/create'});
 
     /**
      * Riot crud model
@@ -69,18 +85,19 @@ $script.ready('layout', function() {
 
     RiotCrudModel.addModel('product',{
             title: 'Products',
+            menu: true,
             schema: 'http://localhost:3030/schema/product.json', // string || object ?? || array [{list:'list-tag'}] ?? default
             target: 'div#content', // optional
-            endpoint: '/api/product',
+            // endpoint: '/api/product',
             // dependencies: 'product-view-plugin.js',
         },{ // mixed object || array ['list','show','create','update','delete'] ???
             list: {
                 // optional
                 tag: 'crud-datatables', // default
-                title: 'Products',
+                title: 'Product List',
                 schema: 'http://localhost:3030/schema/product_faker.json', // string || object ?? || array [{list:'list-tag'}] ?? default
                 target: 'div#content', // optional
-                endpoint: '/api/product/list',
+                // endpoint: '/api/product/list',
                 dependencies: [
                     riotCrudTheme + '/views/crud-datatables.js',
                     '/bower_components/datatables.net/js/jquery.dataTables.min.js',
@@ -102,64 +119,49 @@ $script.ready('layout', function() {
                 ] // string || array
             },
             view:{
-                 tag: 'crud-jsoneditor', // default
-                title: 'Products',
+                tag: 'crud-jsoneditor', // default
+                title: 'Product Demo',
                 schema: 'http://localhost:3030/schema/product_faker.json', // string || object ?? || array [{list:'list-tag'}] ?? default
                 target: 'div#content', // optional
-                endpoint: '/api/product/view',
+                // endpoint: '/api/product/view',
                 dependencies: [
                     riotCrudTheme + '/views/crud-jsoneditor.js',
                     '/bower_components/json-editor/dist/jsoneditor.min.js'
                 ] // string || array
+            },
+            create: {
+                fn: function() {riot.route('/product/create')}
+            },
+            edit: {
+                title: 'Edit Products',
+                menu:true,
+                fn: function() {riot.route('/product/edit')}
             }
         });
 
-    RiotCrudModel.addModel('category',{
-        title: 'Category',
-        schema: 'http://localhost:3030/schema/order.json', // string || object ?? || array [{list:'list-tag'}] ?? default
-        target: 'div#content', // optional
-        endpoint: '/api/category',
-        tag: 'category-view',
-        // dependencies: 'category-view-plugin.js',
-        }, {
-            list: {
-            },
-            view:{
+    // RiotCrudModel.addModel('category',{
+    //     title: 'Category',
+    //     schema: 'http://localhost:3030/schema/order.json', // string || object ?? || array [{list:'list-tag'}] ?? default
+    //     target: 'div#content', // optional
+    //     // endpoint: '/api/category',
+    //     tag: 'category-view',
+    //     // dependencies: 'category-view-plugin.js',
+    //     }, {
+    //         list: {
+    //         },
+    //         view:{
 
-            }
-        }
-    );
+    //         }
+    //     }
+    // );
 
 
-    console.info('routes: RiotCrudController.getRoutes()',RiotCrudController.getRoutes());
+
+    // console.info('routes: RiotCrudController.getRoutes()',RiotCrudController.getRoutes());
     // mount menu here will ignore following addRoute
     riot.mount('side-menu','side-menu', {
         routes: RiotCrudController.getRoutes()
     });
-
-    RiotCrudController.addRoute('dashboard',
-        {
-            title: 'Dashboard',
-            menu: true,
-            route: '/dashboard',
-            dependencies: [riotCrudTheme + '/dashboard.js'],
-            fn: function(id, action) {
-                riot.mount('#content', 'dashboard');
-            }
-        }
-    );
-
-    RiotCrudController.addRoute('dashboard2',
-        {
-            title: 'Dashboard',
-            menu: true,
-            route: '/dashboard/test/2',
-            dependencies: [riotCrudTheme + '/dashboard.js'],
-            fn: function(id, action) {
-                riot.mount('#content', 'dashboard');
-            }
-        }
-    );
 
     if(window.location.hash === "") {
        riot.route('dashboard');
