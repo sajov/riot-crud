@@ -47,19 +47,17 @@
                       DataTables has most features enabled by default, so all you need to do to use it with your own tables is to call the construction function: <code>$().DataTable();</code>
                     </p>
                     <table id="ajaxdatatables" class="display table table-striped table-bordered datatable-buttons" cellspacing="0" width="100%">
+
+
                         <thead>
                             <tr>
                                 <th each="{ colkey, colval in opts.schema.required }" data-type="{colval.type}">{ colkey }</th>
                             </tr>
                         </thead>
+
                         <tfoot><tr></tr></tfoot>
                     </table>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                                <div class="clearfix"></div>
+
 
                   </div>
                 </div>
@@ -116,23 +114,9 @@
 
     <script>
         var tag = this;
-        // console.clear();
-        tag.uppercase = function(str) {
-            console.warn('update'+str.uppercase());
-            return str.uppercase();
-        }
 
-        console.log(this);
-        // this.opts = {
-        //         name:'testme',
-        //         rows: [
-        //             ['name','age'],
-        //             ['sajo','45']
-        //         ]
-        //     };
-        // curious about all events ?
         this.on('all', function(eventName) {
-        console.info('ALL EVENTNAME',eventName)
+            console.info('ALL EVENTNAME',eventName)
         })
 
         this.refresh = function(params, options) {
@@ -156,6 +140,7 @@
         });
 
         this.on('updated', function(params, options) {
+ console.error(opts.schema);
             tag.initTable();
         });
 
@@ -194,15 +179,11 @@
                     "columns": [
                         { "data": "id" },
                         { "data": "sku" },
-                        { "data": "url" },
-                        { "data": "product" },
-                        { "data": "image" },
                         { "data": "active" },
+                        { "data": "name" },
                         { "data": "price_euro" },
                         { "data": "price_dollar" },
-                        { "data": "attributes.color" },
-                        { "data": "attributes.productMaterial" },
-                        // { "data": "active" },
+                        { "data": "base_color" }
                     ],
                     dom: "Bfrtip",
                     buttons: [
