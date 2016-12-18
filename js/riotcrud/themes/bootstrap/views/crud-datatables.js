@@ -77,7 +77,6 @@ riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class
                 fixedHeader: true,
                 keys: true,
                 "fnServerData": function ( sSource, aoData, fnCallback ) {
-                    console.clear();
 
                     var query = {};
                     var queryObj = {};

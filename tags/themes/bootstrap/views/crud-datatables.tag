@@ -679,7 +679,7 @@
                 fixedHeader: true,
                 keys: true,
                 "fnServerData": function ( sSource, aoData, fnCallback ) {
-                    console.clear();
+                    // console.clear();
                     // /* reorganize query */
                     var query = {};
                     var queryObj = {};

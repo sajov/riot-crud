@@ -96,7 +96,7 @@
      * - exec fn
      */
     function handler(collection, action, param) {
-        if (typeof routes[collection] == 'undefined') {
+        if (typeof routes[collection] == 'undefined' && typeof routes[collection+action] == 'undefined') {
             console.warn('RiotCrudController no route found',{
                 collection: collection,
                 action: action,
@@ -105,16 +105,16 @@
             return;
         }
 
-        var route = routes[collection];
-        console.info('route',route)
-        console.info('riot.route.query()',riot.route.query())
+        var route = routes[collection] || routes[collection+action];
+        console.info('riotCrudController.handler route',route)
+        console.info('riotCrudController.handler riot.route.query()',riot.route.query())
         // route.options.param = param || {};
         // route.options.query = riot.route.query();
         var _target = route.target || target;
         var _tag = route.tag || collection + '-' + action;
         var _opt = route;
 
-        loadDependencies(collection, action, function() {
+        loadDependencies(route, function() {
             if (typeof route === 'function') {
                 currentName = null;
                 fn(collection, param, action);
@@ -132,22 +132,19 @@
      * @param  {string}   collection Collection name
      * @param  {function} cb         Callback function
      */
-    function loadDependencies(collection, action, cb) {
-        var dep = [];
-        console.log(collection, action,routes);
-        if(typeof routes[collection].dependencies[action] != 'undefined')
-            dep = routes[collection].dependencies[action];
-        if(typeof routes[collection].dependencies != 'undefined' && routes[collection].dependencies.length > 0)
-            dep = routes[collection].dependencies;
-        if(dependencies[collection + '/' + action] && dependencies[collection + '/' + action].length > 0)
-            dep = dependencies[collection + '/' + action];
+    function loadDependencies(route, cb) {
 
-        if (typeof routes[collection].fn == 'function') {
-            routes[collection].fn();
+        var dep = [];
+
+        if(typeof route.dependencies != 'undefined')
+            dep = route.dependencies;
+
+        if (typeof route.fn == 'function') {
+            route.fn();
         }
 
         if ($script && dep.length > 0) {
-            $script(dep, collection + action, function() {
+            $script(dep, route.route, function() {
                 cb()
             });
         } else {
@@ -213,13 +210,13 @@
 ;(function(window, riot, $) {
     'use strict';
 
-
     function riotCrudModel() {
+
         this.opts = {
             title:'old',
             test:'default'
         };
-        this.models = {};
+
     }
 
     riotCrudModel.prototype = {
@@ -233,95 +230,35 @@
 
         addModel: function(name, config, views) {
 
-            var model = $.extend({}, this.opts, config || {} );
-            var modelViews = {};
+            var options = $.extend({}, this.opts, config || {} );
 
             for (var view in views) {
 
-                modelViews[view] = $.extend(
-                                        {route: '/' + name + '/' + view},
-                                        model,
-                                        views[view]
-                                    );
+                var model = $.extend({route: '/' + name + '/' + view}, options, views[view]);
 
-                if(modelViews[view].schema && typeof modelViews[view].schema === 'string') {
-
+                if(model.schema && typeof model.schema === 'string') {
                     $.ajax({
-                      url: modelViews[view].schema,
+                      url: model.schema,
                       dataType: "json",
                       async: false,
                       cache: false,
                       success: function(data){
                         console.info(data)
-                        modelViews[view].schema = data;
+                        model.schema = data;
                         }
                     });
                 }
-            }
-            model.views = modelViews;
 
-            this.models[name] = model;
+                RiotCrudController.addRoute(name+view,model);
+            }
 
             return this;
-        },
-
-        run: function() {
-            // RiotCrudModel.addRoutes(); //auto init?
-            // RiotCrudModel.addObserveble();
-            console.info('RiotCrudModel models',this.models);
-            RiotCrudViews(this.models);
-            return this.models;
         }
     }
 
     window.RiotCrudModel = new riotCrudModel();
 }(window, riot, $));
 
-/**
- * Crud Service
- * @param  {[type]} window [description]
- * @param  {[type]} riot   [description]
- * @param  {[type]} qwest  [description]
- * @return {[type]}        [description]
- */
-;(function(window, riot, $) {
-    'use strict';
-
-    var models = {};
-
-    function riotCrudViews(m) {
-
-        models = m;
-
-        console.info('RiotCrudViews models', models);
-
-        for (var n in models) {
-            var views = Object.keys(models[n].views);
-            console.log('views',views);
-            // for(var view in models[n].views) {
-
-            // console.log('view',models[n].views[view]);
-            // }
-
-            addRoute(n);
-
-        }
-
-        console.groupEnd();
-    }
-
-    function addRoute(model) {
-        RiotCrudController.addRoute(
-            model,
-            models[model].views.list || 'view'
-        );
-    }
-
-
-
-
-    window.RiotCrudViews = riotCrudViews;
-}(window, riot, $));
 
 
 
