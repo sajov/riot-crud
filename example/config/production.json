@@ -1,9 +1,9 @@
 {
-  "host": "feathers-riot-crud-app.feathersjs.com",
+  "host": "feather-riot-crud-app.feathersjs.com",
   "port": 80,
+  "nedb": "NEDB_BASE_PATH",
   "public": "../public/",
   "auth": {
-    "idField": "id",
     "token": {
       "secret": "FEATHERS_AUTH_SECRET"
     },

@@ -1,4 +1,4 @@
-# feathers-riot-crud
+# feather-riot-crud
 
 > 
 
@@ -14,7 +14,7 @@ Getting up and running is as easy as 1, 2, 3.
 2. Install your dependencies
     
     ```
-    cd path/to/feathers-riot-crud; npm install
+    cd path/to/feather-riot-crud; npm install
     ```
 
 3. Start your app

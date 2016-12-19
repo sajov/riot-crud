@@ -14,14 +14,14 @@ module.exports = function(){
   };
 
   // Initialize our service with any options it requires
-  app.use('/users', service(options));
+  app.use('/memories', service(options));
 
   // Get our initialize service to that we can bind hooks
-  const userService = app.service('/users');
+  const memoryService = app.service('/memories');
 
   // Set up our before hooks
-  userService.before(hooks.before);
+  memoryService.before(hooks.before);
 
   // Set up our after hooks
-  userService.after(hooks.after);
+  memoryService.after(hooks.after);
 };

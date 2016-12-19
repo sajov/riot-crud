@@ -70,7 +70,7 @@ exports.product = function(app, count) {
         updatedAt:'2016-12-18',
     };
 
-    app.service('api/products').create(prod, {}).then(function(data) {
+    app.service('products').create(prod, {}).then(function(data) {
       console.log('Created product data', data);
     });
     console.log('FAKER product',prod);

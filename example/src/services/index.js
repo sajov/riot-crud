@@ -1,4 +1,5 @@
 'use strict';
+const memory = require('./memory');
 const category = require('./category');
 const product = require('./product');
 const authentication = require('./authentication');
@@ -12,4 +13,5 @@ module.exports = function() {
   app.configure(user);
   app.configure(product);
   app.configure(category);
+  app.configure(memory);
 };
