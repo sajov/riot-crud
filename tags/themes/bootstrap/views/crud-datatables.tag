@@ -46,63 +46,40 @@
                     <p class="text-muted font-13 m-b-30">
                       DataTables has most features enabled by default, so all you need to do to use it with your own tables is to call the construction function: <code>$().DataTable();</code>
                     </p>
+
                     <table id="ajaxdatatables" class="display table table-striped table-bordered datatable-buttons" cellspacing="0" width="100%">
-
-
                         <thead>
                             <tr>
                                 <th each="{ colkey, colval in opts.schema.required }" data-type="{colval.type}">{ colkey }</th>
                             </tr>
                         </thead>
-
                         <tfoot><tr></tr></tfoot>
                     </table>
 
+                    <!--     <thead>
+                          <tr >
+                            <th each="{ colkey, colval in opts.schema.properties }" >{ colkey }</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr each="{ row in this.opts.rows }" >
+                            <td each="{ colkey, colval in row }">{ colkey }</td>
+                          </tr>
+                        </tbody>
+                    -->
+
+
+                    <!--    <virtual each={ field in this.VM.config.fields }>
+                                <a>{ field.title }</a>
+                            </virtual>
+                     -->
 
                   </div>
                 </div>
               </div>
-
             </div>
-          </div>
-
-
-
-    <div class="container">
-        <h2>CRUD datatables</h2>
-        <!-- <crud-top-bar></crud-top-bar> -->
-        {opts.title}
-        <br>
-        <br>
-
-        <table id="ajaxdatatables" class="display" cellspacing="0" width="100%">
-            <thead>
-                <tr>
-                    <th each="{ colkey, colval in opts.schema.required }" data-type="{colval.type}">{ colkey }</th>
-                </tr>
-            </thead>
-            <tfoot><tr></tr></tfoot>
-        </table>
-
-
-        <!--     <thead>
-              <tr >
-                <th each="{ colkey, colval in opts.schema.properties }" >{ colkey }</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr each="{ row in this.opts.rows }" >
-                <td each="{ colkey, colval in row }">{ colkey }</td>
-              </tr>
-            </tbody>
-        -->
-
-
-        <!--    <virtual each={ field in this.VM.config.fields }>
-                    <a>{ field.title }</a>
-                </virtual>
-         -->
     </div>
+
 
     <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/zf/dt-1.10.12/datatables.min.css"> -->
     <link href="/bower_components/gentelella/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
@@ -240,13 +217,16 @@
 
                         /* search */
                         if(queryObj.search.value.value !== "") {
-                            var queryFields = [];
-                            for (var i = queryObj.columns.value.length - 1; i >= 0; i--) {
-                                if (queryObj.columns.value[i].searchable) {
-                                    queryFields.push(queryObj.columns.value[i].data+'":"'+queryObj.search.value.value);
-                                }
-                            }
-                            query.where = '{"or":["' + queryFields.join('","') + '""]}';
+                            // var queryFields = [];
+                            // for (var i = queryObj.columns.value.length - 1; i >= 0; i--) {
+                            //     if (queryObj.columns.value[i].searchable) {
+                            //         queryFields.push(queryObj.columns.value[i].data+'":"'+queryObj.search.value.value);
+                            //     }
+                            // }
+                            // // query.$where = '{"or":["' + queryFields.join('","') + '""]}';
+                            // query.$or = '["' + queryFields.join('","') + '""]';
+                            // query.$or = '["' + queryFields.join('","') + '""]';
+                            // query.$or = '["' + queryFields.join('","') + '""]';
                         }
 
                         // AJAX

@@ -126,7 +126,9 @@ $script.ready('layout', function() {
                 // endpoint: '/api/product/view',
                 dependencies: [
                     riotCrudTheme + '/views/crud-jsoneditor.js',
-                    '/bower_components/json-editor/dist/jsoneditor.min.js'
+                    // '/bower_components/json-editor/dist/jsoneditor.min.js'
+                    // 'http://cdn.jsdelivr.net/sceditor/1.4.3/jquery.sceditor.bbcode.min.js',
+                    // 'http://cdn.jsdelivr.net/sceditor/1.4.3/jquery.sceditor.xhtml.min.js'
                 ] // string || array
             },
             create: {
