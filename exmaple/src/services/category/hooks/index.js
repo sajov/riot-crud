@@ -8,9 +8,9 @@ exports.before = {
   all: [],
   find: [],
   get: [],
-  create: [lobalHooks.validateSchema(schema)],
-  update: [lobalHooks.validateSchema(schema)],
-  patch: [lobalHooks.validateSchema(schema)],
+  create: [globalHooks.validateSchema(schema)],
+  update: [globalHooks.validateSchema(schema)],
+  patch: [globalHooks.validateSchema(schema)],
   remove: []
 };
 
