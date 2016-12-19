@@ -66,11 +66,11 @@
 
     }
 
-    function mount(target, tag, options, query) {
+    function mount(target, tag, options) {
 
         if(currentTag!=null && tag == currentTag.root.getAttribute('riot-tag')) {
             console.warn('riotcrud.mount if currentTag!=null');
-            currentTag.refresh(query, options);
+            currentTag.refresh(options);
         } else {
             console.warn('riotcrud.mount else', target, tag, options);
             currentTag && currentTag.unmount(true)
@@ -101,6 +101,7 @@
 
         var route = routes[collection] || routes[collection+action];
 
+        route.query = {id: param, query: riot.route.query()};
         loadDependencies(route, function() {
             if (typeof route.fn === 'function') {
                 currentName = null;
@@ -109,8 +110,7 @@
                 mount(
                     route.target || target,
                     route.tag || collection + '-' + action,
-                    route,
-                    riot.route.query()
+                    route
                 );
             }
         })

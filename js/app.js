@@ -68,9 +68,9 @@ $script.ready('layout', function() {
     );
 
     RiotCrudController.addRoute('table-demo',{title: 'Table',menu: true, route: '/product/list'});
-    RiotCrudController.addRoute('table-view',{title: 'Show',menu: true, route:'/product/view'});
-    RiotCrudController.addRoute('table-edit',{title: 'Edit',menu: true, route:'/product/edit'});
-    RiotCrudController.addRoute('table-create',{title: 'Create',menu: true, route:'/product/create'});
+    RiotCrudController.addRoute('table-view',{title: 'Show',menu: true, route:'/product/view/1'});
+    RiotCrudController.addRoute('table-edit',{title: 'Edit',menu: true, route:'/product/edit/1'});
+    RiotCrudController.addRoute('table-create',{title: 'Create',menu: true, route:'/product/create/1'});
 
     /**
      * Riot crud model
@@ -132,12 +132,12 @@ $script.ready('layout', function() {
                 ] // string || array
             },
             create: {
-                fn: function() {riot.route('/product/create')}
+                fn: function() {riot.route('/product/create/1')}
             },
             edit: {
                 title: 'Edit Products',
                 menu:true,
-                fn: function() {riot.route('/product/edit')}
+                fn: function() {riot.route('/product/edit/1')}
             }
         });
 

@@ -23,7 +23,7 @@
           <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
               <div class="x_title">
-                <h2>{opts.data.name}Default Example <small>Users</small></h2>
+                <h2>{tag.opts.data.name}Default Example <small>Users</small></h2>
                 <ul class="nav navbar-right panel_toolbox">
                   <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                   </li>
@@ -65,46 +65,7 @@
     <script>
         var tag = this;
 
-        // // Custom editor
-        // JSONEditor.defaults.editors.dateTime = JSONEditor.defaults.editors.string.extend({
-        //     getValue: function() {
 
-        //         function getTimeZone() {
-        //             var offset = new Date().getTimezoneOffset(), o = Math.abs(offset);
-        //             return (offset < 0 ? "+" : "-") + ("00" + Math.floor(o / 60)).slice(-2) + ":" + ("00" + (o % 60)).slice(-2);
-        //         }
-
-        //         return this.value+getTimeZone();
-        //     },
-
-        //     setValue: function(val) {
-
-        //         // strip timeZone
-        //         var stripedDateTime = val.substring(0, val.lastIndexOf("+"));
-
-
-        //         if(this.value !== stripedDateTime) {
-        //             this.value = stripedDateTime;
-        //             this.input.value = this.value;
-        //             this.refreshPreview();
-        //             this.onChange();
-        //         }
-        //     },
-
-        //     build: function() {
-        //         this.schema.format = "datetime-local";
-        //         this._super();
-
-        //     }
-        // });
-
-        // // Instruct the json-editor to use the custom datetime-editor.
-        // JSONEditor.defaults.resolvers.unshift(function(schema) {
-        //     if(schema.type === "string" && schema.format === "datetime") {
-        //         return "dateTime";
-        //     }
-
-        // });
 
         tag.store = function(e) {
             e.preventDefault();
@@ -122,7 +83,7 @@
             else {
                  $.ajax({
                         type: "PATCH",
-                        url: 'http://localhost:3030/api/products/1',
+                        url: 'http://localhost:3030/api/products/' + tag.opts.query.id,
                         data: output,
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
@@ -140,22 +101,24 @@
         }
 
         this.on('mount', function() {
-
             console.log('crud-jsoneditor update opts.query', this.opts.schema);
-
-
-            tag.initJSONEditor();
-
         });
 
         this.on('mounted', function() {
+
+
+        });
+
+        this.on('before-mount', () => {
+            console.info('dashboard before-mount', tag);
+            tag.initJSONEditor();
         });
 
         tag.initJSONEditor = function() {
                         // AJAX
             $.ajax({
                 type: 'get',
-                url:'http://localhost:3030/api/products/1',
+                url:'http://localhost:3030/api/products/' + tag.opts.query.id || '',
                 // url: tag.VM.config.baseUrl + '/' + tag.VM.model,
                 success: function(data, textStatus, request){
                     tag.opts.data = data;
@@ -214,10 +177,12 @@
                             schema: tag.opts.schema,
                             grid_columns: 2,
                             theme:'bootstrap3',
-                            // object_layout: 'grid',
-                            disable_edit_json: false
+                            object_layout: 'grid',
+                            disable_edit_json: false,
+                            form_name_root:'root[product][name]'
 
                           });
+                    tag.opts.data = data;
                     tag.editor.setValue(data);
                     $('[data-schemaformat="html"]').summernote();
 
@@ -282,6 +247,47 @@
             // });
         }
 
+
+                // // Custom editor
+        // JSONEditor.defaults.editors.dateTime = JSONEditor.defaults.editors.string.extend({
+        //     getValue: function() {
+
+        //         function getTimeZone() {
+        //             var offset = new Date().getTimezoneOffset(), o = Math.abs(offset);
+        //             return (offset < 0 ? "+" : "-") + ("00" + Math.floor(o / 60)).slice(-2) + ":" + ("00" + (o % 60)).slice(-2);
+        //         }
+
+        //         return this.value+getTimeZone();
+        //     },
+
+        //     setValue: function(val) {
+
+        //         // strip timeZone
+        //         var stripedDateTime = val.substring(0, val.lastIndexOf("+"));
+
+
+        //         if(this.value !== stripedDateTime) {
+        //             this.value = stripedDateTime;
+        //             this.input.value = this.value;
+        //             this.refreshPreview();
+        //             this.onChange();
+        //         }
+        //     },
+
+        //     build: function() {
+        //         this.schema.format = "datetime-local";
+        //         this._super();
+
+        //     }
+        // });
+
+        // // Instruct the json-editor to use the custom datetime-editor.
+        // JSONEditor.defaults.resolvers.unshift(function(schema) {
+        //     if(schema.type === "string" && schema.format === "datetime") {
+        //         return "dateTime";
+        //     }
+
+        // });
     </script>
 
 </crud-jsoneditor>

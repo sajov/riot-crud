@@ -51,6 +51,7 @@
                         <thead>
                             <tr>
                                 <th each="{ colkey, colval in opts.schema.required }" data-type="{colval.type}">{ colkey }</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tfoot><tr></tr></tfoot>
@@ -160,8 +161,18 @@
                         { "data": "name" },
                         { "data": "price_euro" },
                         { "data": "price_dollar" },
-                        { "data": "base_color" }
+                        { "data": "base_color" },
+                        {
+                            "data": null,
+                            "targets": -1,
+                            // "defaultContent": "<button>Click!</button>",
+                            "render": function ( data, type, row ) {
+                                // return data +' ('+ row.sku+')';
+                                return '<a class="btn btn-default buttons-csv buttons-html5 btn-sm" tabindex="0" aria-controls="ajaxdatatables" href="#product/view/' + row.id + '"><span> Edit</span></a>';
+                            }
+                        },
                     ],
+                    "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
                     dom: "Bfrtip",
                     buttons: [
                         {
@@ -183,8 +194,12 @@
                         {
                           extend: "print",
                           className: "btn-sm"
-                        },
+                        }
                     ],
+                    deferRender: true,
+                    // scrollY: 380,
+                    // scrollCollapse: true,
+                    // scroller: true,
                     responsive: true,
                     fixedHeader: true,
                     keys: true,
