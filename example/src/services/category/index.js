@@ -18,7 +18,7 @@ module.exports = function(){
     // Model: db,
     paginate: {
       default: 5,
-      max: 25
+      max: 250
     }
   };
 
