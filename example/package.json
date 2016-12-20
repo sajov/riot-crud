@@ -18,7 +18,7 @@
   "scripts": {
     "test": "npm run jshint && npm run mocha",
     "jshint": "jshint src/. test/. --config",
-    "start": "node src/",
+    "start": "nodemon src/ -w faker/ -w src/",
     "mocha": "mocha test/ --recursive"
   },
   "dependencies": {

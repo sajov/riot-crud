@@ -85,6 +85,7 @@ $script.ready('layout', function() {
 
     RiotCrudModel.addModel('product',{
             title: 'Products',
+            description: '/products/list',
             menu: true,
             schema: 'http://localhost:3030/schema/product.json', // string || object ?? || array [{list:'list-tag'}] ?? default
             target: 'div#content', // optional
@@ -93,11 +94,20 @@ $script.ready('layout', function() {
         },{ // mixed object || array ['list','show','create','update','delete'] ???
             list: {
                 // optional
+                selection: true,
+                filterable: true,
+                buttons: true,
                 tag: 'crud-datatables', // default
                 title: 'Product List',
                 schema: 'http://localhost:3030/schema/product.json', // string || object ?? || array [{list:'list-tag'}] ?? default
                 target: 'div#content', // optional
                 // endpoint: '/api/product/list',
+                columns: {
+                    base_color: {
+                        "data": null,
+                        "render": function ( data, type, row ) {return '<span style="background-color:' + data.base_color + '">' + data.base_color + '</span>';}
+                    }
+                },
                 dependencies: [
                     riotCrudTheme + '/views/crud-datatables.js',
                     // '/bower_components/datatables.net/js/jquery.dataTables.min.js',

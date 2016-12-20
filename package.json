@@ -4,6 +4,7 @@
   "description": "",
   "main": "gulpfile.js",
   "scripts": {
+    "start": "gulp serve && cd example/ && npm start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

@@ -83,7 +83,7 @@
             else {
                  $.ajax({
                         type: "PATCH",
-                        url: 'http://localhost:3030/api/products/' + tag.opts.query.id,
+                        url: 'http://localhost:3030/products/' + tag.opts.query.id,
                         data: output,
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
@@ -118,7 +118,7 @@
                         // AJAX
             $.ajax({
                 type: 'get',
-                url:'http://localhost:3030/api/products/' + tag.opts.query.id || '',
+                url:'http://localhost:3030/products/' + tag.opts.query.id || '',
                 // url: tag.VM.config.baseUrl + '/' + tag.VM.model,
                 success: function(data, textStatus, request){
                     tag.opts.data = data;

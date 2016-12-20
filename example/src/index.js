@@ -6,6 +6,6 @@ const server = app.listen(port);
 const faker = require('./../faker/product.js');
 server.on('listening', function () {
 
-  faker.product(app, 50);
+  faker.product(app, 150);
   console.log(`Feathers application started on ${app.get('host')}:${port}`)
 });

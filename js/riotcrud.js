@@ -213,7 +213,7 @@
         },
 
         addModel: function(name, config, views) {
-            var options = $.extend({}, this.opts, config || {} );
+            var options = $.extend({model:name}, this.opts, config || {} );
 
             for (var view in views) {
 
@@ -226,7 +226,7 @@
                       async: false,
                       cache: false,
                       success: function(data){
-                        console.info(data)
+                        // console.info(data)
                         model.schema = data;
                         }
                     });
