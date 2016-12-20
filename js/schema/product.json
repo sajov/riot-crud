@@ -1,9 +1,13 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
+  "title": "Product",
   "properties": {
     "id": {
       "type": "integer"
+    },
+    "active": {
+      "type": "boolean"
     },
     "sku": {
       "type": "string"
@@ -11,14 +15,8 @@
     "name": {
       "type": "string"
     },
-    "image": {
-      "type": "string",
-      "links": [
-              {
-                "href": "https://www.medic-world.com/img/130x130/{{self}}",
-                "mediaType": "image/*"
-              }
-            ]
+    "url": {
+      "type": "string"
     },
     "price_euro": {
       "type": "number"
@@ -26,8 +24,108 @@
     "price_dollar": {
       "type": "number"
     },
-    "active": {
-      "type": "integer"
+    "image": {
+      "type": "string"
+    },
+   "images": {
+      "type": "array",
+      "format": "table",
+      "title": "Images",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "title": "Image",
+        "headerTemplate": "{{ i1 }} - {{ self.title }} (type {{ self.mediaType }})",
+        "properties": {
+          "href": {
+            "type": "string",
+            "format": "image"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "options": {
+                "wysiwyg": true
+            }
+          },
+          "mediaType": {
+            "type": "string",
+            "enum": [
+              "jpg",
+              "png",
+              "git"
+            ]
+          }
+        }
+      }
+    },
+     "locales": {
+      "type": "array",
+      "format": "table",
+      "title": "locales",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "title": "Locale",
+        "properties": {
+          "lang": {
+            "type": "string",
+            "enum": [
+              "DE",
+              "EN",
+              "FR",
+              "ES",
+              "IT"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "format": "html",
+            "options": {
+                "wysiwyg": true
+            }
+          }
+        }
+      }
+    },
+    "attributes": {
+      "type": "object",
+      "format": "table",
+      "title": "Attributes",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "title": "Pet",
+        "properties": {
+          "color": {
+            "type": "string",
+            "enum": [
+              "red",
+              "blue",
+              "bird",
+              "reptile",
+              "other"
+            ]
+          },
+          "material": {
+            "type": "string"
+          },
+          "adjective": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "base_color": {
+     "type": "string",
+      "format": "color",
+      "title": "favorite color",
+      "default": "#ffa500"
     },
     "category": {
       "type": "string",
@@ -36,33 +134,31 @@
           "wysiwyg": true
       }
     },
-    "colors": {
-      "type": "string"
-    },
-    "colors": {
+   "createdAt": {
       "type": "string",
-      "format": "color"
-    },
-    "createdAt": {
-      "type": "string",
-      "format": "datetime-local"
+      "format": "date"
     },
     "updatedAt": {
       "type": "string",
-      "format": "datetime-local"
+      "format": "date"
     }
   },
   "required": [
     "id",
     "sku",
+    "active",
     "name",
-    "image",
     "price_euro",
     "price_dollar",
+    "base_color"
+  ],
+  "defaultProperties": [
+    "id",
+    "sku",
     "active",
-    "category",
-    "colors",
-    "createdAt",
-    "updatedAt"
+    "name",
+    "price_euro",
+    "price_dollar",
+    "base_color"
   ]
 }
