@@ -1,159 +1,189 @@
-var riotCrudTheme = '/js/riotcrud/themes/bootstrap'; //'/js/riotcrud/themes/zurb';
+var riotCrudTheme =
+        location.search == '?theme=zurb' ?
+        '/js/riotcrud/themes/zurb' :
+        '/js/riotcrud/themes/bootstrap';
 
 var dependencyList = {
     layout: [riotCrudTheme + '/menu.js', riotCrudTheme + '/dashboard.js', riotCrudTheme + '/views/crud-views.js'],
-    dashboard: riotCrudTheme + '/login.js',register: riotCrudTheme + '/register.js'
+    login: riotCrudTheme + '/login.js',register: riotCrudTheme + '/register.js'
 };
 
 $script(dependencyList.layout, 'layout');
 
 $script.ready('layout', function() {
 
+    // var riotCrudTheme = '/js/riotcrud/themes/bootstrap'; //'/js/riotcrud/themes/zurb';
+
+
+    // var dependencyList = {
+    //     layout: [riotCrudTheme + '/menu.js', riotCrudTheme + '/dashboard.js', riotCrudTheme + '/views/crud-views.js'],
+    //     dashboard: riotCrudTheme + '/login.js',register: riotCrudTheme + '/register.js'
+    // };
+
+    // var onLoadDependencies = [];
+
+    // /*router util*/
+    // $.each(dependencyList.layout,function(index, script) {
+    //     onLoadDependencies.push(
+    //         $.ajax({
+    //           url: script,
+    //           dataType: "script",
+    //           cache: false,
+    //           success: function(){console.info(script)}
+    //         })
+    //     );
+    // });
+
+    // /*router util*/
+    // $.when(onLoadDependencies)
+    //     .done(function(first_call, second_call, third_call){
+    //         //do something
+    //         console.info('dep');
+    //     })
+    //     .fail(function(){
+    //         //handle errors
+    //         console.error('dep?');
+    //     });
+
+
+    console.info('script ready');
     /**
      * Riot controller
      * define custom routes
      */
-    riotCrudController.target('#content');
+    RiotCrudController.defaults({
+        target: '#content'
+    });
 
-    riotCrudController
-        .route('dashboard')
-        .name('Dashboard')
-        .dependencies([riotCrudTheme + '/dashboard.js'])
-        .fn(function(id, action) {
-            riot.mount('#content', 'dashboard');
-        })
-        .add();
+    RiotCrudController.addRoute('dashboard',
+        {
+            title: 'Dashboard',
+            menu: true,
+            route: '/dashboard',
+            dependencies: [riotCrudTheme + '/dashboard.js'],
+            fn: function(id, action) {
+                riot.mount('#content', 'dashboard');
+            }
+        }
+    );
 
+    RiotCrudController.addRoute('table-demo',{title: 'Table',menu: true, route: '/product/list'});
+    RiotCrudController.addRoute('table-view',{title: 'Show',menu: true, route:'/product/view/1'});
+    RiotCrudController.addRoute('table-edit',{title: 'Edit',menu: true, route:'/product/edit/1'});
+    RiotCrudController.addRoute('table-create',{title: 'Create',menu: true, route:'/product/create/1'});
 
     /**
-     * Riot crud model api
-     * define base config
+     * Riot crud model
+     * define your models
      */
-    riotCrudModel.baseUrl('http://localhost:3030');
-    riotCrudModel.target('div#content');
-
-
-    riotCrudModel.requestFn(function(collection, view, id, params) {
-
-    });
-    riotCrudModel.responseFn(function(collection, view, id, params, response) {
-
+    RiotCrudModel.defaults({
+        baseUrl: 'http://localhost:3030',
+        target: 'div#content',
+        requestFn: function(collection, view, id, params) {},
+        responseFn: function(collection, view, id, params, response) {}
     });
 
-    // RiotCrud.defaults({
-    //     baseUrl: 'http://localhost:3030',
-    //     target: 'div#content',
-    //     requestFn: function(collection, view, id, params) {return {}},
-    //     responseFn: function(collection, view, id, params, response) {};       ,
-    // });
+    RiotCrudModel.addModel('product',{
+            title: 'Products',
+            description: '/products/list',
+            menu: true,
+            schema: 'http://localhost:3030/schema/product.json', // string || object ?? || array [{list:'list-tag'}] ?? default
+            target: 'div#content', // optional
+            // endpoint: '/api/product',
+            // dependencies: 'product-view-plugin.js',
+        },{ // mixed object || array ['list','show','create','update','delete'] ???
+            list: {
+                // optional
+                selection: true,
+                filterable: true,
+                buttons: true,
+                tag: 'crud-datatables', // default
+                title: 'Product List',
+                schema: 'http://localhost:3030/schema/product.json', // string || object ?? || array [{list:'list-tag'}] ?? default
+                target: 'div#content', // optional
+                // endpoint: '/api/product/list',
+                columns: {
+                    base_color: {
+                        "data": null,
+                        "render": function ( data, type, row ) {return '<span style="background-color:' + data.base_color + '">' + data.base_color + '</span>';}
+                    }
+                },
+                dependencies: [
+                    riotCrudTheme + '/views/crud-datatables.js',
+                    // '/bower_components/datatables.net/js/jquery.dataTables.min.js',
+                    // '/bower_components/gentelella/vendors/datatables.net/js/jquery.dataTables.min.js',
+                    // '/bower_components/gentelella/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
+                    // '/bower_components/gentelella/vendors/datatables.net-buttons/js/dataTables.buttons.min.js',
+                    // '/bower_components/gentelella/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js',
+                    // '/bower_components/gentelella/vendors/datatables.net-buttons/js/buttons.flash.min.js',
+                    // '/bower_components/gentelella/vendors/datatables.net-buttons/js/buttons.html5.min.js',
+                    // '/bower_components/gentelella/vendors/datatables.net-buttons/js/buttons.print.min.js',
+                    // '/bower_components/gentelella/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js',
+                    // '/bower_components/gentelella/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js',
+                    // '/bower_components/gentelella/vendors/datatables.net-responsive/js/dataTables.responsive.min.js',
+                    // '/bower_components/gentelella/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js',
+                    // '/bower_components/gentelella/vendors/datatables.net-scroller/js/datatables.scroller.min.js',
+                    // '/bower_components/gentelella/vendors/jszip/dist/jszip.min.js',
+                    // '/bower_components/gentelella/vendors/pdfmake/build/pdfmake.min.js',
+                    // '/bower_components/gentelella/vendors/pdfmake/build/vfs_fonts.js',
+                ] // string || array
+            },
+            view:{
+                tag: 'crud-jsoneditor', // default
+                title: 'Product Demo',
+                schema: 'http://localhost:3030/schema/product.json', // string || object ?? || array [{list:'list-tag'}] ?? default
+                target: 'div#content', // optional
+                // endpoint: '/api/product/view',
+                dependencies: [
+                    riotCrudTheme + '/views/crud-jsoneditor.js',
+                    // '/bower_components/json-editor/dist/jsoneditor.min.js'
+                    // 'http://cdn.jsdelivr.net/sceditor/1.4.3/jquery.sceditor.bbcode.min.js',
+                    // 'http://cdn.jsdelivr.net/sceditor/1.4.3/jquery.sceditor.xhtml.min.js'
+                ] // string || array
+            },
+            create: {
+                fn: function() {riot.route('/product/create/1')}
+            },
+            edit: {
+                title: 'Edit Products',
+                menu:true,
+                fn: function() {riot.route('/product/edit/1')}
+            }
+        });
 
-    // RiotCrud.addModel({
-    //     title: 'Products',
-    //     schema: 'product.json', // string || object ?? || array [{list:'list-tag'}] ?? default
+    // RiotCrudModel.addModel('category',{
+    //     title: 'Category',
+    //     schema: 'http://localhost:3030/schema/order.json', // string || object ?? || array [{list:'list-tag'}] ?? default
     //     target: 'div#content', // optional
-    //     endpoint: '/api/product',
-    //     tag: 'product-view'
-    //     views: { // mixed object || array ['list','show','create','update','delete'] ???
+    //     // endpoint: '/api/category',
+    //     tag: 'category-view',
+    //     // dependencies: 'category-view-plugin.js',
+    //     }, {
     //         list: {
-    //             // optional
-    //             // title: 'Products',
-    //             // schema: 'product.json', // string || object ?? || array [{list:'list-tag'}] ?? default
-    //             // target: 'div#content', // optional
-    //             // endpoint: '/api/product/list',
-    //             // tag: 'product-view'
     //         },
     //         view:{
 
     //         }
-
-    //     },
-    // });
-
-    // riot.mount('side-menu', {
-    //     routes: riotCrudController.getRoutes()
-    // });
-
-    // RiotCrud.baseUrl('http://localhost:3030');
-    // RiotCrud.target('div#content');
-    // RiotCrud.requestFn(function(collection, view, id, params) {return {};});
-    // RiotCrud.responseFn(function(collection, view, id, params, response) {});
-
-    // RiotCrud
-    //     .addModel('product')
-    //     .schama('schema.json') // string || object ?? || array [{list:'list-tag'}] ?? default
-    //     .title('Custom Product view') // title || schamatitle
-    //     .endpoint('/api/products') // baseUrl + rest || schamatitle
-    //     .views(['list','show','create','update','delete'])
-    //     .tags('custom-product') // string || {list:'list-tag'} ?? default
-
-    /**
-     * Riot crud model api
-     * define define your models
-     */
-    $.getJSON("/schema/product.json",
-        function(result){
-            if(!result || typeof result.title === 'undefined')
-                console.error(result);
-
-            console.info('Schema result.title', result);
-
-            var Products = riotCrudModel.entity('products');
-            Products.schema(result)
-                    .restname('api/products')
-                    .requestFn(function (){alert(1)})
-                    .responseFn(function (){alert(1)});
-
-            Products.listView()
-                .title('product list')
-                .description('product list description')
-                .perPage(30).fields([
-                    riotCrudField('id', 'text')
-                        .title('ID')
-                        .attributes("width",100)
-                        .isDetailLink(false)
-                        .filter(true)
-                        // .template('{ opts.id }<img src="https://placeholder/img/30x30/{ opts.image }" />'),
-                        .fn(function(field, data){return data.id + '<img src="https://placeholder/img/30x30/' + data.image + '" />'})
-                        ,
-                    riotCrudField('sku', 'date')
-                        .isDetailLink()
-                        .attributes("width",150)
-                        .filter(true),
-                    riotCrudField('name', 'text')
-                        .isDetailLink(true)
-                        .filter(true),
-                    riotCrudField('active')
-                        .fn(function(field, data){return data.active ? '<span class="fi-check"></span>' : '<span class="fi-x"></span>'})
-                        .attributes("width",100)
-                        // .tag('crud-field-switch')
-                        .filter(true),
-                    riotCrudField('price_euro', 'number')
-                        .attributes("width",120)
-                        .filter(true),
-                    // riotCrudField('image', 'text').template('{ opts.data.id }<img src="https://placeholder/img/30x30/{ opts.data[opts.field.name] }" />'),
-                    // riotCrudField('category', 'number').fn(function(field, data){return 'john'+data[field.name]+'dudeu'}),
-                ]);
-            Products.editView()
-                .title('product edit')
-                .description('product edit description');
+    //     }
+    // );
 
 
 
+    // console.info('routes: RiotCrudController.getRoutes()',RiotCrudController.getRoutes());
+    // mount menu here will ignore following addRoute
+    riot.mount('side-menu','side-menu', {
+        routes: RiotCrudController.getRoutes()
+    });
 
-                riotCrudModel.run();
+    if(window.location.hash === "") {
+       riot.route('dashboard');
+    }
 
-                // console.log('riotCrudController.getRoutes()', riotCrudController.getRoutes());
-                riot.mount('side-menu', {
-                    routes: riotCrudController.getRoutes()
-                });
+    RiotCrudController.start();
 
-                if(window.location.hash === "") {
-                   riot.route('dashboard');
-                }
+    // RiotCrudModel
+    // RiotCrudRoute.start(RiotCrudModel.getRoutes())
+    // RiotCrudObservebla
 
-                riotCrudController.start();
-      }
-    );
+})
 
-
-});

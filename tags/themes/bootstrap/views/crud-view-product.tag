@@ -34,6 +34,7 @@
     <script>
 
     this.on('update', function() {
+        alert(1);
         console.log('this.opts',this.VM.row);
     })
 
