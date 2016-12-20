@@ -23,29 +23,8 @@
             <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
-                  <div class="x_title">
-                    <h2>Default Example <small>Users</small></h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                      </li>
-                      <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                        <ul class="dropdown-menu" role="menu">
-                          <li><a href="#">Settings 1</a>
-                          </li>
-                          <li><a href="#">Settings 2</a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li><a class="close-link"><i class="fa fa-close"></i></a>
-                      </li>
-                    </ul>
-                    <div class="clearfix"></div>
-                  </div>
+
                   <div class="x_content">
-                    <p class="text-muted font-13 m-b-30">
-                      DataTables has most features enabled by default, so all you need to do to use it with your own tables is to call the construction function: <code>$().DataTable();</code>
-                    </p>
 
                     <table id="datatable" class="display table table-striped table-bordered datatable-buttons" cellspacing="0" width="100%">
                         <thead>
@@ -67,30 +46,11 @@
                         </tfoot>
                     </table>
 
-                    <!--     <thead>
-                          <tr >
-                            <th each="{ colkey, colval in opts.schema.properties }" >{ colkey }</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr each="{ row in this.opts.rows }" >
-                            <td each="{ colkey, colval in row }">{ colkey }</td>
-                          </tr>
-                        </tbody>
-                    -->
-
-
-                    <!--    <virtual each={ field in this.VM.config.fields }>
-                                <a>{ field.title }</a>
-                            </virtual>
-                     -->
-
                   </div>
                 </div>
               </div>
             </div>
     </div>
-
 
     <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/zf/dt-1.10.12/datatables.min.css"> -->
     <link href="/bower_components/gentelella/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
