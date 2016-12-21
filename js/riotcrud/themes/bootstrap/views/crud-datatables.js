@@ -22,7 +22,26 @@ riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class
             console.info('DATATABLES UPDATED');
 
             tag.initTable();
+            tag.socket();
         });
+
+        tag.socket = function () {
+            var socket = io('http://localhost:3030');
+            var client = feathers()
+              .configure(feathers.hooks())
+              .configure(feathers.socketio(socket));
+            window.service = client.service('products');
+            service.on('created', function(todo) {
+                console.log('Someone created a todo', todo);
+            });
+
+            service.find().then(function(result){
+              console.log('Authenticated!', result);
+              tag.datatable.rows.add(result.data)
+            }).catch(function(error){
+              console.error('Error authenticating!', error);
+            });
+        }
 
         this.on('mount', function() {
             console.log('DATATABLES MOUNT');
@@ -102,6 +121,7 @@ riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class
                         "data": null,
                         "targets": 0,
                         "order": false,
+                        "orderable": false,
 
                         "render": function ( data, type, row ) {
                             return '<input type="checkbox" value="'+ row.id + '"/>';
@@ -122,10 +142,12 @@ riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class
                     {
                         "data": null,
                         "targets": -1,
+                        "orderable": false,
 
                         "render": function ( data, type, row ) {
 
-                            return '<a class="btn btn-default buttons-csv buttons-html5 btn-sm" tabindex="0" aria-controls="ajaxdatatables" href="#product/view/' + row.id + '"><span> Edit</span></a>';
+                            return '<a class="btn btn-default btn-small" tabindex="0" aria-controls="ajaxdatatables" href="#product/view/' + row.id + '"><span> Edit</span></a>' +
+                                    '<div class="dt-buttons btn-group"><a class="btn btn-default buttons-copy buttons-html5 btn-sm" href="#"><span> Delete</span></a></div>';
                         }
                     }
                 );
@@ -145,7 +167,8 @@ riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class
                 query.$limit = queryObj['length'].value;
                 query.$skip = queryObj['start'].value;
 
-                console.log('!!!!',queryObj.order);
+                query = $.extend({}, query, opts.query.query);
+
                 for (var i = queryObj.order.value.length - 1; i >= 0; i--) {
 
                     if(queryObj.columns.value[ queryObj.order.value[i].column ] != null) {
@@ -153,19 +176,15 @@ riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class
                             query.$sort = {};
                         query.$sort[queryObj.columns.value[ queryObj.order.value[i].column ].data] =  queryObj.order.value[i].dir == 'asc' ? 1 : -1;
                     }
-
                 }
 
                 if(queryObj.search.value.value !== "") {
-                    console.log(queryObj.search.value.value);
-
                     query.name=queryObj.search.value.value;
-
                 }
 
                 $.ajax({
                    type: 'get',
-                   url:'http://localhost:3030/products',
+                   url:opts.endpoint,
 
                    data: query,
                    success: function(data, textStatus, request){
@@ -187,6 +206,10 @@ riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class
                         alert(request.getResponseHeader('X-Total-Count'));
                    }
                 });
+        }
+
+        tag.rowSelection =  function(e) {
+
         }
 
 });

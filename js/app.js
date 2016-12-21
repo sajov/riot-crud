@@ -89,14 +89,14 @@ $script.ready('layout', function() {
             menu: true,
             schema: 'http://localhost:3030/schema/product.json', // string || object ?? || array [{list:'list-tag'}] ?? default
             target: 'div#content', // optional
-            // endpoint: '/api/product',
+            endpoint: 'http://localhost:3030/products',
             // dependencies: 'product-view-plugin.js',
         },{ // mixed object || array ['list','show','create','update','delete'] ???
             list: {
                 // optional
                 selection: true,
                 filterable: true,
-                buttons: true,
+                buttons: ['edit','delete'],
                 tag: 'crud-datatables', // default
                 title: 'Product List',
                 schema: 'http://localhost:3030/schema/product.json', // string || object ?? || array [{list:'list-tag'}] ?? default

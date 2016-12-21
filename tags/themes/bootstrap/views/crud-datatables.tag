@@ -29,7 +29,7 @@
                     <table id="datatable" class="display table table-striped table-bordered datatable-buttons" cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                                <th if={opts.selection}><input onclick={rowSelection} type="checkbox"/></th>
+                                <th if={opts.selection}><input onclick={rowSelection} type="checkbox" /></th>
                                 <th each="{ colkey, colval in opts.schema.required }" data-type="{colval.type}">{ colkey }</th>
                                 <th></th>
                             </tr>
@@ -87,7 +87,28 @@
             console.info('DATATABLES UPDATED');
 
             tag.initTable();
+            tag.socket();
         });
+
+        tag.socket = function () {
+            var socket = io('http://localhost:3030');
+            var client = feathers()
+              .configure(feathers.hooks())
+              .configure(feathers.socketio(socket));
+            window.service = client.service('products');
+            service.on('created', function(todo) {
+                console.log('Someone created a todo', todo);
+            });
+            // service.create({
+            //     description: 'Todo from client'
+            // });
+            service.find().then(function(result){
+              console.log('Authenticated!', result);
+              tag.datatable.rows.add(result.data)
+            }).catch(function(error){
+              console.error('Error authenticating!', error);
+            });
+        }
 
         this.on('mount', function() {
             console.log('DATATABLES MOUNT');
@@ -103,30 +124,6 @@
             console.error('opts.tableData',opts.tableData);
 
             tag.datatable = $('#datatable').DataTable(tag.getDatatableConfig());
-
-            // tag.datatable.columns().flatten().each( function ( colIdx ) {
-            //     // Create the select list and search operation
-            //     var select = $('<select />')
-            //         .appendTo(
-            //             tag.datatable.column(colIdx).footer()
-            //         )
-            //         .on( 'change', function () {
-            //             tag.datatable
-            //                 .column( colIdx )
-            //                 .search( $(this).val() )
-            //                 .draw();
-            //         } );
-
-            //     // Get the search data for the first column and add to the select list
-            //     tag.datatable
-            //         .column( colIdx )
-            //         .cache( 'search' )
-            //         .sort()
-            //         .unique()
-            //         .each( function ( d ) {
-            //             select.append( $('<option value="'+d+'">'+d+'</option>') );
-            //         } );
-            // } );
 
             $('#datatable tfoot input').on('change keyup', function () {
                 tag.datatable
@@ -187,6 +184,13 @@
                 "pageLength": 10,
                 "search": false,
                 "scrollX": true,
+                // scrollY:        "300px",
+                // scrollX:        true,
+                // scrollCollapse: true,
+                // fixedColumns:   {
+                //     leftColumns: 1,
+                //     rightColumns: 1
+                // },
                 // deferRender: true,
                 // scrollY: 380,
                 // scrollCollapse: true,
@@ -203,6 +207,7 @@
                         "data": null,
                         "targets": 0,
                         "order": false,
+                        "orderable": false,
                         // "defaultContent": "<button>Click!</button>",
                         "render": function ( data, type, row ) {
                             return '<input type="checkbox" value="'+ row.id + '"/>';
@@ -224,10 +229,12 @@
                     {
                         "data": null,
                         "targets": -1,
+                        "orderable": false,
                         // "defaultContent": "<button>Click!</button>",
                         "render": function ( data, type, row ) {
                             // return data +' ('+ row.sku+')';
-                            return '<a class="btn btn-default buttons-csv buttons-html5 btn-sm" tabindex="0" aria-controls="ajaxdatatables" href="#product/view/' + row.id + '"><span> Edit</span></a>';
+                            return '<a class="btn btn-default btn-small" tabindex="0" aria-controls="ajaxdatatables" href="#product/view/' + row.id + '"><span> Edit</span></a>' +
+                                    '<div class="dt-buttons btn-group"><a class="btn btn-default buttons-copy buttons-html5 btn-sm" href="#"><span> Delete</span></a></div>';
                         }
                     }
                 );
@@ -243,8 +250,8 @@
          * @return {[type]}            [description]
          */
         tag.datatableSearch = function ( sSource, aoData, fnCallback ) {
-                // console.clear();
-                // /* reorganize query */
+
+                /* reorganize query */
                 var query = {};
                 var queryObj = {};
                 for (var i = aoData.length - 1; i >= 0; i--) {
@@ -256,12 +263,8 @@
                 query.$limit = queryObj['length'].value;
                 query.$skip = queryObj['start'].value;
 
+                query = $.extend({}, query, opts.query.query);
                 /* sort */
-                // query.$sort ={price_dollar:1};
-                // query.$sort['name'] = 1;
-
-                // query.$sort = {};
-                console.log('!!!!',queryObj.order);
                 for (var i = queryObj.order.value.length - 1; i >= 0; i--) {
                     // console.error(queryObj.order.value);
                     if(queryObj.columns.value[ queryObj.order.value[i].column ] != null) {
@@ -269,33 +272,17 @@
                             query.$sort = {};
                         query.$sort[queryObj.columns.value[ queryObj.order.value[i].column ].data] =  queryObj.order.value[i].dir == 'asc' ? 1 : -1;
                     }
-                //                 ' ' +
-                //                 queryObj.order.value[i].dir;
                 }
 
-                // console.error(query.$sort)
 
                 /* search */
                 if(queryObj.search.value.value !== "") {
-                    console.log(queryObj.search.value.value);
-                    // query.$search[queryObj.columns.value[ queryObj.order.value[i].column ].data] =  queryObj.order.value[i].dir == 'asc' ? 1 : -1;
                     query.name=queryObj.search.value.value;
-                    // var queryFields = [];
-                    // for (var i = queryObj.columns.value.length - 1; i >= 0; i--) {
-                    //     if (queryObj.columns.value[i].searchable) {
-                    //         queryFields.push(queryObj.columns.value[i].data+'":"'+queryObj.search.value.value);
-                    //     }
-                    // }
-                    // // query.$where = '{"or":["' + queryFields.join('","') + '""]}';
-                    // query.$or = '["' + queryFields.join('","') + '""]';
-                    // query.$or = '["' + queryFields.join('","') + '""]';
-                    // query.$or = '["' + queryFields.join('","') + '""]';
                 }
-
                 // AJAX
                 $.ajax({
                    type: 'get',
-                   url:'http://localhost:3030/products',
+                   url:opts.endpoint,
                    // url: tag.VM.config.baseUrl + '/' + tag.VM.model,
                    data: query,
                    success: function(data, textStatus, request){
@@ -319,6 +306,11 @@
                         alert(request.getResponseHeader('X-Total-Count'));
                    }
                 });
+        }
+
+        tag.rowSelection =  function(e) {
+            // console.log(e);
+            // alert($(e.target).attr('selected'))
         }
 
     </script>
