@@ -62,55 +62,36 @@
 
     <script>
         var tag = this;
+        var self = this;
+        self.mixin(serviceMixin);
 
-        this.refresh = function(params, options) {
+        self.refresh = function(params, options) {
             // console.log('datatables refresh opts', opts.title);
             // alert('refresh',params, options);
-            // this.mergeParams(params);
-            // riotux.trigger(this.VM.modelStore,'list',{tag:this.root.getAttribute('riot-tag'), params:params});
+            // self.mergeParams(params);
+            // riotux.trigger(self.VM.modelStore,'list',{tag:self.root.getAttribute('riot-tag'), params:params});
         }
 
-        this.on('all', function(eventName) {
+        self.on('all', function(eventName) {
             console.info('ALL EVENTNAME',eventName)
         })
 
-        this.on('update', function(params, options) {
+        self.on('update', function(params, options) {
             // console.log('datatables update opts', opts.title);
         });
 
-        this.on('updated', function(params, options) {
+        self.on('updated', function(params, options) {
             // console.log('datatables updated opts', opts.schema.properties);
         });
 
-        this.on('updated', function(params, options) {
+        self.on('updated', function(params, options) {
             console.error('MOIUNGFT');
             console.info('DATATABLES UPDATED');
 
             tag.initTable();
-            tag.socket();
         });
 
-        tag.socket = function () {
-            var socket = io('http://localhost:3030');
-            var client = feathers()
-              .configure(feathers.hooks())
-              .configure(feathers.socketio(socket));
-            window.service = client.service('products');
-            service.on('created', function(todo) {
-                console.log('Someone created a todo', todo);
-            });
-            // service.create({
-            //     description: 'Todo from client'
-            // });
-            service.find().then(function(result){
-              console.log('Authenticated!', result);
-              tag.datatable.rows.add(result.data)
-            }).catch(function(error){
-              console.error('Error authenticating!', error);
-            });
-        }
-
-        this.on('mount', function() {
+        self.on('mount', function() {
             console.log('DATATABLES MOUNT');
             opts.tableHeader = opts.schema.defaultProperties || opts.schema.required;
             console.error(opts.tableHeader);
@@ -120,7 +101,7 @@
          * Init Datatable
          * @return {[type]} [description]
          */
-        this.initTable = function() {
+        self.initTable = function() {
             console.error('opts.tableData',opts.tableData);
 
             tag.datatable = $('#datatable').DataTable(tag.getDatatableConfig());
@@ -128,13 +109,13 @@
             $('#datatable tfoot input').on('change keyup', function () {
                 tag.datatable
                     .column( $(this).parent().index()+':visible' )
-                    .search( this.value )
+                    .search( self.value )
                     .draw();
             } );
 
             $('.top_search input').on('change', function() {
                 console.log($(this).val());
-                tag.datatable.search( this.value ).draw();
+                tag.datatable.search( self.value ).draw();
             });
         }
 
@@ -142,8 +123,7 @@
          * Get datatable configuration
          * @return object Datatable configurytion
          */
-        this.getDatatableConfig = function() {
-
+        self.getDatatableConfig = function() {
             var config = {
                 order: [[0,'asc']],
                 columns: [],
@@ -233,7 +213,7 @@
                         // "defaultContent": "<button>Click!</button>",
                         "render": function ( data, type, row ) {
                             // return data +' ('+ row.sku+')';
-                            return '<a class="btn btn-default btn-small" tabindex="0" aria-controls="ajaxdatatables" href="#product/view/' + row.id + '"><span> Edit</span></a>' +
+                            return '<a class="btn btn-default btn-small" tabindex="0" aria-controls="ajaxdatatables" href="#products/view/' + row.id + '"><span> Edit</span></a>' +
                                     '<div class="dt-buttons btn-group"><a class="btn btn-default buttons-copy buttons-html5 btn-sm" href="#"><span> Delete</span></a></div>';
                         }
                     }
@@ -279,33 +259,49 @@
                 if(queryObj.search.value.value !== "") {
                     query.name=queryObj.search.value.value;
                 }
-                // AJAX
-                $.ajax({
-                   type: 'get',
-                   url:opts.endpoint,
-                   // url: tag.VM.config.baseUrl + '/' + tag.VM.model,
-                   data: query,
-                   success: function(data, textStatus, request){
 
-                    console.info('success');
-                    console.info(data);
-                    console.info(request);
-                    console.info(request.getResponseHeader('X-Total-Count'));
+                tag.service.find(query).then(function(result){
+                    console.info('CRUD-JSONEDITOR UPDATE FIND', result);
                         fnCallback({
                             error: false,
                             // recordsTotal: request.getResponseHeader('X-Total-Count'),
                             // recordsFiltered: request.getResponseHeader('X-Total-Count'),
                             // data: data
-                            recordsTotal: data.total,
-                            recordsFiltered: data.total,
-                            data: data.data
+                            recordsTotal: result.total,
+                            recordsFiltered: result.total,
+                            data: result.data
                         })
-                   },
-                   error: function (request, textStatus, errorThrown) {
-                    alert('error');
-                        alert(request.getResponseHeader('X-Total-Count'));
-                   }
+                }).catch(function(error){
+                  console.error('Error CRUD-JSONEDITOR UPDATE FIND', error);
                 });
+                // AJAX
+                // $.ajax({
+                //    type: 'get',
+                //    url:opts.endpoint,
+                //    // url: tag.VM.config.baseUrl + '/' + tag.VM.model,
+                //    data: query,
+                //    success: function(data, textStatus, request){
+
+                //     console.info('success');
+                //     console.info(data);
+                //     console.info(request);
+                //     console.info(request.getResponseHeader('X-Total-Count'));
+                //     alert(request);
+                //         fnCallback({
+                //             error: false,
+                //             // recordsTotal: request.getResponseHeader('X-Total-Count'),
+                //             // recordsFiltered: request.getResponseHeader('X-Total-Count'),
+                //             // data: data
+                //             recordsTotal: data.total,
+                //             recordsFiltered: data.total,
+                //             data: data.data
+                //         })
+                //    },
+                //    error: function (request, textStatus, errorThrown) {
+                //     alert('error');
+                //         alert(request.getResponseHeader('X-Total-Count'));
+                //    }
+                // });
         }
 
         tag.rowSelection =  function(e) {

@@ -23,7 +23,7 @@
           <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
               <div class="x_title">
-                <h2>{tag.opts.data.name}Default Example <small>Users</small></h2>
+                <h2>{self.opts.data.name}Default Example <small>Users</small></h2>
                 <ul class="nav navbar-right panel_toolbox">
                   <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                   </li>
@@ -46,7 +46,7 @@
 
 
                 <div id="jsoneditor"></div>
-                <a class="btn success" href="#" onclick={ store }>Speichern</a>
+                <a class="btn success" href="#" onclick={ saveJSONEditor }>Speichern</a>
 
               </div>
             </div>
@@ -63,231 +63,89 @@
 
 
     <script>
-        var tag = this;
+        var self = this;
+        self.mixin(serviceMixin);
 
-
-
-        tag.store = function(e) {
-            e.preventDefault();
-            // console.log(e);
-            // alert();
-            var json = tag.editor.getValue();
-
-            output = JSON.stringify(json,null,2);
-            console.log('save',output);
-            var validation_errors = tag.editor.validate();
-            // // Show validation errors if there are any
-            if(validation_errors.length) {
-                alert(JSON.stringify(validation_errors,null,2));
-            }
-            else {
-                 $.ajax({
-                        type: "PATCH",
-                        url: 'http://localhost:3030/products/' + tag.opts.query.id,
-                        data: output,
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        success: function(data){
-                            console.info(data);
-                        },
-                        failure: function(errMsg) {
-                            console.error(errMsg);
-                        }
-                  });
-                console.log('valid');
-            }
-
-            // updateDirectLink();
-        }
-
-        this.on('mount', function() {
-            console.log('crud-jsoneditor update opts.query', this.opts.schema);
-        });
-
-        this.on('mounted', function() {
-
+        this.on('update', function() {
+            console.info('CRUD-JSONEDITOR UPDATE',self.opts.query);
+            if(typeof self.opts.query.id != 'undefined')
+                self.get(self.opts.query.id)
 
         });
 
-        this.on('before-mount', () => {
-            console.info('dashboard before-mount', tag);
-            tag.initJSONEditor();
-        });
-
-        tag.initJSONEditor = function() {
-                        // AJAX
-            $.ajax({
-                type: 'get',
-                url:'http://localhost:3030/products/' + tag.opts.query.id || '',
-                // url: tag.VM.config.baseUrl + '/' + tag.VM.model,
-                success: function(data, textStatus, request){
-                    tag.opts.data = data;
-                    console.info('success');
-                    console.info(data);
-                    console.info(request);
-                    console.info(request.getResponseHeader('X-Total-Count'));
-                    console.info('crud-jsoneditor update ajax callback',{
-                        data: data
-                    })
-
-                    // Set the global default
-                    // JSONEditor.defaults.options.theme = "foundation6";
-                    JSONEditor.defaults.options.theme = "bootstrap3";
-                    JSONEditor.plugins.selectize.enable = true;
-                    JSONEditor.defaults.iconlib = 'fontawesome4';
-                    JSONEditor.plugins.selectize.enable = true;
-                    JSONEditor.plugins.select2.width = "300px";
-                    // JSONEditor.plugins.sceditor.emoticonsEnabled = true;
-                    // JSONEditor.plugins.epiceditor.basePath = 'epiceditor';
-
-                    tag.editor = new JSONEditor(document.getElementById('jsoneditor'),{
-
-                            schema: 'http://localhost:3030/schema/product_faker.json',
-                            ajax:true,
-                            // schema: {
-                            //   type: "object",
-                            //   title: "Car",
-                            //   properties: {
-                            //     make: {
-                            //       type: "string",
-                            //       enum: [
-                            //         "Toyota",
-                            //         "BMW",
-                            //         "Honda",
-                            //         "Ford",
-                            //         "Chevy",
-                            //         "VW"
-                            //       ]
-                            //     },
-                            //     model: {
-                            //       type: "string"
-                            //     },
-                            //     year: {
-                            //       type: "integer",
-                            //       enum: [
-                            //         1995,1996,1997,1998,1999,
-                            //         2000,2001,2002,2003,2004,
-                            //         2005,2006,2007,2008,2009,
-                            //         2010,2011,2012,2013,2014
-                            //       ],
-                            //       default: 2008
-                            //     }
-                            //   }
-                            // }
-                            schema: tag.opts.schema,
-                            grid_columns: 2,
-                            theme:'bootstrap3',
-                            object_layout: 'grid',
-                            disable_edit_json: false,
-                            form_name_root:'root[product][name]'
-
-                          });
-                    tag.opts.data = data;
-                    tag.editor.setValue(data);
-                    $('[data-schemaformat="html"]').summernote();
+        this.refresh = function(opts) {
+            console.error('serviceMixin refresh(root) opts',opts);
+            if(typeof self.opts.query.id != 'undefined')
+                self.get(self.opts.query.id)
+        },
 
 
+        this.on('before-mount', () => {console.info('CRUD-JSONEDITOR BEFORE-MOUNT');});
 
-                    console.log('schema',tag.opts.schema);
+        this.on('mount', function() {console.info('CRUD-JSONEDITOR MOUNT');});
 
-                },
-                error: function (request, textStatus, errorThrown) {
-                    alert('error');
-                    alert(request.getResponseHeader('X-Total-Count'));
+        this.on('mounted', function() {console.info('CRUD-JSONEDITOR MOUNTED',self.opts.query);});
+
+        self.get = function(id) {
+
+            self.service.get(id).then(function(result){
+                console.info('CRUD-JSONEDITOR UPDATE FIND', result);
+                if(typeof self.editor == 'undefined') {
+                  self.initJSONEditor();
                 }
+                self.editor.setValue(result);
+            }).catch(function(error){
+              console.error('Error CRUD-JSONEDITOR UPDATE FIND', error);
             });
-
-
-
-            // config = {
-
-            //     // Seed the form with a starting value
-            //     startval: this.VM.row,
-
-            //     no_additional_properties: true,
-
-            //     // Require all properties by default
-            //     required_by_default: true,
-
-            //     iconlib: "fontawesome4",
-            //     // Disable additional properties
-            //     no_additional_properties: false,
-            //     disable_array_add: true,
-            //     disable_array_delete_last_row: true,
-            //     disable_array_delete_all_rows: true,
-            //     disable_array_delete: true,
-            //     disable_collapse: true,
-            //     grid_columns: 2,
-            //     // Require all properties by default
-            //     required_by_default: false
-            // };
-
-            // if(this.VM.config.schema) {
-            //     config.ajax = true;
-            //     config.schema = this.VM.config.schema;
-            // }
-
-            // console.log('mount this.VM',this.VM);
-
-            // tag.editor = new JSONEditor(this.jsoneditor, config);
-
-            // // if(tag.VM.config.view === 'show') {
-            // //     console.log('mount show');
-            // //     tag.editor.disable();
-            // // }
-
-            // tag.editor.on('change',function() {
-            //  if(tag.VM.config.view === 'show') {
-            //     console.log('mount show');
-            //     tag.editor.disable();
-
-            // } else {
-            //     tag.editor.getEditor('root.createdAt').disable();
-            // }
-            // });
         }
 
+        self.initJSONEditor = function(data) {
 
-                // // Custom editor
-        // JSONEditor.defaults.editors.dateTime = JSONEditor.defaults.editors.string.extend({
-        //     getValue: function() {
+            self.opts.data = data;
 
-        //         function getTimeZone() {
-        //             var offset = new Date().getTimezoneOffset(), o = Math.abs(offset);
-        //             return (offset < 0 ? "+" : "-") + ("00" + Math.floor(o / 60)).slice(-2) + ":" + ("00" + (o % 60)).slice(-2);
-        //         }
+            JSONEditor.defaults.options.theme = "bootstrap3";
+            // JSONEditor.defaults.options.theme = "foundation6";
+            JSONEditor.plugins.selectize.enable = true;
+            JSONEditor.defaults.iconlib = 'fontawesome4';
+            JSONEditor.plugins.selectize.enable = true;
+            JSONEditor.plugins.select2.width = "300px";
+            // JSONEditor.plugins.sceditor.emoticonsEnabled = true;
+            // JSONEditor.plugins.epiceditor.basePath = 'epiceditor';
 
-        //         return this.value+getTimeZone();
-        //     },
+            self.editor = new JSONEditor(document.getElementById('jsoneditor'),
+                {
+                    schema: 'http://localhost:3030/schema/product_faker.json',
+                    ajax:true,
+                    schema: self.opts.schema,
+                    grid_columns: 2,
+                    theme:'bootstrap3',
+                    object_layout: 'grid',
+                    disable_edit_json: false,
+                    form_name_root:'root[product][name]'
 
-        //     setValue: function(val) {
+                }
+            );
 
-        //         // strip timeZone
-        //         var stripedDateTime = val.substring(0, val.lastIndexOf("+"));
+            $('[data-schemaformat="html"]').summernote();
+        }
 
+        self.saveJSONEditor = function(e) {
+            e.preventDefault();
 
-        //         if(this.value !== stripedDateTime) {
-        //             this.value = stripedDateTime;
-        //             this.input.value = this.value;
-        //             this.refreshPreview();
-        //             this.onChange();
-        //         }
-        //     },
+            var json = self.editor.getValue();
+            var validation_errors = self.editor.validate();
+            if(validation_errors.length) {
+                console.error(JSON.stringify(validation_errors,null,2));
+            } else {
+                self.service.update(json.id,json).then(function(result){
+                  console.info('CRUD-JSONEDITOR saveJSONEditor update', result);
+                }).catch(function(error){
+                  console.error('Error CRUD-JSONEDITOR saveJSONEditor update', error);
+                });
+            }
+        }
 
-        //     build: function() {
-        //         this.schema.format = "datetime-local";
-        //         this._super();
-
-        //     }
-        // });
-
-        // // Instruct the json-editor to use the custom datetime-editor.
-        // JSONEditor.defaults.resolvers.unshift(function(schema) {
-        //     if(schema.type === "string" && schema.format === "datetime") {
-        //         return "dateTime";
-        //     }
-
-        // });
     </script>
 
 </crud-jsoneditor>
+

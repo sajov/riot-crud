@@ -67,10 +67,10 @@ $script.ready('layout', function() {
         }
     );
 
-    RiotCrudController.addRoute('table-demo',{title: 'Table',menu: true, route: '/product/list'});
-    RiotCrudController.addRoute('table-view',{title: 'Show',menu: true, route:'/product/view/1'});
-    RiotCrudController.addRoute('table-edit',{title: 'Edit',menu: true, route:'/product/edit/1'});
-    RiotCrudController.addRoute('table-create',{title: 'Create',menu: true, route:'/product/create/1'});
+    RiotCrudController.addRoute('table-demo',{title: 'Table',menu: true, route: '/products/list'});
+    RiotCrudController.addRoute('table-view',{title: 'Show',menu: true, route:'/products/view/1'});
+    RiotCrudController.addRoute('table-edit',{title: 'Edit',menu: true, route:'/products/edit/1'});
+    RiotCrudController.addRoute('table-create',{title: 'Create',menu: true, route:'/products/create/1'});
 
     /**
      * Riot crud model
@@ -83,13 +83,14 @@ $script.ready('layout', function() {
         responseFn: function(collection, view, id, params, response) {}
     });
 
-    RiotCrudModel.addModel('product',{
+    RiotCrudModel.addModel('products',{
             title: 'Products',
             description: '/products/list',
             menu: true,
             schema: 'http://localhost:3030/schema/product.json', // string || object ?? || array [{list:'list-tag'}] ?? default
             target: 'div#content', // optional
-            endpoint: 'http://localhost:3030/products',
+            endpoint: 'http://localhost:3030', //'http://localhost:3030/products', rest enpoints
+            tag: 'crud-jsoneditor', // default
             // dependencies: 'product-view-plugin.js',
         },{ // mixed object || array ['list','show','create','update','delete'] ???
             list: {
@@ -136,13 +137,14 @@ $script.ready('layout', function() {
                 // endpoint: '/api/product/view',
                 dependencies: [
                     riotCrudTheme + '/views/crud-jsoneditor.js',
-                    // '/bower_components/json-editor/dist/jsoneditor.min.js'
+                    '/bower_components/json-editor/dist/jsoneditor.min.js',
+                    'http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js',
                     // 'http://cdn.jsdelivr.net/sceditor/1.4.3/jquery.sceditor.bbcode.min.js',
                     // 'http://cdn.jsdelivr.net/sceditor/1.4.3/jquery.sceditor.xhtml.min.js'
                 ] // string || array
             },
             create: {
-                fn: function() {riot.route('/product/create/1')}
+                fn: function() {riot.route('/product/view')}
             },
             edit: {
                 title: 'Edit Products',

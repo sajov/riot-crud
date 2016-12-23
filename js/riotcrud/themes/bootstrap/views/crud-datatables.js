@@ -1,55 +1,38 @@
 riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class="title_left"> <h3>{opts.title} <small>{opts.description}</small></h3> </div> <div class="title_right"> <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search"> <div class="input-group"> <input type="text" class="form-control" placeholder="Search for..."> <span class="input-group-btn"> <button class="btn btn-default" type="button">Go!</button> </span> </div> </div> </div> </div> <div class="clearfix"></div> <div class="row"> <div class="col-md-12 col-sm-12 col-xs-12"> <div class="x_panel"> <div class="x_content"> <table id="datatable" class="display table table-striped table-bordered datatable-buttons" cellspacing="0" width="100%"> <thead> <tr> <th if="{opts.selection}"><input onclick="{rowSelection}" type="checkbox"></th> <th each="{colkey, colval in opts.schema.required}" data-type="{colval.type}">{colkey}</th> <th></th> </tr> </thead> <tfoot> <tr id="filterrow" if="{opts.filterable}"> <th></th> <th each="{colkey, colval in opts.schema.required}" data-type="{colval.type}"> <small> <input type="text" name="filter_{colkey}" placeholder="filter {colkey}"></small> </th> <th></th> </tr> </tfoot> </table> </div> </div> </div> </div> </div> <link href="/bower_components/gentelella/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">', '', '', function(opts) {
         var tag = this;
+        var self = this;
+        self.mixin(serviceMixin);
 
-        this.refresh = function(params, options) {
+        self.refresh = function(params, options) {
 
         }
 
-        this.on('all', function(eventName) {
+        self.on('all', function(eventName) {
             console.info('ALL EVENTNAME',eventName)
         })
 
-        this.on('update', function(params, options) {
+        self.on('update', function(params, options) {
 
         });
 
-        this.on('updated', function(params, options) {
+        self.on('updated', function(params, options) {
 
         });
 
-        this.on('updated', function(params, options) {
+        self.on('updated', function(params, options) {
             console.error('MOIUNGFT');
             console.info('DATATABLES UPDATED');
 
             tag.initTable();
-            tag.socket();
         });
 
-        tag.socket = function () {
-            var socket = io('http://localhost:3030');
-            var client = feathers()
-              .configure(feathers.hooks())
-              .configure(feathers.socketio(socket));
-            window.service = client.service('products');
-            service.on('created', function(todo) {
-                console.log('Someone created a todo', todo);
-            });
-
-            service.find().then(function(result){
-              console.log('Authenticated!', result);
-              tag.datatable.rows.add(result.data)
-            }).catch(function(error){
-              console.error('Error authenticating!', error);
-            });
-        }
-
-        this.on('mount', function() {
+        self.on('mount', function() {
             console.log('DATATABLES MOUNT');
             opts.tableHeader = opts.schema.defaultProperties || opts.schema.required;
             console.error(opts.tableHeader);
         })
 
-        this.initTable = function() {
+        self.initTable = function() {
             console.error('opts.tableData',opts.tableData);
 
             tag.datatable = $('#datatable').DataTable(tag.getDatatableConfig());
@@ -57,18 +40,17 @@ riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class
             $('#datatable tfoot input').on('change keyup', function () {
                 tag.datatable
                     .column( $(this).parent().index()+':visible' )
-                    .search( this.value )
+                    .search( self.value )
                     .draw();
             } );
 
             $('.top_search input').on('change', function() {
                 console.log($(this).val());
-                tag.datatable.search( this.value ).draw();
+                tag.datatable.search( self.value ).draw();
             });
         }
 
-        this.getDatatableConfig = function() {
-
+        self.getDatatableConfig = function() {
             var config = {
                 order: [[0,'asc']],
                 columns: [],
@@ -146,7 +128,7 @@ riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class
 
                         "render": function ( data, type, row ) {
 
-                            return '<a class="btn btn-default btn-small" tabindex="0" aria-controls="ajaxdatatables" href="#product/view/' + row.id + '"><span> Edit</span></a>' +
+                            return '<a class="btn btn-default btn-small" tabindex="0" aria-controls="ajaxdatatables" href="#products/view/' + row.id + '"><span> Edit</span></a>' +
                                     '<div class="dt-buttons btn-group"><a class="btn btn-default buttons-copy buttons-html5 btn-sm" href="#"><span> Delete</span></a></div>';
                         }
                     }
@@ -182,30 +164,19 @@ riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class
                     query.name=queryObj.search.value.value;
                 }
 
-                $.ajax({
-                   type: 'get',
-                   url:opts.endpoint,
-
-                   data: query,
-                   success: function(data, textStatus, request){
-
-                    console.info('success');
-                    console.info(data);
-                    console.info(request);
-                    console.info(request.getResponseHeader('X-Total-Count'));
+                tag.service.find(query).then(function(result){
+                    console.info('CRUD-JSONEDITOR UPDATE FIND', result);
                         fnCallback({
                             error: false,
 
-                            recordsTotal: data.total,
-                            recordsFiltered: data.total,
-                            data: data.data
+                            recordsTotal: result.total,
+                            recordsFiltered: result.total,
+                            data: result.data
                         })
-                   },
-                   error: function (request, textStatus, errorThrown) {
-                    alert('error');
-                        alert(request.getResponseHeader('X-Total-Count'));
-                   }
+                }).catch(function(error){
+                  console.error('Error CRUD-JSONEDITOR UPDATE FIND', error);
                 });
+
         }
 
         tag.rowSelection =  function(e) {
