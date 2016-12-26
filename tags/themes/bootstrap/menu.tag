@@ -26,7 +26,7 @@
     <div class="menu_section">
       <h3>Demos</h3>
       <ul class="nav side-menu">
-        <li class="active">
+        <li class="">
           <a>
             <i class="fa fa-edit"></i> Riotjs Tags native <span class="fa fa-chevron-down"></span>
           </a>

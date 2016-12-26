@@ -15,7 +15,7 @@ exports.validateSchema = function(schema) {
 
     return function(hook, next) {
 
-        console.log('hook.result',hook.result);
+        // console.log('hook.result',hook.result);
 
         v.addSchema(s, '/Schema');
 
@@ -23,11 +23,11 @@ exports.validateSchema = function(schema) {
 
         if(validation.errors.length > 0) {
           hook.result = validation;
-          console.log('validation ERROR',validation);
+          console.errors('validation ERROR',validation);
         }
 
-        console.log('validation ERRORS 0');
-        console.log('show in browser');
+        // console.log('validation ERRORS 0');
+        // console.log('show in browser');
 
         next();
 

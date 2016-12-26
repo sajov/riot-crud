@@ -26,13 +26,52 @@ exports.cms = function(app, count) {
     console.log('run faker cms')
 }
 
-exports.product = function(app, count) {
-
-  console.log('run faker product');
-  // console.log(faker);
-
+exports.category = function(app, count) {
+  console.info('RUN FAKER CATEGORY');
   var helper = faker.helpers;
 
+  for(var i = count; i >= 0; i--){
+
+      var name = faker.commerce.productName();
+      var description = faker.lorem.sentences();
+
+      var prod = {
+        id: i,
+        active: faker.random.boolean(),
+        name: name,
+        description: description,
+        url: faker.internet.url() + '/' + faker.helpers.slugify(name),
+        image: faker.image.fashion(),
+        locales: [
+          {lang:'ES', title:name, description: faker.lorem.sentences()}
+        ],
+        images: [
+          {
+            href: 'https://www.medic-world.com/skin/frontend/ultimo/mw/images/flags/mwd.png',
+            // href: faker.image.fashion(),
+            title: faker.random.words(),
+            description: faker.random.words(),
+            mediaType: 'jpg',
+          }
+        ],
+        createdAt:'2016-12-18',
+        updatedAt:'2016-12-18',
+    };
+
+    app.service('categories').create(prod, {}).then(function(data) {
+      // console.log('Created categories data', 'data');
+    });
+    if(i==1)
+    console.log('FAKER categories',prod);
+    // post('http://localhost:3030/cms', prod);
+
+  };
+}
+
+
+exports.product = function(app, count) {
+  console.info('RUN FAKER PRODUCT');
+  var helper = faker.helpers;
 
   for(var i = count; i >= 0; i--){
 
@@ -71,8 +110,9 @@ exports.product = function(app, count) {
     };
 
     app.service('products').create(prod, {}).then(function(data) {
-      console.log('Created product data', data);
+      // console.log('Created product data', 'data');
     });
+    if(i==1)
     console.log('FAKER product',prod);
     // post('http://localhost:3030/cms', prod);
 

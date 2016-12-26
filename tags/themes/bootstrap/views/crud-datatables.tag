@@ -65,11 +65,12 @@
         var self = this;
         self.mixin(serviceMixin);
 
-        self.refresh = function(params, options) {
+        self.refresh = function(query) {
             // console.log('datatables refresh opts', opts.title);
-            // alert('refresh',params, options);
+            console.log('refresh',query.query);
             // self.mergeParams(params);
             // riotux.trigger(self.VM.modelStore,'list',{tag:self.root.getAttribute('riot-tag'), params:params});
+            self.update();
         }
 
         self.on('all', function(eventName) {
@@ -77,6 +78,23 @@
         })
 
         self.on('update', function(params, options) {
+            var dependencies = [
+                '/bower_components/gentelella/vendors/datatables.net/js/jquery.dataTables.min.js',
+                '/bower_components/gentelella/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
+                '/bower_components/gentelella/vendors/datatables.net-buttons/js/dataTables.buttons.min.js',
+                '/bower_components/gentelella/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js',
+                '/bower_components/gentelella/vendors/datatables.net-buttons/js/buttons.flash.min.js',
+                '/bower_components/gentelella/vendors/datatables.net-buttons/js/buttons.html5.min.js',
+                '/bower_components/gentelella/vendors/datatables.net-buttons/js/buttons.print.min.js',
+                '/bower_components/gentelella/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js',
+                '/bower_components/gentelella/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js',
+                '/bower_components/gentelella/vendors/datatables.net-responsive/js/dataTables.responsive.min.js',
+                '/bower_components/gentelella/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js',
+                '/bower_components/gentelella/vendors/datatables.net-scroller/js/datatables.scroller.min.js',
+                '/bower_components/gentelella/vendors/jszip/dist/jszip.min.js',
+                '/bower_components/gentelella/vendors/pdfmake/build/pdfmake.min.js',
+                '/bower_components/gentelella/vendors/pdfmake/build/vfs_fonts.js'
+            ];
             // console.log('datatables update opts', opts.title);
         });
 
@@ -87,7 +105,6 @@
         self.on('updated', function(params, options) {
             console.error('MOIUNGFT');
             console.info('DATATABLES UPDATED');
-
             tag.initTable();
         });
 
@@ -230,7 +247,7 @@
          * @return {[type]}            [description]
          */
         tag.datatableSearch = function ( sSource, aoData, fnCallback ) {
-
+            console.info('CRUD-JSONEDITOR TAG.DATATABLESEARCH ?=====????', sSource, aoData, fnCallback);
                 /* reorganize query */
                 var query = {};
                 var queryObj = {};
@@ -260,8 +277,9 @@
                     query.name=queryObj.search.value.value;
                 }
 
-                tag.service.find(query).then(function(result){
-                    console.info('CRUD-JSONEDITOR UPDATE FIND', result);
+                tag.service.find({query:query}).then(function(result){
+                    console.info('CRUD-JSONEDITOR TAG.DATATABLESEARCH QUERY', query);
+                    console.info('CRUD-JSONEDITOR TAG.DATATABLESEARCH RESULT', result);
                         fnCallback({
                             error: false,
                             // recordsTotal: request.getResponseHeader('X-Total-Count'),
@@ -274,34 +292,6 @@
                 }).catch(function(error){
                   console.error('Error CRUD-JSONEDITOR UPDATE FIND', error);
                 });
-                // AJAX
-                // $.ajax({
-                //    type: 'get',
-                //    url:opts.endpoint,
-                //    // url: tag.VM.config.baseUrl + '/' + tag.VM.model,
-                //    data: query,
-                //    success: function(data, textStatus, request){
-
-                //     console.info('success');
-                //     console.info(data);
-                //     console.info(request);
-                //     console.info(request.getResponseHeader('X-Total-Count'));
-                //     alert(request);
-                //         fnCallback({
-                //             error: false,
-                //             // recordsTotal: request.getResponseHeader('X-Total-Count'),
-                //             // recordsFiltered: request.getResponseHeader('X-Total-Count'),
-                //             // data: data
-                //             recordsTotal: data.total,
-                //             recordsFiltered: data.total,
-                //             data: data.data
-                //         })
-                //    },
-                //    error: function (request, textStatus, errorThrown) {
-                //     alert('error');
-                //         alert(request.getResponseHeader('X-Total-Count'));
-                //    }
-                // });
         }
 
         tag.rowSelection =  function(e) {

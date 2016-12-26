@@ -84,6 +84,8 @@ $script.ready('layout', function() {
     });
 
     RiotCrudModel.addModel('products',{
+
+            modelname: 'products',
             title: 'Products',
             description: '/products/list',
             menu: true,
@@ -151,23 +153,80 @@ $script.ready('layout', function() {
                 menu:true,
                 fn: function() {riot.route('/product/edit/1')}
             }
-        });
+        }
+    );
 
-    // RiotCrudModel.addModel('category',{
-    //     title: 'Category',
-    //     schema: 'http://localhost:3030/schema/order.json', // string || object ?? || array [{list:'list-tag'}] ?? default
-    //     target: 'div#content', // optional
-    //     // endpoint: '/api/category',
-    //     tag: 'category-view',
-    //     // dependencies: 'category-view-plugin.js',
-    //     }, {
-    //         list: {
-    //         },
-    //         view:{
-
-    //         }
-    //     }
-    // );
+   RiotCrudModel.addModel('categories',{
+            modelname: 'categories',
+            title: 'Categories',
+            description: '/categories/list',
+            menu: true,
+            schema: 'http://localhost:3030/schema/category.json', // string || object ?? || array [{list:'list-tag'}] ?? default
+            target: 'div#content', // optional
+            endpoint: 'http://localhost:3030', //'http://localhost:3030/products', rest enpoints
+            tag: 'crud-jsoneditor', // default
+            // dependencies: 'product-view-plugin.js',
+        },{ // mixed object || array ['list','show','create','update','delete'] ???
+            list: {
+                // optional
+                selection: true,
+                filterable: true,
+                buttons: ['edit','delete'],
+                tag: 'crud-datatables', // default
+                title: 'Category List',
+                schema: 'http://localhost:3030/schema/category.json', // string || object ?? || array [{list:'list-tag'}] ?? default
+                target: 'div#content', // optional
+                // endpoint: '/api/product/list',
+                columns: {
+                    base_color: {
+                        "data": null,
+                        "render": function ( data, type, row ) {return '<span style="background-color:' + data.base_color + '">' + data.base_color + '</span>';}
+                    }
+                },
+                dependencies: [
+                    riotCrudTheme + '/views/crud-datatables.js',
+                    // '/bower_components/datatables.net/js/jquery.dataTables.min.js',
+                    // '/bower_components/gentelella/vendors/datatables.net/js/jquery.dataTables.min.js',
+                    // '/bower_components/gentelella/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
+                    // '/bower_components/gentelella/vendors/datatables.net-buttons/js/dataTables.buttons.min.js',
+                    // '/bower_components/gentelella/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js',
+                    // '/bower_components/gentelella/vendors/datatables.net-buttons/js/buttons.flash.min.js',
+                    // '/bower_components/gentelella/vendors/datatables.net-buttons/js/buttons.html5.min.js',
+                    // '/bower_components/gentelella/vendors/datatables.net-buttons/js/buttons.print.min.js',
+                    // '/bower_components/gentelella/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js',
+                    // '/bower_components/gentelella/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js',
+                    // '/bower_components/gentelella/vendors/datatables.net-responsive/js/dataTables.responsive.min.js',
+                    // '/bower_components/gentelella/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js',
+                    // '/bower_components/gentelella/vendors/datatables.net-scroller/js/datatables.scroller.min.js',
+                    // '/bower_components/gentelella/vendors/jszip/dist/jszip.min.js',
+                    // '/bower_components/gentelella/vendors/pdfmake/build/pdfmake.min.js',
+                    // '/bower_components/gentelella/vendors/pdfmake/build/vfs_fonts.js',
+                ] // string || array
+            },
+            view:{
+                tag: 'crud-jsoneditor', // default
+                title: 'Category Demo',
+                schema: 'http://localhost:3030/schema/product.json', // string || object ?? || array [{list:'list-tag'}] ?? default
+                target: 'div#content', // optional
+                // endpoint: '/api/product/view',
+                dependencies: [
+                    riotCrudTheme + '/views/crud-jsoneditor.js',
+                    '/bower_components/json-editor/dist/jsoneditor.min.js',
+                    'http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js',
+                    // 'http://cdn.jsdelivr.net/sceditor/1.4.3/jquery.sceditor.bbcode.min.js',
+                    // 'http://cdn.jsdelivr.net/sceditor/1.4.3/jquery.sceditor.xhtml.min.js'
+                ] // string || array
+            },
+            create: {
+                fn: function() {riot.route('/category/view')}
+            },
+            edit: {
+                title: 'Edit Categories',
+                menu:true,
+                fn: function() {riot.route('/category/edit/1')}
+            }
+        }
+    );
 
 
 

@@ -3,8 +3,11 @@ riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class
         var self = this;
         self.mixin(serviceMixin);
 
-        self.refresh = function(params, options) {
+        self.refresh = function(query) {
 
+            console.log('refresh',query.query);
+
+            self.update();
         }
 
         self.on('all', function(eventName) {
@@ -12,6 +15,23 @@ riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class
         })
 
         self.on('update', function(params, options) {
+            var dependencies = [
+                '/bower_components/gentelella/vendors/datatables.net/js/jquery.dataTables.min.js',
+                '/bower_components/gentelella/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
+                '/bower_components/gentelella/vendors/datatables.net-buttons/js/dataTables.buttons.min.js',
+                '/bower_components/gentelella/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js',
+                '/bower_components/gentelella/vendors/datatables.net-buttons/js/buttons.flash.min.js',
+                '/bower_components/gentelella/vendors/datatables.net-buttons/js/buttons.html5.min.js',
+                '/bower_components/gentelella/vendors/datatables.net-buttons/js/buttons.print.min.js',
+                '/bower_components/gentelella/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js',
+                '/bower_components/gentelella/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js',
+                '/bower_components/gentelella/vendors/datatables.net-responsive/js/dataTables.responsive.min.js',
+                '/bower_components/gentelella/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js',
+                '/bower_components/gentelella/vendors/datatables.net-scroller/js/datatables.scroller.min.js',
+                '/bower_components/gentelella/vendors/jszip/dist/jszip.min.js',
+                '/bower_components/gentelella/vendors/pdfmake/build/pdfmake.min.js',
+                '/bower_components/gentelella/vendors/pdfmake/build/vfs_fonts.js'
+            ];
 
         });
 
@@ -22,7 +42,6 @@ riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class
         self.on('updated', function(params, options) {
             console.error('MOIUNGFT');
             console.info('DATATABLES UPDATED');
-
             tag.initTable();
         });
 
@@ -138,6 +157,7 @@ riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class
         }
 
         tag.datatableSearch = function ( sSource, aoData, fnCallback ) {
+            console.info('CRUD-JSONEDITOR TAG.DATATABLESEARCH ?=====????', sSource, aoData, fnCallback);
 
                 var query = {};
                 var queryObj = {};
@@ -164,8 +184,9 @@ riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class
                     query.name=queryObj.search.value.value;
                 }
 
-                tag.service.find(query).then(function(result){
-                    console.info('CRUD-JSONEDITOR UPDATE FIND', result);
+                tag.service.find({query:query}).then(function(result){
+                    console.info('CRUD-JSONEDITOR TAG.DATATABLESEARCH QUERY', query);
+                    console.info('CRUD-JSONEDITOR TAG.DATATABLESEARCH RESULT', result);
                         fnCallback({
                             error: false,
 
@@ -176,7 +197,6 @@ riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class
                 }).catch(function(error){
                   console.error('Error CRUD-JSONEDITOR UPDATE FIND', error);
                 });
-
         }
 
         tag.rowSelection =  function(e) {
