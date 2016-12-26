@@ -67,8 +67,11 @@
     }
 
     function mount(target, tag, options) {
-
-        if(currentTag!=null && tag == currentTag.root.getAttribute('riot-tag')) {
+        if(
+            currentTag!=null && tag == currentTag.root.getAttribute('riot-tag')
+            && options.model == currentTag.opts.model
+            ) {
+            console.info(currentTag.opts.model);
             console.warn('riotcrud.mount if currentTag!=null');
             currentTag.refresh(options);
         } else {
