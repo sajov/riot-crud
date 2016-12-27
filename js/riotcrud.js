@@ -130,10 +130,6 @@
         if(typeof route.dependencies != 'undefined')
             dep = route.dependencies;
 
-        if (typeof route.fn == 'function') {
-            route.fn();
-        }
-
         if ($script && dep.length > 0) {
             $script(dep, route.route, function() {
                 cb()

@@ -69,10 +69,11 @@ exports.category = function(app, count) {
 }
 
 
-exports.product = function(app, count) {
+exports.product = function(app, count, update) {
+  if(update !== false)
   console.info('RUN FAKER PRODUCT');
   var helper = faker.helpers;
-
+  var products = [];
   for(var i = count; i >= 0; i--){
 
       var name = faker.commerce.productName();
@@ -109,15 +110,59 @@ exports.product = function(app, count) {
         updatedAt:'2016-12-18',
     };
 
+    if(update !== false)
     app.service('products').create(prod, {}).then(function(data) {
       // console.log('Created product data', 'data');
     });
-    if(i==1)
+
+    products.push(prod);
+    if(i==1 && update !== false)
     console.log('FAKER product',prod);
     // post('http://localhost:3030/cms', prod);
 
   };
+  return products;
 }
 
 
+exports.order = function(app, count) {
+  console.info('RUN FAKER ORDER');
+  var helper = faker.helpers;
 
+  for(var i = count; i >= 0; i--){
+
+    var order = faker.helpers.contextualCard();
+    var shippingAddress = faker.helpers.userCard();
+
+    order.id = i;
+    order.orderId = faker.random.number();
+    order.account = '#'+faker.finance.account();
+    order.name = shippingAddress.name;
+    order.dob = dateFormat(order.dob);
+    order.comment = faker.lorem.sentence();
+    order.shippingAddress = shippingAddress.address;
+    order.shippingAddress.name = shippingAddress.name;
+    order.createdAt = dateFormat(faker.date.past());
+    order.updatedAt = dateFormat(faker.date.past());
+
+    order.items = this.product(app,0, false);
+
+    order.transaction = faker.helpers.createTransaction();
+    order.transaction.date = dateFormat(order.transaction.date);
+
+    app.service('orders').create(order, {}).then(function(data) {
+      // console.log('Created product data', 'data');
+    });
+    if(i==1)
+    console.log('FAKER ORDER',order);
+    // post('http://localhost:3030/cms', prod);
+
+  };
+// console.log('this.product',this.product);
+}
+
+function dateFormat(date) {
+  return date.toISOString().
+              replace(/T/, ' ').      // replace T with a space
+              replace(/\..+/, '');
+}

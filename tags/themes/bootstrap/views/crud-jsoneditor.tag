@@ -22,7 +22,7 @@
         <div class="row">
           <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
-              <div class="x_title">
+              <div class="x_title hidden-print">
                 <h2>{self.opts.data.name}Default Example <small>Users</small></h2>
                 <ul class="nav navbar-right panel_toolbox">
                   <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>

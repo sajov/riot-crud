@@ -4,7 +4,7 @@ var riotCrudTheme =
         '/js/riotcrud/themes/bootstrap';
 
 var dependencyList = {
-    layout: [riotCrudTheme + '/menu.js', riotCrudTheme + '/dashboard.js', riotCrudTheme + '/views/crud-views.js'],
+    layout: [riotCrudTheme + '/menu.js', riotCrudTheme + '/views/crud-views.js'],
     login: riotCrudTheme + '/login.js',register: riotCrudTheme + '/register.js'
 };
 
@@ -67,6 +67,18 @@ $script.ready('layout', function() {
         }
     );
 
+    RiotCrudController.addRoute('order',
+        {
+            title: 'order',
+            menu: true,
+            route: '/order',
+            dependencies: [riotCrudTheme + '/order.js'],
+            fn: function(id, action) {
+                riot.mount('#content', 'order');
+            }
+        }
+    );
+
     RiotCrudController.addRoute('table-demo',{title: 'Table',menu: true, route: '/products/list'});
     RiotCrudController.addRoute('table-view',{title: 'Show',menu: true, route:'/products/view/1'});
     RiotCrudController.addRoute('table-edit',{title: 'Edit',menu: true, route:'/products/edit/1'});
@@ -85,7 +97,7 @@ $script.ready('layout', function() {
 
     RiotCrudModel.addModel('products',{
 
-            modelname: 'products',
+            service: 'products',
             title: 'Products',
             description: '/products/list',
             menu: true,
@@ -157,7 +169,7 @@ $script.ready('layout', function() {
     );
 
    RiotCrudModel.addModel('categories',{
-            modelname: 'categories',
+            service: 'categories',
             title: 'Categories',
             description: '/categories/list',
             menu: true,
@@ -230,13 +242,66 @@ $script.ready('layout', function() {
 
 
 
+    RiotCrudModel.addModel('orders',
+        {
+            service: 'orders',
+            title: 'Orders',
+            menu: true,
+            route: '/orders',
+            dependencies: [riotCrudTheme + '/order.js'],
+            schema: 'http://localhost:3030/schema/order.json', // string || object ?? || array [{list:'list-tag'}] ?? default
+            target: 'div#content', // optional
+            endpoint: 'http://localhost:3030', //'http://localhost:3030/products', rest enpoints
+            tag: 'crud-jsoneditor', // default
+        },
+        { // mixed object || array ['list','show','create','update','delete'] ???
+            list: {
+                // optional
+                selection: true,
+                filterable: true,
+                buttons: ['edit','delete'],
+                tag: 'crud-datatables', // default
+                title: 'Order List',
+                schema: 'http://localhost:3030/schema/order.json', // string || object ?? || array [{list:'list-tag'}] ?? default
+                target: 'div#content', // optional
+                // endpoint: '/api/product/list',
+                columns: {
+                    base_color: {
+                        "data": null,
+                        "render": function ( data, type, row ) {return '<span style="background-color:' + data.base_color + '">' + data.base_color + '</span>';}
+                    }
+                },
+                dependencies: [
+                    riotCrudTheme + '/views/crud-datatables.js',
+                ] // string || array
+            },
+            view:{
+                tag: 'order', // default
+                title: 'Order Demo',
+                schema: 'http://localhost:3030/schema/order.json', // string || object ?? || array [{list:'list-tag'}] ?? default
+                target: 'div#content', // optional
+                // endpoint: '/api/product/view',
+                dependencies: [
+                    riotCrudTheme + '/order.js'
+                ]
+            },
+            create: {
+                fn: function() {riot.route('/order/view')}
+            },
+            edit: {
+                title: 'Edit Categories',
+                menu:true,
+                fn: function() {riot.route('/order/edit/1')}
+            }
+        }
+    );
     // console.info('routes: RiotCrudController.getRoutes()',RiotCrudController.getRoutes());
     // mount menu here will ignore following addRoute
     riot.mount('side-menu','side-menu', {
         routes: RiotCrudController.getRoutes()
     });
 
-    if(window.location.hash === "") {
+    if(window.location.hash === "" && window.location.hash != "#dashboard") {
        riot.route('dashboard');
     }
 

@@ -3,18 +3,22 @@ var serviceMixin = {
     observable: riot.observable(),
     init: function(){
         var self = this;
-        var socket = io(self.opts.endpoint);
-        var client = feathers()
+        self.socket = io(self.opts.endpoint || 'http://localhost:3030');
+        self.client = feathers()
           .configure(feathers.hooks())
-          .configure(feathers.socketio(socket));
-        self.service = client.service(self.opts.modelname);
-        console.info('SERVICE MIXIN INIT',self.opts.modelname, self.opts.endpoint, self.service);
+          .configure(feathers.socketio(self.socket));
+
+        if(typeof self.opts.service != 'undefined') {
+            self.service = self.client.service(self.opts.service);
+        }
+
+        console.info('SERVICE MIXIN INIT',self.opts.service, self.opts.endpoint, self.service);
 
     },
 
     refresh: function(opts) {
         console.log(opts);
-        alert('refresch', opts.modelname)
+        alert('refresch', opts.service)
     }
 };
 

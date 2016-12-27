@@ -230,8 +230,10 @@
                         // "defaultContent": "<button>Click!</button>",
                         "render": function ( data, type, row ) {
                             // return data +' ('+ row.sku+')';
-                            return '<a class="btn btn-default btn-small" tabindex="0" aria-controls="ajaxdatatables" href="#products/view/' + row.id + '"><span> Edit</span></a>' +
-                                    '<div class="dt-buttons btn-group"><a class="btn btn-default buttons-copy buttons-html5 btn-sm" href="#"><span> Delete</span></a></div>';
+                            return '<div class="dt-buttons btn-group">' +
+                                        '<a class="btn btn-info btn-xs btn-blockNo" tabindex="0" aria-controls="ajaxdatatables" href="#' + opts.service + '/view/' + row.id + '"><span> Edit</span></a>' +
+                                        '<a class="btn btn-danger btn-xs btn-blockNo" href="#"><span> Delete</span></a>' +
+                                    '</div>';
                         }
                     }
                 );

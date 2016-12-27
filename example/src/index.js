@@ -8,5 +8,6 @@ server.on('listening', function () {
 
   faker.product(app, 150);
   faker.category(app, 50);
+  faker.order(app, 24);
   console.log(`Feathers application started on ${app.get('host')}:${port}`)
 });

@@ -29,6 +29,16 @@
     <!-- Custom Theme Style -->
     <link href="/bower_components/gentelella/build/css/custom.min.css" rel="stylesheet">
 
+<style type="text/css" media="print">
+        @page {
+            size: auto;   /* auto is the initial value */
+            margin: 0;  /* this affects the margin in the printer settings */
+        }
+         a[href]:after { content: none !important; }
+        img[src]:after { content: none !important; }
+    </style>
+
+
     </head>
     <body class="nav-md">
 
@@ -41,7 +51,7 @@
               </div>
             </div>
             <!-- top navigation -->
-            <div class="top_nav">
+            <div class="top_nav hidden-print">
                 <div class="nav_menu">
                     <nav class="" role="navigation">
                         <div class="nav toggle">
@@ -143,7 +153,7 @@
             </div>
             <!-- footer content -->
             <footer>
-              <div class="pull-right">
+              <div class="pull-right hidden-print">
                 Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
               </div>
               <div class="clearfix"></div>
@@ -179,6 +189,7 @@
     <script src="/bower_components/gentelella/vendors/pdfmake/build/vfs_fonts.js"></script>
 
 
+
     <!-- json-editor WYSIWYG -->
 <!--     <script src="/bower_components/json-editor/dist/jsoneditor.min.js"></script> -->
 
@@ -186,6 +197,37 @@
    <!--  <script src="http://cdn.jsdelivr.net/sceditor/1.4.3/jquery.sceditor.bbcode.min.js"></script>
     <script src="http://cdn.jsdelivr.net/sceditor/1.4.3/jquery.sceditor.xhtml.min.js"></script>
  -->
+
+
+
+    <!-- Chart.js -->
+    <script src="/bower_components/gentelella/vendors/Chart.js/dist/Chart.min.js"></script>
+    <!-- gauge.js -->
+    <script src="/bower_components/gentelella/vendors/bernii/gauge.js/dist/gauge.min.js"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="/bower_components/gentelella/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+    <!-- iCheck -->
+    <script src="/bower_components/gentelella/vendors/iCheck/icheck.min.js"></script>
+    <!-- Skycons -->
+    <script src="/bower_components/gentelella/vendors/skycons/skycons.js"></script>
+    <!-- Flot -->
+    <script src="/bower_components/gentelella/vendors/Flot/jquery.flot.js"></script>
+    <script src="/bower_components/gentelella/vendors/Flot/jquery.flot.pie.js"></script>
+    <script src="/bower_components/gentelella/vendors/Flot/jquery.flot.time.js"></script>
+    <script src="/bower_components/gentelella/vendors/Flot/jquery.flot.stack.js"></script>
+    <script src="/bower_components/gentelella/vendors/Flot/jquery.flot.resize.js"></script>
+    <!-- Flot plugins -->
+    <script src="/bower_components/gentelella/production/js/flot/jquery.flot.orderBars.js"></script>
+    <script src="/bower_components/gentelella/production/js/flot/date.js"></script>
+    <script src="/bower_components/gentelella/production/js/flot/jquery.flot.spline.js"></script>
+    <script src="/bower_components/gentelella/production/js/flot/curvedLines.js"></script>
+    <!-- jVectorMap -->
+    <script src="/bower_components/gentelella/production/js/maps/jquery-jvectormap-2.0.3.min.js"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="/bower_components/gentelella/production/js/moment/moment.min.js"></script>
+    <script src="/bower_components/gentelella/production/js/datepicker/daterangepicker.js"></script>
+
+
     <!-- Custom Theme Scripts -->
     <script src="/bower_components/gentelella/build/js/custom.min.js"></script>
 
