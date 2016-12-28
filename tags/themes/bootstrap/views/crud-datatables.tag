@@ -66,7 +66,6 @@
         self.mixin(serviceMixin);
 
         self.refresh = function(query) {
-            // console.log('datatables refresh opts', opts.title);
             console.log('refresh',query.query);
             // self.mergeParams(params);
             // riotux.trigger(self.VM.modelStore,'list',{tag:self.root.getAttribute('riot-tag'), params:params});

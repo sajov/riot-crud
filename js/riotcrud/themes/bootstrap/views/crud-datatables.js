@@ -4,7 +4,6 @@ riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class
         self.mixin(serviceMixin);
 
         self.refresh = function(query) {
-
             console.log('refresh',query.query);
 
             self.update();
