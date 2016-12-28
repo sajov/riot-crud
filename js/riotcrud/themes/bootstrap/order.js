@@ -3,7 +3,7 @@ riot.tag2('order', '<div class=""> <div class="page-title hidden-print"> <div cl
         self.mixin(serviceMixin);
 
         this.on('before-mount', () => {
-           self.initOrder(self.opts.query.id);
+            self.initOrder(self.opts.query.id);
         });
 
         this.on('mount', function() {
@@ -25,23 +25,23 @@ riot.tag2('order', '<div class=""> <div class="page-title hidden-print"> <div cl
         });
 
         this.on('*', (eventName) => {
-            console.info('order all eventName:'+ eventName);
+          console.info('order all eventName:'+ eventName);
         });
 
         this.refresh = function(opts) {
 
-            self.initOrder(opts.query.id);
+          self.initOrder(opts.query.id);
         }
 
         this.initOrder = function(orderId) {
-           console.info('order before-mount', orderId);
-            self.service.get(orderId).then(function(result){
-                console.info('CRUD-JSONEDITOR UPDATE FIND', result);
-                self.opts.data = result;
-                self.update();
-            }).catch(function(error){
-              console.error('Error CRUD-JSONEDITOR UPDATE FIND', error);
-            });
+         console.info('order before-mount', orderId);
+          self.service.get(orderId).then(function(result){
+              console.info('CRUD-JSONEDITOR UPDATE FIND', result);
+              self.opts.data = result;
+              self.update();
+          }).catch(function(error){
+            console.error('Error CRUD-JSONEDITOR UPDATE FIND', error);
+          });
         }
 });
 

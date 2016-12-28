@@ -301,6 +301,14 @@ $script.ready('layout', function() {
         routes: RiotCrudController.getRoutes()
     });
 
+    riot.mount('top-menu','top-menu', {
+        services: {
+            products: ['created','create','update','updated'],
+            categories: ['created','create','update','updated'],
+            // orders: ['created','create','update','updated']
+        }
+    });
+
     if(window.location.hash === "" && window.location.hash != "#dashboard") {
        riot.route('dashboard');
     }

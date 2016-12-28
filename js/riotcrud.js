@@ -54,6 +54,25 @@
             return this;
         },
 
+        loadDependencies: function(dependencies, tag, cb) {
+            var dep = [];
+
+            if(typeof dependencies != 'undefined')
+                dep = dependencies;
+
+            if ($script && dependencies.length > 0) {
+                $script(dep, tag, function() {
+                    if(typeof cb === 'function') {
+                        cb();
+                    }
+                });
+            } else {
+                if(typeof cb === 'function') {
+                    cb();
+                }
+            }
+        },
+
         start: function(route) {
             riot.route(handler)
             riot.route.start();
@@ -92,7 +111,6 @@
      * - exec fn
      */
     function handler(collection, action, param) {
-
         if (typeof routes[collection] == 'undefined' && typeof routes[collection+action] == 'undefined') {
             console.error('RiotCrudController no route found',{
                 collection: collection,
@@ -105,7 +123,7 @@
         var route = routes[collection] || routes[collection+action];
 
         route.query = {id: param, query: riot.route.query()};
-        loadDependencies(route, function() {
+        RiotCrudController.loadDependencies(route.dependencies, route.route, function() {
             if (typeof route.fn === 'function') {
                 currentName = null;
                 route.fn(collection, param, action);
@@ -124,20 +142,24 @@
      * @param  {string}   collection Collection name
      * @param  {function} cb         Callback function
      */
-    function loadDependencies(route, cb) {
-        var dep = [];
+    // function loadDependencies(dependencies, tag, cb) {
+    //     var dep = [];
 
-        if(typeof route.dependencies != 'undefined')
-            dep = route.dependencies;
+    //     if(typeof dependencies != 'undefined')
+    //         dep = dependencies;
 
-        if ($script && dep.length > 0) {
-            $script(dep, route.route, function() {
-                cb()
-            });
-        } else {
-            cb();
-        }
-    }
+    //     if ($script && dependencies.length > 0) {
+    //         $script(dep, tag, function() {
+    //             if(typeof cb === 'function') {
+    //                 cb();
+    //             }
+    //         });
+    //     } else {
+    //         if(typeof cb === 'function') {
+    //             cb();
+    //         }
+    //     }
+    // }
 
     // Routes
     if (!window.RiotCrudController) {
