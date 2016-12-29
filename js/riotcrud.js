@@ -60,8 +60,9 @@
             if(typeof dependencies != 'undefined')
                 dep = dependencies;
 
-            if ($script && dependencies.length > 0) {
-                $script(dep, tag, function() {
+            if ($script &&  dep.length > 0) {
+                // $script(dep, tag, function() {
+                $script(dep,  function() {
                     if(typeof cb === 'function') {
                         cb();
                     }
@@ -234,12 +235,15 @@
         },
 
         addModel: function(name, config, views) {
+
             var options = $.extend({model:name}, this.opts, config || {} );
 
             for (var view in views) {
+                var model = $.extend({name: name, route: '/' + name + '/' + view}, options, views[view]);
+                model.view = view;
+                model.views = Object.keys(views);
 
-                var model = $.extend({route: '/' + name + '/' + view}, options, views[view]);
-
+                //remove, use json-editor ajax mode
                 if(model.schema && typeof model.schema === 'string') {
                     $.ajax({
                       url: model.schema,

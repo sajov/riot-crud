@@ -1,62 +1,49 @@
-riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class="title_left"> <h3>{opts.title} <small>{opts.description}</small></h3> </div> <div class="title_right"> <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search"> <div class="input-group"> <input type="text" class="form-control" placeholder="Search for..."> <span class="input-group-btn"> <button class="btn btn-default" type="button">Go!</button> </span> </div> </div> </div> </div> <div class="clearfix"></div> <div class="row"> <div class="col-md-12 col-sm-12 col-xs-12"> <div class="x_panel"> <div class="x_content"> <table id="datatable" class="display table table-striped table-bordered datatable-buttons" cellspacing="0" width="100%"> <thead> <tr> <th if="{opts.selection}"><input onclick="{rowSelection}" type="checkbox"></th> <th each="{colkey, colval in opts.schema.required}" data-type="{colval.type}">{colkey}</th> <th></th> </tr> </thead> <tfoot> <tr id="filterrow" if="{opts.filterable}"> <th></th> <th each="{colkey, colval in opts.schema.required}" data-type="{colval.type}"> <small> <input type="text" name="filter_{colkey}" placeholder="filter {colkey}"></small> </th> <th></th> </tr> </tfoot> </table> </div> </div> </div> </div> </div> <link href="/bower_components/gentelella/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">', '', '', function(opts) {
-        var tag = this;
+riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class="title_left"> <h3>{opts.title} <small>{opts.description}</small></h3> </div> <div class="title_right"> <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search"> <div class="input-group"> <input type="text" class="form-control" placeholder="Search for..."> <span class="input-group-btn"> <button class="btn btn-default" type="button">Go!</button> </span> </div> </div> </div> </div> <div class="clearfix"></div> <div class="row"> <div class="col-md-12 col-sm-12 col-xs-12"> <div class="x_panel"> <div class="x_content"> <table id="datatable" class="display table table-striped table-bordered datatable-buttons" cellspacing="0" width="100%"> <thead> <tr> <th if="{opts.selection}"><input onclick="{rowSelection}" type="checkbox"></th> <th each="{colkey, colval in opts.schema.required}" data-type="{colval.type}">{colkey}</th> <th></th> </tr> </thead> <tfoot> <tr id="filterrow" if="{opts.filterable}"> <th></th> <th each="{colkey, colval in opts.schema.required}" data-type="{colval.type}"> <small> <input type="text" name="filter_{colkey}" placeholder="filter {colkey}"></small> </th> <th></th> </tr> </tfoot> </table> </div> </div> </div> </div> </div> <link href="https://cdn.datatables.net/v/bs/dt-1.10.13/b-1.2.4/b-colvis-1.2.4/b-flash-1.2.4/b-html5-1.2.4/b-print-1.2.4/cr-1.3.2/fc-3.2.2/fh-3.1.2/kt-2.2.0/r-2.1.0/rr-1.2.0/sc-1.4.2/se-1.2.0/datatables.min.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">', '', '', function(opts) {
         var self = this;
         self.mixin(serviceMixin);
 
+        self.dependencies = [
+            'https://cdn.datatables.net/v/bs/dt-1.10.13/b-1.2.4/b-colvis-1.2.4/b-flash-1.2.4/b-html5-1.2.4/b-print-1.2.4/cr-1.3.2/fc-3.2.2/fh-3.1.2/kt-2.2.0/r-2.1.0/rr-1.2.0/sc-1.4.2/se-1.2.0/datatables.min.js'
+
+        ];
+
         self.refresh = function(query) {
             console.log('refresh',query.query);
-
-            self.update();
+            self.datatable.draw();
         }
 
-        self.on('all', function(eventName) {
-            console.info('ALL EVENTNAME',eventName)
-        })
-
         self.on('update', function(params, options) {
-            var dependencies = [
-                '/bower_components/gentelella/vendors/datatables.net/js/jquery.dataTables.min.js',
-                '/bower_components/gentelella/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
-                '/bower_components/gentelella/vendors/datatables.net-buttons/js/dataTables.buttons.min.js',
-                '/bower_components/gentelella/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js',
-                '/bower_components/gentelella/vendors/datatables.net-buttons/js/buttons.flash.min.js',
-                '/bower_components/gentelella/vendors/datatables.net-buttons/js/buttons.html5.min.js',
-                '/bower_components/gentelella/vendors/datatables.net-buttons/js/buttons.print.min.js',
-                '/bower_components/gentelella/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js',
-                '/bower_components/gentelella/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js',
-                '/bower_components/gentelella/vendors/datatables.net-responsive/js/dataTables.responsive.min.js',
-                '/bower_components/gentelella/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js',
-                '/bower_components/gentelella/vendors/datatables.net-scroller/js/datatables.scroller.min.js',
-                '/bower_components/gentelella/vendors/jszip/dist/jszip.min.js',
-                '/bower_components/gentelella/vendors/pdfmake/build/pdfmake.min.js',
-                '/bower_components/gentelella/vendors/pdfmake/build/vfs_fonts.js'
-            ];
+            console.info('CRUD-DATATABLES UPDATE',params, options);
 
         });
 
         self.on('updated', function(params, options) {
-
+            console.info('CRUD-DATATABLES UPDATED',params, options);
         });
 
         self.on('updated', function(params, options) {
-            console.error('MOIUNGFT');
-            console.info('DATATABLES UPDATED');
-            tag.initTable();
+            console.info('CRUD-DATATABLES UPDATED',params, options);
         });
 
-        self.on('mount', function() {
-            console.log('DATATABLES MOUNT');
+        self.on('mount', function(params, options) {
+            console.log('CRUD-DATATABLES MOUNT',params, options);
+             RiotCrudController.loadDependencies(self.dependencies,'crud-datatables', function (argument) {
+                 self.initTable();
+            });
             opts.tableHeader = opts.schema.defaultProperties || opts.schema.required;
-            console.error(opts.tableHeader);
-        })
+
+        });
+
+        self.on('mounted', function(params, options) {
+            console.info('CRUD-DATATABLES UPDATED',params, options);
+        });
 
         self.initTable = function() {
-            console.error('opts.tableData',opts.tableData);
 
-            tag.datatable = $('#datatable').DataTable(tag.getDatatableConfig());
+            self.datatable = $('#datatable').DataTable(self.getDatatableConfig());
 
             $('#datatable tfoot input').on('change keyup', function () {
-                tag.datatable
+                self.datatable
                     .column( $(this).parent().index()+':visible' )
                     .search( self.value )
                     .draw();
@@ -64,7 +51,7 @@ riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class
 
             $('.top_search input').on('change', function() {
                 console.log($(this).val());
-                tag.datatable.search( self.value ).draw();
+                self.datatable.search( self.value ).draw();
             });
         }
 
@@ -112,7 +99,7 @@ riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class
                 responsive: true,
                 fixedHeader: true,
                 keys: true,
-                "fnServerData": tag.datatableSearch
+                "fnServerData": self.datatableSearch
             }
 
             if(opts.selection) {
@@ -134,7 +121,6 @@ riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class
             for (var i = 0;i < opts.tableHeader.length; i++) {
                 var  col = opts.columns[opts.tableHeader[i]] || {data: opts.tableHeader[i]};
                 config.columns.push(col);
-                console.info('add col',col);
             }
 
             if(opts.buttons) {
@@ -147,8 +133,8 @@ riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class
                         "render": function ( data, type, row ) {
 
                             return '<div class="dt-buttons btn-group">' +
-                                        '<a class="btn btn-info btn-xs btn-blockNo" tabindex="0" aria-controls="ajaxdatatables" href="#' + opts.service + '/view/' + row.id + '"><span> Edit</span></a>' +
-                                        '<a class="btn btn-danger btn-xs btn-blockNo" href="#"><span> Delete</span></a>' +
+                                        '<a class="btn btn-info btn-xs btn-blockNo" tabindex="0" aria-controls="ajaxdatatables" href="#' + opts.service + '/view/' + row.id + '"><span> View</span></a>' +
+                                        '<a class="btn btn-danger btn-xs btn-blockNo" href="#" onclick="alert(' + row.id + ')"><span> Delete</span></a>' +
                                     '</div>';
                         }
                     }
@@ -157,8 +143,8 @@ riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class
             return config;
         }
 
-        tag.datatableSearch = function ( sSource, aoData, fnCallback ) {
-            console.info('CRUD-JSONEDITOR TAG.DATATABLESEARCH ?=====????', sSource, aoData, fnCallback);
+        self.datatableSearch = function ( sSource, aoData, fnCallback ) {
+            console.info('CRUD-DATATABLES self.DATATABLESEARCH ?=====????', sSource, aoData, fnCallback);
 
                 var query = {};
                 var queryObj = {};
@@ -185,9 +171,9 @@ riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class
                     query.name=queryObj.search.value.value;
                 }
 
-                tag.service.find({query:query}).then(function(result){
-                    console.info('CRUD-JSONEDITOR TAG.DATATABLESEARCH QUERY', query);
-                    console.info('CRUD-JSONEDITOR TAG.DATATABLESEARCH RESULT', result);
+                self.service.find({query:query}).then(function(result){
+                    console.info('CRUD-DATATABLES self.DATATABLESEARCH QUERY', query);
+                    console.info('CRUD-DATATABLES self.DATATABLESEARCH RESULT', result);
                         fnCallback({
                             error: false,
 
@@ -196,11 +182,11 @@ riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class
                             data: result.data
                         })
                 }).catch(function(error){
-                  console.error('Error CRUD-JSONEDITOR UPDATE FIND', error);
+                  console.error('Error CRUD-DATATABLES UPDATE FIND', error);
                 });
         }
 
-        tag.rowSelection =  function(e) {
+        self.rowSelection =  function(e) {
 
         }
 

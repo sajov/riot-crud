@@ -606,6 +606,26 @@
         var self = this;
         self.mixin(serviceMixin);
 
+        self.dependencies = [
+              'bower_components/gentelella/vendors/Chart.js/dist/Chart.min.js',
+              'bower_components/gentelella/vendors/bernii/gauge.js/dist/gauge.min.js',
+              'bower_components/gentelella/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js',
+              'bower_components/gentelella/vendors/iCheck/icheck.min.js',
+              'bower_components/gentelella/vendors/skycons/skycons.js',
+              'bower_components/gentelella/vendors/Flot/jquery.flot.js',
+              'bower_components/gentelella/vendors/Flot/jquery.flot.pie.js',
+              'bower_components/gentelella/vendors/Flot/jquery.flot.time.js',
+              'bower_components/gentelella/vendors/Flot/jquery.flot.stack.js',
+              'bower_components/gentelella/vendors/Flot/jquery.flot.resize.js',
+              'bower_components/gentelella/production/js/flot/jquery.flot.orderBars.js',
+              'bower_components/gentelella/production/js/flot/date.js',
+              'bower_components/gentelella/production/js/flot/jquery.flot.spline.js',
+              'bower_components/gentelella/production/js/flot/curvedLines.js',
+              'bower_components/gentelella/production/js/maps/jquery-jvectormap-2.0.3.min.js',
+              'bower_components/gentelella/production/js/moment/moment.min.js',
+              'bower_components/gentelella/production/js/datepicker/daterangepicker.js',
+        ];
+
 
         this.on('before-mount', () => {
             console.info('dashboard before-mount', self);
@@ -614,34 +634,12 @@
 
         this.on('mount', function() {
             console.info('dashboard mount',self.opts);
-            // notificationCenter.send('update_state',{name:'dashboard'});
-
-
-            self.opts.data = {};
-            self.client.service('categories').find().then(function(result){
-                console.info('CRUD-JSONEDITOR UPDATE FIND', result);
-                self.opts.data.categories = result.total;
-                self.initDashboard();
-                self.update();
-            }).catch(function(error){
-              console.error('Error CRUD-JSONEDITOR UPDATE FIND', error);
+             RiotCrudController.loadDependencies(self.dependencies,'crud-jsoneditor', function (argument) {
             });
-             self.client.service('products').find().then(function(result){
-                console.info('CRUD-JSONEDITOR UPDATE FIND', result);
-                self.opts.data.products = result.total;
-                self.initDashboard();
-                self.update();
-            }).catch(function(error){
-              console.error('Error CRUD-JSONEDITOR UPDATE FIND', error);
-            });
-
         });
 
         this.on('update', function() {
             console.info('dashboard update',self.opts);
-            // notificationCenter.send('update_state',{name:'dashboard'});
-
-
         });
 
         this.on('updated', function() {
@@ -659,95 +657,6 @@
             console.info('dashboard all eventName:'+ eventName);
         });
 
-        this.initDashboard = function() {
-              var cb = function(start, end, label) {
-                  console.log(start.toISOString(), end.toISOString(), label);
-                  $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-                };
-
-                var optionSet1 = {
-                  startDate: moment().subtract(29, 'days'),
-                  endDate: moment(),
-                  minDate: '01/01/2012',
-                  maxDate: '12/31/2015',
-                  dateLimit: {
-                    days: 60
-                  },
-                  showDropdowns: true,
-                  showWeekNumbers: true,
-                  timePicker: false,
-                  timePickerIncrement: 1,
-                  timePicker12Hour: true,
-                  ranges: {
-                    'Today': [moment(), moment()],
-                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                    'This Month': [moment().startOf('month'), moment().endOf('month')],
-                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-                  },
-                  opens: 'left',
-                  buttonClasses: ['btn btn-default'],
-                  applyClass: 'btn-small btn-primary',
-                  cancelClass: 'btn-small',
-                  format: 'MM/DD/YYYY',
-                  separator: ' to ',
-                  locale: {
-                    applyLabel: 'Submit',
-                    cancelLabel: 'Clear',
-                    fromLabel: 'From',
-                    toLabel: 'To',
-                    customRangeLabel: 'Custom',
-                    daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-                    monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-                    firstDay: 1
-                  }
-                };
-                $('#reportrange span').html(moment().subtract(29, 'days').format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
-                $('#reportrange').daterangepicker(optionSet1, cb);
-                $('#reportrange').on('show.daterangepicker', function() {
-                  console.log("show event fired");
-                });
-                $('#reportrange').on('hide.daterangepicker', function() {
-                  console.log("hide event fired");
-                });
-                $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
-                  console.log("apply event fired, start/end dates are " + picker.startDate.format('MMMM D, YYYY') + " to " + picker.endDate.format('MMMM D, YYYY'));
-                });
-                $('#reportrange').on('cancel.daterangepicker', function(ev, picker) {
-                  console.log("cancel event fired");
-                });
-                $('#options1').click(function() {
-                  $('#reportrange').data('daterangepicker').setOptions(optionSet1, cb);
-                });
-                $('#options2').click(function() {
-                  $('#reportrange').data('daterangepicker').setOptions(optionSet2, cb);
-                });
-                $('#destroy').click(function() {
-                  $('#reportrange').data('daterangepicker').remove();
-                });
-                var opts = {
-                    lines: 12,
-                    angle: 0,
-                    lineWidth: 0.4,
-                    pointer: {
-                        length: 0.75,
-                        strokeWidth: 0.042,
-                        color: '#1D212A'
-                    },
-                    limitMax: 'false',
-                    colorStart: '#1ABC9C',
-                    colorStop: '#1ABC9C',
-                    strokeColor: '#F0F3F3',
-                    generateGradient: true
-                };
-                var target = document.getElementById('foo'),
-                gauge = new Gauge(target).setOptions(opts);
-                gauge.maxValue = 6000;
-                gauge.animationSpeed = 32;
-                gauge.set(3200);
-                gauge.setTextField(document.getElementById("gauge-text"));
-        };
     </script>
 </dashboard>
 

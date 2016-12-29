@@ -1,4 +1,76 @@
-<!-- zurb tags -->
+<crud-action-menu>
+    <div class="btn-group">
+        <a if="{opts.actions.edit}" class="btn btn-primary btn-sm" href="#{opts.name}/edit/{opts.data.id}" onclick={ edit } >Edit</a>
+        <a if="{opts.actions.view}" class="btn btn-info btn-sm" href="#{opts.name}/view/{opts.data.id}" onclick={ view } >View</a>
+        <a if="{opts.actions.save}" class="btn btn-success btn-sm" href="#" onclick={ save } >Save</a>
+        <a if="{opts.actions.delete}" class="btn btn-danger btn-sm" href="#" onclick={ parent.delete } >Delete</a>
+        <a if="{opts.actions.create}" class="btn btn-warning btn-sm" href="#{opts.name}/create/">New</a>
+        <a if="{opts.actions.list}" class="btn btn-default btn-sm" href="#{opts.name}/list" onclick={ list } >List</a>
+        &nbsp;
+        &nbsp;
+        &nbsp;
+        &nbsp;
+        &nbsp;
+        &nbsp;
+    </div>
+
+
+    <script>
+
+      var self = this;
+      opts.actions = {
+        edit: true,
+        view: true,
+        create: true,
+        list: true,
+        delete: true,
+        save: true
+
+      };
+
+      this.on('update', () => {
+
+        for(var i = 0; i < opts.views.length; i++){
+            opts.actions[opts.views[i]] = true;
+        }
+
+        if(opts.view != 'view') {
+          opts.actions.edit = false;
+        }
+
+        if(opts.view == 'create') {
+          opts.actions.delete = false;
+        }
+
+        if(opts.view == 'view') {
+          opts.actions.save = false;
+        }
+        if(opts.view == 'edit') {
+          opts.actions.save = true;
+        }
+
+        if(opts.view != 'view') {
+          opts.actions.create = false;
+        }
+
+        if(opts.view == 'view' || opts.view == 'create') {
+          opts.actions.view = false;
+        }
+
+        console.info('CRUD-ACTION-MENU UPDATE',opts.name,opts.view,  opts.views, opts.data, opts.actions);
+      });
+
+      this.save = (e) => {
+        if(opts.view == 'create') {
+          self.parent.create();
+        } else if(opts.view == 'edit') {
+          self.parent.save();
+        }
+      }
+    </script>
+
+</crud-action-menu>
+
 <crud-top-bar>
     <div class="top-bar">
         <div class="top-bar-title">

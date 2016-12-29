@@ -36,7 +36,7 @@ exports.category = function(app, count) {
       var description = faker.lorem.sentences();
 
       var prod = {
-        id: i,
+        id: i+1,
         active: faker.random.boolean(),
         name: name,
         description: description,
@@ -80,7 +80,7 @@ exports.product = function(app, count, update) {
       var price = parseFloat(faker.commerce.price());
 
       var prod = {
-        id: i,
+        id: i+1,
         active: faker.random.boolean(),
         sku: faker.finance.mask(),
         name: name,
@@ -134,7 +134,7 @@ exports.order = function(app, count) {
     var order = faker.helpers.contextualCard();
     var shippingAddress = faker.helpers.userCard();
 
-    order.id = i;
+    order.id = i+1;
     order.orderId = faker.random.number();
     order.account = '#'+faker.finance.account();
     order.name = shippingAddress.name;

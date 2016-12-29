@@ -1,4 +1,4 @@
-riot.tag2('top-menu', '<div> <a class="btn success" href="#" onclick="{test}">Test</a> </div> <link href="/bower_components/gentelella/vendors/pnotify/dist/pnotify.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/pnotify/dist/pnotify.buttons.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/pnotify/dist/pnotify.nonblock.css" rel="stylesheet">', '', '', function(opts) {
+riot.tag2('top-menu', '<link href="/bower_components/gentelella/vendors/pnotify/dist/pnotify.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/pnotify/dist/pnotify.buttons.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/pnotify/dist/pnotify.nonblock.css" rel="stylesheet">', '', '', function(opts) {
         var self = this;
         self.mixin(serviceMixin);
 
@@ -32,8 +32,8 @@ riot.tag2('top-menu', '<div> <a class="btn success" href="#" onclick="{test}">Te
                             + event
                             + '</i>'
                             , eventTypeMap[event]
-                            , '<a class="btn btn-info btn-xs" tabindex="0" href="#'
-                            + services[service]
+                            , '<a class="btn btn-default btn-xs" tabindex="0" href="#'
+                            + service
                             + '/view/'
                             + response.id
                             + '"><span> Show</span></a>' + JSON.stringify(response)

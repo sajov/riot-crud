@@ -1,23 +1,39 @@
-riot.tag2('crud-jsoneditor', '<div> <div class="page-title"> </div> <div class="row"> <div class="col-md-12 col-sm-12 col-xs-12"> <div class="x_panel"> <div class="x_title hidden-print"> <h2>{self.opts.data.name}Default Example <small>Users</small></h2> <ul class="nav navbar-right panel_toolbox"> <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li> <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a> <ul class="dropdown-menu" role="menu"> <li><a href="#">Settings 1</a> </li> <li><a href="#">Settings 2</a> </li> </ul> </li> <li><a class="close-link"><i class="fa fa-close"></i></a> </li> </ul> <div class="clearfix"></div> </div> <div class="x_content"> <div id="jsoneditor"></div> <a class="btn success" href="#" onclick="{saveJSONEditor}">Speichern</a> </div> </div> </div> </div> <div class="clearfix"></div> </div> <link rel="stylesheet" href="http://cdn.jsdelivr.net/select2/3.4.8/select2.css"> <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css">', '', '', function(opts) {
+riot.tag2('crud-jsoneditor', '<div> <div class="page-title"> </div> <div class="row"> <div class="col-md-12 col-sm-12 col-xs-12"> <div class="x_panel"> <div class="x_title hidden-print"> <h2>{opts.title} <small>{opts.service}</small></h2> <ul class="nav navbar-right panel_toolbox"> <li> <crud-action-menu name="{opts.name}" views="{opts.views}" view="{opts.view}" data="{opts.query}"></crud-action-menu> </li> <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li> <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a> <ul class="dropdown-menu" role="menu"> <li><a href="#">Settings 1</a> </li> <li><a href="#">Settings 2</a> </li> </ul> </li> <li><a class="close-link"><i class="fa fa-close"></i></a> </li> </ul> <div class="pull-right"> </div> <div class="clearfix"></div> </div> <div class="x_content"> <div id="jsoneditor"></div> <a class="btn success" href="#" onclick="{saveJSONEditor}">Speichern</a> </div> </div> </div> </div> <div class="clearfix"></div> </div> <link rel="stylesheet" href="http://cdn.jsdelivr.net/select2/3.4.8/select2.css"> <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css">', '', '', function(opts) {
         var self = this;
         self.mixin(serviceMixin);
 
+        self.dependencies = [
+                '/bower_components/json-editor/dist/jsoneditor.min.js',
+                'http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js'
+        ];
+
         this.on('update', function() {
             console.info('CRUD-JSONEDITOR UPDATE',self.opts.query);
-            if(typeof self.opts.query.id != 'undefined')
-                self.get(self.opts.query.id)
+            if(typeof self.editor == 'undefined') {
+
+            }
+
+            if(typeof self.opts.query.id != 'undefined') {
+                RiotCrudController.loadDependencies(self.dependencies,'crud-jsoneditor', function (argument) {
+                    self.get(self.opts.query.id)
+                });
+            }
 
         });
 
-        this.refresh = function(opts) {
-            console.error('serviceMixin refresh(root) opts',opts);
-            if(typeof self.opts.query.id != 'undefined')
-                self.get(self.opts.query.id)
+        this.refresh = (opts) => {
+            self.opts = opts;
+            self.update();
         },
 
-        this.on('before-mount', () => {console.info('CRUD-JSONEDITOR BEFORE-MOUNT');});
+        this.on('before-mount', () => {console.info('CRUD-JSONEDITOR BEFORE-MOUNT',self.opts.query);});
 
-        this.on('mount', function() {console.info('CRUD-JSONEDITOR MOUNT');});
+        this.on('mount', function() {
+            console.info('CRUD-JSONEDITOR MOUNT',self.opts.query, self.opts.view, self.opts.views);
+            RiotCrudController.loadDependencies(self.dependencies,'crud-jsoneditor', function (argument) {
+                self.initJSONEditor();
+            });
+        });
 
         this.on('mounted', function() {console.info('CRUD-JSONEDITOR MOUNTED',self.opts.query);});
 
@@ -28,7 +44,9 @@ riot.tag2('crud-jsoneditor', '<div> <div class="page-title"> </div> <div class="
                 if(typeof self.editor == 'undefined') {
                   self.initJSONEditor();
                 }
+                self.data = result;
                 self.editor.setValue(result);
+
             }).catch(function(error){
               console.error('Error CRUD-JSONEDITOR UPDATE FIND', error);
             });
@@ -45,15 +63,25 @@ riot.tag2('crud-jsoneditor', '<div> <div class="page-title"> </div> <div class="
             JSONEditor.plugins.selectize.enable = true;
             JSONEditor.plugins.select2.width = "300px";
 
+            JSONEditor.defaults.disable_collapse = true;
+            JSONEditor.defaults.disable_edit_json = true;
+            JSONEditor.defaults.disable_properties = true;
+            JSONEditor.defaults.no_additional_properties = true;
+
             self.editor = new JSONEditor(document.getElementById('jsoneditor'),
                 {
                     schema: 'http://localhost:3030/schema/product_faker.json',
                     ajax:true,
                     schema: self.opts.schema,
-                    grid_columns: 2,
                     theme:'bootstrap3',
                     object_layout: 'grid',
-                    disable_edit_json: false,
+                    grid_columns: 10,
+                    expand_height: true,
+                    disable_edit_json: true,
+                    disable_collapse: true,
+                    disable_edit_json: true,
+                    disable_properties: true,
+
                     form_name_root:'root[product][name]'
 
                 }
@@ -76,6 +104,31 @@ riot.tag2('crud-jsoneditor', '<div> <div class="page-title"> </div> <div class="
                   console.error('Error CRUD-JSONEDITOR saveJSONEditor update', error);
                 });
             }
+        }
+
+        this.create = (e) => {
+
+            e.preventDefault();
+
+            console.clear();
+
+            var json = self.editor.getValue();
+            var validation_errors = self.editor.validate();
+
+            if(validation_errors.length) {
+                console.error(JSON.stringify(validation_errors,null,2));
+            } else {
+
+                json.id = 9879;
+
+                self.service.create(json).then(function(result){
+                  console.info('CRUD-JSONEDITOR result', result);
+                }).catch(function(error){
+                  console.error('CRUD-JSONEDITOR error', json, error);
+                });
+            }
+
+            console.info(opts.data,json,validation_errors)
         }
 
 });

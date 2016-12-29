@@ -53,6 +53,7 @@
     </div>
 
     <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/zf/dt-1.10.12/datatables.min.css"> -->
+    <link href="https://cdn.datatables.net/v/bs/dt-1.10.13/b-1.2.4/b-colvis-1.2.4/b-flash-1.2.4/b-html5-1.2.4/b-print-1.2.4/cr-1.3.2/fc-3.2.2/fh-3.1.2/kt-2.2.0/r-2.1.0/rr-1.2.0/sc-1.4.2/se-1.2.0/datatables.min.css" rel="stylesheet">
     <link href="/bower_components/gentelella/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
     <link href="/bower_components/gentelella/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
     <link href="/bower_components/gentelella/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
@@ -61,69 +62,73 @@
 
 
     <script>
-        var tag = this;
         var self = this;
         self.mixin(serviceMixin);
 
+        self.dependencies = [
+            'https://cdn.datatables.net/v/bs/dt-1.10.13/b-1.2.4/b-colvis-1.2.4/b-flash-1.2.4/b-html5-1.2.4/b-print-1.2.4/cr-1.3.2/fc-3.2.2/fh-3.1.2/kt-2.2.0/r-2.1.0/rr-1.2.0/sc-1.4.2/se-1.2.0/datatables.min.js'
+            // '/bower_components/gentelella/vendors/datatables.net/js/jquery.dataTables.min.js',
+            // '/bower_components/gentelella/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
+            // '/bower_components/gentelella/vendors/datatables.net-buttons/js/dataTables.buttons.min.js',
+            // '/bower_components/gentelella/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js',
+            // '/bower_components/gentelella/vendors/datatables.net-buttons/js/buttons.flash.min.js',
+            // '/bower_components/gentelella/vendors/datatables.net-buttons/js/buttons.html5.min.js',
+            // '/bower_components/gentelella/vendors/datatables.net-buttons/js/buttons.print.min.js',
+            // '/bower_components/gentelella/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js',
+            // '/bower_components/gentelella/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js',
+            // '/bower_components/gentelella/vendors/datatables.net-responsive/js/dataTables.responsive.min.js',
+            // '/bower_components/gentelella/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js',
+            // '/bower_components/gentelella/vendors/datatables.net-scroller/js/datatables.scroller.min.js',
+            // '/bower_components/gentelella/vendors/jszip/dist/jszip.min.js',
+            // '/bower_components/gentelella/vendors/pdfmake/build/pdfmake.min.js',
+            // '/bower_components/gentelella/vendors/pdfmake/build/vfs_fonts.js'
+        ];
+
         self.refresh = function(query) {
             console.log('refresh',query.query);
-            // self.mergeParams(params);
-            // riotux.trigger(self.VM.modelStore,'list',{tag:self.root.getAttribute('riot-tag'), params:params});
-            self.update();
+            self.datatable.draw();
         }
 
-        self.on('all', function(eventName) {
-            console.info('ALL EVENTNAME',eventName)
-        })
+        // self.on('all', function(eventName) {
+        //     console.info('CRUD-DATATABLES ALL EVENTNAME',eventName)
+        // })
 
         self.on('update', function(params, options) {
-            var dependencies = [
-                '/bower_components/gentelella/vendors/datatables.net/js/jquery.dataTables.min.js',
-                '/bower_components/gentelella/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
-                '/bower_components/gentelella/vendors/datatables.net-buttons/js/dataTables.buttons.min.js',
-                '/bower_components/gentelella/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js',
-                '/bower_components/gentelella/vendors/datatables.net-buttons/js/buttons.flash.min.js',
-                '/bower_components/gentelella/vendors/datatables.net-buttons/js/buttons.html5.min.js',
-                '/bower_components/gentelella/vendors/datatables.net-buttons/js/buttons.print.min.js',
-                '/bower_components/gentelella/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js',
-                '/bower_components/gentelella/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js',
-                '/bower_components/gentelella/vendors/datatables.net-responsive/js/dataTables.responsive.min.js',
-                '/bower_components/gentelella/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js',
-                '/bower_components/gentelella/vendors/datatables.net-scroller/js/datatables.scroller.min.js',
-                '/bower_components/gentelella/vendors/jszip/dist/jszip.min.js',
-                '/bower_components/gentelella/vendors/pdfmake/build/pdfmake.min.js',
-                '/bower_components/gentelella/vendors/pdfmake/build/vfs_fonts.js'
-            ];
-            // console.log('datatables update opts', opts.title);
+            console.info('CRUD-DATATABLES UPDATE',params, options);
+
         });
 
         self.on('updated', function(params, options) {
-            // console.log('datatables updated opts', opts.schema.properties);
+            console.info('CRUD-DATATABLES UPDATED',params, options);
         });
 
         self.on('updated', function(params, options) {
-            console.error('MOIUNGFT');
-            console.info('DATATABLES UPDATED');
-            tag.initTable();
+            console.info('CRUD-DATATABLES UPDATED',params, options);
         });
 
-        self.on('mount', function() {
-            console.log('DATATABLES MOUNT');
+        self.on('mount', function(params, options) {
+            console.log('CRUD-DATATABLES MOUNT',params, options);
+             RiotCrudController.loadDependencies(self.dependencies,'crud-datatables', function (argument) {
+                 self.initTable();
+            });
             opts.tableHeader = opts.schema.defaultProperties || opts.schema.required;
-            console.error(opts.tableHeader);
-        })
+
+        });
+
+        self.on('mounted', function(params, options) {
+            console.info('CRUD-DATATABLES UPDATED',params, options);
+        });
 
         /**
          * Init Datatable
          * @return {[type]} [description]
          */
         self.initTable = function() {
-            console.error('opts.tableData',opts.tableData);
 
-            tag.datatable = $('#datatable').DataTable(tag.getDatatableConfig());
+            self.datatable = $('#datatable').DataTable(self.getDatatableConfig());
 
             $('#datatable tfoot input').on('change keyup', function () {
-                tag.datatable
+                self.datatable
                     .column( $(this).parent().index()+':visible' )
                     .search( self.value )
                     .draw();
@@ -131,7 +136,7 @@
 
             $('.top_search input').on('change', function() {
                 console.log($(this).val());
-                tag.datatable.search( self.value ).draw();
+                self.datatable.search( self.value ).draw();
             });
         }
 
@@ -194,7 +199,7 @@
                 responsive: true,
                 fixedHeader: true,
                 keys: true,
-                "fnServerData": tag.datatableSearch
+                "fnServerData": self.datatableSearch
             }
 
             if(opts.selection) {
@@ -217,7 +222,6 @@
             for (var i = 0;i < opts.tableHeader.length; i++) {
                 var  col = opts.columns[opts.tableHeader[i]] || {data: opts.tableHeader[i]};
                 config.columns.push(col);
-                console.info('add col',col);
             }
 
             if(opts.buttons) {
@@ -230,8 +234,8 @@
                         "render": function ( data, type, row ) {
                             // return data +' ('+ row.sku+')';
                             return '<div class="dt-buttons btn-group">' +
-                                        '<a class="btn btn-info btn-xs btn-blockNo" tabindex="0" aria-controls="ajaxdatatables" href="#' + opts.service + '/view/' + row.id + '"><span> Edit</span></a>' +
-                                        '<a class="btn btn-danger btn-xs btn-blockNo" href="#"><span> Delete</span></a>' +
+                                        '<a class="btn btn-info btn-xs btn-blockNo" tabindex="0" aria-controls="ajaxdatatables" href="#' + opts.service + '/view/' + row.id + '"><span> View</span></a>' +
+                                        '<a class="btn btn-danger btn-xs btn-blockNo" href="#" onclick="alert(' + row.id + ')"><span> Delete</span></a>' +
                                     '</div>';
                         }
                     }
@@ -247,13 +251,13 @@
          * @param  {[type]} fnCallback [description]
          * @return {[type]}            [description]
          */
-        tag.datatableSearch = function ( sSource, aoData, fnCallback ) {
-            console.info('CRUD-JSONEDITOR TAG.DATATABLESEARCH ?=====????', sSource, aoData, fnCallback);
+        self.datatableSearch = function ( sSource, aoData, fnCallback ) {
+            console.info('CRUD-DATATABLES self.DATATABLESEARCH ?=====????', sSource, aoData, fnCallback);
                 /* reorganize query */
                 var query = {};
                 var queryObj = {};
                 for (var i = aoData.length - 1; i >= 0; i--) {
-                    // console.log('datatables aoData[i].name',aoData[i].name);
+                    // console.log('CRUD-datatables aoData[i].name',aoData[i].name);
                     queryObj[aoData[i].name] = aoData[i];
                 }
 
@@ -278,9 +282,9 @@
                     query.name=queryObj.search.value.value;
                 }
 
-                tag.service.find({query:query}).then(function(result){
-                    console.info('CRUD-JSONEDITOR TAG.DATATABLESEARCH QUERY', query);
-                    console.info('CRUD-JSONEDITOR TAG.DATATABLESEARCH RESULT', result);
+                self.service.find({query:query}).then(function(result){
+                    console.info('CRUD-DATATABLES self.DATATABLESEARCH QUERY', query);
+                    console.info('CRUD-DATATABLES self.DATATABLESEARCH RESULT', result);
                         fnCallback({
                             error: false,
                             // recordsTotal: request.getResponseHeader('X-Total-Count'),
@@ -291,11 +295,11 @@
                             data: result.data
                         })
                 }).catch(function(error){
-                  console.error('Error CRUD-JSONEDITOR UPDATE FIND', error);
+                  console.error('Error CRUD-DATATABLES UPDATE FIND', error);
                 });
         }
 
-        tag.rowSelection =  function(e) {
+        self.rowSelection =  function(e) {
             // console.log(e);
             // alert($(e.target).attr('selected'))
         }

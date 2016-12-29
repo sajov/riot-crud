@@ -25,6 +25,9 @@
               <div class="x_title hidden-print">
                 <h2>{opts.data.name} <small>{opts.data.address.city}</small></h2>
                 <ul class="nav navbar-right panel_toolbox">
+                  <li>
+                       <crud-action-menu name="{opts.name}" views="{opts.views}" view="{opts.view}" data="{opts.query}"></crud-action-menu>
+                    </li>
                   <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                   </li>
                   <li class="dropdown">
@@ -208,15 +211,17 @@
 
 
         this.on('before-mount', () => {
-            self.initOrder(self.opts.query.id);
+            // self.initOrder(self.opts.query.id);
         });
 
         this.on('mount', function() {
             console.info('order mount',self.opts);
+            self.initOrder(self.opts.query.id);
         });
 
         this.on('update', function() {
             console.info('order update',self.opts);
+
         });
 
         this.on('updated', function() {
@@ -229,9 +234,14 @@
         this.on('unmount', () => {
         });
 
-        this.on('*', (eventName) => {
-          console.info('order all eventName:'+ eventName);
-        });
+        // this.on('*', (eventName) => {
+        //   console.info('order all eventName:'+ eventName);
+        // });
+
+        this.delete = function(e) {
+          e.preventDefault()
+          alert('delete')
+        };
 
         this.refresh = function(opts) {
 
