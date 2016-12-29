@@ -10,8 +10,7 @@ riot.tag2('top-menu', '<link href="/bower_components/gentelella/vendors/pnotify/
 
         this.on('mount', function(event) {
 
-            RiotCrudController.loadDependencies(self.dependencies,'top-menu', function (argument) {
-            });
+            RiotCrudController.loadDependencies(self.dependencies,'top-menu', function (argument) {});
 
             var services = Object.keys(self.opts.services);
 
@@ -39,7 +38,6 @@ riot.tag2('top-menu', '<link href="/bower_components/gentelella/vendors/pnotify/
                             + '"><span> Show</span></a>' + JSON.stringify(response)
                         );
                     })
-
                 }
             }
         });
@@ -51,20 +49,9 @@ riot.tag2('top-menu', '<link href="/bower_components/gentelella/vendors/pnotify/
             })
         }
 
-        this.test = function(e) {
-
-            e.preventDefault();
-            console.clear();
-            self.messageService.create({
-                id:222233321,
-                name: 'Message from client'
-            }, function(err,data){
-                console.log('err,data',err,data)
-            });
-        }
-
         this.notify = function(title, type, text) {
             new PNotify({
+                  delay: 3000,
                   title: title,
                   type: type,
                   text: text,

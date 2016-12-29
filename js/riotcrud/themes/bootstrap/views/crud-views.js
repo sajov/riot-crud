@@ -45,9 +45,9 @@ riot.tag2('crud-action-menu', '<div class="btn-group"> <a if="{opts.actions.edit
 
       this.save = (e) => {
         if(opts.view == 'create') {
-          self.parent.create();
+          parent.create();
         } else if(opts.view == 'edit') {
-          self.parent.save();
+          parent.save();
         }
       }
 });

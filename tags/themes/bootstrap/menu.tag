@@ -16,12 +16,9 @@
 
         this.on('mount', function(event) {
 
-            RiotCrudController.loadDependencies(self.dependencies,'top-menu', function (argument) {
-            });
+            RiotCrudController.loadDependencies(self.dependencies,'top-menu', function (argument) {});
 
             var services = Object.keys(self.opts.services);
-
-
 
             for(key in services) {
 
@@ -47,22 +44,6 @@
                             + '"><span> Show</span></a>' + JSON.stringify(response)
                         );
                     })
-                    // self[service].on(event, function( response) {
-                    //     // console.info(service, 'on event '+ event, response);
-                        // self.notify(
-                        //     'Service "'
-                        //     + service
-                        //     + '" has been <i>'
-                        //     + event
-                        //     + '</i>'
-                        //     , eventTypeMap[event]
-                        //     , '<a class="btn btn-info btn-xs" tabindex="0" href="#'
-                        //     + services[service]
-                        //     + '/view/'
-                        //     + response.id
-                        //     + '"><span> Show</span></a>' + JSON.stringify(response)
-                        // );
-                    // });
                 }
             }
         });
@@ -74,20 +55,9 @@
             })
         }
 
-        this.test = function(e) {
-
-            e.preventDefault();
-            console.clear();
-            self.messageService.create({
-                id:222233321,
-                name: 'Message from client'
-            }, function(err,data){
-                console.log('err,data',err,data)
-            });
-        }
-
         this.notify = function(title, type, text) {
             new PNotify({
+                  delay: 3000,
                   title: title,
                   type: type,
                   text: text,

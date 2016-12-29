@@ -28,7 +28,6 @@ var serviceMixin = {
                 self.refresh();
             }
         }
-
     },
 
     refresh: function(opts) {

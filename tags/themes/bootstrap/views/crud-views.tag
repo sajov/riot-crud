@@ -62,9 +62,9 @@
 
       this.save = (e) => {
         if(opts.view == 'create') {
-          self.parent.create();
+          parent.create();
         } else if(opts.view == 'edit') {
-          self.parent.save();
+          parent.save();
         }
       }
     </script>
