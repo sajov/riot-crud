@@ -43,19 +43,20 @@
 
 <crud-action-menu>
 
-    <panel_a riot-tag="panel" color='red'></panel_a>
+<!--     <panel_a riot-tag="panel" color='red'></panel_a>
     <panel_b riot-tag="panel" color='blue'>
         <panel_c riot-tag="panel" color='yellow'></panel_c>
     </panel_b>
-
+ -->
 
     <div class="btn-group">
-        <a if="{opts.actions.edit}"  service="{opts.service}" view="{opts.view}" id="{opts.id}" class="btn btn-primary btn-sm" href="#" onclick={ actionMenuTrigger } >Edit</a>
-        <a if="{opts.actions.view}"  service="{opts.service}" view="{opts.view}" id="{opts.id}" class="btn btn-info btn-sm" href="#" onclick={ actionMenuTrigger } >View</a>
-        <a if="{opts.actions.save}"  service="{opts.service}" view="{opts.view}" id="{opts.id}" class="btn btn-success btn-sm" href="#" onclick={ actionMenuTrigger } >Save</a>
-        <a if="{opts.actions.delete}"  service="{opts.service}" view="{opts.view}" id="{opts.id}" class="btn btn-danger btn-sm" href="#" onclick={ actionMenuTrigger } >Delete</a>
-        <a if="{opts.actions.create}"  service="{opts.service}" view="{opts.view}" id="{opts.id}" class="btn btn-warning btn-sm" href="#" onclick={ actionMenuTrigger } >New</a>
-        <a if="{opts.actions.list}"  service="{opts.service}" view="{opts.view}" id="{opts.id}" class="btn btn-default btn-sm" href="#" onclick={ actionMenuTrigger } >List</a>
+        <a each={action in opts.actions} if={ action.active } onclick={ click } class="btn btn-{ action.buttonClass || 'default'} btn-sm">{action.label}</a>
+        <!-- <a if="{opts.actions}"  service="{opts.service}" view="{opts.view}" id="{opts.id}" class="btn btn-primary btn-sm" href="#" onclick={ actionMenuTrigger } >Edit</a>
+        <a if="{opts.actions}"  service="{opts.service}" view="{opts.view}" id="{opts.id}" class="btn btn-info btn-sm" href="#" onclick={ actionMenuTrigger } >View</a>
+        <a if="{opts.actions}"  service="{opts.service}" view="{opts.view}" id="{opts.id}" class="btn btn-success btn-sm" href="#" onclick={ actionMenuTrigger } >Save</a>
+        <a if="{opts.actions}"  service="{opts.service}" view="{opts.view}" id="{opts.id}" class="btn btn-danger btn-sm" href="#" onclick={ actionMenuTrigger } >Delete</a>
+        <a if="{opts.actions}"  service="{opts.service}" view="{opts.view}" id="{opts.id}" class="btn btn-warning btn-sm" href="#" onclick={ actionMenuTrigger } >New</a>
+        <a if="{opts.actions}"  service="{opts.service}" view="{opts.view}" id="{opts.id}" class="btn btn-default btn-sm" href="#" onclick={ actionMenuTrigger } >List</a> -->
         &nbsp;
         &nbsp;
         &nbsp;
@@ -67,59 +68,50 @@
 
     <script>
       var self = this;
-      self.mixin(serviceMixin);
-      self.mixin(serviceObservableMixin);
+      // self.mixin(serviceMixin);
 
 
-      opts.actions = {
-        edit: true,
-        view: true,
-        create: true,
-        list: true,
-        delete: true,
-        save: true
-
-      };
-
-      this.on('update', () => {
-
-        for(var i = 0; i < opts.views.length; i++){
-            opts.actions[opts.views[i]] = true;
+      opts.actions = [
+        {
+          name: 'view',
+          label: 'View',
+          buttonClass: 'info',
+          active: true
+        },
+        {
+          name: 'edit',
+          label: 'Edit',
+          buttonClass: 'primary',
+          active: true
+        },
+        {
+          name: 'create',
+          label: 'Create',
+          buttonClass: 'warning',
+          active: true
+        },
+        {
+          name: 'delete',
+          label: 'Delete',
+          buttonClass: 'danger',
+          active: true
+        },
+        {
+          name: 'save',
+          label: 'Save',
+          buttonClass: 'success',
+          active: true
+        },
+        {
+          name: 'list',
+          label: 'List',
+          buttonClass: 'default',
+          active: true
         }
+      ];
 
-        if(opts.view != 'view') {
-          opts.actions.edit = false;
-        }
+      self.mixin(ViewActionsMixin);
 
-        if(opts.view == 'create') {
-          opts.actions.delete = false;
-        }
-
-        if(opts.view == 'view') {
-          opts.actions.save = false;
-        }
-        if(opts.view == 'edit') {
-          opts.actions.save = true;
-        }
-
-        if(opts.view != 'view') {
-          opts.actions.create = false;
-        }
-
-        if(opts.view == 'view' || opts.view == 'create') {
-          opts.actions.view = false;
-        }
-
-        console.info('CRUD-ACTION-MENU UPDATE',opts.name,opts.view,  opts.views, opts.data, opts.actions);
-      });
-
-      this.save = (e) => {
-        if(opts.view == 'create') {
-          parent.create();
-        } else if(opts.view == 'edit') {
-          parent.save();
-        }
-      }
     </script>
 
 </crud-action-menu>

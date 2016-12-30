@@ -4,60 +4,50 @@ riot.tag2('panel', '<yield></yield> <button each="{color in colors}" onclick="{c
       this.mixin(SharedMixin)
 });
 
-riot.tag2('crud-action-menu', '<panel_a riot-tag="panel" color="red"></panel_a> <panel_b riot-tag="panel" color="blue"> <panel_c riot-tag="panel" color="yellow"></panel_c> </panel_b> <div class="btn-group"> <a if="{opts.actions.edit}" service="{opts.service}" view="{opts.view}" id="{opts.id}" class="btn btn-primary btn-sm" href="#" onclick="{actionMenuTrigger}">Edit</a> <a if="{opts.actions.view}" service="{opts.service}" view="{opts.view}" id="{opts.id}" class="btn btn-info btn-sm" href="#" onclick="{actionMenuTrigger}">View</a> <a if="{opts.actions.save}" service="{opts.service}" view="{opts.view}" id="{opts.id}" class="btn btn-success btn-sm" href="#" onclick="{actionMenuTrigger}">Save</a> <a if="{opts.actions.delete}" service="{opts.service}" view="{opts.view}" id="{opts.id}" class="btn btn-danger btn-sm" href="#" onclick="{actionMenuTrigger}">Delete</a> <a if="{opts.actions.create}" service="{opts.service}" view="{opts.view}" id="{opts.id}" class="btn btn-warning btn-sm" href="#" onclick="{actionMenuTrigger}">New</a> <a if="{opts.actions.list}" service="{opts.service}" view="{opts.view}" id="{opts.id}" class="btn btn-default btn-sm" href="#" onclick="{actionMenuTrigger}">List</a> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </div>', '', '', function(opts) {
+riot.tag2('crud-action-menu', '<div class="btn-group"> <a each="{action in opts.actions}" if="{action.active}" onclick="{click}" class="btn btn-{action.buttonClass || \'default\'} btn-sm">{action.label}</a> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </div>', '', '', function(opts) {
       var self = this;
-      self.mixin(serviceMixin);
-      self.mixin(serviceObservableMixin);
 
-      opts.actions = {
-        edit: true,
-        view: true,
-        create: true,
-        list: true,
-        delete: true,
-        save: true
-
-      };
-
-      this.on('update', () => {
-
-        for(var i = 0; i < opts.views.length; i++){
-            opts.actions[opts.views[i]] = true;
+      opts.actions = [
+        {
+          name: 'view',
+          label: 'View',
+          buttonClass: 'info',
+          active: true
+        },
+        {
+          name: 'edit',
+          label: 'Edit',
+          buttonClass: 'primary',
+          active: true
+        },
+        {
+          name: 'create',
+          label: 'Create',
+          buttonClass: 'warning',
+          active: true
+        },
+        {
+          name: 'delete',
+          label: 'Delete',
+          buttonClass: 'danger',
+          active: true
+        },
+        {
+          name: 'save',
+          label: 'Save',
+          buttonClass: 'success',
+          active: true
+        },
+        {
+          name: 'list',
+          label: 'List',
+          buttonClass: 'default',
+          active: true
         }
+      ];
 
-        if(opts.view != 'view') {
-          opts.actions.edit = false;
-        }
+      self.mixin(ViewActionsMixin);
 
-        if(opts.view == 'create') {
-          opts.actions.delete = false;
-        }
-
-        if(opts.view == 'view') {
-          opts.actions.save = false;
-        }
-        if(opts.view == 'edit') {
-          opts.actions.save = true;
-        }
-
-        if(opts.view != 'view') {
-          opts.actions.create = false;
-        }
-
-        if(opts.view == 'view' || opts.view == 'create') {
-          opts.actions.view = false;
-        }
-
-        console.info('CRUD-ACTION-MENU UPDATE',opts.name,opts.view,  opts.views, opts.data, opts.actions);
-      });
-
-      this.save = (e) => {
-        if(opts.view == 'create') {
-          parent.create();
-        } else if(opts.view == 'edit') {
-          parent.save();
-        }
-      }
 });
 
 riot.tag2('crud-top-bar', '<div class="top-bar"> <div class="top-bar-title"> <span>{VM.config.title} {VM.data.id}</span> <br><small class="subheader">{VM.config.description}</small> </div> <div if="{VM.search}" id="responsive-menu"> <div class="top-bar-right"> <ul class="menu"> <li><input type="search" onkeyup="{VM.search}" class="small" style="font-size: 14px;" placeholder="Search"></li> <li><button type="button" onclick="{VM.search}" data-submit class="button small"><span class="fi-magnifying-glass"></span></button></li> </ul> </div> </div> <div class="top-bar-right"> <ul class="dropdown menu" data-dropdown-menu> <li if="{VM.selectedIds.length != 0}"> <a href="#" onclick="{VM.delete}" class="button small alert fi-trash"> Delete ({VM.selectedIds.length})</a> </li> <li if="{VM.selectedIds.length != 0}"> <a href="{VM.csvData}" onclick="{VM.delete}" download="{VM.model}.csv" class="button small secondary fi-save"> CSV ({VM.selectedIds.length})</a> </li> <li if="{VM.config.menu.list}"> <a href="#" onclick="{VM.list}" class="button small secondary fi-list-bullet"> List</a> </li> <li if="{VM.config.menu.show}"> <a href="#" onclick="{VM.show}" class="button small warning fi-page-search"> Show</a> </li> <li if="{VM.config.menu.edit}"> <a href="#" onclick="{VM.edit}" class="button small warning fi-page-edit"> Edit</a> </li> <li if="{VM.config.menu.save}"> <a href="#" onclick="{VM.save}" class="button small success fi-save"> Save</a> </li> <li if="{VM.config.menu.creation}"> <a href="#" onclick="{VM.creation}" class="button small success fi-edit"> Create</a> </li> <li if="{VM.config.menu.destroy}"> <a href="#" onclick="{VM.destroyModal}" class="button small alert fi-trash"> Delete</a> </li> <li if="{VM.search}"> <a if="{opts.delete}" class="button small secondary fi-magnifying-glass"> Search</a> </li> </ul> </div> </div>', '', '', function(opts) {
