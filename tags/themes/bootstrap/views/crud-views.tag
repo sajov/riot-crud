@@ -1,11 +1,61 @@
+
+<panel>
+    <yield />
+    <button each={color in colors} onclick={ click }>Call {color}</button>
+    <div show={called}>I hear you {caller}
+    </div>
+    <style>
+      panel_a{
+          display:block;
+          width:400px;
+          height:80px;
+          background:red;
+          border:solid;
+          margin-bottom:20px;
+          padding:5px;
+      }
+
+      panel_b{
+          display:block;
+          width:400px;
+          height:80px;
+          background:lightblue;
+          border:solid;
+           padding:5px;
+      }
+
+      panel_c{
+          display:block;
+          width:140px;
+          height:50px;
+          background:yellow;
+          border:solid;
+          float:right;
+          margin:5px;
+           padding:5px;
+      }
+    </style>
+    <script>
+      this.color = opts.color
+      this.mixin(SharedMixin)
+    </script>
+</panel>
+
 <crud-action-menu>
+
+    <panel_a riot-tag="panel" color='red'></panel_a>
+    <panel_b riot-tag="panel" color='blue'>
+        <panel_c riot-tag="panel" color='yellow'></panel_c>
+    </panel_b>
+
+
     <div class="btn-group">
-        <a if="{opts.actions.edit}" class="btn btn-primary btn-sm" href="#{opts.name}/edit/{opts.data.id}" onclick={ edit } >Edit</a>
-        <a if="{opts.actions.view}" class="btn btn-info btn-sm" href="#{opts.name}/view/{opts.data.id}" onclick={ view } >View</a>
-        <a if="{opts.actions.save}" class="btn btn-success btn-sm" href="#" onclick={ save } >Save</a>
-        <a if="{opts.actions.delete}" class="btn btn-danger btn-sm" href="#" onclick={ parent.delete } >Delete</a>
-        <a if="{opts.actions.create}" class="btn btn-warning btn-sm" href="#{opts.name}/create/">New</a>
-        <a if="{opts.actions.list}" class="btn btn-default btn-sm" href="#{opts.name}/list" onclick={ list } >List</a>
+        <a if="{opts.actions.edit}"  service="{opts.service}" view="{opts.view}" id="{opts.id}" class="btn btn-primary btn-sm" href="#" onclick={ actionMenuTrigger } >Edit</a>
+        <a if="{opts.actions.view}"  service="{opts.service}" view="{opts.view}" id="{opts.id}" class="btn btn-info btn-sm" href="#" onclick={ actionMenuTrigger } >View</a>
+        <a if="{opts.actions.save}"  service="{opts.service}" view="{opts.view}" id="{opts.id}" class="btn btn-success btn-sm" href="#" onclick={ actionMenuTrigger } >Save</a>
+        <a if="{opts.actions.delete}"  service="{opts.service}" view="{opts.view}" id="{opts.id}" class="btn btn-danger btn-sm" href="#" onclick={ actionMenuTrigger } >Delete</a>
+        <a if="{opts.actions.create}"  service="{opts.service}" view="{opts.view}" id="{opts.id}" class="btn btn-warning btn-sm" href="#" onclick={ actionMenuTrigger } >New</a>
+        <a if="{opts.actions.list}"  service="{opts.service}" view="{opts.view}" id="{opts.id}" class="btn btn-default btn-sm" href="#" onclick={ actionMenuTrigger } >List</a>
         &nbsp;
         &nbsp;
         &nbsp;
@@ -16,8 +66,11 @@
 
 
     <script>
-
       var self = this;
+      self.mixin(serviceMixin);
+      self.mixin(serviceObservableMixin);
+
+
       opts.actions = {
         edit: true,
         view: true,
