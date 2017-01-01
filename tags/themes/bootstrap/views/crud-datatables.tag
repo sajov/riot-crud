@@ -41,7 +41,7 @@
                                 <th each="{ colkey, colval in opts.schema.required }" data-type="{colval.type}">
                                    <small> <input type="text" name="filter_{ colkey }" placeholder="filter { colkey }"></small>
                                 </th>
-                                <th></th>
+                                <th>&nbsp;</th>
                             </tr>
                         </tfoot>
                     </table>
@@ -59,7 +59,11 @@
     <link href="/bower_components/gentelella/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
     <link href="/bower_components/gentelella/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
     <link href="/bower_components/gentelella/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
-
+    <style>
+        .btn-group {
+          display: flex;
+        }
+    </style>
 
     <script>
         var self = this;
@@ -234,8 +238,8 @@
                         "render": function ( data, type, row ) {
                             // return data +' ('+ row.sku+')';
                             return '<div class="dt-buttons btn-group">' +
-                                        '<a class="btn btn-info btn-xs btn-blockNo" tabindex="0" aria-controls="ajaxdatatables" href="#' + opts.service + '/view/' + row.id + '"><span> View</span></a>' +
-                                        '<a class="btn btn-danger btn-xs btn-blockNo" href="#" onclick="alert(' + row.id + ')"><span> Delete</span></a>' +
+                                        '<a class="btn btn-info btn-xs btn-blockNo" tabindex="0" aria-controls="ajaxdatatables" href="#' + opts.service + '/view/' + row.id + '"><i class="fa fa-edit"></i></a>' +
+                                        '<a class="btn btn-danger btn-xs btn-blockNo" href="#" onclick="alert(' + row.id + ')"><i class="fa fa-trash-o"></i></a>' +
                                     '</div>';
                         }
                     }

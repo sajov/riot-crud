@@ -20,49 +20,48 @@
 
 
         <div class="row">
-          <div class="col-md-12 col-sm-12 col-xs-12">
-            <div class="x_panel">
-              <div class="x_title hidden-print">
-                <h2>{opts.title} <small>{opts.service}</small></h2>
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title hidden-print">
+                        <h2>{opts.title} <small>{opts.service}</small></h2>
 
-                <ul class="nav navbar-right panel_toolbox">
-                    <li>
-                       <crud-action-menu name="{opts.name}" views="{opts.views}" view="{opts.view}" data="{opts.query}"></crud-action-menu>
-                    </li>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li>
+                               <crud-action-menu name="{opts.name}" views="{opts.views}" view="{opts.view}" data="{opts.query}"></crud-action-menu>
+                            </li>
+                            <li>
+                                <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>
+                                        <a href="#">Settings 1</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Settings 2</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a class="close-link"><i class="fa fa-close"></i></a>
+                            </li>
+                        </ul>
 
-                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                  </li>
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                    <ul class="dropdown-menu" role="menu">
-                      <li><a href="#">Settings 1</a>
-                      </li>
-                      <li><a href="#">Settings 2</a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li><a class="close-link"><i class="fa fa-close"></i></a>
-                  </li>
-                </ul>
-                <div class="pull-right">
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="x_content">
+
+                        <div id="jsoneditor"></div>
+                        <a class="btn success" href="#" onclick={ saveJSONEditor }>Speichern</a>
+
+                    </div>
                 </div>
-                <div class="clearfix"></div>
-              </div>
-
-              <div class="x_content">
-
-
-                <div id="jsoneditor"></div>
-                <a class="btn success" href="#" onclick={ saveJSONEditor }>Speichern</a>
-
-              </div>
             </div>
-          </div>
         </div>
-
         <div class="clearfix"></div>
-
-
     </div>
 
     <link rel="stylesheet" href="http://cdn.jsdelivr.net/select2/3.4.8/select2.css">
