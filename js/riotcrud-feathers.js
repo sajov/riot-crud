@@ -94,7 +94,7 @@ var ViewActionsMixin = {
 
         self.click = (e) => {
             e.preventDefault();
-            console.log(e.item);
+            console.log(self.opts.name,self.opts.view,self.opts.data.id,e.item);
             self.observable.trigger('event_call_test',e.item)
         }
     },

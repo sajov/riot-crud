@@ -62,6 +62,11 @@
     <style>
         .btn-group {
           display: flex;
+          float: right;
+        }
+        table.dataTable th.focus, table.dataTable td.focus {
+            outline: 2px solid silver!important;
+            outline-offset: -1px;
         }
     </style>
 
@@ -112,10 +117,14 @@
 
         self.on('mount', function(params, options) {
             console.log('CRUD-DATATABLES MOUNT',params, options);
-             RiotCrudController.loadDependencies(self.dependencies,'crud-datatables', function (argument) {
+            RiotCrudController.loadDependencies(self.dependencies,'crud-datatables', function (argument) {
                  self.initTable();
             });
             opts.tableHeader = opts.schema.defaultProperties || opts.schema.required;
+
+            self.observable.on('delete', () => {
+                alert('dude recieved event delete');
+            })
 
         });
 
@@ -238,8 +247,8 @@
                         "render": function ( data, type, row ) {
                             // return data +' ('+ row.sku+')';
                             return '<div class="dt-buttons btn-group">' +
-                                        '<a class="btn btn-info btn-xs btn-blockNo" tabindex="0" aria-controls="ajaxdatatables" href="#' + opts.service + '/view/' + row.id + '"><i class="fa fa-edit"></i></a>' +
-                                        '<a class="btn btn-danger btn-xs btn-blockNo" href="#" onclick="alert(' + row.id + ')"><i class="fa fa-trash-o"></i></a>' +
+                                        '<a class="btn btn-info btn-xs" tabindex="0" aria-controls="ajaxdatatables" href="#' + opts.service + '/view/' + row.id + '"><i class="fa fa-edit"></i></a>' +
+                                        '<a class="btn btn-danger btn-xs" onclick="riot.observable().trigger(\'delete\')"><i class="fa fa-trash-o"></i></a>' +
                                     '</div>';
                         }
                     }
