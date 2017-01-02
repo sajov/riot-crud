@@ -122,7 +122,9 @@ $script.ready('layout', function() {
                 columns: {
                     base_color: {
                         "data": null,
-                        "render": function ( data, type, row ) {return '<span style="background-color:' + data.base_color + '">' + data.base_color + '</span>';}
+                        "render": function ( data, type, row ) {
+                            return '<span class="badge badge-success" style="background-color:' + data.base_color + '">' + data.base_color + '</span>';
+                        }
                     }
                 },
                 dependencies: [
@@ -190,7 +192,9 @@ $script.ready('layout', function() {
                 columns: {
                     base_color: {
                         "data": null,
-                        "render": function ( data, type, row ) {return '<span style="background-color:' + data.base_color + '">' + data.base_color + '</span>';}
+                        "render": function ( data, type, row ) {
+                            return '<span class="badge badge-success" style="background-color:' + data.base_color + '">' + data.base_color + '</span>';
+                        }
                     }
                 },
                 dependencies: [
@@ -228,13 +232,26 @@ $script.ready('layout', function() {
                 ] // string || array
             },
             create: {
-                fn: function() {riot.route('/category/view')}
+                // fn: function() {riot.route('/product/view')}
+                tag: 'crud-jsoneditor', // default
+                title: 'Edit Products (json-editor demo)',
+                menu:true,
+                target: 'div#content', // optional
+                // fn: function() {riot.route('/products/edit/1')}
+                dependencies: [
+                    riotCrudTheme + '/views/crud-jsoneditor.js'
+                ]
             },
             edit: {
-                title: 'Edit Categories',
+                tag: 'crud-jsoneditor', // default
+                title: 'Edit Products (json-editor demo)',
                 menu:true,
-                fn: function() {riot.route('/category/edit/1')}
-            }
+                target: 'div#content', // optional
+                // fn: function() {riot.route('/products/edit/1')}
+                dependencies: [
+                    riotCrudTheme + '/views/crud-jsoneditor.js'
+                ]
+            },
         }
     );
 
@@ -266,7 +283,9 @@ $script.ready('layout', function() {
                 columns: {
                     base_color: {
                         "data": null,
-                        "render": function ( data, type, row ) {return '<span style="background-color:' + data.base_color + '">' + data.base_color + '</span>';}
+                        "render": function ( data, type, row ) {
+                            return '<span class="badge badge-success" style="background-color:' + data.base_color + '">' + data.base_color + '</span>';
+                        }
                     }
                 },
                 dependencies: [
