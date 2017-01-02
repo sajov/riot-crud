@@ -207,8 +207,11 @@
 
     <script>
         var self = this;
-        self.mixin(serviceMixin);
+        self.mixin(FeatherClientMixin);
 
+        RiotControl.on('delete', (arg) => {
+            alert('delete ORDER');
+        })
 
         this.on('before-mount', () => {
             // self.initOrder(self.opts.query.id);
@@ -232,6 +235,7 @@
         });
 
         this.on('unmount', () => {
+          RiotControl.off('delete');
         });
 
         // this.on('*', (eventName) => {

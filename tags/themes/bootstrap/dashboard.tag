@@ -11,7 +11,7 @@
 
   <script>
     var self = this;
-    self.mixin(serviceMixin);
+    self.mixin(FeatherClientMixin);
 
     this.on('mount', function(){
 
@@ -604,7 +604,7 @@
 
     <script>
         var self = this;
-        self.mixin(serviceMixin);
+        self.mixin(FeatherClientMixin);
 
         self.dependencies = [
               'bower_components/gentelella/vendors/Chart.js/dist/Chart.min.js',

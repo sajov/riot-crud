@@ -6,7 +6,7 @@
 
     <script>
         var self = this;
-        self.mixin(serviceMixin);
+        self.mixin(FeatherClientMixin);
 
         self.dependencies = [
                 '/bower_components/gentelella/vendors/pnotify/dist/pnotify.js',

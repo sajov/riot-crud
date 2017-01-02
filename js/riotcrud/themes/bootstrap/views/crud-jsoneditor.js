@@ -1,55 +1,44 @@
-riot.tag2('crud-jsoneditor', '<div> <div class="page-title"> </div> <div class="row"> <div class="col-md-12 col-sm-12 col-xs-12"> <div class="x_panel"> <div class="x_title hidden-print"> <h2>{opts.title} <small>{opts.service}</small></h2> <ul class="nav navbar-right panel_toolbox"> <li> <crud-action-menu name="{opts.name}" views="{opts.views}" view="{opts.view}" data="{opts.query}"></crud-action-menu> </li> <li> <a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li> <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a> <ul class="dropdown-menu" role="menu"> <li> <a href="#">Settings 1</a> </li> <li> <a href="#">Settings 2</a> </li> </ul> </li> <li> <a class="close-link"><i class="fa fa-close"></i></a> </li> </ul> <div class="pull-right"></div> <div class="clearfix"></div> </div> <div class="x_content"> <div id="jsoneditor"></div> <a class="btn success" href="#" onclick="{saveJSONEditor}">Speichern</a> </div> </div> </div> </div> <div class="clearfix"></div> </div> <link rel="stylesheet" href="http://cdn.jsdelivr.net/select2/3.4.8/select2.css"> <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css">', '', '', function(opts) {
+riot.tag2('crud-jsoneditor', '<div> <div class="page-title"> </div> <div class="row"> <div class="col-md-12 col-sm-12 col-xs-12"> <div class="x_panel"> <div class="x_title hidden-print"> <h2>{opts.title} <small>{opts.service}</small></h2> <ul class="nav navbar-right panel_toolbox"> <li> <crud-action-menu name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}"></crud-action-menu> </li> <li> <a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li> <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a> <ul class="dropdown-menu" role="menu"> <li> <a href="#">Settings 1</a> </li> <li> <a href="#">Settings 2</a> </li> </ul> </li> <li> <a class="close-link"><i class="fa fa-close"></i></a> </li> </ul> <div class="pull-right"></div> <div class="clearfix"></div> </div> <div class="x_content"> <div id="jsoneditor"></div> <a class="btn success" href="#" onclick="{saveJSONEditor}">Speichern</a> </div> </div> </div> </div> <div class="clearfix"></div> </div> <link rel="stylesheet" href="http://cdn.jsdelivr.net/select2/3.4.8/select2.css"> <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css">', '', '', function(opts) {
         var self = this;
-        self.mixin(serviceMixin);
+        self.mixin(FeatherClientMixin);
 
         self.dependencies = [
                 '/bower_components/json-editor/dist/jsoneditor.min.js',
                 'http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js'
         ];
 
-        this.on('update', function() {
-            console.info('CRUD-JSONEDITOR UPDATE',self.opts.query);
-            if(typeof self.editor == 'undefined') {
-
-            }
-
-            if(typeof self.opts.query.id != 'undefined') {
-                RiotCrudController.loadDependencies(self.dependencies,'crud-jsoneditor', function (argument) {
-                    self.get(self.opts.query.id)
-                });
-            }
-
-        });
-
         this.refresh = (opts) => {
             self.opts = opts;
             self.update();
+            self.get(self.opts.query.id);
         },
 
-        this.on('before-mount', () => {console.info('CRUD-JSONEDITOR BEFORE-MOUNT',self.opts.query);});
-
         this.on('mount', function() {
-            console.info('CRUD-JSONEDITOR MOUNT',self.opts.query, self.opts.view, self.opts.views);
             RiotCrudController.loadDependencies(self.dependencies,'crud-jsoneditor', function (argument) {
                 self.initJSONEditor();
+                self.get(self.opts.query.id)
             });
         });
 
-        this.on('mounted', function() {console.info('CRUD-JSONEDITOR MOUNTED',self.opts.query);});
-
         self.get = function(id) {
 
-            self.service.get(id).then(function(result){
-                console.info('CRUD-JSONEDITOR UPDATE FIND', result);
-                if(typeof self.editor == 'undefined') {
-                  self.initJSONEditor();
-                }
-                self.data = result;
-                self.editor.setValue(result);
+            if(typeof self.opts.query.id != 'undefined') {
 
-            }).catch(function(error){
-              console.error('Error CRUD-JSONEDITOR UPDATE FIND', error);
-            });
+                self.service.get(id).then(function(result){
+                    console.info('CRUD-JSONEDITOR UPDATE FIND', result);
+                    if(typeof self.editor == 'undefined') {
+                      self.initJSONEditor();
+                    }
+                    self.data = result;
+                    self.editor.setValue(self.data);
+
+                }).catch(function(error){
+                  console.error('Error CRUD-JSONEDITOR UPDATE FIND', error);
+                });
+            } else {
+                self.data = {};
+                self.editor.setValue(self.data);
+            }
         }
 
         self.initJSONEditor = function(data) {
@@ -103,6 +92,35 @@ riot.tag2('crud-jsoneditor', '<div> <div class="page-title"> </div> <div class="
                 }).catch(function(error){
                   console.error('Error CRUD-JSONEDITOR saveJSONEditor update', error);
                 });
+            }
+        }
+
+        self.getData = () => {
+
+            var json = self.editor.getValue();
+            var validation_errors = self.editor.validate();
+
+            if(validation_errors.length) {
+                console.error(JSON.stringify(validation_errors,null,2));
+                return false;
+            } else {
+                return json;
+            }
+        }
+
+        self.updateData = function(e) {
+            e.preventDefault();
+
+            var json = self.editor.getValue();
+            var validation_errors = self.editor.validate();
+            if(validation_errors.length) {
+                console.error(JSON.stringify(validation_errors,null,2));
+            } else {
+                self.service.update(json.id,json)
+                            .then(function(result){})
+                            .catch(function(error){
+                                console.error('Error CRUD-JSONEDITOR saveJSONEditor update', error);
+                            });
             }
         }
 

@@ -1,6 +1,6 @@
 riot.tag2('top-menu', '<link href="/bower_components/gentelella/vendors/pnotify/dist/pnotify.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/pnotify/dist/pnotify.buttons.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/pnotify/dist/pnotify.nonblock.css" rel="stylesheet">', '', '', function(opts) {
         var self = this;
-        self.mixin(serviceMixin);
+        self.mixin(FeatherClientMixin);
 
         self.dependencies = [
                 '/bower_components/gentelella/vendors/pnotify/dist/pnotify.js',

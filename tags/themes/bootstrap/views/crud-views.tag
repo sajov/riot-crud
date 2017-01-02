@@ -1,117 +1,12 @@
 
-<panel>
-    <yield />
-    <button each={color in colors} onclick={ click }>Call {color}</button>
-    <div show={called}>I hear you {caller}
-    </div>
-    <style>
-      panel_a{
-          display:block;
-          width:400px;
-          height:80px;
-          background:red;
-          border:solid;
-          margin-bottom:20px;
-          padding:5px;
-      }
-
-      panel_b{
-          display:block;
-          width:400px;
-          height:80px;
-          background:lightblue;
-          border:solid;
-           padding:5px;
-      }
-
-      panel_c{
-          display:block;
-          width:140px;
-          height:50px;
-          background:yellow;
-          border:solid;
-          float:right;
-          margin:5px;
-           padding:5px;
-      }
-    </style>
-    <script>
-      this.color = opts.color
-      this.mixin(SharedMixin)
-    </script>
-</panel>
-
 <crud-action-menu>
-
-<!--     <panel_a riot-tag="panel" color='red'></panel_a>
-    <panel_b riot-tag="panel" color='blue'>
-        <panel_c riot-tag="panel" color='yellow'></panel_c>
-    </panel_b>
- -->
 
     <div class="btn-group">
         <a each={action in opts.actions} if={ action.active } onclick={ click } class="btn btn-{ action.buttonClass || 'default'} btn-sm">{action.label}</a>
-        <!-- <a if="{opts.actions}"  service="{opts.service}" view="{opts.view}" id="{opts.id}" class="btn btn-primary btn-sm" href="#" onclick={ actionMenuTrigger } >Edit</a>
-        <a if="{opts.actions}"  service="{opts.service}" view="{opts.view}" id="{opts.id}" class="btn btn-info btn-sm" href="#" onclick={ actionMenuTrigger } >View</a>
-        <a if="{opts.actions}"  service="{opts.service}" view="{opts.view}" id="{opts.id}" class="btn btn-success btn-sm" href="#" onclick={ actionMenuTrigger } >Save</a>
-        <a if="{opts.actions}"  service="{opts.service}" view="{opts.view}" id="{opts.id}" class="btn btn-danger btn-sm" href="#" onclick={ actionMenuTrigger } >Delete</a>
-        <a if="{opts.actions}"  service="{opts.service}" view="{opts.view}" id="{opts.id}" class="btn btn-warning btn-sm" href="#" onclick={ actionMenuTrigger } >New</a>
-        <a if="{opts.actions}"  service="{opts.service}" view="{opts.view}" id="{opts.id}" class="btn btn-default btn-sm" href="#" onclick={ actionMenuTrigger } >List</a> -->
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
     </div>
 
-
     <script>
-      var self = this;
-      // self.mixin(serviceMixin);
-
-
-      opts.actions = [
-        {
-          name: 'view',
-          label: 'View',
-          buttonClass: 'info',
-          active: true
-        },
-        {
-          name: 'edit',
-          label: 'Edit',
-          buttonClass: 'primary',
-          active: true
-        },
-        {
-          name: 'create',
-          label: 'Create',
-          buttonClass: 'warning',
-          active: true
-        },
-        {
-          name: 'delete',
-          label: 'Delete',
-          buttonClass: 'danger',
-          active: true
-        },
-        {
-          name: 'save',
-          label: 'Save',
-          buttonClass: 'success',
-          active: true
-        },
-        {
-          name: 'list',
-          label: 'List',
-          buttonClass: 'default',
-          active: true
-        }
-      ];
-
-      self.mixin(ViewActionsMixin);
-
+      this.mixin(viewActionsMixin);
     </script>
 
 </crud-action-menu>
