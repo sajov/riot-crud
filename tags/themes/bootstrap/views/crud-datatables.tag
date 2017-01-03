@@ -1,57 +1,5 @@
 <crud-datatables>
 
-    <div class="">
-            <div class="page-title">
-              <div class="title_left">
-                <h3>{ opts.title } <small>{ opts.description }</small></h3>
-              </div>
-
-              <div class="title_right">
-                <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-                  <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search for...">
-                    <span class="input-group-btn">
-                      <button class="btn btn-default" type="button">Go!</button>
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="clearfix"></div>
-
-            <div class="row">
-              <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-
-                  <div class="x_content">
-
-                    <table id="datatable" class="display table table-striped table-bordered datatable-buttons" cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th if={opts.selection}><input onclick={rowSelection} type="checkbox" /></th>
-                                <th each="{ colkey, colval in opts.schema.required }" data-type="{colval.type}">{ colkey }</th>
-                                <th></th>
-                            </tr>
-
-                        </thead>
-                        <tfoot>
-                            <tr id="filterrow"  if={opts.filterable}>
-                                <th></th>
-                                <th each="{ colkey, colval in opts.schema.required }" data-type="{colval.type}">
-                                   <small> <input type="text" name="filter_{ colkey }" placeholder="filter { colkey }"></small>
-                                </th>
-                                <th>&nbsp;</th>
-                            </tr>
-                        </tfoot>
-                    </table>
-
-                  </div>
-                </div>
-              </div>
-            </div>
-    </div>
-
     <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/zf/dt-1.10.12/datatables.min.css"> -->
     <link href="https://cdn.datatables.net/v/bs/dt-1.10.13/b-1.2.4/b-colvis-1.2.4/b-flash-1.2.4/b-html5-1.2.4/b-print-1.2.4/cr-1.3.2/fc-3.2.2/fh-3.1.2/kt-2.2.0/r-2.1.0/rr-1.2.0/sc-1.4.2/se-1.2.0/datatables.min.css" rel="stylesheet">
     <link href="/bower_components/gentelella/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
@@ -69,6 +17,59 @@
             outline-offset: -1px;
         }
     </style>
+
+    <div class="">
+        <div class="page-title">
+          <div class="title_left">
+            <h3>{ opts.title } <small>{ opts.description }</small></h3>
+          </div>
+
+          <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search for...">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button">Go!</button>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+
+              <div class="x_content">
+
+                <table id="datatable" class="display table table-striped table-bordered datatable-buttons" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th if={opts.selection}><input onclick={rowSelection} type="checkbox" /></th>
+                            <th each="{ colkey, colval in opts.schema.required }" data-type="{colval.type}">{ colkey }</th>
+                            <th></th>
+                        </tr>
+
+                    </thead>
+                    <tfoot>
+                        <tr id="filterrow"  if={opts.filterable}>
+                            <th></th>
+                            <th each="{ colkey, colval in opts.schema.required }" data-type="{colval.type}">
+                               <small> <input type="text" name="filter_{ colkey }" placeholder="filter { colkey }"></small>
+                            </th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </tfoot>
+                </table>
+
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
 
     <script>
         var self = this;
@@ -98,23 +99,6 @@
             self.datatable.draw();
         }
 
-        // self.on('all', function(eventName) {
-        //     console.info('CRUD-DATATABLES ALL EVENTNAME',eventName)
-        // })
-
-        self.on('update', function(params, options) {
-            console.info('CRUD-DATATABLES UPDATE',params, options);
-
-        });
-
-        self.on('updated', function(params, options) {
-            console.info('CRUD-DATATABLES UPDATED',params, options);
-        });
-
-        self.on('updated', function(params, options) {
-            console.info('CRUD-DATATABLES UPDATED',params, options);
-        });
-
         self.on('mount', function(params, options) {
             console.log('CRUD-DATATABLES MOUNT',params, options);
             RiotCrudController.loadDependencies(self.dependencies,'crud-datatables', function (argument) {
@@ -126,10 +110,6 @@
                 alert('dude recieved event delete');
             })
 
-        });
-
-        self.on('mounted', function(params, options) {
-            console.info('CRUD-DATATABLES UPDATED',params, options);
         });
 
         /**
@@ -238,6 +218,7 @@
             }
 
             if(opts.buttons) {
+                var viewModelKey = [self.opts.service, self.opts.view, 'delete', 'confirmation'].join('_');
                 config.columns.push(
                     {
                         "data": null,
@@ -248,7 +229,7 @@
                             // return data +' ('+ row.sku+')';
                             return '<div class="dt-buttons btn-group">' +
                                         '<a class="btn btn-info btn-xs" tabindex="0" aria-controls="ajaxdatatables" href="#' + opts.service + '/view/' + row.id + '"><i class="fa fa-edit"></i></a>' +
-                                        '<a class="btn btn-danger btn-xs" onclick="riot.observable().trigger(\'delete\')"><i class="fa fa-trash-o"></i></a>' +
+                                        '<a class="btn btn-danger btn-xs" onclick="RiotControl.trigger(\'' + viewModelKey + '\',\''+row.id+'\')"><i class="fa fa-trash-o"></i></a>' +
                                     '</div>';
                         }
                     }

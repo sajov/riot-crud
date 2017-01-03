@@ -53,7 +53,6 @@ var FeatherClientMixin = {
           .configure(feathers.socketio(self.socket));
 
         if(typeof self.opts.service != 'undefined') {
-            console.info('init ',RiotControl);
 
 
             self.service = self.client.service(self.opts.service);
@@ -61,8 +60,14 @@ var FeatherClientMixin = {
             var viewModelKey = [self.opts.service, self.opts.view].join('_');
 
             self.eventKeyDelete = viewModelKey + '_delete';
-            RiotControl.on(self.eventKeyDelete, () => {
-                self.service.remove(self.data.id)
+            self.eventKeyDeleteConfirmation = viewModelKey + '_delete_confirmation';
+            RiotControl.on(self.eventKeyDeleteConfirmation, (id) => {
+                RiotControl.trigger('delete_confirmation_modal', self.opts.service, self.opts.view, id || self.opts.query.id)
+            });
+
+            self.eventKeyDeleteConfirmed = viewModelKey + '_delete';
+            RiotControl.on(self.eventKeyDeleteConfirmed, (id) => {
+                self.service.remove(id)
                             .then(function(result){
                                 riot.route([self.opts.service, 'list'].join('/'))
                             })
@@ -70,6 +75,7 @@ var FeatherClientMixin = {
                                 console.error('SERVICEMIXIN DELETE ERROR', error);
                             });
             });
+
 
             self.eventKeyEditSave = self.opts.service + '_edit_save';
             RiotControl.on(self.eventKeyEditSave, () => {
@@ -102,6 +108,7 @@ var FeatherClientMixin = {
 
             self.on('unmount', () => {
                 RiotControl.off(self.eventKeyDelete);
+                RiotControl.off(self.eventKeyDeleteConfirmation);
                 RiotControl.off(self.eventKeyEditSave);
                 RiotControl.off(self.eventKeyCreateSave);
             })
@@ -159,11 +166,8 @@ var viewActionsMixin = {
         self.on('update', () => {
 
             var  view = self.opts.view || 'undefined';
-
             self.opts.actions = actions.map((action, index) => {
-
                 action.active = true;
-
                 switch(view) {
                     case 'view':
                         if(['view','save'].indexOf(action.name) != -1){
@@ -184,7 +188,6 @@ var viewActionsMixin = {
                         break;
 
                 }
-                console.log(action.name + ' ' + action.active);
                 return action;
             });
         })
@@ -201,6 +204,8 @@ var viewActionsMixin = {
 
             switch(action){
                 case 'delete':
+                    RiotControl.trigger(viewModelKey+'_confirmation')
+                    break;
                 case 'save':
                 case 'update':
                     RiotControl.trigger(viewModelKey)
