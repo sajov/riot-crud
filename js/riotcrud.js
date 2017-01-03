@@ -138,31 +138,6 @@
         })
     }
 
-    /**
-     * Dependency loader
-     * @param  {string}   collection Collection name
-     * @param  {function} cb         Callback function
-     */
-    // function loadDependencies(dependencies, tag, cb) {
-    //     var dep = [];
-
-    //     if(typeof dependencies != 'undefined')
-    //         dep = dependencies;
-
-    //     if ($script && dependencies.length > 0) {
-    //         $script(dep, tag, function() {
-    //             if(typeof cb === 'function') {
-    //                 cb();
-    //             }
-    //         });
-    //     } else {
-    //         if(typeof cb === 'function') {
-    //             cb();
-    //         }
-    //     }
-    // }
-
-    // Routes
     if (!window.RiotCrudController) {
         window.RiotCrudController = new riotCrudController;
     }
