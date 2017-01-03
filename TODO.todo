@@ -1,3 +1,17 @@
-Events:
-  ☐ datatables (view, remove)
-  ☐ json-editor (update, patch, remove, create)
+Themes:
+  ☐ Switch
+    ☐ Bootstrap
+    ☐ Zurb
+Views:
+  ☐ add Tree Tag
+  ☐ Dashboeard add multiple lists
+  ☐ Login
+  ☐ Register
+  ☐ Tag Notification add dropdown incommming messages
+  ☐ Tag Custom Order
+    ☐  dynamic items
+      ☐  add options delete and add
+    ☐  add total
+Cleanups:
+  ☐ datatables
+  ☐ json-editor

@@ -84,12 +84,16 @@ exports.product = function(app, count, update) {
         active: faker.random.boolean(),
         sku: faker.finance.mask(),
         name: name,
+        description: faker.lorem.sentences(),
         url: faker.internet.url() + '/' + faker.helpers.slugify(name),
         price_euro: price,
         price_dollar: price,
         image: faker.image.fashion(),
         locales: [
-          {lang:'ES', title:name, description: faker.lorem.sentences()}
+          {lang:'EN', title:name, description: faker.lorem.sentences()},
+          {lang:'ES', title:faker.commerce.productName(), description: faker.lorem.sentences()},
+          {lang:'FR', title:faker.commerce.productName(), description: faker.lorem.sentences()},
+          {lang:'IT', title:faker.commerce.productName(), description: faker.lorem.sentences()}
         ],
         images: [
           {
@@ -145,10 +149,19 @@ exports.order = function(app, count) {
     order.createdAt = dateFormat(faker.date.past());
     order.updatedAt = dateFormat(faker.date.past());
 
-    order.items = this.product(app,0, false);
-
+    order.items = this.product(app,3, false);
+    for (var item = 0; item < order.items.length; item++) {
+      order.items[item].qty = 2;
+    }
     order.transaction = faker.helpers.createTransaction();
     order.transaction.date = dateFormat(order.transaction.date);
+
+    order.subtotal = faker.commerce.price(5.9, 7.9, 2, '') * 1;
+    order.taxRate = 19.00;
+    order.tax = faker.commerce.price(19, 19, 2, '') * 1;
+    order.shipping = faker.commerce.price(5.9, 7.9, 2, '') * 1;
+    order.discount = 0;
+    order.total = order.subtotal + order.tax + order.shipping;
 
     app.service('orders').create(order, {}).then(function(data) {
       // console.log('Created product data', 'data');

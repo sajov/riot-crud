@@ -95,48 +95,35 @@
                                 <!-- /.col -->
                             </div>
                             <!-- /.row -->
-                            <!-- Table row -->
+
+
+                            <!-- ITEMS Table row  -->
                             <div class="row">
                                 <div class="col-xs-12 table">
-                                    <table class="table table-striped">
+                                <table class="table table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Qty</th>
+                                                <th>SKU</th>
                                                 <th>Product</th>
-                                                <th>Serial #</th>
+                                                <th>Image</th>
                                                 <th style="width: 59%">Description</th>
+                                                <th>Qty</th>
                                                 <th>Subtotal</th>
+                                                <th>&nbsp;</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Call of Duty</td>
-                                                <td>455-981-221</td>
-                                                <td>El snort testosterone trophy driving gloves handsome gerry Richardson helvetica tousled street art master testosterone trophy driving gloves handsome gerry Richardson
+                                            <tr each={ item, key in opts.data.items }>
+                                                <td>{item.sku} </td>
+                                                <td><img src="{item.image}" width="60"></td>
+                                                <td>{item.name}</td>
+                                                <td>{item.description}</td>
+                                                <td>
+                                                    <input type="text" name="qty" onchange={ changeQty } value="{item.qty}" class="hidden-print" size="3">
+                                                    <span class="visible-print">{item.qty}</span>
                                                 </td>
-                                                <td>$64.50</td>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Need for Speed IV</td>
-                                                <td>247-925-726</td>
-                                                <td>Wes Anderson umami biodiesel</td>
-                                                <td>$50.00</td>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Monsters DVD</td>
-                                                <td>735-845-642</td>
-                                                <td>Terry Richardson helvetica tousled street art master, El snort testosterone trophy driving gloves handsome letterpress erry Richardson helvetica tousled</td>
-                                                <td>$10.70</td>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Grown Ups Blue Ray</td>
-                                                <td>422-568-642</td>
-                                                <td>Tousled lomo letterpress erry Richardson helvetica tousled street art master helvetica tousled street art master, El snort testosterone</td>
-                                                <td>$25.99</td>
+                                                <td align="right">{item.price_euro} €</td>
+                                                <td align="right"><a href="#" itemKey="{key}" onclick={ deleteItem } class="btn btn-danger btn-xs hidden-print"><i class="fa fa-trash-o"></i></a></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -144,6 +131,8 @@
                                 <!-- /.col -->
                             </div>
                             <!-- /.row -->
+
+
                             <div class="row">
                                 <!-- accepted payments column -->
                                 <div class="col-xs-6">
@@ -161,22 +150,26 @@
                                     <p class="lead">Amount Due 2/22/2014</p>
                                     <div class="table-responsive">
                                         <table class="table">
-                                            <tbody>
+                                             <tbody>
                                                 <tr>
                                                     <th style="width:50%">Subtotal:</th>
-                                                    <td>$250.30</td>
+                                                    <td>{opts.data.subtotal} €</td>
+                                                </tr>
+                                                <tr ifNO="{opts.data.discount}">
+                                                    <th style="width:50%">Discount:</th>
+                                                    <td><input type="text" onblur={ changeDiscount } name="discount" value="{opts.data.discount}" size="3"> €</td>
                                                 </tr>
                                                 <tr>
-                                                    <th>Tax (9.3%)</th>
-                                                    <td>$10.34</td>
+                                                    <th>Tax ({opts.data.taxRate}%)</th>
+                                                    <td>{opts.data.tax} €</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Shipping:</th>
-                                                    <td>$5.80</td>
+                                                    <td>{opts.data.shipping} €</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Total:</th>
-                                                    <td>$265.24</td>
+                                                    <td>{opts.data.total} €</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -204,23 +197,52 @@
         var self = this;
         self.mixin(FeatherClientMixin);
 
-        this.on('mount', function() {
+        self.on('mount', () => {
             console.info('order mount',self.opts);
             self.initOrder(self.opts.query.id);
         });
 
-        this.refresh = function(opts) {
+        self.refresh = (opts) => {
           self.initOrder(opts.query.id);
         }
 
-        this.initOrder = function(orderId) {
-          self.service.get(orderId).then(function(result){
-              console.info('CRUD-JSONEDITOR UPDATE FIND', result);
-              self.opts.data = result;
-              self.update();
-          }).catch(function(error){
-            console.error('Error CRUD-JSONEDITOR UPDATE FIND', error);
+        self.initOrder = (orderId) => {
+          self.service.get(orderId).then((result) => {
+                self.opts.data = result;
+                self.update();
+          }).catch((error) => {
+            console.error('Error', error);
           });
+        }
+
+        self.calculate = () => {
+            var subtotal = 0;
+            for (key in opts.data.items) {
+                subtotal += (opts.data.items[key].price_euro * opts.data.items[key].qty);
+            }
+            self.opts.data.subtotal = subtotal;
+            self.opts.data.total = (self.opts.data.subtotal + self.opts.data.tax + self.opts.data.shipping )
+            self.update();
+        }
+
+        self.changeQty = (e) => {
+            e.preventDefault();
+            for (var i = 0; i < opts.data.items.length; i++) {
+                if(opts.data.items[i].id == e.item.item.id) {
+                   opts.data.items[i].qty = $(e.target).val();
+                }
+            }
+            self.calculate();
+        }
+
+        self.deleteItem = (e) => {
+            e.preventDefault();
+            for (var i = 0; i < opts.data.items.length; i++) {
+                if(opts.data.items[i].id == e.item.item.id) {
+                   opts.data.items.splice(i, 1);
+                }
+            }
+            self.calculate();
         }
     </script>
 </order>
