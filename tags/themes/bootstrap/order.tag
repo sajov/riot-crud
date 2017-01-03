@@ -157,7 +157,7 @@
                                                 </tr>
                                                 <tr ifNO="{opts.data.discount}">
                                                     <th style="width:50%">Discount:</th>
-                                                    <td><input type="text" onblur={ changeDiscount } name="discount" value="{opts.data.discount}" size="3"> €</td>
+                                                    <td><input type="text" onkeyup={ changeDiscount } name="discount" value="{opts.data.discount}" size="3"> €</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Tax ({opts.data.taxRate}%)</th>
@@ -165,7 +165,7 @@
                                                 </tr>
                                                 <tr>
                                                     <th>Shipping:</th>
-                                                    <td>{opts.data.shipping} €</td>
+                                                    <td><input type="text" onkeyup={ changeShipping } name="discount" value="{opts.data.shipping}" size="3"> €</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Total:</th>
@@ -221,7 +221,7 @@
                 subtotal += (opts.data.items[key].price_euro * opts.data.items[key].qty);
             }
             self.opts.data.subtotal = subtotal;
-            self.opts.data.total = (self.opts.data.subtotal + self.opts.data.tax + self.opts.data.shipping )
+            self.opts.data.total = (self.opts.data.subtotal + self.opts.data.tax + self.opts.data.shipping)
             self.update();
         }
 
@@ -229,9 +229,23 @@
             e.preventDefault();
             for (var i = 0; i < opts.data.items.length; i++) {
                 if(opts.data.items[i].id == e.item.item.id) {
-                   opts.data.items[i].qty = $(e.target).val();
+                   opts.data.items[i].qty = $(e.target).val() * 1;
                 }
             }
+            self.calculate();
+        }
+
+        self.changeDiscount = (e) => {
+            console.warn('changeDiscount: ' + $(e.target).val());
+            e.preventDefault();
+            opts.data.discount = $(e.target).val() * 1;
+            self.calculate();
+        }
+
+        self.changeShipping = (e) => {
+            console.warn('changeShipping: ' + $(e.target).val());
+            e.preventDefault();
+            opts.data.shipping = $(e.target).val() * 1;
             self.calculate();
         }
 
