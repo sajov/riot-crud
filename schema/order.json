@@ -6,9 +6,6 @@
     "id": {
       "type": "number"
     },
-    "active": {
-      "type": "number"
-    },
     "name": {
       "type": "string"
     },
@@ -24,7 +21,7 @@
               }
             ]
     },
-    "description": {
+    "comment": {
       "type": "string",
       "format": "html",
           "options": {
@@ -43,8 +40,7 @@
   "required": [
     "id",
     "name",
-    "description",
-    "active",
+    "comment",
     "createdAt",
     "updatedAt"
   ]
