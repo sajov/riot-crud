@@ -8,7 +8,6 @@ riot.tag2('crud-datatables', '<link href="https://cdn.datatables.net/v/bs/dt-1.1
         ];
 
         self.refresh = function(query) {
-            console.log('refresh',query.query);
             self.datatable.draw();
         }
 
@@ -18,11 +17,6 @@ riot.tag2('crud-datatables', '<link href="https://cdn.datatables.net/v/bs/dt-1.1
                  self.initTable();
             });
             opts.tableHeader = opts.schema.defaultProperties || opts.schema.required;
-
-            self.observable.on('delete', () => {
-                alert('dude recieved event delete');
-            })
-
         });
 
         self.initTable = function() {
@@ -37,8 +31,7 @@ riot.tag2('crud-datatables', '<link href="https://cdn.datatables.net/v/bs/dt-1.1
             } );
 
             $('.top_search input').on('change', function() {
-                console.log($(this).val());
-                self.datatable.search( self.value ).draw();
+                self.datatable.draw(true);
             });
         }
 

@@ -82,7 +82,7 @@
                 for(event in events) {
                     var event = events[event];
                     self.event(service, event, function(service, event,response){
-                        var eventTypeMap = {'created':'info', 'updated':'info'};
+                        var eventTypeMap = {'created':'info', 'updated':'info','removed':'success'};
                         self.notify(
                             'Service "'
                             + service
@@ -90,6 +90,7 @@
                             + event
                             + '</i>'
                             , eventTypeMap[event]
+                            ,'id: ' + response.id
                             // , '<a class="btn btn-default btn-xs" tabindex="0" href="#'
                             // + service
                             // + '/view/'

@@ -48,7 +48,7 @@ riot.tag2('top-menu', '<link href="/bower_components/gentelella/vendors/pnotify/
                 for(event in events) {
                     var event = events[event];
                     self.event(service, event, function(service, event,response){
-                        var eventTypeMap = {'created':'info', 'updated':'info'};
+                        var eventTypeMap = {'created':'info', 'updated':'info','removed':'success'};
                         self.notify(
                             'Service "'
                             + service
@@ -56,6 +56,7 @@ riot.tag2('top-menu', '<link href="/bower_components/gentelella/vendors/pnotify/
                             + event
                             + '</i>'
                             , eventTypeMap[event]
+                            ,'id: ' + response.id
 
                         );
                     })

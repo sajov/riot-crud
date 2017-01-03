@@ -95,7 +95,6 @@
         ];
 
         self.refresh = function(query) {
-            console.log('refresh',query.query);
             self.datatable.draw();
         }
 
@@ -105,11 +104,6 @@
                  self.initTable();
             });
             opts.tableHeader = opts.schema.defaultProperties || opts.schema.required;
-
-            self.observable.on('delete', () => {
-                alert('dude recieved event delete');
-            })
-
         });
 
         /**
@@ -128,8 +122,7 @@
             } );
 
             $('.top_search input').on('change', function() {
-                console.log($(this).val());
-                self.datatable.search( self.value ).draw();
+                self.datatable.draw(true);
             });
         }
 
