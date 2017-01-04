@@ -3,6 +3,9 @@ Themes:
     ☐ Bootstrap
     ☐ Zurb
 Views:
+  ☐ datatable
+    ✔ add global search @done (17-01-04 22:49)
+    ☐ add field search/filter
   ☐ add Tree Tag
   ☐ Dashboeard add multiple lists
   ☐ Login
