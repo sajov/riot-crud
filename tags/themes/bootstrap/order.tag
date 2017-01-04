@@ -220,12 +220,12 @@
             for (key in opts.data.items) {
                 subtotal += (opts.data.items[key].price_euro * opts.data.items[key].qty);
             }
-            self.opts.data.subtotal = subtotal;
+            self.opts.data.subtotal = subtotal - opts.data.discount;
             self.opts.data.total = (self.opts.data.subtotal + self.opts.data.tax + self.opts.data.shipping)
             self.update();
         }
 
-        self.changeQty = (e) => {
+        changeQty (e) {
             e.preventDefault();
             for (var i = 0; i < opts.data.items.length; i++) {
                 if(opts.data.items[i].id == e.item.item.id) {
@@ -235,21 +235,21 @@
             self.calculate();
         }
 
-        self.changeDiscount = (e) => {
+        changeDiscount (e) {
             console.warn('changeDiscount: ' + $(e.target).val());
             e.preventDefault();
             opts.data.discount = $(e.target).val() * 1;
             self.calculate();
         }
 
-        self.changeShipping = (e) => {
+        changeShipping (e) {
             console.warn('changeShipping: ' + $(e.target).val());
             e.preventDefault();
             opts.data.shipping = $(e.target).val() * 1;
             self.calculate();
         }
 
-        self.deleteItem = (e) => {
+        deleteItem (e) {
             e.preventDefault();
             for (var i = 0; i < opts.data.items.length; i++) {
                 if(opts.data.items[i].id == e.item.item.id) {

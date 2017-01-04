@@ -25,12 +25,12 @@ riot.tag2('order', '<div class=""> <div class="page-title hidden-print"> <div cl
             for (key in opts.data.items) {
                 subtotal += (opts.data.items[key].price_euro * opts.data.items[key].qty);
             }
-            self.opts.data.subtotal = subtotal;
+            self.opts.data.subtotal = subtotal - opts.data.discount;
             self.opts.data.total = (self.opts.data.subtotal + self.opts.data.tax + self.opts.data.shipping)
             self.update();
         }
 
-        self.changeQty = (e) => {
+        this.changeQty = function (e) {
             e.preventDefault();
             for (var i = 0; i < opts.data.items.length; i++) {
                 if(opts.data.items[i].id == e.item.item.id) {
@@ -38,23 +38,23 @@ riot.tag2('order', '<div class=""> <div class="page-title hidden-print"> <div cl
                 }
             }
             self.calculate();
-        }
+        }.bind(this)
 
-        self.changeDiscount = (e) => {
+        this.changeDiscount = function (e) {
             console.warn('changeDiscount: ' + $(e.target).val());
             e.preventDefault();
             opts.data.discount = $(e.target).val() * 1;
             self.calculate();
-        }
+        }.bind(this)
 
-        self.changeShipping = (e) => {
+        this.changeShipping = function (e) {
             console.warn('changeShipping: ' + $(e.target).val());
             e.preventDefault();
             opts.data.shipping = $(e.target).val() * 1;
             self.calculate();
-        }
+        }.bind(this)
 
-        self.deleteItem = (e) => {
+        this.deleteItem = function (e) {
             e.preventDefault();
             for (var i = 0; i < opts.data.items.length; i++) {
                 if(opts.data.items[i].id == e.item.item.id) {
@@ -62,7 +62,7 @@ riot.tag2('order', '<div class=""> <div class="page-title hidden-print"> <div cl
                 }
             }
             self.calculate();
-        }
+        }.bind(this)
 });
 
 
