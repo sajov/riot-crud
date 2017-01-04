@@ -108,7 +108,6 @@
 
         /**
          * Init Datatable
-         * @return {[type]} [description]
          */
         self.initTable = function() {
 
@@ -122,13 +121,14 @@
             } );
 
             $('.top_search input').on('change', function() {
-                self.datatable.draw(true);
+                self.datatable
+                    .search( $(this).val() )
+                    .draw();
             });
         }
 
         /**
          * Get datatable configuration
-         * @return object Datatable configurytion
          */
         self.getDatatableConfig = function() {
             var config = {
@@ -197,7 +197,7 @@
                         "orderable": false,
                         // "defaultContent": "<button>Click!</button>",
                         "render": function ( data, type, row ) {
-                            return '<input type="checkbox" value="'+ row.id + '"/>';
+                            return '<input type="checkbox" value="'+ row[opts.keyField] + '"/>';
                         }
                     }
                 )
@@ -221,8 +221,8 @@
                         "render": function ( data, type, row ) {
                             // return data +' ('+ row.sku+')';
                             return '<div class="dt-buttons btn-group">' +
-                                        '<a class="btn btn-info btn-xs" tabindex="0" aria-controls="ajaxdatatables" href="#' + opts.service + '/view/' + row.id + '"><i class="fa fa-edit"></i></a>' +
-                                        '<a class="btn btn-danger btn-xs" onclick="RiotControl.trigger(\'' + viewModelKey + '\',\''+row.id+'\')"><i class="fa fa-trash-o"></i></a>' +
+                                        '<a class="btn btn-info btn-xs" tabindex="0" aria-controls="ajaxdatatables" href="#' + opts.service + '/view/' + row[opts.keyField] + '"><i class="fa fa-edit"></i></a>' +
+                                        '<a class="btn btn-danger btn-xs" onclick="RiotControl.trigger(\'' + viewModelKey + '\',\''+row[opts.keyField]+'\')"><i class="fa fa-trash-o"></i></a>' +
                                     '</div>';
                         }
                     }
@@ -233,10 +233,6 @@
 
         /**
          * Data Table Search Function
-         * @param  {[type]} sSource    [description]
-         * @param  {[type]} aoData     [description]
-         * @param  {[type]} fnCallback [description]
-         * @return {[type]}            [description]
          */
         self.datatableSearch = function ( sSource, aoData, fnCallback ) {
             console.info('CRUD-DATATABLES self.DATATABLESEARCH ?=====????', sSource, aoData, fnCallback);
@@ -266,23 +262,28 @@
 
                 /* search */
                 if(queryObj.search.value.value !== "") {
-                    query.name=queryObj.search.value.value;
+                    query.$or = [];
+                    for (var i = 0;i < opts.tableHeader.length; i++) {
+                        let q = {};
+                        q[opts.tableHeader[i]] = {$search: queryObj.search.value.value};
+                        query.$or.push(q);
+                    }
+                    console.error('query.$or',query.$or)
                 }
 
                 self.service.find({query:query}).then(function(result){
-                    console.info('CRUD-DATATABLES self.DATATABLESEARCH QUERY', query);
-                    console.info('CRUD-DATATABLES self.DATATABLESEARCH RESULT', result);
-                        fnCallback({
-                            error: false,
-                            // recordsTotal: request.getResponseHeader('X-Total-Count'),
-                            // recordsFiltered: request.getResponseHeader('X-Total-Count'),
-                            // data: data
-                            recordsTotal: result.total,
-                            recordsFiltered: result.total,
-                            data: result.data
-                        })
+                    console.info('CRUD-DATATABLES self.DATATABLESEARCH QUERY,RESULT', query, result);
+                    fnCallback({
+                        error: false,
+                        recordsTotal: result.total,
+                        recordsFiltered: result.total,
+                        data: result.data
+                    })
                 }).catch(function(error){
-                  console.error('Error CRUD-DATATABLES UPDATE FIND', error);
+                    console.error('Error CRUD-DATATABLES UPDATE FIND', error);
+                    fnCallback({
+                        error: error
+                    })
                 });
         }
 

@@ -97,7 +97,7 @@ $script.ready('layout', function() {
 
     RiotCrudModel.addModel('products',
         {
-
+            keyField: '_id',
             service: 'products',
             title: 'Products',
             description: '/products/list',

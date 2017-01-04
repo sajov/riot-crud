@@ -108,46 +108,5 @@ riot.tag2('crud-jsoneditor', '<div> <div class="page-title"> </div> <div class="
             }
         }
 
-        self.updateData = function(e) {
-            e.preventDefault();
-
-            var json = self.editor.getValue();
-            var validation_errors = self.editor.validate();
-            if(validation_errors.length) {
-                console.error(JSON.stringify(validation_errors,null,2));
-            } else {
-                self.service.update(json.id,json)
-                            .then(function(result){})
-                            .catch(function(error){
-                                console.error('Error CRUD-JSONEDITOR saveJSONEditor update', error);
-                            });
-            }
-        }
-
-        this.create = (e) => {
-
-            e.preventDefault();
-
-            console.clear();
-
-            var json = self.editor.getValue();
-            var validation_errors = self.editor.validate();
-
-            if(validation_errors.length) {
-                console.error(JSON.stringify(validation_errors,null,2));
-            } else {
-
-                json.id = 9879;
-
-                self.service.create(json).then(function(result){
-                  console.info('CRUD-JSONEDITOR result', result);
-                }).catch(function(error){
-                  console.error('CRUD-JSONEDITOR error', json, error);
-                });
-            }
-
-            console.info(opts.data,json,validation_errors)
-        }
-
 });
 
