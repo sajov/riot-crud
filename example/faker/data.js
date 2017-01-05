@@ -109,7 +109,8 @@ exports.product = function(app, count, update) {
           material: faker.commerce.productMaterial(),
           adjective: faker.commerce.productAdjective(),
         },
-        base_color: '#ffa500',
+        base_color: '#'+(function lol(m,s,c){return s[m.floor(m.random() * s.length)] +
+  (c && lol(m,s,c-1));})(Math,'0123456789ABCDEF',4),
         createdAt:'2016-12-18',
         updatedAt:'2016-12-18',
     };

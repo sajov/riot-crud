@@ -25,7 +25,6 @@ riot.tag2('crud-jsoneditor', '<div> <div class="page-title"> </div> <div class="
             if(typeof self.opts.query.id != 'undefined') {
 
                 self.service.get(id).then(function(result){
-                    console.info('CRUD-JSONEDITOR UPDATE FIND', result);
                     if(typeof self.editor == 'undefined') {
                       self.initJSONEditor();
                     }
@@ -33,7 +32,7 @@ riot.tag2('crud-jsoneditor', '<div> <div class="page-title"> </div> <div class="
                     self.editor.setValue(self.data);
 
                 }).catch(function(error){
-                  console.error('Error CRUD-JSONEDITOR UPDATE FIND', error);
+                  console.error('Error crud-jsoneditor get', error);
                 });
             } else {
                 self.data = {};
@@ -88,9 +87,8 @@ riot.tag2('crud-jsoneditor', '<div> <div class="page-title"> </div> <div class="
                 console.error(JSON.stringify(validation_errors,null,2));
             } else {
                 self.service.update(json.id,json).then(function(result){
-                  console.info('CRUD-JSONEDITOR saveJSONEditor update', result);
                 }).catch(function(error){
-                  console.error('Error CRUD-JSONEDITOR saveJSONEditor update', error);
+                  console.error('Error crud-jsoneditor savejsoneditor update', error);
                 });
             }
         }

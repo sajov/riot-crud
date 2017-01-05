@@ -98,8 +98,11 @@
             self.datatable.draw();
         }
 
+        self.on('before-unmount', () => {
+            self.datatable.destroy();
+        })
+
         self.on('mount', function(params, options) {
-            console.log('CRUD-DATATABLES MOUNT',params, options);
             RiotCrudController.loadDependencies(self.dependencies,'crud-datatables', function (argument) {
                  self.initTable();
             });
@@ -235,7 +238,6 @@
          * Data Table Search Function
          */
         self.datatableSearch = function ( sSource, aoData, fnCallback ) {
-            console.info('CRUD-DATATABLES self.DATATABLESEARCH ?=====????', sSource, aoData, fnCallback);
                 /* reorganize query */
                 var query = {};
                 var queryObj = {};
@@ -268,11 +270,9 @@
                         q[opts.tableHeader[i]] = {$search: queryObj.search.value.value};
                         query.$or.push(q);
                     }
-                    console.error('query.$or',query.$or)
                 }
 
                 self.service.find({query:query}).then(function(result){
-                    console.info('CRUD-DATATABLES self.DATATABLESEARCH QUERY,RESULT', query, result);
                     fnCallback({
                         error: false,
                         recordsTotal: result.total,
@@ -280,7 +280,7 @@
                         data: result.data
                     })
                 }).catch(function(error){
-                    console.error('Error CRUD-DATATABLES UPDATE FIND', error);
+                    console.error('Error crud-datatables  find', error);
                     fnCallback({
                         error: error
                     })

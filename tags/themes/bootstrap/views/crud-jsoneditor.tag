@@ -96,7 +96,6 @@
             if(typeof self.opts.query.id != 'undefined') {
 
                 self.service.get(id).then(function(result){
-                    console.info('CRUD-JSONEDITOR UPDATE FIND', result);
                     if(typeof self.editor == 'undefined') {
                       self.initJSONEditor();
                     }
@@ -104,7 +103,7 @@
                     self.editor.setValue(self.data);
 
                 }).catch(function(error){
-                  console.error('Error CRUD-JSONEDITOR UPDATE FIND', error);
+                  console.error('Error crud-jsoneditor get', error);
                 });
             } else {
                 self.data = {};
@@ -161,9 +160,8 @@
                 console.error(JSON.stringify(validation_errors,null,2));
             } else {
                 self.service.update(json.id,json).then(function(result){
-                  console.info('CRUD-JSONEDITOR saveJSONEditor update', result);
                 }).catch(function(error){
-                  console.error('Error CRUD-JSONEDITOR saveJSONEditor update', error);
+                  console.error('Error crud-jsoneditor savejsoneditor update', error);
                 });
             }
         }

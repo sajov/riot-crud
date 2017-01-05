@@ -1,27 +1,27 @@
 <modal-delete-confirmation>
 
-       <!-- Small modal -->
-      <div id="deleteConfirmation" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-          <div class="modal-content">
+    <!-- Small modal -->
+    <div id="deleteConfirmation" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
 
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
-              </button>
-              <h4 class="modal-title" id="myModalLabel2">Delete <i>{opts.model}</i></h4>
-            </div>
-            <div class="modal-body">
-              id:{opts.id} {opts.text}
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Abbort</button>
-              <button type="button" class="btn btn-warning" onclick="{confirm}">Delete</button>
-            </div>
-
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel2">Delete <i>{opts.model}</i></h4>
           </div>
+          <div class="modal-body">
+            id:{opts.id} {opts.text}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Abbort</button>
+            <button type="button" class="btn btn-warning" onclick="{confirm}">Delete</button>
+          </div>
+
         </div>
       </div>
-      <!-- /modals -->
+    </div>
+    <!-- /modals -->
 
     <script>
         var self = this;
@@ -145,9 +145,7 @@
             });
         }
 
-        this.on('mount', function() {
-            console.warn('top-menu mount', self.opts.services);
-        });
+
     </script>
 
 </top-menu>
@@ -184,69 +182,28 @@
         <div class="menu_section">
           <h3>Demos</h3>
           <ul class="nav side-menu">
-            <li class="">
-              <a>
-                <i class="fa fa-edit"></i> Riotjs Tags native <span class="fa fa-chevron-down"></span>
-              </a>
-              <ul class="nav child_menu">
-                <li each={key,route in routes} class={ selected: state }>
-                    <a if={route.menu} href="#/{ route.route }" onclick="{ routeTo }" style="" view="#/{ route.route }"><raw content="{ route.title }" /></a>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <a>
-                <i class="fa fa-desktop"></i> Documentation <span class="fa fa-chevron-down"></span>
-              </a>
-              <ul class="nav child_menu">
-                <li><a href="calendar.html">Calendar</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-        <div class="menu_section">
-          <h3>Live On</h3>
-          <ul class="nav side-menu">
-            <li><a><i class="fa fa-bug"></i> Additional Pages <span class="fa fa-chevron-down"></span></a>
-              <ul class="nav child_menu">
-                <li><a href="e_commerce.html">E-commerce</a></li>
-                <li><a href="projects.html">Projects</a></li>
-                <li><a href="project_detail.html">Project Detail</a></li>
-                <li><a href="contacts.html">Contacts</a></li>
-                <li><a href="profile.html">Profile</a></li>
-              </ul>
-            </li>
-            <li><a><i class="fa fa-windows"></i> Extras <span class="fa fa-chevron-down"></span></a>
-              <ul class="nav child_menu">
-                <li><a href="page_403.html">403 Error</a></li>
-                <li><a href="page_404.html">404 Error</a></li>
-                <li><a href="page_500.html">500 Error</a></li>
-                <li><a href="plain_page.html">Plain Page</a></li>
-                <li><a href="login.html">Login Page</a></li>
-                <li><a href="pricing_tables.html">Pricing Tables</a></li>
-              </ul>
-            </li>
-            <li><a><i class="fa fa-sitemap"></i> Multilevel Menu <span class="fa fa-chevron-down"></span></a>
-              <ul class="nav child_menu">
-                  <li><a href="#level1_1">Level One</a>
-                  <li><a>Level One<span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li class="sub_menu"><a href="level2.html">Level Two</a>
-                      </li>
-                      <li><a href="#level2_1">Level Two</a>
-                      </li>
-                      <li><a href="#level2_2">Level Two</a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li><a href="#level1_2">Level One</a>
-                  </li>
-              </ul>
-            </li>
-            <li><a href="javascript:void(0)"><i class="fa fa-laptop"></i> Landing Page <span class="label label-success pull-right">Coming Soon</span></a></li>
-          </ul>
-        </div>
 
+            <!-- default routes -->
+            <li each={key,route in opts.routes.default.routes}>
+                <a href="#{ route.route }" onclick="{ routeTo }" style="" view="#{ route.route }"><raw content="{ route.title }" /></a>
+            </li>
+            <!-- end default routes -->
+
+            <!-- custom routes RiotControl.addMenuGroup() -->
+            <li each={key,group in opts.routes} if={key!='default'}>
+                <a>
+                    <raw content="{group.html}" />
+                </a>
+                <ul class="nav child_menu">
+                    <li each={key,route in group.routes} class={ selected: state }>
+                         <a href="#{ route.route }" onclick="{ routeTo }" style="" view="#{ route.route }"><raw content="{ route.title }" /></a>
+                    </li>
+                </ul>
+            </li>
+            <!-- end custom routes RiotControl.addMenuGroup() -->
+
+          </ul>
+        </div>
     </div>
     <!-- /sidebar menu -->
     <!-- /menu footer buttons -->
@@ -267,20 +224,15 @@
     <!-- /menu footer buttons -->
 
 	<script>
-        this.routes = opts.routes;
+        var self = this;
 
-
-
-        console.info('Menu this.routes',this.routes);
-    		var thisTag = this;
-    		thisTag.chosenTagName = "";
-
-        this.on('*', function(event) {
-          // alert(event)
-        });
-
-        this.on('update', function(event) {
-
+        RiotControl.on('routeStateChange',(route) => {
+            var $current = $('.sidebar-menu').find('li.active > a.active');
+            if($current.attr('href') == '#'+route) {
+                $current.addClass('active');
+            } else {
+                $current.addClass('active');
+            }
         });
 
         this.on('mount', function() {
@@ -289,18 +241,6 @@
 
         this.routeTo = function(e) {
             riot.route(e.item.route.route || e.item.route.view);
-        }
-
-        this.mountPage = function(page) {
-            riot.route(page.route);
-            riot.mount('#content',page.route);
-        }
-
-        thisTag.deselectAll = function() {
-            routes.forEach(function(choice) {
-                console.log(choice);
-                choice[2] = false;
-            });
         }
 
         this.initSidebar = function() {
@@ -392,7 +332,6 @@
                   });
               }
           // /Sidebar
-
         }
 	</script>
 

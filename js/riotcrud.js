@@ -13,7 +13,12 @@
     var currentName = null;
     var dependencies = {};
     var routes = {};
-    var routeNames = {};
+    var menuGroups = {
+        default:{
+            html: false,
+            routes: {}
+        }
+    };
     var target = '#content';
     var options = {
             target: '#main',
@@ -34,33 +39,51 @@
      */
     riotCrudController.prototype = {
 
-        defaults: function(config) {
+        defaults: (config) => {
             options = $.extend({}, options, config);
             return this;
         },
 
-        addRoute: function(route, config) {
+        addRoute: (route, config) => {
             config = $.extend({}, options, config);
             routes[route] = config;
+            // if(config.menu) {
+            //     menuGroups[config.menuGroup || 'default'].routes = {
+
+            //     };
+            // }
             return this;
         },
 
-        getRoutes: function() {
-             return routes;
+        addMenuGroup: (key, html) => {
+            menuGroups[key] = {html: html, routes: {}}
         },
 
-        addDependencies: function(view, d) {
+        getRoutes: () => {
+            return routes;
+        },
+
+        getRouteMenu: () => {
+            for (var k in routes){
+                if (routes[k].menu) {
+                   menuGroups[routes[k].menuGroup || 'default'].routes[k] = routes[k];
+                }
+            }
+            return menuGroups;
+        },
+
+        addDependencies: (view, d) => {
             dependencies[view] = d;
             return this;
         },
 
-        loadDependencies: function(dependencies, tag, cb) {
+        loadDependencies: (dependencies, tag, cb) => {
             var dep = [];
             if(typeof dependencies != 'undefined')
                 dep = dependencies;
 
             if ($script &&  dep.length > 0) {
-                $script(dep,  function() {
+                $script(dep,  () => {
                     if(typeof cb === 'function') {
                         cb();
                     }
@@ -72,7 +95,7 @@
             }
         },
 
-        start: function(route) {
+        start: (route) => {
             riot.route(handler)
             riot.route.start();
             riot.route.exec();
@@ -119,6 +142,9 @@
 
         route.query = {id: param, query: riot.route.query()};
         RiotCrudController.loadDependencies(route.dependencies, route.route, function() {
+
+            RiotControl.trigger('routeStateChange',route.route);
+
             if (typeof route.fn === 'function') {
                 currentName = null;
                 route.fn(collection, param, action);
