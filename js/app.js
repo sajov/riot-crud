@@ -20,9 +20,15 @@ $script.ready('layout', function() {
         target: '#content',
     });
 
+    /**
+     * Add menu groups
+     */
     RiotCrudController.addMenuGroup('models','<i class="fa fa-table"></i>Models<span class="fa fa-chevron-down"></span>');
     RiotCrudController.addMenuGroup('views','<i class="fa fa-desktop"></i>Views<span class="fa fa-chevron-down"></span>');
 
+    /**
+     * Add custom view Dashboard
+     */
     RiotCrudController.addRoute('dashboard',
         {
             title: '<i class="fa fa-home"></i>Dashboard',
@@ -35,6 +41,9 @@ $script.ready('layout', function() {
         }
     );
 
+    /**
+     * Add custom view Order
+     */
     RiotCrudController.addRoute('customorders',
         {
             title: 'Order <small>(custom view)</small>',
@@ -52,41 +61,32 @@ $script.ready('layout', function() {
     );
 
     /**
-     * Riot crud model
-     * define your models
+     * Add a model with it's views
      */
-    RiotCrudModel.defaults({
-        target: 'div#content',
-        endpoint: 'http://localhost:3030',
-        requestFn: function(collection, view, id, params) {},
-        responseFn: function(collection, view, id, params, response) {}
-    });
-
     RiotCrudModel.addModel('products',
         {
             keyField: '_id',
             service: 'products',
             title: 'Products',
             description: '/products/list',
-            schema: 'http://localhost:3030/schema/product.json', // string || object ?? || array [{list:'list-tag'}] ?? default
-            target: 'div#content', // optional
-            endpoint: 'http://localhost:3030', //'http://localhost:3030/products', rest enpoints
-            tag: 'crud-jsoneditor', // default
-            // dependencies: 'product-view-plugin.js',
+            schema: 'http://localhost:3030/schema/product.json',
+            target: 'div#content',
+            endpoint: 'http://localhost:3030',
+            tag: 'crud-jsoneditor',
+
         },
-        { // mixed object || array ['list','show','create','update','delete'] ???
+        {
             list: {
-                // optional
+
                 selection: true,
                 filterable: true,
                 menu:true,
                 menuGroup: 'models',
                 buttons: ['edit','delete'],
-                tag: 'crud-datatables', // default
+                tag: 'crud-datatables',
                 title: 'Products',
-                schema: 'http://localhost:3030/schema/product.json', // string || object ?? || array [{list:'list-tag'}] ?? default
-                target: 'div#content', // optional
-                // endpoint: '/api/product/list',
+                schema: 'http://localhost:3030/schema/product.json',
+                target: 'div#content',
                 columns: {
                     base_color: {
                         "data": null,
@@ -100,30 +100,26 @@ $script.ready('layout', function() {
                 ]
             },
             view:{
-                tag: 'crud-jsoneditor', // default
+                tag: 'crud-jsoneditor',
                 title: 'Product Demo',
-                schema: 'http://localhost:3030/schema/product.json', // string || object ?? || array [{list:'list-tag'}] ?? default
-                target: 'div#content', // optional
-                // endpoint: '/api/product/view',
+                schema: 'http://localhost:3030/schema/product.json',
+                target: 'div#content',
                 dependencies: [
                     riotCrudTheme + '/views/crud-jsoneditor.js',
-                ] // string || array
+                ]
             },
             create: {
-                // fn: function() {riot.route('/product/view')}
-                tag: 'crud-jsoneditor', // default
+                tag: 'crud-jsoneditor',
                 title: 'Edit Products (json-editor demo)',
-                target: 'div#content', // optional
-                // fn: function() {riot.route('/products/edit/1')}
+                target: 'div#content',
                 dependencies: [
                     riotCrudTheme + '/views/crud-jsoneditor.js'
                 ]
             },
             edit: {
-                tag: 'crud-jsoneditor', // default
+                tag: 'crud-jsoneditor',
                 title: 'Edit Products (json-editor demo)',
-                target: 'div#content', // optional
-                // fn: function() {riot.route('/products/edit/1')}
+                target: 'div#content',
                 dependencies: [
                     riotCrudTheme + '/views/crud-jsoneditor.js'
                 ]
@@ -137,21 +133,21 @@ $script.ready('layout', function() {
             service: 'categories',
             title: 'Categories',
             description: '/categories/list',
-            schema: 'http://localhost:3030/schema/category.json', // string || object ?? || array [{list:'list-tag'}] ?? default
-            tag: 'crud-jsoneditor', // default
+            schema: 'http://localhost:3030/schema/category.json',
+            tag: 'crud-jsoneditor',
         },
-        { // mixed object || array ['list','show','create','update','delete'] ???
+        {
             list: {
-                // optional
+
                 selection: true,
                 filterable: true,
                 menu:true,
                 menuGroup: 'models',
                 buttons: ['edit','delete'],
-                tag: 'crud-datatables', // default
+                tag: 'crud-datatables',
                 title: 'Categories',
-                schema: 'http://localhost:3030/schema/category.json', // string || object ?? || array [{list:'list-tag'}] ?? default
-                target: 'div#content', // optional
+                schema: 'http://localhost:3030/schema/category.json',
+                target: 'div#content',
                 columns: {
                     base_color: {
                         "data": null,
@@ -162,28 +158,28 @@ $script.ready('layout', function() {
                 },
                 dependencies: [
                     riotCrudTheme + '/views/crud-datatables.js',
-                ] // string || array
+                ]
             },
             view:{
-                tag: 'crud-jsoneditor', // default
+                tag: 'crud-jsoneditor',
                 title: 'Category Demo',
-                schema: 'http://localhost:3030/schema/product.json', // string || object ?? || array [{list:'list-tag'}] ?? default
+                schema: 'http://localhost:3030/schema/product.json',
                 dependencies: [
                     riotCrudTheme + '/views/crud-jsoneditor.js',
-                ] // string || array
+                ]
             },
             create: {
-                tag: 'crud-jsoneditor', // default
+                tag: 'crud-jsoneditor',
                 title: 'Edit Products (json-editor demo)',
-                target: 'div#content', // optional
+                target: 'div#content',
                 dependencies: [
                     riotCrudTheme + '/views/crud-jsoneditor.js'
                 ]
             },
             edit: {
-                tag: 'crud-jsoneditor', // default
+                tag: 'crud-jsoneditor',
                 title: 'Edit Products (json-editor demo)',
-                target: 'div#content', // optional
+                target: 'div#content',
                 dependencies: [
                     riotCrudTheme + '/views/crud-jsoneditor.js'
                 ]
@@ -198,23 +194,23 @@ $script.ready('layout', function() {
             service: 'orders',
             title: 'Orders',
             dependencies: [riotCrudTheme + '/order.js'],
-            schema: 'http://localhost:3030/schema/order.json', // string || object ?? || array [{list:'list-tag'}] ?? default
-            target: 'div#content', // optional
-            endpoint: 'http://localhost:3030', //'http://localhost:3030/products', rest enpoints
-            tag: 'crud-jsoneditor', // default
+            schema: 'http://localhost:3030/schema/order.json',
+            target: 'div#content',
+            endpoint: 'http://localhost:3030',
+            tag: 'crud-jsoneditor',
         },
-        { // mixed object || array ['list','show','create','update','delete'] ???
+        {
             list: {
-                // optional
+
                 selection: true,
                 filterable: true,
                 menu:true,
                 menuGroup: 'models',
                 buttons: ['edit','delete'],
-                tag: 'crud-datatables', // default
+                tag: 'crud-datatables',
                 title: 'Order List',
-                schema: 'http://localhost:3030/schema/order.json', // string || object ?? || array [{list:'list-tag'}] ?? default
-                target: 'div#content', // optional
+                schema: 'http://localhost:3030/schema/order.json',
+                target: 'div#content',
                 // endpoint: '/api/product/list',
                 columns: {
                     base_color: {
@@ -226,30 +222,30 @@ $script.ready('layout', function() {
                 },
                 dependencies: [
                     riotCrudTheme + '/views/crud-datatables.js',
-                ] // string || array
+                ]
             },
             view:{
-                tag: 'order', // default
+                tag: 'order',
                 actionMenu: {save:true},
                 title: 'Order <small>(custom view)</small>',
-                schema: 'http://localhost:3030/schema/order.json', // string || object ?? || array [{list:'list-tag'}] ?? default
-                target: 'div#content', // optional
+                schema: 'http://localhost:3030/schema/order.json',
+                target: 'div#content',
                 dependencies: [
                     riotCrudTheme + '/order.js'
                 ]
             },
             create: {
-                tag: 'crud-jsoneditor', // default
+                tag: 'crud-jsoneditor',
                 title: 'Create Order (json-editor demo)',
-                target: 'div#content', // optional
+                target: 'div#content',
                 dependencies: [
                     riotCrudTheme + '/views/crud-jsoneditor.js'
                 ]
             },
             edit: {
-                tag: 'crud-jsoneditor', // default
+                tag: 'crud-jsoneditor',
                 title: 'Edit Order (json-editor demo)',
-                target: 'div#content', // optional
+                target: 'div#content',
                 dependencies: [
                     riotCrudTheme + '/views/crud-jsoneditor.js'
                 ]

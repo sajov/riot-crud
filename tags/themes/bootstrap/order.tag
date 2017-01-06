@@ -203,7 +203,8 @@
         });
 
         self.refresh = (opts) => {
-          self.initOrder(opts.query.id);
+            if(opts.query.id)
+                self.initOrder(opts.query.id);
         }
 
         self.initOrder = (orderId) => {
