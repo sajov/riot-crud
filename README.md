@@ -23,7 +23,7 @@ npm install
 npm start
 ```
 
-![CRUD Demo](https://github.com/sajov/riot-crud/tree/develop/docs/crud1.png "Dashboard")
-![CRUD Demo](https://github.com/sajov/riot-crud/tree/develop/docs/crud2.png "List view Datatables")
-![CRUD Demo](https://github.com/sajov/riot-crud/tree/develop/docs/crud3.png "Show view")
-![CRUD Demo](https://github.com/sajov/riot-crud/tree/develop/docs/crud4.png "Edit view JSON-Editor")
+![CRUD Demo](https://github.com/sajov/riot-crud/blob/develop/docs/crud1.png "Dashboard")
+![CRUD Demo](https://github.com/sajov/riot-crud/blob/develop/docs/crud2.png "List view Datatables")
+![CRUD Demo](https://github.com/sajov/riot-crud/blob/develop/docs/crud3.png "Show view")
+![CRUD Demo](https://github.com/sajov/riot-crud/blob/develop/docs/crud4.png "Edit view JSON-Editor")
