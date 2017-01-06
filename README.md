@@ -42,10 +42,11 @@ npm start
 * Routing (riot routing)
 * Modular Views (riot tags)
 * Dependency loading per view (scriptjs)
-* Crud client (feathers-client)
+* Crud client (feathers-client socketio)
 * JSON-Schema based front- and backend validation without modeling
 * CRUD Views (create, show, edit, list)
 * Demos List view based on datatables
+* Socketio growl rest event notifications
 
 ```
 
