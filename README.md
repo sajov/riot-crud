@@ -12,7 +12,8 @@ If you are interest in alternatives more lose coupled and less full stack go ahe
 * [feathers-client](https://github.com/feathersjs/feathers-client) Client side Feathers for REST and websockets that works with NodeJS, React Native and any client framework
 * [riot](https://github.com/riot/riot) Simple and elegant component-based UI library
 * [gentelella](https://github.com/puikinsh/gentelella) Free Bootstrap 3 Admin Template
-> Many thanks to all these Contributors for there huge work!
+
+> Many thanks to all these Contributors for their huge work!
 
 ## Getting started
 
@@ -42,6 +43,7 @@ npm start
 * Modular Views (riot tags)
 * Dependency loading per view (scriptjs)
 * Crud client (feathers-client)
+* JSON-Schema based front- and backend validation without modeling
 * CRUD Views (create, show, edit, list)
 * Demos List view based on datatables
 
