@@ -2,10 +2,10 @@
 A flexible CRUD Admin Project inspired by [ng-admin](https://github.com/marmelab/ng-admin).
 This is Experimental and under development for my personal needs
 
-*[feathers](https://github.com/feathersjs/feathers) An open source REST and realtime API layer for modern applications.
-*[feathers-client](https://github.com/feathersjs/feathers-client) Client side Feathers for REST and websockets that works with NodeJS, React Native and any client framework
-*[riot](https://github.com/riot/riot) Simple and elegant component-based UI library
-*[gentelella](https://github.com/puikinsh/gentelella) Free Bootstrap 3 Admin Template
+* [feathers](https://github.com/feathersjs/feathers) An open source REST and realtime API layer for modern applications.
+* [feathers-client](https://github.com/feathersjs/feathers-client) Client side Feathers for REST and websockets that works with NodeJS, React Native and any client framework
+* [riot](https://github.com/riot/riot) Simple and elegant component-based UI library
+* [gentelella](https://github.com/puikinsh/gentelella) Free Bootstrap 3 Admin Template
 
 
 # Getting started
