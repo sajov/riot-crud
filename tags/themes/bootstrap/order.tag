@@ -24,7 +24,7 @@
                         <h2>{opts.data.name} <small>{opts.data.address.city}</small></h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li>
-                                <crud-action-menu name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}"></crud-action-menu>
+                                <crud-action-menu name="{opts.name}" views="{opts.views}" view="{opts.view}" actionMenu="{opts.actionMenu}" query="{opts.query}"></crud-action-menu>
                             </li>
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                             <li class="dropdown">
@@ -198,7 +198,7 @@
         self.mixin(FeatherClientMixin);
 
         self.on('mount', () => {
-            console.info('order mount',self.opts);
+            console.info('order mount',self.opts.actionMenu);
             self.initOrder(self.opts.query.id);
         });
 

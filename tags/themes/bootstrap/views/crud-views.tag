@@ -11,6 +11,8 @@
 
     <script>
       this.mixin(viewActionsMixin);
+      var self = this;
+      console.info('order console.info(order mount,self.opts.actionMenu); mount',opts.actionMenu);
     </script>
 
 </crud-action-menu>

@@ -35,15 +35,18 @@ $script.ready('layout', function() {
         }
     );
 
-    RiotCrudController.addRoute('order',
+    RiotCrudController.addRoute('customorders',
         {
             title: 'Order <small>(custom view)</small>',
             menu: true,
             menuGroup: 'views',
-            route: '/orders/view/1',
+            route: '/customorders',
+            servicename: 'orders',
+            endpoint: 'http://localhost:3030',
             dependencies: [riotCrudTheme + '/order.js'],
             fn: function(id, action) {
-                riot.mount('#content', 'order');
+                var tag = riot.mount('#content', 'order')[0];
+                console.log('TAG',tag)
             }
         }
     );
@@ -227,6 +230,7 @@ $script.ready('layout', function() {
             },
             view:{
                 tag: 'order', // default
+                actionMenu: {save:true},
                 title: 'Order <small>(custom view)</small>',
                 schema: 'http://localhost:3030/schema/order.json', // string || object ?? || array [{list:'list-tag'}] ?? default
                 target: 'div#content', // optional

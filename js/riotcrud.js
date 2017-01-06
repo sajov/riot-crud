@@ -300,7 +300,7 @@
 
                 self.eventKeyEditSave = self.opts.service + '_edit_save';
                 RiotControl.on(self.eventKeyEditSave, () => {
-                    var data = self.getData();
+                    var data = self.getData() || self.data;
                     if(data == false) {
                         return false;
                     }
@@ -412,6 +412,7 @@
                             break;
 
                     }
+
                     return action;
                 });
             })
