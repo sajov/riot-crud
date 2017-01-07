@@ -15,7 +15,7 @@ exports.validateSchema = function(schema) {
 
     return function(hook, next) {
 
-        console.log('hook.result',hook.result);
+        // console.log('hook.result',hook.result);
 
         v.addSchema(s, '/Schema');
 
@@ -23,13 +23,43 @@ exports.validateSchema = function(schema) {
 
         if(validation.errors.length > 0) {
           hook.result = validation;
-          console.log('validation ERROR',validation);
+          console.errors('validation ERROR',validation);
         }
 
-        console.log('validation ERRORS 0');
-        console.log('show in browser');
+        // console.log('validation ERRORS 0');
+        // console.log('show in browser');
 
         next();
 
     };
 };
+
+exports.searchRegex = function () {
+  return function (hook) {
+    const query = hook.params.query;
+    for (let field in query) {
+      if(query[field].$search && field.indexOf('$') == -1) {
+        query[field] = { $regex: new RegExp(query[field].$search) }
+      }
+      if(field == '$or') {
+        let plain = [];
+        query[field].map((action, index) => {
+            let f = Object.keys(action)[0];
+            if(action[f].$search) {
+                let q = {};
+                let v = parseInt(action[f].$search) == action[f].$search ? parseInt(action[f].$search) : action[f].$search;
+                q[f] = v;
+                plain.push(q);
+                action[f] = { $regex: new RegExp(action[f].$search, 'i') };
+            }
+            return action;
+        });
+        query[field] = query[field].concat(plain);
+        console.log('plain', plain);
+        console.log('$or', query[field]);
+      }
+    }
+    hook.params.query = query
+    return hook
+  }
+}

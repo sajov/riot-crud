@@ -1,55 +1,46 @@
-riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class="title_left"> <h3>{opts.title} <small>{opts.description}</small></h3> </div> <div class="title_right"> <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search"> <div class="input-group"> <input type="text" class="form-control" placeholder="Search for..."> <span class="input-group-btn"> <button class="btn btn-default" type="button">Go!</button> </span> </div> </div> </div> </div> <div class="clearfix"></div> <div class="row"> <div class="col-md-12 col-sm-12 col-xs-12"> <div class="x_panel"> <div class="x_title"> <h2>Default Example <small>Users</small></h2> <ul class="nav navbar-right panel_toolbox"> <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li> <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a> <ul class="dropdown-menu" role="menu"> <li><a href="#">Settings 1</a> </li> <li><a href="#">Settings 2</a> </li> </ul> </li> <li><a class="close-link"><i class="fa fa-close"></i></a> </li> </ul> <div class="clearfix"></div> </div> <div class="x_content"> <p class="text-muted font-13 m-b-30"> DataTables has most features enabled by default, so all you need to do to use it with your own tables is to call the construction function: <code>$().DataTable();</code> </p> <table id="datatable" class="display table table-striped table-bordered datatable-buttons" cellspacing="0" width="100%"> <thead> <tr> <th if="{opts.selection}"><input onclick="{rowSelection}" type="checkbox"></th> <th each="{colkey, colval in opts.schema.required}" data-type="{colval.type}">{colkey}</th> <th></th> </tr> </thead> <tfoot> <tr id="filterrow" if="{opts.filterable}"> <th></th> <th each="{colkey, colval in opts.schema.required}" data-type="{colval.type}"> <small> <input type="text" name="filter_{colkey}" placeholder="filter {colkey}"></small> </th> <th></th> </tr> </tfoot> </table> </div> </div> </div> </div> </div> <link href="/bower_components/gentelella/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">', '', '', function(opts) {
-        var tag = this;
+riot.tag2('crud-datatables', '<link href="https://cdn.datatables.net/v/bs/dt-1.10.13/b-1.2.4/b-colvis-1.2.4/b-flash-1.2.4/b-html5-1.2.4/b-print-1.2.4/cr-1.3.2/fc-3.2.2/fh-3.1.2/kt-2.2.0/r-2.1.0/rr-1.2.0/sc-1.4.2/se-1.2.0/datatables.min.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet"> <div class=""> <div class="page-title"> <div class="title_left"> <h3>{opts.title} <small>{opts.description}</small></h3> </div> <div class="title_right"> <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search"> <div class="input-group"> <input type="text" class="form-control" placeholder="Search for..."> <span class="input-group-btn"> <button class="btn btn-default" type="button">Go!</button> </span> </div> </div> </div> </div> <div class="clearfix"></div> <div class="row"> <div class="col-md-12 col-sm-12 col-xs-12"> <div class="x_panel"> <div class="x_content"> <table id="datatable" class="display table table-striped table-bordered datatable-buttons" cellspacing="0" width="100%"> <thead> <tr> <th if="{opts.selection}"><input onclick="{rowSelection}" type="checkbox"></th> <th each="{colkey, colval in opts.schema.required}" data-type="{colval.type}">{colkey}</th> <th></th> </tr> </thead> <tfoot> <tr id="filterrow" if="{opts.filterable}"> <th></th> <th each="{colkey, colval in opts.schema.required}" data-type="{colval.type}"> <small> <input type="text" name="filter_{colkey}" placeholder="filter {colkey}"></small> </th> <th>&nbsp;</th> </tr> </tfoot> </table> </div> </div> </div> </div> </div>', '.btn-group { display: flex; float: right; } table.dataTable th.focus, table.dataTable td.focus { outline: 2px solid silver!important; outline-offset: -1px; }', '', function(opts) {
+        var self = this;
+        self.mixin(FeatherClientMixin);
 
-        this.refresh = function(params, options) {
+        self.dependencies = [
+            'https://cdn.datatables.net/v/bs/dt-1.10.13/b-1.2.4/b-colvis-1.2.4/b-flash-1.2.4/b-html5-1.2.4/b-print-1.2.4/cr-1.3.2/fc-3.2.2/fh-3.1.2/kt-2.2.0/r-2.1.0/rr-1.2.0/sc-1.4.2/se-1.2.0/datatables.min.js'
 
+        ];
+
+        self.refresh = function(query) {
+            self.datatable.draw();
         }
 
-        this.on('all', function(eventName) {
-            console.info('ALL EVENTNAME',eventName)
+        self.on('before-unmount', () => {
+            self.datatable.destroy();
         })
 
-        this.on('update', function(params, options) {
-
-        });
-
-        this.on('updated', function(params, options) {
-
-        });
-
-        this.on('updated', function(params, options) {
-            console.error('MOIUNGFT');
-            console.info('DATATABLES UPDATED');
-
-            tag.initTable();
-        });
-
-        this.on('mount', function() {
-            console.log('DATATABLES MOUNT');
+        self.on('mount', function(params, options) {
+            RiotCrudController.loadDependencies(self.dependencies,'crud-datatables', function (argument) {
+                 self.initTable();
+            });
             opts.tableHeader = opts.schema.defaultProperties || opts.schema.required;
-            console.error(opts.tableHeader);
-        })
+        });
 
-        this.initTable = function() {
-            console.error('opts.tableData',opts.tableData);
+        self.initTable = function() {
 
-            tag.datatable = $('#datatable').DataTable(tag.getDatatableConfig());
+            self.datatable = $('#datatable').DataTable(self.getDatatableConfig());
 
             $('#datatable tfoot input').on('change keyup', function () {
-                tag.datatable
+                self.datatable
                     .column( $(this).parent().index()+':visible' )
-                    .search( this.value )
+                    .search( self.value )
                     .draw();
             } );
 
             $('.top_search input').on('change', function() {
-                console.log($(this).val());
-                tag.datatable.search( this.value ).draw();
+                self.datatable
+                    .search( $(this).val() )
+                    .draw();
             });
         }
 
-        this.getDatatableConfig = function() {
-
+        self.getDatatableConfig = function() {
             var config = {
                 order: [[0,'asc']],
                 columns: [],
@@ -93,7 +84,7 @@ riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class
                 responsive: true,
                 fixedHeader: true,
                 keys: true,
-                "fnServerData": tag.datatableSearch
+                "fnServerData": self.datatableSearch
             }
 
             if(opts.selection) {
@@ -102,9 +93,10 @@ riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class
                         "data": null,
                         "targets": 0,
                         "order": false,
+                        "orderable": false,
 
                         "render": function ( data, type, row ) {
-                            return '<input type="checkbox" value="'+ row.id + '"/>';
+                            return '<input type="checkbox" value="'+ row[opts.keyField] + '"/>';
                         }
                     }
                 )
@@ -114,18 +106,22 @@ riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class
             for (var i = 0;i < opts.tableHeader.length; i++) {
                 var  col = opts.columns[opts.tableHeader[i]] || {data: opts.tableHeader[i]};
                 config.columns.push(col);
-                console.info('add col',col);
             }
 
             if(opts.buttons) {
+                var viewModelKey = [self.opts.service, self.opts.view, 'delete', 'confirmation'].join('_');
                 config.columns.push(
                     {
                         "data": null,
                         "targets": -1,
+                        "orderable": false,
 
                         "render": function ( data, type, row ) {
 
-                            return '<a class="btn btn-default buttons-csv buttons-html5 btn-sm" tabindex="0" aria-controls="ajaxdatatables" href="#product/view/' + row.id + '"><span> Edit</span></a>';
+                            return '<div class="dt-buttons btn-group">' +
+                                        '<a class="btn btn-info btn-xs" tabindex="0" aria-controls="ajaxdatatables" href="#' + opts.service + '/view/' + row[opts.keyField] + '"><i class="fa fa-edit"></i></a>' +
+                                        '<a class="btn btn-danger btn-xs" onclick="RiotControl.trigger(\'' + viewModelKey + '\',\''+row[opts.keyField]+'\')"><i class="fa fa-trash-o"></i></a>' +
+                                    '</div>';
                         }
                     }
                 );
@@ -133,7 +129,7 @@ riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class
             return config;
         }
 
-        tag.datatableSearch = function ( sSource, aoData, fnCallback ) {
+        self.datatableSearch = function ( sSource, aoData, fnCallback ) {
 
                 var query = {};
                 var queryObj = {};
@@ -145,7 +141,8 @@ riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class
                 query.$limit = queryObj['length'].value;
                 query.$skip = queryObj['start'].value;
 
-                console.log('!!!!',queryObj.order);
+                query = $.extend({}, query, opts.query.query);
+
                 for (var i = queryObj.order.value.length - 1; i >= 0; i--) {
 
                     if(queryObj.columns.value[ queryObj.order.value[i].column ] != null) {
@@ -153,40 +150,34 @@ riot.tag2('crud-datatables', '<div class=""> <div class="page-title"> <div class
                             query.$sort = {};
                         query.$sort[queryObj.columns.value[ queryObj.order.value[i].column ].data] =  queryObj.order.value[i].dir == 'asc' ? 1 : -1;
                     }
-
                 }
 
                 if(queryObj.search.value.value !== "") {
-                    console.log(queryObj.search.value.value);
-
-                    query.name=queryObj.search.value.value;
-
+                    query.$or = [];
+                    for (var i = 0;i < opts.tableHeader.length; i++) {
+                        let q = {};
+                        q[opts.tableHeader[i]] = {$search: queryObj.search.value.value};
+                        query.$or.push(q);
+                    }
                 }
 
-                $.ajax({
-                   type: 'get',
-                   url:'http://localhost:3030/products',
-
-                   data: query,
-                   success: function(data, textStatus, request){
-
-                    console.info('success');
-                    console.info(data);
-                    console.info(request);
-                    console.info(request.getResponseHeader('X-Total-Count'));
-                        fnCallback({
-                            error: false,
-
-                            recordsTotal: data.total,
-                            recordsFiltered: data.total,
-                            data: data.data
-                        })
-                   },
-                   error: function (request, textStatus, errorThrown) {
-                    alert('error');
-                        alert(request.getResponseHeader('X-Total-Count'));
-                   }
+                self.service.find({query:query}).then(function(result){
+                    fnCallback({
+                        error: false,
+                        recordsTotal: result.total,
+                        recordsFiltered: result.total,
+                        data: result.data
+                    })
+                }).catch(function(error){
+                    console.error('Error crud-datatables  find', error);
+                    fnCallback({
+                        error: error
+                    })
                 });
+        }
+
+        self.rowSelection =  function(e) {
+
         }
 
 });

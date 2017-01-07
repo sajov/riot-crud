@@ -1,0 +1,24 @@
+Themes:
+  ☐ Switch
+    ☐ Bootstrap
+    ☐ Zurb
+Views:
+  ☐ add brutusin-json-forms
+  ☐ datatable
+    ✔ add global search @done (17-01-04 22:49)
+    ☐ add field search/filter
+  ☐ add Tree Tag
+  ☐ Dashboeard add multiple lists
+  ☐ Login
+  ☐ Register
+  ☐ Tag Notification add dropdown incommming messages
+  ☐ Tag Custom Order
+    ☐  dynamic items
+      ☐  add options delete and add
+    ☐  add total
+Cleanups:
+  ☐ datatables
+  ☐ json-editor
+
+
+  https://github.com/joshfire/jsonform/tree/master/playground#readme

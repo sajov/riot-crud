@@ -13,7 +13,12 @@
     var currentName = null;
     var dependencies = {};
     var routes = {};
-    var routeNames = {};
+    var menuGroups = {
+        default:{
+            html: false,
+            routes: {}
+        }
+    };
     var target = '#content';
     var options = {
             target: '#main',
@@ -34,27 +39,63 @@
      */
     riotCrudController.prototype = {
 
-        defaults: function(config) {
+        defaults: (config) => {
             options = $.extend({}, options, config);
             return this;
         },
 
-        addRoute: function(route, config) {
+        addRoute: (route, config) => {
             config = $.extend({}, options, config);
             routes[route] = config;
+            // if(config.menu) {
+            //     menuGroups[config.menuGroup || 'default'].routes = {
+
+            //     };
+            // }
             return this;
         },
 
-        getRoutes: function() {
-             return routes;
+        addMenuGroup: (key, html) => {
+            menuGroups[key] = {html: html, routes: {}}
         },
 
-        addDependencies: function(view, d) {
+        getRoutes: () => {
+            return routes;
+        },
+
+        getRouteMenu: () => {
+            for (var k in routes){
+                if (routes[k].menu) {
+                   menuGroups[routes[k].menuGroup || 'default'].routes[k] = routes[k];
+                }
+            }
+            return menuGroups;
+        },
+
+        addDependencies: (view, d) => {
             dependencies[view] = d;
             return this;
         },
 
-        start: function(route) {
+        loadDependencies: (dependencies, tag, cb) => {
+            var dep = [];
+            if(typeof dependencies != 'undefined')
+                dep = dependencies;
+
+            if ($script &&  dep.length > 0) {
+                $script(dep,  () => {
+                    if(typeof cb === 'function') {
+                        cb();
+                    }
+                });
+            } else {
+                if(typeof cb === 'function') {
+                    cb();
+                }
+            }
+        },
+
+        start: (route) => {
             riot.route(handler)
             riot.route.start();
             riot.route.exec();
@@ -67,14 +108,13 @@
     }
 
     function mount(target, tag, options) {
-
-        if(currentTag!=null && tag == currentTag.root.getAttribute('riot-tag')) {
-            console.warn('riotcrud.mount if currentTag!=null');
+        if(
+            currentTag!=null && tag == currentTag.root.getAttribute('riot-tag')
+            && options.model == currentTag.opts.model
+            ) {
             currentTag.refresh(options);
         } else {
-            console.warn('riotcrud.mount else', target, tag, options);
             currentTag && currentTag.unmount(true)
-
             currentTag = riot.mount(target, tag, options)[0]
             currentName = tag
         }
@@ -89,7 +129,6 @@
      * - exec fn
      */
     function handler(collection, action, param) {
-
         if (typeof routes[collection] == 'undefined' && typeof routes[collection+action] == 'undefined') {
             console.error('RiotCrudController no route found',{
                 collection: collection,
@@ -102,7 +141,10 @@
         var route = routes[collection] || routes[collection+action];
 
         route.query = {id: param, query: riot.route.query()};
-        loadDependencies(route, function() {
+        RiotCrudController.loadDependencies(route.dependencies, route.route, function() {
+
+            RiotControl.trigger('routeStateChange',route.route);
+
             if (typeof route.fn === 'function') {
                 currentName = null;
                 route.fn(collection, param, action);
@@ -116,77 +158,11 @@
         })
     }
 
-    /**
-     * Dependency loader
-     * @param  {string}   collection Collection name
-     * @param  {function} cb         Callback function
-     */
-    function loadDependencies(route, cb) {
-        var dep = [];
-
-        if(typeof route.dependencies != 'undefined')
-            dep = route.dependencies;
-
-        if (typeof route.fn == 'function') {
-            route.fn();
-        }
-
-        if ($script && dep.length > 0) {
-            $script(dep, route.route, function() {
-                cb()
-            });
-        } else {
-            cb();
-        }
-    }
-
-    // Routes
     if (!window.RiotCrudController) {
         window.RiotCrudController = new riotCrudController;
     }
 
 }(window, riot, $script));
-
-
-
-/**
- * riotCrudViewMixins
- * @param  {[type]} riot [description]
- * @return {[type]}      [description]
- */
-;
-(function(window, riot) {
-
-    // var ScopeMixin = {
-    //     init: function() {
-    //         alert('init');
-    //         this.VM = this.getVM();
-    //     },
-
-    //     getVM: function() {
-    //         alert('init');
-    //         var root = this
-    //         while (root.parent) {
-    //             root = root.parent
-    //         }
-    //         return root.VM || root._riot_id
-    //     },
-
-    //     getScope: function() {
-    //         alert('init');
-    //         var root = this
-    //         while (root.parent) {
-    //             root = root.parent
-    //         }
-
-    //         return root.opts.scope || root._riot_id
-    //     }
-    // }
-
-    // riot.mixin(ScopeMixin);
-
-}(window, riot));
-
 
 /**
  * Riot crud model
@@ -200,8 +176,7 @@
 
     function riotCrudModel() {
         this.opts = {
-            title:'old',
-            test:'default'
+            keyField:'id'
         };
     }
 
@@ -213,22 +188,22 @@
         },
 
         addModel: function(name, config, views) {
+
             var options = $.extend({model:name}, this.opts, config || {} );
 
             for (var view in views) {
+                var model = $.extend({name: name, route: '/' + name + '/' + view}, options, views[view]);
+                model.view = view;
+                model.views = Object.keys(views);
 
-                var model = $.extend({route: '/' + name + '/' + view}, options, views[view]);
-
+                //TODO: remove, use json-editor ajax mode
                 if(model.schema && typeof model.schema === 'string') {
                     $.ajax({
                       url: model.schema,
                       dataType: "json",
                       async: false,
                       cache: false,
-                      success: function(data){
-                        // console.info(data)
-                        model.schema = data;
-                        }
+                      success: function(data){model.schema = data;}
                     });
                 }
 
@@ -242,6 +217,244 @@
     window.RiotCrudModel = new riotCrudModel();
 }(window, riot, $));
 
+/**
+ * riotCrudViewMixins
+ * @param  {[type]} riot [description]
+ * @return {[type]}      [description]
+ */
+;
+(function(window, riot) {
+
+    RiotControl = {
+      _stores: [],
+      addStore: function(store) {
+        this._stores.push(store);
+      },
+      reset: function() {
+        this._stores = [];
+      }
+    };
+
+    ['on','one','off','trigger'].forEach(function(api){
+      RiotControl[api] = function() {
+        var args = [].slice.call(arguments);
+        this._stores.forEach(function(el){
+          el[api].apply(el, args);
+        });
+      };
+    });
+
+    if (typeof(module) !== 'undefined') module.exports = RiotControl;
+
+    function ModelStore() {
+      if (!(this instanceof ModelStore)) return new ModelStore()
+
+      riot.observable(this)
+
+      var self = this;
+
+    }
+    RiotControl.addStore(new ModelStore());
+    if (!window.RiotControl) {
+        window.RiotControl = RiotControl;
+    }
+
+    var FeatherClientMixin = {
+        observable: riot.observable(),
+        init: function(){
+            var self = this;
+
+            self.socket = io(self.opts.endpoint || 'http://localhost:3030');
+            self.client = feathers()
+              .configure(feathers.hooks())
+              .configure(feathers.socketio(self.socket));
+
+            if(typeof self.opts.service != 'undefined') {
 
 
+                self.service = self.client.service(self.opts.service);
 
+                var viewModelKey = [self.opts.service, self.opts.view].join('_');
+
+                self.eventKeyDelete = viewModelKey + '_delete';
+                self.eventKeyDeleteConfirmation = viewModelKey + '_delete_confirmation';
+                RiotControl.on(self.eventKeyDeleteConfirmation, (id) => {
+                    RiotControl.trigger('delete_confirmation_modal', self.opts.service, self.opts.view, id || self.opts.query.id)
+                });
+
+                self.eventKeyDeleteConfirmed = viewModelKey + '_delete';
+                RiotControl.on(self.eventKeyDeleteConfirmed, (id) => {
+                    self.service.remove(id)
+                                .then(function(result){
+                                    if(self.opts.view != 'list') {
+                                        riot.route([self.opts.service, 'list'].join('/'))
+                                    } else {
+                                        self.refresh();
+                                    }
+                                })
+                                .catch(function(error){
+                                    console.error('FeatherClientMixin ' + self.eventKeyDeleteConfirmed, error);
+                                });
+                });
+
+
+                self.eventKeyEditSave = self.opts.service + '_edit_save';
+                RiotControl.on(self.eventKeyEditSave, () => {
+                    var data = self.getData() || self.data;
+                    if(data == false) {
+                        return false;
+                    }
+
+                    self.service.update(data[self.opts.keyField],data)
+                                .then(function(result){})
+                                .catch(function(error){
+                                    console.error('FeatherClientMixin ' + self.eventKeyEditSave, error);
+                                });
+
+                });
+
+                self.eventKeyCreateSave = self.opts.service + '_create_save';
+                RiotControl.on(self.eventKeyCreateSave, () => {
+                    var data = self.getData();
+                    if(data == false) {
+                        return false;
+                    }
+
+                    self.service.create(data)
+                                .then(function(result){})
+                                .catch(function(error){
+                                    console.error('FeatherClientMixin ' + self.eventKeyCreateSave, error);
+                                });
+                });
+
+                self.on('unmount', () => {
+                    RiotControl.off(self.eventKeyDelete);
+                    RiotControl.off(self.eventKeyDeleteConfirmed);
+                    RiotControl.off(self.eventKeyDeleteConfirmation);
+                    RiotControl.off(self.eventKeyEditSave);
+                    RiotControl.off(self.eventKeyCreateSave);
+                })
+
+            }
+        }
+    }
+    if (!window.FeatherClientMixin) {
+        window.FeatherClientMixin = FeatherClientMixin;
+    }
+    riot.mixin("FeatherClientMixin", FeatherClientMixin);
+
+    var viewActionsMixin = {
+        observable: riot.observable(),
+        init: function(){
+            var self = this;
+
+            var actions = [
+                {
+                  name: 'view',
+                  label: 'View',
+                  buttonClass: 'info',
+                  active: true
+                },
+                {
+                  name: 'edit',
+                  label: 'Edit',
+                  buttonClass: 'primary',
+                  active: true
+                },
+                {
+                  name: 'create',
+                  label: 'Create',
+                  buttonClass: 'warning',
+                  active: true
+                },
+                {
+                  name: 'delete',
+                  label: 'Delete',
+                  buttonClass: 'danger',
+                  active: true
+                },
+                {
+                  name: 'save',
+                  label: 'Save',
+                  buttonClass: 'success',
+                  active: true
+                },
+                {
+                  name: 'list',
+                  label: 'List',
+                  buttonClass: 'default',
+                  active: true
+                }
+            ];
+
+            self.on('update', () => {
+
+                var  view = self.opts.view || 'undefined';
+                self.opts.actions = actions.map((action, index) => {
+                    action.active = true;
+                    switch(view) {
+                        case 'view':
+                            if(['view','save'].indexOf(action.name) != -1){
+                                action.active = false;
+                            }
+                            break;
+                        case 'edit':
+                            if(['edit'].indexOf(action.name) != -1){
+                                action.active = false;
+                            }
+                            break;
+                        case 'create':
+                            if(['create','edit','view','delete'].indexOf(action.name) != -1){
+                                action.active = false;
+                            }
+                            break;
+                        default:
+                            break;
+
+                    }
+
+                    return action;
+                });
+            })
+
+            self.click = (e) => {
+                e.preventDefault();
+
+                var service = self.opts.name;
+                var view = self.opts.view;
+                var action = e.item.action.name;
+                var viewModelKey = [service, view, action].join('_');
+
+                switch(action){
+                    case 'delete':
+                        RiotControl.trigger(viewModelKey+'_confirmation')
+                        break;
+                    case 'save':
+                    case 'update':
+                        RiotControl.trigger(viewModelKey)
+                        break;
+                    case 'view':
+                    case 'edit':
+                        riot.route([service, action, self.opts.query.id].join('/'))
+                        break;
+                    case 'list':
+                    case 'create':
+                        riot.route([service, action].join('/'))
+                        break;
+                    default:
+                        console.error('unknown event: ' + viewModelKey)
+                        break;
+                }
+
+            }
+        },
+
+    };
+    if (!window.viewActionsMixin) {
+        window.viewActionsMixin = viewActionsMixin;
+    }
+    // register the ViewActionsMixin throughout the app
+    riot.mixin("viewActionsMixin", viewActionsMixin);
+
+
+}(window, riot));

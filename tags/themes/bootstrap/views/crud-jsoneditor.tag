@@ -20,42 +20,48 @@
 
 
         <div class="row">
-          <div class="col-md-12 col-sm-12 col-xs-12">
-            <div class="x_panel">
-              <div class="x_title">
-                <h2>{tag.opts.data.name}Default Example <small>Users</small></h2>
-                <ul class="nav navbar-right panel_toolbox">
-                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                  </li>
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                    <ul class="dropdown-menu" role="menu">
-                      <li><a href="#">Settings 1</a>
-                      </li>
-                      <li><a href="#">Settings 2</a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li><a class="close-link"><i class="fa fa-close"></i></a>
-                  </li>
-                </ul>
-                <div class="clearfix"></div>
-              </div>
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title hidden-print">
+                        <h2>{opts.title} <small>{opts.service}</small></h2>
 
-              <div class="x_content">
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li>
+                               <crud-action-menu name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}"></crud-action-menu>
+                            </li>
+                            <li>
+                                <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>
+                                        <a href="#">Settings 1</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Settings 2</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a class="close-link"><i class="fa fa-close"></i></a>
+                            </li>
+                        </ul>
 
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                    </div>
 
-                <div id="jsoneditor"></div>
-                <a class="btn success" href="#" onclick={ store }>Speichern</a>
+                    <div class="x_content">
 
-              </div>
+                        <div id="jsoneditor"></div>
+                        <a class="btn success" href="#" onclick={ saveJSONEditor }>Speichern</a>
+
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-
         <div class="clearfix"></div>
-
-
     </div>
 
     <link rel="stylesheet" href="http://cdn.jsdelivr.net/select2/3.4.8/select2.css">
@@ -63,231 +69,118 @@
 
 
     <script>
-        var tag = this;
+        var self = this;
+        self.mixin(FeatherClientMixin);
 
+        self.dependencies = [
+                '/bower_components/json-editor/dist/jsoneditor.min.js',
+                'http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js'
+        ];
 
-
-        tag.store = function(e) {
-            e.preventDefault();
-            // console.log(e);
-            // alert();
-            var json = tag.editor.getValue();
-
-            output = JSON.stringify(json,null,2);
-            console.log('save',output);
-            var validation_errors = tag.editor.validate();
-            // // Show validation errors if there are any
-            if(validation_errors.length) {
-                alert(JSON.stringify(validation_errors,null,2));
-            }
-            else {
-                 $.ajax({
-                        type: "PATCH",
-                        url: 'http://localhost:3030/products/' + tag.opts.query.id,
-                        data: output,
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        success: function(data){
-                            console.info(data);
-                        },
-                        failure: function(errMsg) {
-                            console.error(errMsg);
-                        }
-                  });
-                console.log('valid');
-            }
-
-            // updateDirectLink();
-        }
+        // this can move into serviceMixins
+        this.refresh = (opts) => {
+            self.opts = opts;
+            self.update();
+            self.get(self.opts.query.id);
+        },
 
         this.on('mount', function() {
-            console.log('crud-jsoneditor update opts.query', this.opts.schema);
-        });
-
-        this.on('mounted', function() {
-
-
-        });
-
-        this.on('before-mount', () => {
-            console.info('dashboard before-mount', tag);
-            tag.initJSONEditor();
-        });
-
-        tag.initJSONEditor = function() {
-                        // AJAX
-            $.ajax({
-                type: 'get',
-                url:'http://localhost:3030/products/' + tag.opts.query.id || '',
-                // url: tag.VM.config.baseUrl + '/' + tag.VM.model,
-                success: function(data, textStatus, request){
-                    tag.opts.data = data;
-                    console.info('success');
-                    console.info(data);
-                    console.info(request);
-                    console.info(request.getResponseHeader('X-Total-Count'));
-                    console.info('crud-jsoneditor update ajax callback',{
-                        data: data
-                    })
-
-                    // Set the global default
-                    // JSONEditor.defaults.options.theme = "foundation6";
-                    JSONEditor.defaults.options.theme = "bootstrap3";
-                    JSONEditor.plugins.selectize.enable = true;
-                    JSONEditor.defaults.iconlib = 'fontawesome4';
-                    JSONEditor.plugins.selectize.enable = true;
-                    JSONEditor.plugins.select2.width = "300px";
-                    // JSONEditor.plugins.sceditor.emoticonsEnabled = true;
-                    // JSONEditor.plugins.epiceditor.basePath = 'epiceditor';
-
-                    tag.editor = new JSONEditor(document.getElementById('jsoneditor'),{
-
-                            schema: 'http://localhost:3030/schema/product_faker.json',
-                            ajax:true,
-                            // schema: {
-                            //   type: "object",
-                            //   title: "Car",
-                            //   properties: {
-                            //     make: {
-                            //       type: "string",
-                            //       enum: [
-                            //         "Toyota",
-                            //         "BMW",
-                            //         "Honda",
-                            //         "Ford",
-                            //         "Chevy",
-                            //         "VW"
-                            //       ]
-                            //     },
-                            //     model: {
-                            //       type: "string"
-                            //     },
-                            //     year: {
-                            //       type: "integer",
-                            //       enum: [
-                            //         1995,1996,1997,1998,1999,
-                            //         2000,2001,2002,2003,2004,
-                            //         2005,2006,2007,2008,2009,
-                            //         2010,2011,2012,2013,2014
-                            //       ],
-                            //       default: 2008
-                            //     }
-                            //   }
-                            // }
-                            schema: tag.opts.schema,
-                            grid_columns: 2,
-                            theme:'bootstrap3',
-                            object_layout: 'grid',
-                            disable_edit_json: false,
-                            form_name_root:'root[product][name]'
-
-                          });
-                    tag.opts.data = data;
-                    tag.editor.setValue(data);
-                    $('[data-schemaformat="html"]').summernote();
-
-
-
-                    console.log('schema',tag.opts.schema);
-
-                },
-                error: function (request, textStatus, errorThrown) {
-                    alert('error');
-                    alert(request.getResponseHeader('X-Total-Count'));
-                }
+            RiotCrudController.loadDependencies(self.dependencies,'crud-jsoneditor', function (argument) {
+                self.initJSONEditor();
+                self.get(self.opts.query.id)
             });
+        });
 
+        self.get = function(id) {
 
+            if(typeof self.opts.query.id != 'undefined') {
 
-            // config = {
+                self.service.get(id).then(function(result){
+                    if(typeof self.editor == 'undefined') {
+                      self.initJSONEditor();
+                    }
+                    self.data = result;
+                    self.editor.setValue(self.data);
 
-            //     // Seed the form with a starting value
-            //     startval: this.VM.row,
+                }).catch(function(error){
+                  console.error('Error crud-jsoneditor get', error);
+                });
+            } else {
+                self.data = {};
+                self.editor.setValue(self.data);
+            }
+        }
 
-            //     no_additional_properties: true,
+        self.initJSONEditor = function(data) {
 
-            //     // Require all properties by default
-            //     required_by_default: true,
+            self.opts.data = data;
 
-            //     iconlib: "fontawesome4",
-            //     // Disable additional properties
-            //     no_additional_properties: false,
-            //     disable_array_add: true,
-            //     disable_array_delete_last_row: true,
-            //     disable_array_delete_all_rows: true,
-            //     disable_array_delete: true,
-            //     disable_collapse: true,
-            //     grid_columns: 2,
-            //     // Require all properties by default
-            //     required_by_default: false
-            // };
+            JSONEditor.defaults.options.theme = "bootstrap3";
+            // JSONEditor.defaults.options.theme = "foundation6";
+            JSONEditor.plugins.selectize.enable = true;
+            JSONEditor.defaults.iconlib = 'fontawesome4';
+            JSONEditor.plugins.selectize.enable = true;
+            JSONEditor.plugins.select2.width = "300px";
+            // JSONEditor.plugins.sceditor.emoticonsEnabled = true;
+            // JSONEditor.plugins.epiceditor.basePath = 'epiceditor';
 
-            // if(this.VM.config.schema) {
-            //     config.ajax = true;
-            //     config.schema = this.VM.config.schema;
-            // }
+            JSONEditor.defaults.disable_collapse = true;
+            JSONEditor.defaults.disable_edit_json = true;
+            JSONEditor.defaults.disable_properties = true;
+            JSONEditor.defaults.no_additional_properties = true;
 
-            // console.log('mount this.VM',this.VM);
+            self.editor = new JSONEditor(document.getElementById('jsoneditor'),
+                {
+                    schema: 'http://localhost:3030/schema/product_faker.json',
+                    ajax:true,
+                    schema: self.opts.schema,
+                    theme:'bootstrap3',
+                    object_layout: 'grid',
+                    grid_columns: 10,
+                    expand_height: true,
+                    disable_edit_json: true,
+                    disable_collapse: true,
+                    disable_edit_json: true,
+                    disable_properties: true,
+                    // no_additional_properties: true,
+                    form_name_root:'root[product][name]'
 
-            // tag.editor = new JSONEditor(this.jsoneditor, config);
+                }
+            );
 
-            // // if(tag.VM.config.view === 'show') {
-            // //     console.log('mount show');
-            // //     tag.editor.disable();
-            // // }
+            $('[data-schemaformat="html"]').summernote();
+        }
 
-            // tag.editor.on('change',function() {
-            //  if(tag.VM.config.view === 'show') {
-            //     console.log('mount show');
-            //     tag.editor.disable();
+        self.saveJSONEditor = function(e) {
+            e.preventDefault();
 
-            // } else {
-            //     tag.editor.getEditor('root.createdAt').disable();
-            // }
-            // });
+            var json = self.editor.getValue();
+            var validation_errors = self.editor.validate();
+            if(validation_errors.length) {
+                console.error(JSON.stringify(validation_errors,null,2));
+            } else {
+                self.service.update(json.id,json).then(function(result){
+                }).catch(function(error){
+                  console.error('Error crud-jsoneditor savejsoneditor update', error);
+                });
+            }
+        }
+
+        self.getData = () => {
+
+            var json = self.editor.getValue();
+            var validation_errors = self.editor.validate();
+
+            if(validation_errors.length) {
+                console.error(JSON.stringify(validation_errors,null,2));
+                return false;
+            } else {
+                return json;
+            }
         }
 
 
-                // // Custom editor
-        // JSONEditor.defaults.editors.dateTime = JSONEditor.defaults.editors.string.extend({
-        //     getValue: function() {
-
-        //         function getTimeZone() {
-        //             var offset = new Date().getTimezoneOffset(), o = Math.abs(offset);
-        //             return (offset < 0 ? "+" : "-") + ("00" + Math.floor(o / 60)).slice(-2) + ":" + ("00" + (o % 60)).slice(-2);
-        //         }
-
-        //         return this.value+getTimeZone();
-        //     },
-
-        //     setValue: function(val) {
-
-        //         // strip timeZone
-        //         var stripedDateTime = val.substring(0, val.lastIndexOf("+"));
-
-
-        //         if(this.value !== stripedDateTime) {
-        //             this.value = stripedDateTime;
-        //             this.input.value = this.value;
-        //             this.refreshPreview();
-        //             this.onChange();
-        //         }
-        //     },
-
-        //     build: function() {
-        //         this.schema.format = "datetime-local";
-        //         this._super();
-
-        //     }
-        // });
-
-        // // Instruct the json-editor to use the custom datetime-editor.
-        // JSONEditor.defaults.resolvers.unshift(function(schema) {
-        //     if(schema.type === "string" && schema.format === "datetime") {
-        //         return "dateTime";
-        //     }
-
-        // });
     </script>
 
 </crud-jsoneditor>
+

@@ -19,15 +19,25 @@
 
 
     <!-- Datatables -->
-<!--     <link href="/bower_components/gentelella/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
-    <link href="/bower_components/gentelella/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
-    <link href="/bower_components/gentelella/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
-    <link href="/bower_components/gentelella/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
-    <link href="/bower_components/gentelella/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+    <!--     <link href="/bower_components/gentelella/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+        <link href="/bower_components/gentelella/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+        <link href="/bower_components/gentelella/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+        <link href="/bower_components/gentelella/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+        <link href="/bower_components/gentelella/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
 
- -->
+     -->
     <!-- Custom Theme Style -->
     <link href="/bower_components/gentelella/build/css/custom.min.css" rel="stylesheet">
+
+    <style type="text/css" media="print">
+        @page {
+            size: auto;   /* auto is the initial value */
+            margin: 0;  /* this affects the margin in the printer settings */
+        }
+         a[href]:after { content: none !important; }
+        img[src]:after { content: none !important; }
+    </style>
+
 
     </head>
     <body class="nav-md">
@@ -40,8 +50,9 @@
                 <side-menu routes="{opts.routes}"></side-menu>
               </div>
             </div>
+
             <!-- top navigation -->
-            <div class="top_nav">
+            <div class="top_nav hidden-print">
                 <div class="nav_menu">
                     <nav class="" role="navigation">
                         <div class="nav toggle">
@@ -66,6 +77,8 @@
                                 </ul>
                             </li>
                             <li role="presentation" class="dropdown">
+                                <top-menu></top-menu>
+
                                 <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
                                     <i class="fa fa-envelope-o"></i>
                                     <span class="badge bg-green">6</span>
@@ -143,7 +156,7 @@
             </div>
             <!-- footer content -->
             <footer>
-              <div class="pull-right">
+              <div class="pull-right hidden-print">
                 Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
               </div>
               <div class="clearfix"></div>
@@ -160,34 +173,12 @@
     <script src="/bower_components/gentelella/vendors/fastclick/lib/fastclick.js"></script>
     <!-- NProgress -->
     <script src="/bower_components/gentelella/vendors/nprogress/nprogress.js"></script>
-
-    <!-- Datatables -->
-    <script src="/bower_components/gentelella/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="/bower_components/gentelella/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-    <script src="/bower_components/gentelella/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="/bower_components/gentelella/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
-    <script src="/bower_components/gentelella/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
-    <script src="/bower_components/gentelella/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
-    <script src="/bower_components/gentelella/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
-    <script src="/bower_components/gentelella/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
-    <script src="/bower_components/gentelella/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
-    <script src="/bower_components/gentelella/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="/bower_components/gentelella/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-    <script src="/bower_components/gentelella/vendors/datatables.net-scroller/js/datatables.scroller.min.js"></script>
-    <script src="/bower_components/gentelella/vendors/jszip/dist/jszip.min.js"></script>
-    <script src="/bower_components/gentelella/vendors/pdfmake/build/pdfmake.min.js"></script>
-    <script src="/bower_components/gentelella/vendors/pdfmake/build/vfs_fonts.js"></script>
-
-
-    <!-- json-editor WYSIWYG -->
-    <script src="/bower_components/json-editor/dist/jsoneditor.min.js"></script>
-
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js"></script>
-   <!--  <script src="http://cdn.jsdelivr.net/sceditor/1.4.3/jquery.sceditor.bbcode.min.js"></script>
-    <script src="http://cdn.jsdelivr.net/sceditor/1.4.3/jquery.sceditor.xhtml.min.js"></script>
- -->
     <!-- Custom Theme Scripts -->
     <script src="/bower_components/gentelella/build/js/custom.min.js"></script>
+
+    <!-- Feathers-Client and SocketIO -->
+    <script type="text/javascript" src="http://localhost:3030/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="//cdn.rawgit.com/feathersjs/feathers-client/v1.1.0/dist/feathers.js"></script>
 
     <!-- riot-crud -->
     <!-- <script src="/bower_components/riot/riot+compiler.min.js"></script> -->
