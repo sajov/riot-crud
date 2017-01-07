@@ -3,6 +3,7 @@ Themes:
     ☐ Bootstrap
     ☐ Zurb
 Views:
+  ☐ add brutusin-json-forms
   ☐ datatable
     ✔ add global search @done (17-01-04 22:49)
     ☐ add field search/filter
