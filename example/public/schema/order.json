@@ -3,8 +3,8 @@
   "type": "object",
   "title": "Orders",
   "properties": {
-    "id": {
-      "type": "number"
+    "_id": {
+      "type": "string"
     },
     "name": {
       "type": "string"
@@ -38,7 +38,7 @@
     }
   },
   "required": [
-    "id",
+    "_id",
     "name",
     "comment",
     "createdAt",

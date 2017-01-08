@@ -6,7 +6,7 @@ const schema = require(process.cwd() + '/public/schema/category.json');
 
 exports.before = {
   all: [],
-  find: [],
+  find: [globalHooks.searchRegex()],
   get: [],
   create: [globalHooks.validateSchema(schema)],
   update: [globalHooks.validateSchema(schema)],

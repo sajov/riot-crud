@@ -8,7 +8,8 @@ riot.tag2('order', '<div class=""> <div class="page-title hidden-print"> <div cl
         });
 
         self.refresh = (opts) => {
-          self.initOrder(opts.query.id);
+            if(opts.query.id)
+                self.initOrder(opts.query.id);
         }
 
         self.initOrder = (orderId) => {

@@ -3,8 +3,8 @@
   "type": "object",
   "title": "Product",
   "properties": {
-    "id": {
-      "type": "integer"
+    "_id": {
+      "type": "string"
     },
     "active": {
       "type": "boolean"
@@ -143,7 +143,7 @@
     }
   },
   "required": [
-    "id",
+    "_id",
     "sku",
     "active",
     "name",
@@ -152,7 +152,7 @@
     "base_color"
   ],
   "defaultProperties": [
-    "id",
+    "_id",
     "sku",
     "active",
     "name",

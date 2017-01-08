@@ -90,7 +90,7 @@
                             + event
                             + '</i>'
                             , eventTypeMap[event]
-                            ,'id: ' + response.id
+                            ,'id: ' + (response.id || response._id)
                             // , '<a class="btn btn-default btn-xs" tabindex="0" href="#'
                             // + service
                             // + '/view/'

@@ -176,7 +176,7 @@
 
     function riotCrudModel() {
         this.opts = {
-            keyField:'id'
+            idField:'_id'
         };
     }
 
@@ -305,7 +305,7 @@
                         return false;
                     }
 
-                    self.service.update(data[self.opts.keyField],data)
+                    self.service.update(data[self.opts.idField],data)
                                 .then(function(result){})
                                 .catch(function(error){
                                     console.error('FeatherClientMixin ' + self.eventKeyEditSave, error);

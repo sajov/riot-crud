@@ -23,7 +23,6 @@ riot.tag2('crud-datatables', '<link href="https://cdn.datatables.net/v/bs/dt-1.1
         });
 
         self.initTable = function() {
-
             self.datatable = $('#datatable').DataTable(self.getDatatableConfig());
 
             $('#datatable tfoot input').on('change keyup', function () {
@@ -96,7 +95,7 @@ riot.tag2('crud-datatables', '<link href="https://cdn.datatables.net/v/bs/dt-1.1
                         "orderable": false,
 
                         "render": function ( data, type, row ) {
-                            return '<input type="checkbox" value="'+ row[opts.keyField] + '"/>';
+                            return '<input type="checkbox" value="'+ row[opts.idField] + '"/>';
                         }
                     }
                 )
@@ -119,8 +118,8 @@ riot.tag2('crud-datatables', '<link href="https://cdn.datatables.net/v/bs/dt-1.1
                         "render": function ( data, type, row ) {
 
                             return '<div class="dt-buttons btn-group">' +
-                                        '<a class="btn btn-info btn-xs" tabindex="0" aria-controls="ajaxdatatables" href="#' + opts.service + '/view/' + row[opts.keyField] + '"><i class="fa fa-edit"></i></a>' +
-                                        '<a class="btn btn-danger btn-xs" onclick="RiotControl.trigger(\'' + viewModelKey + '\',\''+row[opts.keyField]+'\')"><i class="fa fa-trash-o"></i></a>' +
+                                        '<a class="btn btn-info btn-xs" tabindex="0" aria-controls="ajaxdatatables" href="#' + opts.service + '/view/' + row[opts.idField] + '"><i class="fa fa-edit"></i></a>' +
+                                        '<a class="btn btn-danger btn-xs" onclick="RiotControl.trigger(\'' + viewModelKey + '\',\''+row[opts.idField]+'\')"><i class="fa fa-trash-o"></i></a>' +
                                     '</div>';
                         }
                     }

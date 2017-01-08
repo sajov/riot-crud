@@ -3,8 +3,8 @@
   "type": "object",
   "title": "Categories",
   "properties": {
-    "id": {
-      "type": "number"
+    "_id": {
+      "type": "string"
     },
     "active": {
       "type": "number"
@@ -41,7 +41,7 @@
     }
   },
   "required": [
-    "id",
+    "_id",
     "name",
     "description",
     "image",

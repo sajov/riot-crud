@@ -113,7 +113,6 @@
          * Init Datatable
          */
         self.initTable = function() {
-
             self.datatable = $('#datatable').DataTable(self.getDatatableConfig());
 
             $('#datatable tfoot input').on('change keyup', function () {
@@ -200,7 +199,7 @@
                         "orderable": false,
                         // "defaultContent": "<button>Click!</button>",
                         "render": function ( data, type, row ) {
-                            return '<input type="checkbox" value="'+ row[opts.keyField] + '"/>';
+                            return '<input type="checkbox" value="'+ row[opts.idField] + '"/>';
                         }
                     }
                 )
@@ -224,8 +223,8 @@
                         "render": function ( data, type, row ) {
                             // return data +' ('+ row.sku+')';
                             return '<div class="dt-buttons btn-group">' +
-                                        '<a class="btn btn-info btn-xs" tabindex="0" aria-controls="ajaxdatatables" href="#' + opts.service + '/view/' + row[opts.keyField] + '"><i class="fa fa-edit"></i></a>' +
-                                        '<a class="btn btn-danger btn-xs" onclick="RiotControl.trigger(\'' + viewModelKey + '\',\''+row[opts.keyField]+'\')"><i class="fa fa-trash-o"></i></a>' +
+                                        '<a class="btn btn-info btn-xs" tabindex="0" aria-controls="ajaxdatatables" href="#' + opts.service + '/view/' + row[opts.idField] + '"><i class="fa fa-edit"></i></a>' +
+                                        '<a class="btn btn-danger btn-xs" onclick="RiotControl.trigger(\'' + viewModelKey + '\',\''+row[opts.idField]+'\')"><i class="fa fa-trash-o"></i></a>' +
                                     '</div>';
                         }
                     }

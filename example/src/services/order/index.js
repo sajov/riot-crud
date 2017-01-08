@@ -1,15 +1,25 @@
 'use strict';
 
-const service = require('feathers-memory');
+const path = require('path');
+const NeDB = require('nedb');
+const service = require('feathers-nedb');
+// const service = require('feathers-memory');
 const hooks = require('./hooks');
 
 module.exports = function(){
   const app = this;
 
+  const db = new NeDB({
+    filename: path.join(app.get('nedb'), 'products.db'),
+    autoload: true,
+    inMemoryOnly: true
+  });
+
   let options = {
+    Model: db,
     paginate: {
       default: 5,
-      max: 25
+      max: 250
     }
   };
 

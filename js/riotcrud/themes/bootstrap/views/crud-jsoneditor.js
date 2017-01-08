@@ -86,7 +86,7 @@ riot.tag2('crud-jsoneditor', '<div> <div class="page-title"> </div> <div class="
             if(validation_errors.length) {
                 console.error(JSON.stringify(validation_errors,null,2));
             } else {
-                self.service.update(json.id,json).then(function(result){
+                self.service.update(json[opts.idField],json).then(function(result){
                 }).catch(function(error){
                   console.error('Error crud-jsoneditor savejsoneditor update', error);
                 });

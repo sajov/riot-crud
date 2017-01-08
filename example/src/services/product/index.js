@@ -12,7 +12,8 @@ module.exports = function(){
   const db = new NeDB({
     filename: path.join(app.get('nedb'), 'products.db'),
     autoload: true,
-    inMemoryOnly: true
+    inMemoryOnly: true,
+    id: 'id'
   });
 
   let options = {
