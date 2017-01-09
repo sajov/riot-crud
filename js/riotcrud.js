@@ -293,7 +293,13 @@
                                     }
                                 })
                                 .catch(function(error){
-                                    console.error('FeatherClientMixin ' + self.eventKeyDeleteConfirmed, error);
+                                    RiotControl.trigger(
+                                        'notification',
+                                        error.errorType + ' ' + self.eventKeyDeleteConfirmed,
+                                        'error',
+                                        error.message
+                                    );
+
                                 });
                 });
 
@@ -308,7 +314,13 @@
                     self.service.update(data[self.opts.idField],data)
                                 .then(function(result){})
                                 .catch(function(error){
-                                    console.error('FeatherClientMixin ' + self.eventKeyEditSave, error);
+                                    RiotControl.trigger(
+                                        'notification',
+                                        error.errorType + ' ' + self.eventKeyEditSave,
+                                        'error',
+                                        error.message
+                                    );
+
                                 });
 
                 });
@@ -319,11 +331,18 @@
                     if(data == false) {
                         return false;
                     }
-
+                    delete data.id || data._id;
+                    console.log('datadatadatadatadata',data)
                     self.service.create(data)
                                 .then(function(result){})
                                 .catch(function(error){
-                                    console.error('FeatherClientMixin ' + self.eventKeyCreateSave, error);
+                                    RiotControl.trigger(
+                                        'notification',
+                                        error.errorType + ' ' + self.eventKeyCreateSave,
+                                        'error',
+                                        error.message
+                                    );
+
                                 });
                 });
 
