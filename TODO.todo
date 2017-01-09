@@ -19,6 +19,7 @@ Views:
 Cleanups:
   ☐ datatables
   ☐ json-editor
-
+Add Plugin Demos:
+  ☐ https://github.com/jiren/StreamTable.js/blob/master/stream_table.js
 
   https://github.com/joshfire/jsonform/tree/master/playground#readme
