@@ -161,6 +161,7 @@
                 .then((result) => {
                         var order = result.data[0];
                         order.id = result.total + 100;
+                        order._id = result.total + 100;
                         self.client.service('orders')
                             .create(order)
                             .then((result) => {
