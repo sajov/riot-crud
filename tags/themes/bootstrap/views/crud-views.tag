@@ -4,9 +4,15 @@
 </raw>
 
 <crud-action-menu>
-
     <div class="btn-group">
-        <a each={action in opts.actions} if={ action.active } onclick={ click } class="btn btn-{ action.buttonClass || 'default'} btn-sm">{action.label}</a>
+        <a each={action in opts.actions} if={ action.active || opts.defaultviews[action.name]} onclick={ click } class="btn btn-{ action.buttonClass || 'default'} {dropdown-menu: action.options} btn-sm">{action.label}</a>
+
+ <!--        <a data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle" type="a" aria-expanded="false">
+            Actions <span class="caret"></span>
+         </a>
+        <ul role="menu" class="dropdown-menu">
+          <li each={option in ['Copy','CSV','Excel','Print','divider','Import']} class="{divider: option == 'divider'}"><a if={option != 'divider'} href="#">{option}</a></li>
+        </ul> -->
     </div>
 
     <script>

@@ -55,7 +55,7 @@ riot.tag2('top-menu', '<link href="/bower_components/gentelella/vendors/pnotify/
                             + '" has been <i>'
                             + event
                             + '</i>'
-                            , eventTypeMap[event]
+                            , eventTypeMap[event] || event
                             ,'id: ' + (response.id || response._id)
 
                         );

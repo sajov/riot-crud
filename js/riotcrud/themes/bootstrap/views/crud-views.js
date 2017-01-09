@@ -2,7 +2,7 @@ riot.tag2('raw', '<span></span>', '', '', function(opts) {
     this.root.innerHTML = opts.content
 });
 
-riot.tag2('crud-action-menu', '<div class="btn-group"> <a each="{action in opts.actions}" if="{action.active}" onclick="{click}" class="btn btn-{action.buttonClass || \'default\'} btn-sm">{action.label}</a> </div>', '', '', function(opts) {
+riot.tag2('crud-action-menu', '<div class="btn-group"> <a each="{action in opts.actions}" if="{action.active || opts.defaultviews[action.name]}" onclick="{click}" class="btn btn-{action.buttonClass || \'default\'} {dropdown-menu: action.options} btn-sm">{action.label}</a> </div>', '', '', function(opts) {
       this.mixin(viewActionsMixin);
       var self = this;
       console.info('order console.info(order mount,self.opts.actionMenu); mount',opts.actionMenu);

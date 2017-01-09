@@ -89,7 +89,7 @@
                             + '" has been <i>'
                             + event
                             + '</i>'
-                            , eventTypeMap[event]
+                            , eventTypeMap[event] || event
                             ,'id: ' + (response.id || response._id)
                             // , '<a class="btn btn-default btn-xs" tabindex="0" href="#'
                             // + service
