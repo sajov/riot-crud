@@ -13,7 +13,8 @@
     "json-editor": "^0.7.28",
     "datatables.net": "^1.10.12",
     "bootstrap": "^3.3.7",
-    "gentelella": "1.3.0"
+    "gentelella": "1.3.0",
+    "jsoneditor": "^5.5.11"
   },
   "ignore": [
     "**/.*",

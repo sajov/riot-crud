@@ -1,20 +1,14 @@
-<!-- jsoneditor https://github.com/josdejong/jsoneditor/blob/master/bower.json -->
-<crud-jsoneditor>
+<!-- json-editor https://github.com/jdorn/json-editor -->
 
-    <link href="/bower_components/jsoneditor/dist/jsoneditor.min.css" rel="stylesheet">
-    <style type="text/css">
-        div.jsoneditor-menu{
-            /*color: rgb(115,135,156);
-            background: white!important;*/
-        }
-    </style>
+<crud-json-editor>
+
     <div>
         <div class="page-title">
-          <div class="title_left">
+         <!--  <div class="title_left">
             <h3>Product <small>Edit</small></h3>
           </div>
-
-          <div class="title_right">
+ -->
+          <!-- <div class="title_right">
             <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
               <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search for...">
@@ -23,8 +17,7 @@
                 </span>
               </div>
             </div>
-          </div>
-        </div>
+          </div> -->
         </div>
 
 
@@ -72,29 +65,31 @@
         </div>
         <div class="clearfix"></div>
     </div>
+
+    <link rel="stylesheet" href="http://cdn.jsdelivr.net/select2/3.4.8/select2.css">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css">
+
+
     <script>
         var self = this;
         self.mixin(FeatherClientMixin);
 
         self.dependencies = [
-                '/bower_components/jsoneditor/dist/jsoneditor.min.js'
+                '/bower_components/json-editor/dist/jsoneditor.min.js',
+                'http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js'
         ];
 
         // this can move into serviceMixins
         this.refresh = (opts) => {
             self.opts = opts;
             self.update();
-            if(self.opts.query.id) {
-                self.get(self.opts.query.id);
-            }
+            self.get(self.opts.query.id);
         },
 
         this.on('mount', function() {
-            RiotCrudController.loadDependencies(self.dependencies,'crud-jsoneditor', function (argument) {
-                self.initPlugins();
-                if(self.opts.query.id) {
-                    self.get(self.opts.query.id)
-                }
+            RiotCrudController.loadDependencies(self.dependencies,'crud-json-editor', function (argument) {
+                self.initJSONEditor();
+                self.get(self.opts.query.id)
             });
         });
 
@@ -104,13 +99,13 @@
 
                 self.service.get(id).then(function(result){
                     if(typeof self.editor == 'undefined') {
-                      self.initPlugins();
+                      self.initJSONEditor();
                     }
                     self.data = result;
                     self.editor.setValue(self.data);
 
                 }).catch(function(error){
-                  console.error('Error crud-jsoneditor get', error);
+                  console.error('Error crud-json-editor get', error);
                 });
             } else {
                 self.data = {};
@@ -118,28 +113,44 @@
             }
         }
 
-        self.initPlugins = function(data) {
+        self.initJSONEditor = function(data) {
 
             self.opts.data = data;
 
-            // create the editor
-            var container = document.getElementById("jsoneditor");
-            var options = {};
-            var editor = new JSONEditor(container, options);
+            JSONEditor.defaults.options.theme = "bootstrap3";
+            // JSONEditor.defaults.options.theme = "foundation6";
+            JSONEditor.plugins.selectize.enable = true;
+            JSONEditor.defaults.iconlib = 'fontawesome4';
+            JSONEditor.plugins.selectize.enable = true;
+            JSONEditor.plugins.select2.width = "300px";
+            // JSONEditor.plugins.sceditor.emoticonsEnabled = true;
+            // JSONEditor.plugins.epiceditor.basePath = 'epiceditor';
 
-            // set json
-            var json = {
-                "Array": [1, 2, 3],
-                "Boolean": true,
-                "Null": null,
-                "Number": 123,
-                "Object": {"a": "b", "c": "d"},
-                "String": "Hello World"
-            };
-            editor.set(json);
+            JSONEditor.defaults.disable_collapse = true;
+            JSONEditor.defaults.disable_edit_json = true;
+            JSONEditor.defaults.disable_properties = true;
+            JSONEditor.defaults.no_additional_properties = true;
 
-            // get json
-            var json = editor.get();
+            self.editor = new JSONEditor(document.getElementById('jsoneditor'),
+                {
+                    schema: 'http://localhost:3030/schema/product_faker.json',
+                    ajax:true,
+                    schema: self.opts.schema,
+                    theme:'bootstrap3',
+                    object_layout: 'grid',
+                    grid_columns: 10,
+                    expand_height: true,
+                    disable_edit_json: true,
+                    disable_collapse: true,
+                    disable_edit_json: true,
+                    disable_properties: true,
+                    // no_additional_properties: true,
+                    form_name_root:'root[product][name]'
+
+                }
+            );
+
+            $('[data-schemaformat="html"]').summernote();
         }
 
         self.saveJSONEditor = function(e) {
@@ -150,9 +161,9 @@
             if(validation_errors.length) {
                 console.error(JSON.stringify(validation_errors,null,2));
             } else {
-                self.service.update(json[opts.idField],json).then(function(result){
+                self.service.update(json.id,json).then(function(result){
                 }).catch(function(error){
-                  console.error('Error crud-jsoneditor savejsoneditor update', error);
+                  console.error('Error crud-json-editor savejsoneditor update', error);
                 });
             }
         }
@@ -173,5 +184,5 @@
 
     </script>
 
-</crud-jsoneditor>
+</crud-json-editor>
 
