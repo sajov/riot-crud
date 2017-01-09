@@ -177,7 +177,7 @@ $script.ready('layout', function() {
             },
             edit: {
                 tag: 'crud-jsoneditor',
-                title: 'Edit Products (json-editor demo)',
+                title: 'Edit Category (json-editor demo)',
                 target: 'div#content',
                 dependencies: [
                     riotCrudTheme + '/views/crud-jsoneditor.js'
