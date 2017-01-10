@@ -14,7 +14,8 @@
     "datatables.net": "^1.10.12",
     "bootstrap": "^3.3.7",
     "gentelella": "1.3.0",
-    "jsoneditor": "^5.5.11"
+    "jsoneditor": "^5.5.11",
+    "json-forms": "^1.5.2"
   },
   "ignore": [
     "**/.*",

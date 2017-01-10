@@ -344,6 +344,19 @@
                                 });
                 });
 
+                self.getSchema = (cb) => {
+                        //TODO: remove, use json-editor ajax mode
+                    if(self.schema && typeof self.schema === 'string') {
+                        $.ajax({
+                          url: self.schema,
+                          dataType: "json",
+                          async: false,
+                          cache: false,
+                          success: function(data){self.schema = data;cb()}
+                        });
+                    }
+                }
+
                 self.on('unmount', () => {
                     RiotControl.off(self.eventKeyDelete);
                     RiotControl.off(self.eventKeyDeleteConfirmed);

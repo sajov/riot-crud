@@ -90,7 +90,7 @@
             {todo:'add view jsonform', done: true},
             {todo:'Data upload/import', done: false},
             {todo:'add view ALPACA FORMS', done: false},
-            {todo:'add view brutusin json-forms', done: false},
+            {todo:'add view brutusin json-forms', done: true},
         ];
     </script>
 </todo-list>
@@ -121,8 +121,14 @@
                 <todo-list title="Feature List" subtitle="current and following tasks"></todo-list>
             </div>
             <div class="col-md-6 col-sm-6 col-xs-12">
-                <div id="jsoneditor"></div>
+                <div id="jsoneditor-container"></div>
                 <crud-jsoneditorNO title="Products" subtitle="(jsoneditor view demo)" query="{jsoneditorQuery}" servicname="categories" view="edit" type="inline"></crud-jsoneditorNO>
+            </div>
+        </div>
+
+         <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div id="json-forms-container"></div>
             </div>
         </div>
 
@@ -137,6 +143,7 @@
             id:1
         };
 
+
         self.dependencies = [
             riotCrudTheme + '/views/crud-jsoneditor.js', // TODO: bugfix
             '/bower_components/gentelella/vendors/iCheck/icheck.min.js',
@@ -145,7 +152,7 @@
         this.on('mount', function() {
              RiotCrudController.loadDependencies(self.dependencies,'crud-jsoneditor', function (argument) {
                 initPlugins();
-                riot.mount('#jsoneditor','crud-jsoneditor',
+                riot.mount('#jsoneditor-container','crud-jsoneditor',
                      {
                         model: 'categories',
                         service: 'categories',
@@ -161,6 +168,26 @@
                         menuGroup: 'models',
                         buttons: ['edit','delete'],
                         title: 'Categories',
+                        schema: 'http://localhost:3030/schema/category.json',
+                        type:'inline',
+                        query: {id:'1'}
+                });
+
+                riot.mount('#json-forms-container','crud-json-forms',
+                     {
+                        model: 'products',
+                        service: 'products',
+                        title: 'Products',
+                        description: 'inline products view with brutusin:json-forms',
+                        schema: 'http://localhost:3030/schema/products.json',
+                        tag: 'crud-json-editor',
+                        selection: true,
+                        view: 'edit',
+                        views: ['save'],
+                        filterable: true,
+                        menu:true,
+                        menuGroup: 'models',
+                        buttons: ['edit','delete'],
                         schema: 'http://localhost:3030/schema/category.json',
                         type:'inline',
                         query: {id:'1'}

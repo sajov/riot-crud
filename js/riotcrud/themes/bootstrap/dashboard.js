@@ -40,11 +40,11 @@ riot.tag2('todo-list', '<div class="x_panel"> <div class="x_title"> <h2>{opts.ti
             {todo:'add view jsonform', done: true},
             {todo:'Data upload/import', done: false},
             {todo:'add view ALPACA FORMS', done: false},
-            {todo:'add view brutusin json-forms', done: false},
+            {todo:'add view brutusin json-forms', done: true},
         ];
 });
 
-riot.tag2('dashboard', '<link href="/bower_components/gentelella/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/iCheck/skins/flat/green.css" rel="stylesheet"> <div class=""> <div class="row top_tiles"> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Orders" description="Lorem ipsum psdea itgum rixt." icon="fa-euro" service="orders"></top-widget> </div> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Categories" description="Lorem ipsum psdea itgum rixt." icon="fa-sitemap" service="categories"></top-widget> </div> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Products" description="Lorem ipsum psdea itgum rixt." icon="fa-caret-square-o-right" service="products"></top-widget> </div> </div> <div class="row"> <div class="col-md-6 col-sm-6 col-xs-12"> <todo-list title="Feature List" subtitle="current and following tasks"></todo-list> </div> <div class="col-md-6 col-sm-6 col-xs-12"> <div id="jsoneditor"></div> <crud-jsoneditorno title="Products" subtitle="(jsoneditor view demo)" query="{jsoneditorQuery}" servicname="categories" view="edit" type="inline"></crud-jsoneditorNO> </div> </div> </div>', '', '', function(opts) {
+riot.tag2('dashboard', '<link href="/bower_components/gentelella/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/iCheck/skins/flat/green.css" rel="stylesheet"> <div class=""> <div class="row top_tiles"> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Orders" description="Lorem ipsum psdea itgum rixt." icon="fa-euro" service="orders"></top-widget> </div> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Categories" description="Lorem ipsum psdea itgum rixt." icon="fa-sitemap" service="categories"></top-widget> </div> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Products" description="Lorem ipsum psdea itgum rixt." icon="fa-caret-square-o-right" service="products"></top-widget> </div> </div> <div class="row"> <div class="col-md-6 col-sm-6 col-xs-12"> <todo-list title="Feature List" subtitle="current and following tasks"></todo-list> </div> <div class="col-md-6 col-sm-6 col-xs-12"> <div id="jsoneditor-container"></div> <crud-jsoneditorno title="Products" subtitle="(jsoneditor view demo)" query="{jsoneditorQuery}" servicname="categories" view="edit" type="inline"></crud-jsoneditorNO> </div> </div> <div class="row"> <div class="col-md-12 col-sm-12 col-xs-12"> <div id="json-forms-container"></div> </div> </div> </div>', '', '', function(opts) {
         var self = this;
         self.mixin(FeatherClientMixin);
 
@@ -61,7 +61,7 @@ riot.tag2('dashboard', '<link href="/bower_components/gentelella/vendors/bootstr
         this.on('mount', function() {
              RiotCrudController.loadDependencies(self.dependencies,'crud-jsoneditor', function (argument) {
                 initPlugins();
-                riot.mount('#jsoneditor','crud-jsoneditor',
+                riot.mount('#jsoneditor-container','crud-jsoneditor',
                      {
                         model: 'categories',
                         service: 'categories',
@@ -77,6 +77,26 @@ riot.tag2('dashboard', '<link href="/bower_components/gentelella/vendors/bootstr
                         menuGroup: 'models',
                         buttons: ['edit','delete'],
                         title: 'Categories',
+                        schema: 'http://localhost:3030/schema/category.json',
+                        type:'inline',
+                        query: {id:'1'}
+                });
+
+                riot.mount('#json-forms-container','crud-json-forms',
+                     {
+                        model: 'products',
+                        service: 'products',
+                        title: 'Products',
+                        description: 'inline products view with brutusin:json-forms',
+                        schema: 'http://localhost:3030/schema/products.json',
+                        tag: 'crud-json-editor',
+                        selection: true,
+                        view: 'edit',
+                        views: ['save'],
+                        filterable: true,
+                        menu:true,
+                        menuGroup: 'models',
+                        buttons: ['edit','delete'],
                         schema: 'http://localhost:3030/schema/category.json',
                         type:'inline',
                         query: {id:'1'}
