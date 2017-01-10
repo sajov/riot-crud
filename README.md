@@ -55,7 +55,7 @@ npm start
 * jsoneditor edit view
 * jsone-ditor edit view
 
-```
+```javascript
 
     /**
      * Riot crud controller
