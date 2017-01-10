@@ -15,6 +15,9 @@ If you are interest in alternatives more lose coupled and less full stack go ahe
 
 > Many thanks to all these Contributors for their huge work!
 
+
+
+
 ## Getting started
 
 ### Start Demo Server
@@ -30,23 +33,27 @@ npm install
 npm start
 ```
 ## Dashboard (custom view)
-![CRUD Demo](https://github.com/sajov/riot-crud/blob/develop/docs/crud1.png "Dashboard")
+![CRUD Demo](https://github.com/sajov/riot-crud/blob/master/docs/crud1.png "Dashboard")
 ## List view (datatables)
-![CRUD Demo](https://github.com/sajov/riot-crud/blob/develop/docs/crud2.png "List view Datatables")
+![CRUD Demo](https://github.com/sajov/riot-crud/blob/master/docs/crud2.png "List view Datatables")
 ## Show view (custom view)
-![CRUD Demo](https://github.com/sajov/riot-crud/blob/develop/docs/crud3.png "Show view")
+![CRUD Demo](https://github.com/sajov/riot-crud/blob/master/docs/crud3.png "Show view")
 ## Edit view (json-editor)
-![CRUD Demo](https://github.com/sajov/riot-crud/blob/develop/docs/crud4.png "Edit view JSON-Editor")
+![CRUD Demo](https://github.com/sajov/riot-crud/blob/master/docs/crud4.png "Edit view JSON-Editor")
 
 ##Features:
 * Routing (riot routing)
 * Modular Views (riot tags)
 * Dependency loading per view (scriptjs)
 * Crud client (feathers-client socketio)
+* Socketio growl rest event notifications
 * JSON-Schema based front- and backend validation without modeling
 * CRUD Views (create, show, edit, list)
-* Demos List view based on datatables
-* Socketio growl rest event notifications
+* Datatables listing view
+* Datatables listing view
+* json-form edit view
+* jsoneditor edit view
+* jsone-ditor edit view
 
 ```
 
