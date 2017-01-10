@@ -151,6 +151,8 @@
                         schema: 'http://localhost:3030/schema/category.json',
                         tag: 'crud-json-editor',
                         selection: true,
+                        view: 'list',
+                        views: ['list'],
                         filterable: true,
                         menu:true,
                         menuGroup: 'models',

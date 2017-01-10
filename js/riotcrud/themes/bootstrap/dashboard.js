@@ -67,6 +67,8 @@ riot.tag2('dashboard', '<link href="/bower_components/gentelella/vendors/bootstr
                         schema: 'http://localhost:3030/schema/category.json',
                         tag: 'crud-json-editor',
                         selection: true,
+                        view: 'list',
+                        views: ['list'],
                         filterable: true,
                         menu:true,
                         menuGroup: 'models',

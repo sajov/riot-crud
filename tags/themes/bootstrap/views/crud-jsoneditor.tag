@@ -35,7 +35,7 @@
                         <h2>{opts.title} <small>{opts.description}</small></h2>
 
                         <div class="nav navbar-right panel_toolbox">
-                               <crud-action-menu name="{opts.name}" service="categories" endpoint="http://localhost:3030" views="{opts.views}" view="{opts.view}" query="{opts.query}"></crud-action-menu>
+                               <crud-action-menu name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}"></crud-action-menu>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
