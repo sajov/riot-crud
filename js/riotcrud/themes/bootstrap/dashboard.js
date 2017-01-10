@@ -42,17 +42,40 @@ riot.tag2('todo-list', '<div class="x_panel"> <div class="x_title"> <h2>{opts.ti
         ];
 });
 
-riot.tag2('dashboard', '<link href="/bower_components/gentelella/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/iCheck/skins/flat/green.css" rel="stylesheet"> <div class=""> <div class="row top_tiles"> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Orders" description="Lorem ipsum psdea itgum rixt." icon="fa-euro" service="orders"></top-widget> </div> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Categories" description="Lorem ipsum psdea itgum rixt." icon="fa-sitemap" service="categories"></top-widget> </div> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Products" description="Lorem ipsum psdea itgum rixt." icon="fa-caret-square-o-right" service="products"></top-widget> </div> </div> <div class="row"> <div class="col-md-6 col-sm-6 col-xs-12"> <todo-list title="Feature List" subtitle="current and following tasks"></todo-list> </div> </div> </div>', '', '', function(opts) {
+riot.tag2('dashboard', '<link href="/bower_components/gentelella/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/iCheck/skins/flat/green.css" rel="stylesheet"> <div class=""> <div class="row top_tiles"> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Orders" description="Lorem ipsum psdea itgum rixt." icon="fa-euro" service="orders"></top-widget> </div> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Categories" description="Lorem ipsum psdea itgum rixt." icon="fa-sitemap" service="categories"></top-widget> </div> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Products" description="Lorem ipsum psdea itgum rixt." icon="fa-caret-square-o-right" service="products"></top-widget> </div> </div> <div class="row"> <div class="col-md-6 col-sm-6 col-xs-12"> <todo-list title="Feature List" subtitle="current and following tasks"></todo-list> </div> <div class="col-md-6 col-sm-6 col-xs-12"> <div id="jsoneditor"></div> <crud-jsoneditorno title="Products" subtitle="(jsoneditor view demo)" query="{jsoneditorQuery}" servicname="categories" view="edit" type="inline"></crud-jsoneditorNO> </div> </div> </div>', '', '', function(opts) {
         var self = this;
         self.mixin(FeatherClientMixin);
 
+        self.jsoneditorQuery = {
+
+            id:1
+        };
+
         self.dependencies = [
+            riotCrudTheme + '/views/crud-jsoneditor.js',
             '/bower_components/gentelella/vendors/iCheck/icheck.min.js',
         ];
 
         this.on('mount', function() {
              RiotCrudController.loadDependencies(self.dependencies,'crud-jsoneditor', function (argument) {
                 initPlugins();
+                riot.mount('#jsoneditor','crud-jsoneditor',
+                     {
+                        service: 'categories',
+                        title: 'Categories',
+                        description: 'inline category view with jsoneditor',
+                        schema: 'http://localhost:3030/schema/category.json',
+                        tag: 'crud-json-editor',
+                        selection: true,
+                        filterable: true,
+                        menu:true,
+                        menuGroup: 'models',
+                        buttons: ['edit','delete'],
+                        title: 'Categories',
+                        schema: 'http://localhost:3030/schema/category.json',
+                        type:'inline',
+                        query: {id:'1'}
+                });
                 setTimeout(this.fakeOrder, 3000);
                 self.autoOrder = setInterval(this.fakeOrder, 8000);
             });

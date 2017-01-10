@@ -34,7 +34,7 @@ $script.ready('layout', function() {
             title: '<i class="fa fa-home"></i>Dashboard',
             menu: true,
             route: '/dashboard',
-            dependencies: [riotCrudTheme + '/dashboard.js'],
+            dependencies: [riotCrudTheme + '/dashboard.js',riotCrudTheme + '/views/crud-jsoneditor.js'],
             fn: function(id, action) {
                 riot.mount('#content', 'dashboard');
             }
