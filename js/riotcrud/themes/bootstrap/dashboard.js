@@ -41,6 +41,7 @@ riot.tag2('todo-list', '<div class="x_panel"> <div class="x_title"> <h2>{opts.ti
             {todo:'Data upload/import', done: false},
             {todo:'add view ALPACA FORMS', done: false},
             {todo:'add view brutusin json-forms', done: true},
+            {todo:'add view X-editable', done: false},
         ];
 });
 

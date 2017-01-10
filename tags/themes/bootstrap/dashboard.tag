@@ -91,6 +91,7 @@
             {todo:'Data upload/import', done: false},
             {todo:'add view ALPACA FORMS', done: false},
             {todo:'add view brutusin json-forms', done: true},
+            {todo:'add view X-editable', done: false},
         ];
     </script>
 </todo-list>
