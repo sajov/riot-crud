@@ -87,8 +87,10 @@
             {todo:'add view Datatables', done: true},
             {todo:'add view Json Editor', done: true},
             {todo:'add view Steamtables', done: false},
-            {todo:'add view jsonform', done: false},
+            {todo:'add view jsonform', done: true},
             {todo:'Data upload/import', done: false},
+            {todo:'add view ALPACA FORMS', done: false},
+            {todo:'add view brutusin json-forms', done: false},
         ];
     </script>
 </todo-list>
@@ -145,14 +147,15 @@
                 initPlugins();
                 riot.mount('#jsoneditor','crud-jsoneditor',
                      {
+                        model: 'categories',
                         service: 'categories',
                         title: 'Categories',
                         description: 'inline category view with jsoneditor',
                         schema: 'http://localhost:3030/schema/category.json',
                         tag: 'crud-json-editor',
                         selection: true,
-                        view: 'list',
-                        views: ['list'],
+                        view: 'edit',
+                        views: ['save'],
                         filterable: true,
                         menu:true,
                         menuGroup: 'models',
