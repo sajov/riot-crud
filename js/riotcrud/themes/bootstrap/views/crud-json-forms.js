@@ -162,7 +162,8 @@ riot.tag2('crud-json-forms', '<link href="/bower_components/json-forms/dist/css/
                                           "bird",
                                           "reptile",
                                           "other"
-                                        ]
+                                        ],
+                                        "format": "color"
                                       },
                                       "material": {
                                         "type": "string"

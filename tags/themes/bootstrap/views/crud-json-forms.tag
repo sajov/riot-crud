@@ -212,7 +212,8 @@
                                           "bird",
                                           "reptile",
                                           "other"
-                                        ]
+                                        ],
+                                        "format": "color"
                                       },
                                       "material": {
                                         "type": "string"

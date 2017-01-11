@@ -149,53 +149,15 @@
             '/bower_components/gentelella/vendors/iCheck/icheck.min.js',
         ];
 
+
         this.on('mount', function() {
              RiotCrudController.loadDependencies(self.dependencies,'crud-jsoneditor', function (argument) {
                 initPlugins();
-                riot.mount('#jsoneditor-container','crud-jsoneditor',
-                     {
-                        model: 'categories',
-                        idField: '_id',
-                        service: 'categories',
-                        title: 'Categories',
-                        description: 'inline category view with jsoneditor',
-                        schema: 'http://localhost:3030/schema/category.json',
-                        tag: 'crud-json-editor',
-                        selection: true,
-                        view: 'edit',
-                        views: ['save'],
-                        filterable: true,
-                        menu:true,
-                        actionMenu: true,
-                        menuGroup: 'models',
-                        buttons: ['save','list'],
-                        title: 'Categories',
-                        schema: 'http://localhost:3030/schema/category.json',
-                        type:'inline',
-                        query: {id:'1'}
-                });
+                initJsonForms();
+                initJsonEditor();
 
-                riot.mount('#json-forms-container','crud-json-forms',
-                     {
-                        model: 'products',
-                        idField: '_id',
-                        service: 'products',
-                        title: 'Products',
-                        description: 'inline products view with brutusin:json-forms',
-                        schema: 'http://localhost:3030/schema/products.json',
-                        tag: 'crud-json-editor',
-                        selection: true,
-                        view: 'edit',
-                        views: ['save'],
-                        filterable: true,
-                        menu:true,
-                        actionMenu: true,
-                        menuGroup: 'models',
-                        buttons: ['save','list'],
-                        schema: 'http://localhost:3030/schema/category.json',
-                        type:'inline',
-                        query: {id:'1'}
-                });
+
+
                 setTimeout(this.fakeOrder, 3000);
                 self.autoOrder = setInterval(this.fakeOrder, 8000);
             });
@@ -206,6 +168,65 @@
         this.on('before-unmount', function() {
             clearTimeout(self.autoOrder);
         });
+
+        initJsonEditor = () => {
+            self.client.service('categories')
+                .find({query:{$sort:{_id:-1},$limit:1}})
+                .then((result) => {
+                    riot.mount('#jsoneditor-container','crud-jsoneditor',
+                         {
+                            model: 'categories',
+                            idField: '_id',
+                            service: 'categories',
+                            title: 'Categories',
+                            description: 'inline category view with jsoneditor',
+                            schema: 'http://localhost:3030/schema/category.json',
+                            tag: 'crud-json-editor',
+                            selection: true,
+                            view: 'edit',
+                            views: ['save'],
+                            filterable: true,
+                            menu:true,
+                            actionMenu: true,
+                            menuGroup: 'models',
+                            // buttons: ['create','save','list'],
+                            title: 'Categories',
+                            schema: 'http://localhost:3030/schema/category.json',
+                            type:'inline',
+                            query: {id:'10'}
+                    });
+                })
+                .catch((error) => {});
+        }
+
+        initJsonForms = () => {
+            self.client.service('products')
+                .find({query:{$sort:{_id:-1},$limit:1}})
+                .then((result) => {
+                        riot.mount('#json-forms-container','crud-json-forms',
+                         {
+                            model: 'products',
+                            idField: '_id',
+                            service: 'products',
+                            title: 'Products',
+                            description: 'inline products view with brutusin:json-forms',
+                            schema: 'http://localhost:3030/schema/products.json',
+                            tag: 'crud-json-editor',
+                            selection: true,
+                            view: 'edit',
+                            views: ['save'],
+                            filterable: true,
+                            menu:true,
+                            actionMenu: true,
+                            menuGroup: 'models',
+                            // buttons: ['create','save','list'],
+                            schema: 'http://localhost:3030/schema/category.json',
+                            type:'inline',
+                            query: {id:result.data[0]._id}
+                    });
+                })
+                .catch((error) => {});
+        }
 
         initPlugins = () => {
             // iCheck

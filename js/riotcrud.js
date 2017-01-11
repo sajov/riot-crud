@@ -445,9 +445,8 @@
 
                     if(self.opts.buttons && self.opts.buttons.indexOf(action.name) === -1) {
                         action.active = false;
-                    } else {
-                        action.active = true;
                     }
+
                     return action;
                 });
             })
