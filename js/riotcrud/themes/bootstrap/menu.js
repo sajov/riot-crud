@@ -20,51 +20,43 @@ riot.tag2('modal-delete-confirmation', '<div id="deleteConfirmation" class="moda
 riot.tag2('top-menu', '<link href="/bower_components/gentelella/vendors/pnotify/dist/pnotify.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/pnotify/dist/pnotify.buttons.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/pnotify/dist/pnotify.nonblock.css" rel="stylesheet"> <modal-delete-confirmation></modal-delete-confirmation>', '', '', function(opts) {
         var self = this;
         self.mixin(FeatherClientMixin);
+        RiotCrudController.loadDependencies(
+            [
+                '/bower_components/gentelella/vendors/pnotify/dist/pnotify.js',
+                '/bower_components/gentelella/vendors/pnotify/dist/pnotify.buttons.js',
+                '/bower_components/gentelella/vendors/pnotify/dist/pnotify.nonblock.js',
+            ],
+            'top-menu',
+            function (argument) {
+
+                var services = Object.keys(self.opts.services);
+
+                for(key in services) {
+
+                    var service = services[key];
+
+                    var events = self.opts.services[service];
+
+                    for(event in events) {
+                        var event = events[event];
+                        self.event(service, event, function(service, event,response){
+                            var eventTypeMap = {'created':'info', 'updated':'info','removed':'success'};
+                            self.notify(
+                                'Service "' + service + '" has been <i>' + event + '</i>'
+                                , eventTypeMap[event] || event
+                                ,'id: ' + (response.id || response._id)
+                            );
+                        })
+                    }
+                }
+            }
+        );
 
         RiotControl.on('notification', (title, type, text) => {
             this.notify(title, type, text);
         });
 
-        this.on('mount', function(event) {
-
-            RiotCrudController.loadDependencies(
-                [
-                    '/bower_components/gentelella/vendors/pnotify/dist/pnotify.js',
-                    '/bower_components/gentelella/vendors/pnotify/dist/pnotify.buttons.js',
-                    '/bower_components/gentelella/vendors/pnotify/dist/pnotify.nonblock.js',
-                ],
-                'top-menu',
-                function (argument) {
-
-                    var services = Object.keys(self.opts.services);
-
-                    for(key in services) {
-
-                        var service = services[key];
-
-                        var events = self.opts.services[service];
-
-                        for(event in events) {
-                            var event = events[event];
-                            self.event(service, event, function(service, event,response){
-                                var eventTypeMap = {'created':'info', 'updated':'info','removed':'success'};
-                                self.notify(
-                                    'Service "'
-                                    + service
-                                    + '" has been <i>'
-                                    + event
-                                    + '</i>'
-                                    , eventTypeMap[event] || event
-                                    ,'id: ' + (response.id || response._id)
-
-                                );
-                            })
-                        }
-                    }
-                }
-            );
-
-        });
+        this.on('mount', function(event) {});
 
         this.event = function(service, event, cb) {
             self[service] = self.client.service(service);
@@ -83,7 +75,7 @@ riot.tag2('top-menu', '<link href="/bower_components/gentelella/vendors/pnotify/
             var stack_bar_bottom = {"dir1": "up", "dir2": "right", "spacing1": 0, "spacing2": 0};
 
             var stack_bottomright = {"dir1": "up", "dir2": "left", "firstpos1": 25, "firstpos2": 25};
-
+            if(typeof PNotify == 'function')
             new PNotify({
                   delay: 3000,
                   title: title,
