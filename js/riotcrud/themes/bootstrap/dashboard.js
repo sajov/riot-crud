@@ -30,18 +30,18 @@ riot.tag2('top-widget', '<div class="tile-stats"> <div class="icon"><i class="fa
 
 riot.tag2('todo-list', '<div class="x_panel"> <div class="x_title"> <h2>{opts.title}<small>{opts.subtitle}</small></h2> <ul class="nav navbar-right panel_toolbox"> <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li> <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a> <ul class="dropdown-menu" role="menu"> <li><a href="#">Settings 1</a> </li> <li><a href="#">Settings 2</a> </li> </ul> </li> <li><a class="close-link"><i class="fa fa-close"></i></a> </li> </ul> <div class="clearfix"></div> </div> <div class="x_content"> <div class=""> <ul class="to_do"> <li each="{data in opts.todos}" if="{key!=\'default\'}"> <p><input type="checkbox" class="flat" __checked="{data.done}"> {data.todo} </p> </li> </ul> </div> </div> </div>', '', '', function(opts) {
         opts.todos = [
-            {todo:'Routing', done: true},
-            {todo:'Feathers-Client with Socketio', done: true},
-            {todo:'add Feathers-Client with Socketio', done: true},
-            {todo:'Notifications', done: true},
-            {todo:'add view Datatables', done: true},
-            {todo:'add view Json Editor', done: true},
+            {todo:'Routing (http://riotjs.com/api/route/)', done: true},
+            {todo:'View Models (http://riotjs.com/)', done: true},
+            {todo:'Feathers-Client https://docs.feathersjs.com/clients/readme.html', done: true},
+            {todo:'add view Datatables (https://datatables.net/)', done: true},
+            {todo:'add view Json Editor (https://github.com/jdorn/json-editor)', done: true},
+            {todo:'add view JSON Form (https://github.com/joshfire/jsonform)', done: true},
+            {todo:'Notifications ', done: true},
             {todo:'add view Steamtables', done: false},
-            {todo:'add view jsonform', done: true},
             {todo:'Data upload/import', done: false},
-            {todo:'add view ALPACA FORMS', done: false},
-            {todo:'add view brutusin json-forms', done: true},
-            {todo:'add view X-editable', done: false},
+            {todo:'add view ALPACA FORMS (http://www.alpacajs.org/)', done: false},
+            {todo:'add view brutusin json-forms (json-forms https://github.com/brutusin/json-forms)', done: true},
+            {todo:'add view X-editable (https://vitalets.github.io/x-editable/)', done: false},
         ];
 });
 
@@ -50,7 +50,6 @@ riot.tag2('dashboard', '<link href="/bower_components/gentelella/vendors/bootstr
         self.mixin(FeatherClientMixin);
 
         self.jsoneditorQuery = {
-
             id:1
         };
 
@@ -65,6 +64,7 @@ riot.tag2('dashboard', '<link href="/bower_components/gentelella/vendors/bootstr
                 riot.mount('#jsoneditor-container','crud-jsoneditor',
                      {
                         model: 'categories',
+                        idField: '_id',
                         service: 'categories',
                         title: 'Categories',
                         description: 'inline category view with jsoneditor',
@@ -75,8 +75,9 @@ riot.tag2('dashboard', '<link href="/bower_components/gentelella/vendors/bootstr
                         views: ['save'],
                         filterable: true,
                         menu:true,
+                        actionMenu: true,
                         menuGroup: 'models',
-                        buttons: ['edit','delete'],
+                        buttons: ['save'],
                         title: 'Categories',
                         schema: 'http://localhost:3030/schema/category.json',
                         type:'inline',
@@ -86,6 +87,7 @@ riot.tag2('dashboard', '<link href="/bower_components/gentelella/vendors/bootstr
                 riot.mount('#json-forms-container','crud-json-forms',
                      {
                         model: 'products',
+                        idField: '_id',
                         service: 'products',
                         title: 'Products',
                         description: 'inline products view with brutusin:json-forms',
@@ -96,14 +98,14 @@ riot.tag2('dashboard', '<link href="/bower_components/gentelella/vendors/bootstr
                         views: ['save'],
                         filterable: true,
                         menu:true,
+                        actionMenu: true,
                         menuGroup: 'models',
-                        buttons: ['edit','delete'],
+                        buttons: ['save'],
                         schema: 'http://localhost:3030/schema/category.json',
                         type:'inline',
                         query: {id:'1'}
                 });
-                setTimeout(this.fakeOrder, 3000);
-                self.autoOrder = setInterval(this.fakeOrder, 8000);
+
             });
         });
 
