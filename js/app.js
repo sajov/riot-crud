@@ -91,7 +91,7 @@ $script.ready('layout', function() {
         {
             service: 'products',
             title: 'Products',
-            description: '/products/list',
+            description: 'Views',
             schema: 'http://localhost:3030/schema/product.json',
             target: 'div#content',
             endpoint: 'http://localhost:3030',
@@ -101,6 +101,7 @@ $script.ready('layout', function() {
         {
             list: {
 
+                description: 'Listing View with datatables.net',
                 selection: true,
                 filterable: true,
                 menu:true,
@@ -161,7 +162,7 @@ $script.ready('layout', function() {
         },
         {
             list: {
-
+                description: 'Listing View with datatables.net',
                 selection: true,
                 filterable: true,
                 menu:true,
@@ -224,7 +225,7 @@ $script.ready('layout', function() {
         },
         {
             list: {
-
+                description: 'Listing View with datatables.net',
                 selection: true,
                 filterable: true,
                 menu:true,

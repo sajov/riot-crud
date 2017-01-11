@@ -119,8 +119,6 @@
             var json = self.editor.get();
         }
 
-
-
         self.getData = () => {
             return self.editor.get();
         }
