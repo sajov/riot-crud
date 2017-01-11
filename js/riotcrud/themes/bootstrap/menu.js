@@ -34,34 +34,36 @@ riot.tag2('top-menu', '<link href="/bower_components/gentelella/vendors/pnotify/
                     '/bower_components/gentelella/vendors/pnotify/dist/pnotify.nonblock.js',
                 ],
                 'top-menu',
-                function (argument) {}
+                function (argument) {
+
+                    var services = Object.keys(self.opts.services);
+
+                    for(key in services) {
+
+                        var service = services[key];
+
+                        var events = self.opts.services[service];
+
+                        for(event in events) {
+                            var event = events[event];
+                            self.event(service, event, function(service, event,response){
+                                var eventTypeMap = {'created':'info', 'updated':'info','removed':'success'};
+                                self.notify(
+                                    'Service "'
+                                    + service
+                                    + '" has been <i>'
+                                    + event
+                                    + '</i>'
+                                    , eventTypeMap[event] || event
+                                    ,'id: ' + (response.id || response._id)
+
+                                );
+                            })
+                        }
+                    }
+                }
             );
 
-            var services = Object.keys(self.opts.services);
-
-            for(key in services) {
-
-                var service = services[key];
-
-                var events = self.opts.services[service];
-
-                for(event in events) {
-                    var event = events[event];
-                    self.event(service, event, function(service, event,response){
-                        var eventTypeMap = {'created':'info', 'updated':'info','removed':'success'};
-                        self.notify(
-                            'Service "'
-                            + service
-                            + '" has been <i>'
-                            + event
-                            + '</i>'
-                            , eventTypeMap[event] || event
-                            ,'id: ' + (response.id || response._id)
-
-                        );
-                    })
-                }
-            }
         });
 
         this.event = function(service, event, cb) {

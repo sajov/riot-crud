@@ -68,38 +68,41 @@
                     '/bower_components/gentelella/vendors/pnotify/dist/pnotify.nonblock.js',
                 ],
                 'top-menu',
-                function (argument) {}
+                function (argument) {
+
+                    var services = Object.keys(self.opts.services);
+
+                    for(key in services) {
+
+                        var service = services[key];
+                        // self[service] = self.client.service(service);
+                        var events = self.opts.services[service];
+
+                        for(event in events) {
+                            var event = events[event];
+                            self.event(service, event, function(service, event,response){
+                                var eventTypeMap = {'created':'info', 'updated':'info','removed':'success'};
+                                self.notify(
+                                    'Service "'
+                                    + service
+                                    + '" has been <i>'
+                                    + event
+                                    + '</i>'
+                                    , eventTypeMap[event] || event
+                                    ,'id: ' + (response.id || response._id)
+                                    // , '<a class="btn btn-default btn-xs" tabindex="0" href="#'
+                                    // + service
+                                    // + '/view/'
+                                    // + response.id
+                                    // + '"><span> Show</span></a>' + JSON.stringify(response)
+                                );
+                            })
+                        }
+                    }
+                }
             );
 
-            var services = Object.keys(self.opts.services);
 
-            for(key in services) {
-
-                var service = services[key];
-                // self[service] = self.client.service(service);
-                var events = self.opts.services[service];
-
-                for(event in events) {
-                    var event = events[event];
-                    self.event(service, event, function(service, event,response){
-                        var eventTypeMap = {'created':'info', 'updated':'info','removed':'success'};
-                        self.notify(
-                            'Service "'
-                            + service
-                            + '" has been <i>'
-                            + event
-                            + '</i>'
-                            , eventTypeMap[event] || event
-                            ,'id: ' + (response.id || response._id)
-                            // , '<a class="btn btn-default btn-xs" tabindex="0" href="#'
-                            // + service
-                            // + '/view/'
-                            // + response.id
-                            // + '"><span> Show</span></a>' + JSON.stringify(response)
-                        );
-                    })
-                }
-            }
         });
 
         this.event = function(service, event, cb) {

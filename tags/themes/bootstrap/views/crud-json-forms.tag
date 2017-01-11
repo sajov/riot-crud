@@ -106,7 +106,8 @@
                               "title": "Product",
                               "properties": {
                                 "_id": {
-                                  "type": "string"
+                                  "type": "string",
+                                  "readonly": true
                                 },
                                 "active": {
                                   "type": "boolean"
@@ -263,6 +264,14 @@
                                 "base_color"
                               ]
                             })
+
+            Object.keys(schema.properties).map(function(objectKey, index) {
+                if(schema.required && schema.required.indexOf(objectKey) !== -1) {
+                    if(schema.properties[objectKey].type != 'boolean')
+                        schema.properties[objectKey].required = true;
+                }
+            });
+
             var BrutusinForms = brutusin["json-forms"];
             self.editor = BrutusinForms.create(schema);
 
@@ -273,8 +282,14 @@
 
 
         self.getData = () => {
-            console.log('self.editor.getData()',self.editor.getData())
-            return self.editor.getData();
+            var validation = self.editor.validate();
+            if(validation) {
+                return self.editor.getData();
+            } else {
+                console.log(self.editor.getData(),validation);
+                return false;
+            }
+
         }
 
 
