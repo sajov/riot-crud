@@ -268,7 +268,7 @@
               .configure(feathers.hooks())
               .configure(feathers.socketio(self.socket));
 
-            if(typeof self.opts.service != 'undefined') {
+            if(typeof self.opts.service != 'undefined' && self.opts.view) {
 
                 self.service = self.client.service(self.opts.service);
 
@@ -443,18 +443,21 @@
 
                     }
 
+                    if(self.opts.buttons && self.opts.buttons.indexOf(action.name) === -1) {
+                        action.active = false;
+                    } else {
+                        action.active = true;
+                    }
                     return action;
                 });
             })
 
             self.click = (e) => {
                 e.preventDefault();
-
-                var service = self.opts.name;
+                var service = self.opts.service || self.opts.name; // TODO: move name
                 var view = self.opts.view;
                 var action = e.item.action.name;
                 var viewModelKey = [service, view, action].join('_');
-
                 switch(action){
                     case 'delete':
                         RiotControl.trigger(viewModelKey+'_confirmation')
