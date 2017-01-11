@@ -120,16 +120,16 @@
         <div class="row">
             <div class="col-md-6 col-sm-6 col-xs-12">
                 <todo-list title="Feature List" subtitle="current and following tasks"></todo-list>
+                <div id="jsoneditor-container"></div>
             </div>
             <div class="col-md-6 col-sm-6 col-xs-12">
-                <div id="jsoneditor-container"></div>
-                <crud-jsoneditorNO title="Products" subtitle="(jsoneditor view demo)" query="{jsoneditorQuery}" servicname="categories" view="edit" type="inline"></crud-jsoneditorNO>
+                <div id="json-forms-container"></div>
             </div>
         </div>
 
          <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
-                <div id="json-forms-container"></div>
+
             </div>
         </div>
 
@@ -168,7 +168,7 @@
                         menu:true,
                         actionMenu: true,
                         menuGroup: 'models',
-                        buttons: ['save'],
+                        buttons: ['save','list'],
                         title: 'Categories',
                         schema: 'http://localhost:3030/schema/category.json',
                         type:'inline',
@@ -191,13 +191,13 @@
                         menu:true,
                         actionMenu: true,
                         menuGroup: 'models',
-                        buttons: ['save'],
+                        buttons: ['save','list'],
                         schema: 'http://localhost:3030/schema/category.json',
                         type:'inline',
                         query: {id:'1'}
                 });
-                // setTimeout(this.fakeOrder, 3000);
-                // self.autoOrder = setInterval(this.fakeOrder, 8000);
+                setTimeout(this.fakeOrder, 3000);
+                self.autoOrder = setInterval(this.fakeOrder, 8000);
             });
         });
 
