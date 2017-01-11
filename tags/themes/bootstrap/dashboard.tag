@@ -80,18 +80,18 @@
 
     <script>
         opts.todos = [
-            {todo:'Routing', done: true},
-            {todo:'Feathers-Client with Socketio', done: true},
-            {todo:'add Feathers-Client with Socketio', done: true},
-            {todo:'Notifications', done: true},
-            {todo:'add view Datatables', done: true},
-            {todo:'add view Json Editor', done: true},
+            {todo:'Routing (http://riotjs.com/api/route/)', done: true},
+            {todo:'View Models (http://riotjs.com/)', done: true},
+            {todo:'Feathers-Client https://docs.feathersjs.com/clients/readme.html', done: true},
+            {todo:'add view Datatables (https://datatables.net/)', done: true},
+            {todo:'add view Json Editor (https://github.com/jdorn/json-editor)', done: true},
+            {todo:'add view JSON Form (https://github.com/joshfire/jsonform)', done: true},
+            {todo:'Notifications ', done: true},
             {todo:'add view Steamtables', done: false},
-            {todo:'add view jsonform', done: true},
             {todo:'Data upload/import', done: false},
-            {todo:'add view ALPACA FORMS', done: false},
-            {todo:'add view brutusin json-forms', done: true},
-            {todo:'add view X-editable', done: false},
+            {todo:'add view ALPACA FORMS (http://www.alpacajs.org/)', done: false},
+            {todo:'add view brutusin json-forms (json-forms https://github.com/brutusin/json-forms)', done: true},
+            {todo:'add view X-editable (https://vitalets.github.io/x-editable/)', done: false},
         ];
     </script>
 </todo-list>
@@ -140,7 +140,6 @@
         self.mixin(FeatherClientMixin);
 
         self.jsoneditorQuery = {
-
             id:1
         };
 
@@ -156,6 +155,7 @@
                 riot.mount('#jsoneditor-container','crud-jsoneditor',
                      {
                         model: 'categories',
+                        idField: '_id',
                         service: 'categories',
                         title: 'Categories',
                         description: 'inline category view with jsoneditor',
@@ -166,8 +166,9 @@
                         views: ['save'],
                         filterable: true,
                         menu:true,
+                        actionMenu: true,
                         menuGroup: 'models',
-                        buttons: ['edit','delete'],
+                        buttons: ['save'],
                         title: 'Categories',
                         schema: 'http://localhost:3030/schema/category.json',
                         type:'inline',
@@ -177,6 +178,7 @@
                 riot.mount('#json-forms-container','crud-json-forms',
                      {
                         model: 'products',
+                        idField: '_id',
                         service: 'products',
                         title: 'Products',
                         description: 'inline products view with brutusin:json-forms',
@@ -187,14 +189,15 @@
                         views: ['save'],
                         filterable: true,
                         menu:true,
+                        actionMenu: true,
                         menuGroup: 'models',
-                        buttons: ['edit','delete'],
+                        buttons: ['save'],
                         schema: 'http://localhost:3030/schema/category.json',
                         type:'inline',
                         query: {id:'1'}
                 });
-                setTimeout(this.fakeOrder, 3000);
-                self.autoOrder = setInterval(this.fakeOrder, 8000);
+                // setTimeout(this.fakeOrder, 3000);
+                // self.autoOrder = setInterval(this.fakeOrder, 8000);
             });
         });
 

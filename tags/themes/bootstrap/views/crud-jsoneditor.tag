@@ -35,14 +35,14 @@
                         <h2>{opts.title} <small>{opts.description}</small></h2>
 
                         <div class="nav navbar-right panel_toolbox">
-                               <crud-action-menu name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}"></crud-action-menu>
+                                <crud-action-menu if={opts.actionMenu !== false} service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}"  buttons="{opts.buttons}"></crud-action-menu>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
-
-                    <div class="x_content">
-                        <div id="jsoneditor"></div>
-                    </div>
+                        <div class="x_content">
+                            <br>
+                            <div id="jsoneditor"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -122,8 +122,7 @@
 
 
         self.getData = () => {
-
-            return false;
+            return self.editor.get();
         }
 
 

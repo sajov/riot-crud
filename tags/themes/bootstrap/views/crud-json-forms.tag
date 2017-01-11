@@ -30,7 +30,7 @@
                         <h2>{opts.title} <small>{opts.description}</small></h2>
 
                         <div class="nav navbar-right panel_toolbox">
-                               <crud-action-menu name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}"></crud-action-menu>
+                               <crud-action-menu if={opts.actionMenu !== false} service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-action-menu>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
@@ -101,168 +101,168 @@
             console.log(self.opts.schema)
 
             var schema = new Object({
-  "$schema": "http://json-schema.org/draft-04/schema#",
-  "type": "object",
-  "title": "Product",
-  "properties": {
-    "_id": {
-      "type": "string"
-    },
-    "active": {
-      "type": "boolean"
-    },
-    "sku": {
-      "type": "string"
-    },
-    "name": {
-      "type": "string"
-    },
-    "url": {
-      "type": "string"
-    },
-    "price_euro": {
-      "type": "number"
-    },
-    "price_dollar": {
-      "type": "number"
-    },
-    "image": {
-      "type": "string"
-    },
-   "images": {
-      "type": "array",
-      "format": "table",
-      "title": "Images",
-      "uniqueItems": true,
-      "items": {
-        "type": "object",
-        "title": "Image",
-        "properties": {
-          "href": {
-            "type": "string",
-            "format": "image"
-          },
-          "title": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string",
-            "options": {
-                "wysiwyg": true
-            }
-          },
-          "mediaType": {
-            "type": "string",
-            "enum": [
-              "jpg",
-              "png",
-              "git"
-            ]
-          }
-        }
-      }
-    },
-     "locales": {
-      "type": "array",
-      "format": "table",
-      "title": "locales",
-      "uniqueItems": true,
-      "items": {
-        "type": "object",
-        "title": "Locale",
-        "properties": {
-          "lang": {
-            "type": "string",
-            "enum": [
-              "DE",
-              "EN",
-              "FR",
-              "ES",
-              "IT"
-            ]
-          },
-          "title": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string",
-            "format": "html",
-            "options": {
-                "wysiwyg": true
-            }
-          }
-        }
-      }
-    },
-    "attributes": {
-      "type": "object",
-      "format": "table",
-      "title": "Attributes",
-      "uniqueItems": true,
-      "items": {
-        "type": "object",
-        "title": "Pet",
-        "properties": {
-          "color": {
-            "type": "string",
-            "enum": [
-              "red",
-              "blue",
-              "bird",
-              "reptile",
-              "other"
-            ]
-          },
-          "material": {
-            "type": "string"
-          },
-          "adjective": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "base_color": {
-     "type": "string",
-      "format": "color",
-      "title": "favorite color",
-      "default": "#ffa500"
-    },
-    "category": {
-      "type": "string",
-      "format": "html",
-          "options": {
-          "wysiwyg": true
-      }
-    },
-   "createdAt": {
-      "type": "string",
-      "format": "date"
-    },
-    "updatedAt": {
-      "type": "string",
-      "format": "date"
-    }
-  },
-  "required": [
-    "_id",
-    "sku",
-    "active",
-    "name",
-    "price_euro",
-    "price_dollar",
-    "base_color"
-  ],
-  "defaultProperties": [
-    "_id",
-    "sku",
-    "active",
-    "name",
-    "price_euro",
-    "price_dollar",
-    "base_color"
-  ]
-})
+                              "$schema": "http://json-schema.org/draft-04/schema#",
+                              "type": "object",
+                              "title": "Product",
+                              "properties": {
+                                "_id": {
+                                  "type": "string"
+                                },
+                                "active": {
+                                  "type": "boolean"
+                                },
+                                "sku": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "url": {
+                                  "type": "string"
+                                },
+                                "price_euro": {
+                                  "type": "number"
+                                },
+                                "price_dollar": {
+                                  "type": "number"
+                                },
+                                "image": {
+                                  "type": "string"
+                                },
+                               "images": {
+                                  "type": "array",
+                                  "format": "table",
+                                  "title": "Images",
+                                  "uniqueItems": true,
+                                  "items": {
+                                    "type": "object",
+                                    "title": "Image",
+                                    "properties": {
+                                      "href": {
+                                        "type": "string",
+                                        "format": "image"
+                                      },
+                                      "title": {
+                                        "type": "string"
+                                      },
+                                      "description": {
+                                        "type": "string",
+                                        "options": {
+                                            "wysiwyg": true
+                                        }
+                                      },
+                                      "mediaType": {
+                                        "type": "string",
+                                        "enum": [
+                                          "jpg",
+                                          "png",
+                                          "git"
+                                        ]
+                                      }
+                                    }
+                                  }
+                                },
+                                 "locales": {
+                                  "type": "array",
+                                  "format": "table",
+                                  "title": "locales",
+                                  "uniqueItems": true,
+                                  "items": {
+                                    "type": "object",
+                                    "title": "Locale",
+                                    "properties": {
+                                      "lang": {
+                                        "type": "string",
+                                        "enum": [
+                                          "DE",
+                                          "EN",
+                                          "FR",
+                                          "ES",
+                                          "IT"
+                                        ]
+                                      },
+                                      "title": {
+                                        "type": "string"
+                                      },
+                                      "description": {
+                                        "type": "string",
+                                        "format": "html",
+                                        "options": {
+                                            "wysiwyg": true
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "attributes": {
+                                  "type": "object",
+                                  "format": "table",
+                                  "title": "Attributes",
+                                  "uniqueItems": true,
+                                  "items": {
+                                    "type": "object",
+                                    "title": "Pet",
+                                    "properties": {
+                                      "color": {
+                                        "type": "string",
+                                        "enum": [
+                                          "red",
+                                          "blue",
+                                          "bird",
+                                          "reptile",
+                                          "other"
+                                        ]
+                                      },
+                                      "material": {
+                                        "type": "string"
+                                      },
+                                      "adjective": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                },
+                                "base_color": {
+                                 "type": "string",
+                                  "format": "color",
+                                  "title": "favorite color",
+                                  "default": "#ffa500"
+                                },
+                                "category": {
+                                  "type": "string",
+                                  "format": "html",
+                                      "options": {
+                                      "wysiwyg": true
+                                  }
+                                },
+                               "createdAt": {
+                                  "type": "string",
+                                  "format": "date"
+                                },
+                                "updatedAt": {
+                                  "type": "string",
+                                  "format": "date"
+                                }
+                              },
+                              "required": [
+                                "_id",
+                                "sku",
+                                "active",
+                                "name",
+                                "price_euro",
+                                "price_dollar",
+                                "base_color"
+                              ],
+                              "defaultProperties": [
+                                "_id",
+                                "sku",
+                                "active",
+                                "name",
+                                "price_euro",
+                                "price_dollar",
+                                "base_color"
+                              ]
+                            })
             var BrutusinForms = brutusin["json-forms"];
             self.editor = BrutusinForms.create(schema);
 
@@ -273,8 +273,8 @@
 
 
         self.getData = () => {
-
-            return false;
+            console.log('self.editor.getData()',self.editor.getData())
+            return self.editor.getData();
         }
 
 
