@@ -149,6 +149,10 @@
             '/bower_components/gentelella/vendors/iCheck/icheck.min.js',
         ];
 
+        this.refresh = (opts) => {
+            initJsonForms();
+            initJsonEditor();
+        },
 
         this.on('mount', function() {
              RiotCrudController.loadDependencies(self.dependencies,'crud-jsoneditor', function (argument) {
@@ -246,8 +250,7 @@
                 .find({query:{$sort:{id:-1},$limit:1}})
                 .then((result) => {
                         var order = result.data[0];
-                        order.id = result.total + 100;
-                        order._id = result.total + 100;
+                        order._id = (result.total + 100).toString();
                         self.client.service('orders')
                             .create(order)
                             .then((result) => {
