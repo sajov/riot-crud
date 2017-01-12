@@ -30,7 +30,12 @@
                             <form action="http://localhost:3030/datauploads"
                               class="dropzone"
                               id="my-awesome-dropzone">
-                                  <input type="text" name="user" value="sajo">
+                                <label for="model-selection">Models</label>
+                                  <select id="model-selection">
+                                      <option>Products</option>
+                                      <option>Categories</option>
+                                      <option>Orders</option>
+                                  </select>
                               </form>
                         </div>
                     </div>
@@ -56,9 +61,18 @@
 
 
         self.initPlugins = function() {
-
             // Now with Real-Time Support!
             self.client.service('datauploads').on('created', function(file){
+                console.log('Received file created event!', file);
+                // RiotControl.trigger(
+                //             'notification',
+                //             'uploaded',
+                //             'success',
+                //             'File'
+                //         );
+            });
+
+            self.client.service('datauploads').on('error', function(file){
                 console.log('Received file created event!', file);
             });
 
@@ -66,13 +80,24 @@
             Dropzone.options.myAwesomeDropzone = {
                 paramName: "uri",
                 uploadMultiple: false,
+                maxFilesize: 2000,
                 params: { foo: "bar" },
                 init: function(){
                     this.on('uploadprogress', function(file, progress){
                         console.log('progresss', progress);
+                        NProgress.set(progress)
                     });
                     this.on('sending', function(file, xhr, formData) {
                         formData.append("dyndata", 'dude');
+                    });
+                    this.on('complete', function(file) {
+                        console.log('complete', file);
+                        RiotControl.trigger(
+                            'notification',
+                            'File Upload Success',
+                            'success',
+                            'File ed21810aeff776f42cab262584abb1553c9b2323c17b7ab9fe36f379b8904d0f.m4a cerated'
+                        );
                     });
                 }
             };
