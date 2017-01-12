@@ -182,14 +182,17 @@
 
             <!-- custom routes RiotControl.addMenuGroup() -->
             <li each={key,group in opts.routes} if={key!='default'}>
-                <a>
+                <a if={group.html}>
                     <raw content="{group.html}" />
                 </a>
-                <ul class="nav child_menu">
+                <ul if={group.html} class="nav child_menu">
                     <li each={key,route in group.routes} class={ selected: state }>
                          <a href="#{ route.route }" onclick="{ routeTo }" style="" view="#{ route.route }"><raw content="{ route.title }" /></a>
                     </li>
                 </ul>
+                <a if={!group.html} each={key,route in group.routes} href="#{ route.route }" onclick="{ routeTo }" style="" view="#{ route.route }">
+                  <raw content="{ route.title }" />
+                </a>
             </li>
             <!-- end custom routes RiotControl.addMenuGroup() -->
 

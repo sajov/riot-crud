@@ -26,6 +26,7 @@ $script.ready('layout', function() {
     RiotCrudController.addMenuGroup('models','<i class="fa fa-table"></i>Models<span class="fa fa-chevron-down"></span>');
     RiotCrudController.addMenuGroup('views','<i class="fa fa-desktop"></i>Views<span class="fa fa-chevron-down"></span>');
 
+
     /**
      * Add custom view Dashboard
      */
@@ -278,6 +279,23 @@ $script.ready('layout', function() {
         }
     );
 
+    /**
+     * Add data upload from
+     */
+    RiotCrudController.addMenuGroup('last');
+    RiotCrudController.addRoute('upload',
+        {
+            title: '<i class="fa fa-upload"></i>Data upload',
+            menu: true,
+            menuGroup: 'last',
+            route: '/upload',
+            dependencies: [
+                riotCrudTheme + '/views/crud-upload.js',
+            ],
+            tag: 'crud-upload'
+        }
+    );
+console.log( RiotCrudController.getRouteMenu())
     riot.mount('side-menu','side-menu', {
         routes: RiotCrudController.getRouteMenu()
     });
