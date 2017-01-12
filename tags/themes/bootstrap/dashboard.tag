@@ -197,7 +197,7 @@
                             title: 'Categories',
                             schema: 'http://localhost:3030/schema/category.json',
                             type:'inline',
-                            query: {id:'10'}
+                            query: {id:result.data[0]._id}
                     });
                 })
                 .catch((error) => {});
