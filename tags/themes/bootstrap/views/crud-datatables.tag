@@ -127,6 +127,7 @@
                     .search( $(this).val() )
                     .draw();
             });
+
         }
 
         /**

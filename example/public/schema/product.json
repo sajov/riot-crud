@@ -154,10 +154,9 @@
   "defaultProperties": [
     "_id",
     "sku",
-    "active",
     "name",
+    "image",
     "price_euro",
-    "price_dollar",
-    "base_color"
+    "active"
   ]
 }

@@ -78,6 +78,8 @@ exports.product = function(app, count, update) {
 
       var name = faker.commerce.productName();
       var price = parseFloat(faker.commerce.price());
+      var price_euro = faker.commerce.price(10.9, 17.9, 2, '') * 1;
+      var price_dollar = faker.commerce.price(2.9, 7.9, 2, '') * 1;
 
       var prod = {
         _id: (i+1).toString(),
@@ -86,8 +88,8 @@ exports.product = function(app, count, update) {
         name: name,
         description: faker.lorem.sentences(),
         url: faker.internet.url() + '/' + faker.helpers.slugify(name),
-        price_euro: price,
-        price_dollar: price,
+        price_euro: price_euro,
+        price_dollar: price_dollar,
         image: faker.image.fashion(),
         locales: [
           {lang:'EN', title:name, description: faker.lorem.sentences()},
@@ -150,19 +152,23 @@ exports.order = function(app, count) {
     order.createdAt = dateFormat(faker.date.past());
     order.updatedAt = dateFormat(faker.date.past());
 
-    order.items = this.product(app,3, false);
-    for (var item = 0; item < order.items.length; item++) {
-      order.items[item].qty = 2;
-    }
+    order.items = this.product(app,faker.commerce.price(1, 6, 0, '') * 1, false);
+
     order.transaction = faker.helpers.createTransaction();
     order.transaction.date = dateFormat(order.transaction.date);
 
-    order.subtotal = faker.commerce.price(5.9, 7.9, 2, '') * 1;
+    // order.subtotal = faker.commerce.price(5.9, 7.9, 2, '') * 1;
+    order.subtotal = 0;
     order.taxRate = 19.00;
+    for (var item = 0; item < order.items.length; item++) {
+      order.items[item].qty = faker.commerce.price(1, 3, 0, '') * 1;
+      order.items[item].total = order.items[item].price_euro * order.items[item].qty;
+      order.subtotal += order.items[item].total;
+    }
     order.tax = faker.commerce.price(19, 19, 2, '') * 1;
     order.shipping = faker.commerce.price(5.9, 7.9, 2, '') * 1;
     order.discount = 0;
-    order.total = order.subtotal + order.tax + order.shipping;
+    order.total = parseFloat(((order.subtotal + order.shipping) * 1.19)).toFixed(2)*1;
 
     app.service('orders').create(order, {}).then(function(data) {
       // console.log('Created product data', 'data');

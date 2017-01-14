@@ -4,7 +4,7 @@
   "title": "Products",
   "properties": {
     "id": {
-      "type": "number"
+      "type": "string"
     },
     "sku": {
       "type": "string"
@@ -62,5 +62,13 @@
     "colors",
     "createdAt",
     "updatedAt"
+  ],
+  "defaultProperties": [
+    "_id",
+    "sku",
+    "name",
+    "image",
+    "price_euro",
+    "active"
   ]
 }

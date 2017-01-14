@@ -37,6 +37,7 @@ riot.tag2('crud-datatables', '<link href="https://cdn.datatables.net/v/bs/dt-1.1
                     .search( $(this).val() )
                     .draw();
             });
+
         }
 
         self.getDatatableConfig = function() {

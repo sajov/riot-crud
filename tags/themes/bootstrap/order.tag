@@ -1,4 +1,57 @@
+<modal-dialog>
+
+    <div id="modal-dialog" class="modal fade bs-example-modal-{ opts.size || 'lg'}" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-{ opts.size || 'lg'}">
+        <div class="modal-content">
+
+          <yield/>
+
+        </div>
+      </div>
+    </div>
+
+    RiotControl.on(opts.trigger, () => {
+        $('#modal-dialog').modal('show');
+    });
+
+    confirm (e) {
+        alert('confirm')
+    }
+
+    abort (e) {
+        alert('abort')
+    }
+
+</modal-dialog>
+
 <order>
+
+    <modal-dialog trigger="order_add_item_modal" trigger-submit="crud-table-trigger-selected">
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <h4 class="modal-title" id="myModalLabel2">Add Product</h4>
+        </div>
+        <div class="modal-body">
+            <crud-table service="products" limit="3" skip="0" ups={table:'test'}>
+                    <yield to="title">
+                       search for products
+                    </yield>
+                      <yield to="after">
+                        <button type="button" class="btn btn-success" onclick={triggerData} data-trigger="product_add_items">Add</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal"  onclick={abort}>Abbort</button>
+                      </yield>
+            </crud-table>
+        </div>
+        <div class="modal-footer">
+            <!-- <button type="button" class="btn btn-default" data-dismiss="modal"  onclick={abort}>Abbort</button>
+            <button type="button" class="btn btn-warning" onclick={confirm}>Delete</button> -->
+        </div>
+
+    </modal-dialog>
+
+
+
 
     <div class="">
         <div class="page-title hidden-print">
@@ -26,7 +79,7 @@
                             <li>
                                 <crud-action-menu name="{opts.name}" views="{opts.views}" view="{opts.view}" actionMenu="{opts.actionMenu}" query="{opts.query}" defaultviews="{save:true}"></crud-action-menu>
                             </li>
-                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                            <!-- <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
                                 <ul class="dropdown-menu" role="menu">
@@ -40,7 +93,7 @@
                             </li>
                             <li>
                                 <a class="close-link"><i class="fa fa-close"></i></a>
-                            </li>
+                            </li> -->
                         </ul>
                         <div class="clearfix"></div>
                     </div>
@@ -108,6 +161,7 @@
                                                 <th>Image</th>
                                                 <th style="width: 59%">Description</th>
                                                 <th>Qty</th>
+                                                <th>Price</th>
                                                 <th>Subtotal</th>
                                                 <th>&nbsp;</th>
                                             </tr>
@@ -119,11 +173,17 @@
                                                 <td>{item.name}</td>
                                                 <td>{item.description}</td>
                                                 <td>
-                                                    <input type="text" name="qty" onchange={ changeQty } value="{item.qty}" class="hidden-print" size="3">
+                                                    <input type="text" name="qty" onchange={ changeQty } value="{item.qty}" class="hidden-print text-right" size="3">
                                                     <span class="visible-print">{item.qty}</span>
                                                 </td>
                                                 <td align="right">{item.price_euro} €</td>
+                                                <td align="right">{item.total} €</td>
                                                 <td align="right"><a href="#" itemKey="{key}" onclick={ deleteItem } class="btn btn-danger btn-xs hidden-print"><i class="fa fa-trash-o"></i></a></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="8">
+                                                    <button class="btn btn-primary pull-right hidden-print" onclick={ addItemModal } >Add Product</button>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -135,7 +195,7 @@
 
                             <div class="row">
                                 <!-- accepted payments column -->
-                                <div class="col-xs-6">
+                                <div class="col-xs-9">
                                     <p class="lead">Payment Methods:</p>
                                     <img src="/bower_components/gentelella/production/images/visa.png" alt="Visa">
                                     <img src="/bower_components/gentelella/production/images/mastercard.png" alt="Mastercard">
@@ -146,30 +206,32 @@
                                     </p>
                                 </div>
                                 <!-- /.col -->
-                                <div class="col-xs-6">
+
+                                <!-- TOTALS -->
+                                <div class="col-xs-3">
                                     <p class="lead">Amount Due 2/22/2014</p>
                                     <div class="table-responsive">
                                         <table class="table">
                                              <tbody>
                                                 <tr>
                                                     <th style="width:50%">Subtotal:</th>
-                                                    <td>{opts.data.subtotal} €</td>
+                                                    <td align="right">{opts.data.subtotal} €</td>
                                                 </tr>
                                                 <tr ifNO="{opts.data.discount}">
                                                     <th style="width:50%">Discount:</th>
-                                                    <td><input type="text" onkeyup={ changeDiscount } name="discount" value="{opts.data.discount}" size="3"> €</td>
+                                                    <td align="right"><input type="text" onkeyup={ changeDiscount } name="discount" value="{opts.data.discount}" class="text-right" size="10"> €</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Tax ({opts.data.taxRate}%)</th>
-                                                    <td>{opts.data.tax} €</td>
+                                                    <td align="right">{opts.data.tax} €</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Shipping:</th>
-                                                    <td><input type="text" onkeyup={ changeShipping } name="discount" value="{opts.data.shipping}" size="3"> €</td>
+                                                    <td align="right"><input type="text" onkeyup={ changeShipping } name="discount" value="{opts.data.shipping}" class="text-right" size="10"> €</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Total:</th>
-                                                    <td>{opts.data.total} €</td>
+                                                    <td align="right">{opts.data.total} €</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -181,8 +243,8 @@
                             <!-- this row will not appear when printing -->
                             <div class="row no-print hidden-print">
                                 <div class="col-xs-12">
-                                    <button class="btn btn-default" onclick="window.print();"><i class="fa fa-print"></i> Print</button>
                                     <button class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit Payment</button>
+                                    <button class="btn btn-default pull-right" onclick="window.print();"><i class="fa fa-print"></i> Print</button>
                                     <button class="btn btn-primary pull-right" style="margin-right: 5px;"><i class="fa fa-download"></i> Generate PDF</button>
                                 </div>
                             </div>
@@ -191,6 +253,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 
     <script>
@@ -217,6 +280,7 @@
           });
         }
 
+
         self.calculate = () => {
             var subtotal = 0;
             for (key in opts.data.items) {
@@ -232,9 +296,15 @@
             for (var i = 0; i < opts.data.items.length; i++) {
                 if(opts.data.items[i][opts.idField] == e.item.item[opts.idField]) {
                    opts.data.items[i].qty = $(e.target).val() * 1;
+                   opts.data.items[i].total = opts.data.items[i].qty * opts.data.items[i].price_euro;
                 }
             }
             self.calculate();
+        }
+
+        addItemModal () {
+            // RiotControl.trigger('modal-add-item-show', opts.id);
+            RiotControl.trigger('order_add_item_modal', opts.id);
         }
 
         changeDiscount (e) {
@@ -259,6 +329,10 @@
                 }
             }
             self.calculate();
+        }
+
+        confirm (e) {
+            alert('confirm')
         }
     </script>
 </order>
