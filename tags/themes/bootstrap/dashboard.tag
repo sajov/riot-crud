@@ -143,7 +143,6 @@
             id:1
         };
 
-
         self.dependencies = [
             riotCrudTheme + '/views/crud-jsoneditor.js', // TODO: bugfix
             '/bower_components/gentelella/vendors/iCheck/icheck.min.js',
@@ -159,15 +158,10 @@
                 initPlugins();
                 initJsonForms();
                 initJsonEditor();
-
-
-
                 setTimeout(this.fakeOrder, 3000);
                 self.autoOrder = setInterval(this.fakeOrder, 8000);
             });
         });
-
-
 
         this.on('before-unmount', function() {
             clearTimeout(self.autoOrder);

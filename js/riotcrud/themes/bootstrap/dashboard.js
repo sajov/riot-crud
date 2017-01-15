@@ -68,7 +68,6 @@ riot.tag2('dashboard', '<link href="/bower_components/gentelella/vendors/bootstr
                 initPlugins();
                 initJsonForms();
                 initJsonEditor();
-
                 setTimeout(this.fakeOrder, 3000);
                 self.autoOrder = setInterval(this.fakeOrder, 8000);
             });

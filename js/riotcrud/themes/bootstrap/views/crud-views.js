@@ -8,7 +8,7 @@ riot.tag2('crud-action-menu', '<div class="btn-group"> <a each="{action in opts.
 });
 
 
-riot.tag2('crud-table', '<div> <div class="page-title"> <div class="title_left"> <h3>sdsad <small>sdadsas</small></h3> </div> <div class="title_right"> <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search"> <div class="input-group"> <input type="text" class="form-control" onkeyup="{search}" placeholder="Search for..."> <span class="input-group-btn"> <button class="btn btn-default" type="button">Go!</button> </span> </div> </div> </div> </div> <div class="clearfix"></div> <yield from="title"></yield> <div class="table-responsive"> <table id="{opts.id}" class="table table-striped jambo_table bulk_action"> <thead> <tr> <th if="{opts.selection != false}" nowrap> <input type="checkbox" id="check-all" class="flat"> </th> <th each="{colkey, colval in thead}" onclick="{sort}"> {colkey} <small if="{colval.type == \'string\'}" class="fa fa-sort-alpha-{query.$sort[colkey] ? theadSort : \'asc\'}"></small> <small if="{colval.type == \'number\'}" class="fa fa-sort-numeric-{query.$sort[colkey] ? theadSort : \'asc\'}"></small> <small if="{colval.type != \'number\' && colval.type != \'string\'}" class="fa fa-sort-amount-{query.$sort[colkey] ? theadSort : \'asc\'}"></small> </th> </tr> </thead> <tbody> <tr each="{row in data.data}"> <td if="{opts.selection != false}" class="a-center"> <input onclick="{select}" type="checkbox" class="flat" name="table_records"> </td> <td each="{colkey, colval in thead}" onclick="{selectRow}">{row[colkey]}</td> </tr> </tbody> </table> </div> <yield from="after"></yield> </div>', 'th { white-space: nowrap }', '', function(opts) {
+riot.tag2('crud-table', '<div> <div class="table-responsive"> <table id="{opts.id}" class="table table-striped jambo_table bulk_action"> <thead> <tr> <th if="{opts.selection != false}" nowrap> <i onclick="{selectall}" data-value="{selection.length ==  data.data.length ? 1 : 0}" class="fa fa-{\'check-\': selection.length ==  data.data.length}square selectbox"></i> </th> <th each="{colkey, colval in thead}" onclick="{sort}"> {colkey} <small if="{colval.type == \'string\'}" class="fa fa-sort-alpha-{query.$sort[colkey] ? theadSort : \'asc\'}"></small> <small if="{colval.type == \'number\'}" class="fa fa-sort-numeric-{query.$sort[colkey] ? theadSort : \'asc\'}"></small> <small if="{colval.type != \'number\' && colval.type != \'string\'}" class="fa fa-sort-amount-{query.$sort[colkey] ? theadSort : \'asc\'}"></small> </th> </tr> </thead> <tbody> <tr each="{row in data.data}" onclick="{selectrow}" class="{\'selected\': selection.indexOf(row._id) != -1}"> <td if="{opts.selection != false}" class="a-center"> <i data-value="{row._id}" class="fa fa-{\'check-\': selection.indexOf(row._id) != -1}square selectbox"></i> </td> <td each="{colkey, colval in thead}" onclick="{selectRow}">{row[colkey]}</td> </tr> </tbody> </table> </div> <yield></yield> <div class="clearfix"></div> </div>', 'th { white-space: nowrap } .selectbox { font-size: 150%; }', '', function(opts) {
 
 		var self = this;
 		self.opts.view = 'list';
@@ -23,16 +23,29 @@ riot.tag2('crud-table', '<div> <div class="page-title"> <div class="title_left">
 		this.mixin(FeatherClientMixin);
 
 		self.on('mount', () => {
-			console.info('tabel', self.service);
+			console.info('CRUD-TABLE self', self);
+			console.info('CRUD-TABLE service', self.service);
 			if(self.opts.service) {
 				self.initTable();
 			}
-
 		});
 
-		this.triggerData = function (e) {
-			console.log(e.target.getAttribute('data-trigger'))
+		self.on('*', (e) => {
+			console.info('CRUD-TABLE event:', e);
+		})
 
+		self.on('updated', () => {
+
+		})
+
+		this.triggerData = function (e) {
+			RiotControl.trigger(e.target.getAttribute('data-trigger'),
+				self.data.data.reduce(function(prev, curr) {
+					if (self.selection.indexOf(curr._id) === -1)
+						return prev;
+					return prev.concat(curr);
+				}, [])
+			)
 		}.bind(this)
 
 	    this.search = function (e) {
@@ -49,7 +62,7 @@ riot.tag2('crud-table', '<div> <div class="page-title"> <div class="title_left">
             } else {
             	delete self.query.$or;
             }
-            self.initTable();
+            self.getData();
 	    }.bind(this)
 
 	    this.sort = function (e) {
@@ -62,16 +75,31 @@ riot.tag2('crud-table', '<div> <div class="page-title"> <div class="title_left">
 	    	}
 	    	self.theadSort = self.query.$sort[e.item.colkey] == 1 ? 'asc' : 'desc';
 
-            self.initTable();
+            self.getData();
 	    }.bind(this)
 
-	    this.select = function (e) {
-	    	console.log(e.item);
-	    }.bind(this)
+		selectall = (e) => {
+			if (self.selection.length == self.data.data.length) {
+				self.selection = [];
+			} else {
+				self.selection = self.data.data.reduce(function(prev, curr) {
+				  return prev.concat(curr._id);
+				}, []);
 
-	    this.selectRow = function (e) {
-	    	console.log(e.item);
-	    }.bind(this)
+			}
+
+		}
+
+		selectrow = (e) => {
+			let value = e.item.row._id;
+			let index = self.selection.indexOf(value);
+			if (index !== -1) {
+				self.selection.splice(index,1);
+			} else{
+				self.selection.push(value)
+			}
+
+		}
 
 	    this.initSchema = function () {
 	    	let schema = {};
@@ -117,22 +145,18 @@ riot.tag2('crud-table', '<div> <div class="page-title"> <div class="title_left">
 	    }.bind(this)
 
 	    this.initTable = function () {
-
 	    	self.getRemoteSchema(
 				'http://localhost:3030/schema/product.json',
 				self.getData
 			);
-
 	    }.bind(this)
 
 	    this.getData = function () {
-
-	    	console.log('self.query',self.query);
 	        self.service.find({query:self.query}).then((result) => {
-	             self.data = result;
-	             console.info('Result', result);
-	             console.info('Result', self.data.data[0]);
-	             self.update();
+	        	self.selection = [];
+	            self.data = result;
+	    		console.log('get data',self.query, result);
+	    		self.update();
 	        }).catch((error) => {
 	          console.error('Error', error);
 	        });

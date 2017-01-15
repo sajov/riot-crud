@@ -31,34 +31,20 @@
 		th {
 			white-space: nowrap
 		}
+		.selectbox {
+			font-size: 150%;
+		}
 	</style>
 
 	<div>
-		<div class="page-title">
-	      <div class="title_left">
-	        <h3>sdsad <small>sdadsas</small></h3>
-	      </div>
-
-	      <div class="title_right">
-	        <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-	          <div class="input-group">
-	            <input type="text" class="form-control" onkeyup={ search } placeholder="Search for...">
-	            <span class="input-group-btn">
-	              <button class="btn btn-default" type="button">Go!</button>
-	            </span>
-	          </div>
-	        </div>
-	      </div>
-	    </div>
-	    <div class="clearfix"></div>
-	    <yield from="title"/>
+	    <!-- <yield from="title"/> -->
+	    <!-- <yield from="buttons"/> -->
 		<div class="table-responsive">
-
 			<table id={ opts.id } class="table table-striped jambo_table bulk_action">
 			    <thead>
 			      <tr >
 			      	<th if={ opts.selection != false } nowrap>
-						<input type="checkbox" id="check-all" class="flat">
+			      		<i onclick={ selectall } data-value="{ selection.length ==  data.data.length ? 1 : 0 }" class="fa fa-{'check-': selection.length ==  data.data.length}square selectbox"></i>
 					</th>
 			        <!-- <th each="{ colkey, colval in data.data[0] }" onclick={ sort } >{ colkey }</th> -->
 			        <th each="{ colkey, colval in thead }" onclick={ sort }>
@@ -70,9 +56,9 @@
 			      </tr>
 			    </thead>
 			    <tbody>
-			      <tr each="{ row in data.data }" >
+			      <tr each="{ row in data.data }"  onclick={ selectrow } class="{ 'selected': selection.indexOf(row._id) != -1 }">
 			      	<td if={ opts.selection != false } class="a-center">
-							<input  onclick={select} type="checkbox" class="flat" name="table_records">
+			      			<i data-value="{ row._id }" class="fa fa-{'check-': selection.indexOf(row._id) != -1 }square selectbox"></i>
 					</td>
 			        <!-- <td each="{ colkey, colval in row }" if={ thead[colkey] } onclick={ selectRow } >{ colval }</td> -->
 			        <td each="{ colkey, colval in thead }" onclick={ selectRow } >{ row[colkey] }</td>
@@ -80,7 +66,9 @@
 			    </tbody>
 		    </table>
 		</div>
-		<yield from="after"/>
+		<!-- <yield from="buttons"/> -->
+		<yield></yield>
+		<div class="clearfix"></div>
 	</div>
 
 	<script>
@@ -93,24 +81,37 @@
             $sort: {}
 		};
 
+
+
 		self.selection = [];
 
 		this.mixin(FeatherClientMixin);
 
 		self.on('mount', () => {
-			console.info('tabel', self.service);
+			console.info('CRUD-TABLE self', self);
+			console.info('CRUD-TABLE service', self.service);
 			if(self.opts.service) {
 				self.initTable();
 			}
-
 		});
 
+		self.on('*', (e) => {
+			console.info('CRUD-TABLE event:', e);
+		})
+
+		self.on('updated', () => {
+
+		})
+
 		triggerData (e) {
-			console.log(e.target.getAttribute('data-trigger'))
-			// RiotControl.trigger(e.)
+			RiotControl.trigger(e.target.getAttribute('data-trigger'),
+				self.data.data.reduce(function(prev, curr) {
+					if (self.selection.indexOf(curr._id) === -1)
+						return prev;
+					return prev.concat(curr);
+				}, [])
+			)
 		}
-
-
 
 	    search (e) {
              /* search */
@@ -126,7 +127,7 @@
             } else {
             	delete self.query.$or;
             }
-            self.initTable();
+            self.getData();
 	    }
 
 	    sort (e) {
@@ -139,16 +140,31 @@
 	    	}
 	    	self.theadSort = self.query.$sort[e.item.colkey] == 1 ? 'asc' : 'desc';
 
-            self.initTable();
+            self.getData();
 	    }
 
-	    select (e) {
-	    	console.log(e.item);
-	    }
+		selectall = (e) => {
+			if (self.selection.length == self.data.data.length) {
+				self.selection = [];
+			} else {
+				self.selection = self.data.data.reduce(function(prev, curr) {
+				  return prev.concat(curr._id);
+				}, []);
 
-	    selectRow (e) {
-	    	console.log(e.item);
-	    }
+			}
+			// self.update();
+		}
+
+		selectrow = (e) => {
+			let value = e.item.row._id;
+			let index = self.selection.indexOf(value);
+			if (index !== -1) {
+				self.selection.splice(index,1);
+			} else{
+				self.selection.push(value)
+			}
+			// self.update();
+		}
 
 	    initSchema () {
 	    	let schema = {};
@@ -195,22 +211,18 @@
 	    }
 
 	    initTable () {
-
 	    	self.getRemoteSchema(
 				'http://localhost:3030/schema/product.json',
 				self.getData
 			);
-
 	    }
 
 	    getData () {
-
-	    	console.log('self.query',self.query);
 	        self.service.find({query:self.query}).then((result) => {
-	             self.data = result;
-	             console.info('Result', result);
-	             console.info('Result', self.data.data[0]);
-	             self.update();
+	        	self.selection = [];
+	            self.data = result;
+	    		console.log('get data',self.query, result);
+	    		self.update();
 	        }).catch((error) => {
 	          console.error('Error', error);
 	        });

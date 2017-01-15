@@ -11,16 +11,8 @@
     </div>
 
     RiotControl.on(opts.trigger, () => {
-        $('#modal-dialog').modal('show');
+        $('#modal-dialog').modal('toggle');
     });
-
-    confirm (e) {
-        alert('confirm')
-    }
-
-    abort (e) {
-        alert('abort')
-    }
 
 </modal-dialog>
 
@@ -33,14 +25,29 @@
             <h4 class="modal-title" id="myModalLabel2">Add Product</h4>
         </div>
         <div class="modal-body">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>{title} <small>{description}</small></h3>
+              </div>
+
+              <div class="title_right">
+                <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                  <div class="input-group">
+                    <input type="text" class="form-control" onkeyup={ search } placeholder="Search for...">
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="button">Go!</button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+
             <crud-table service="products" limit="3" skip="0" ups={table:'test'}>
-                    <yield to="title">
-                       search for products
-                    </yield>
-                      <yield to="after">
+                    <yield class="pull-right">
                         <button type="button" class="btn btn-success" onclick={triggerData} data-trigger="product_add_items">Add</button>
                         <button type="button" class="btn btn-default" data-dismiss="modal"  onclick={abort}>Abbort</button>
-                      </yield>
+                    </yield>
             </crud-table>
         </div>
         <div class="modal-footer">
@@ -49,9 +56,6 @@
         </div>
 
     </modal-dialog>
-
-
-
 
     <div class="">
         <div class="page-title hidden-print">
@@ -256,14 +260,27 @@
 
     </div>
 
+    <link href="/bower_components/gentelella/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+
     <script>
         var self = this;
         self.mixin(FeatherClientMixin);
 
+        self.dependencies = [
+            '/bower_components/gentelella/vendors/iCheck/icheck.min.js'
+        ];
+
+        RiotControl.on('product_add_items', (items) => {
+            if(items)
+                self.addItems(items);
+        });
+
         self.on('mount', () => {
-            console.info('order mount',self.opts.actionMenu);
-            if(self.opts.query.id)
-                self.initOrder(self.opts.query.id);
+            RiotCrudController.loadDependencies(self.dependencies,'custom-order', function (argument) {
+                console.info('order mount',self.opts.actionMenu);
+                if(self.opts.query.id)
+                    self.initOrder(self.opts.query.id);
+            });
         });
 
         self.refresh = (opts) => {
@@ -271,15 +288,20 @@
                 self.initOrder(opts.query.id);
         }
 
+        initPlugins = () => {
+
+
+        }
+
         self.initOrder = (orderId) => {
           self.service.get(orderId).then((result) => {
                 self.opts.data = result;
+                RiotControl.trigger('order_add_item_modal', opts.id);
                 self.update();
           }).catch((error) => {
             console.error('Error', error);
           });
         }
-
 
         self.calculate = () => {
             var subtotal = 0;
@@ -305,6 +327,18 @@
         addItemModal () {
             // RiotControl.trigger('modal-add-item-show', opts.id);
             RiotControl.trigger('order_add_item_modal', opts.id);
+        }
+
+        addItems (items) {
+            if(items.length > 0) {
+                for (var i = 0; i < items.length; i++) {
+                    items[i].qty = 1;
+                    items[i].total = 1 * items[i].price_euro;
+                    opts.data.items.push(items[i])
+                }
+                self.calculate();
+                RiotControl.trigger('order_add_item_modal', opts.id);
+            }
         }
 
         changeDiscount (e) {
