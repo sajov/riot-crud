@@ -25,24 +25,6 @@
             <h4 class="modal-title" id="myModalLabel2">Add Product</h4>
         </div>
         <div class="modal-body">
-            <div class="page-title">
-              <div class="title_left">
-                <h3>{title} <small>{description}</small></h3>
-              </div>
-
-              <div class="title_right">
-                <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-                  <div class="input-group">
-                    <input type="text" class="form-control" onkeyup={ search } placeholder="Search for...">
-                    <span class="input-group-btn">
-                      <button class="btn btn-default" type="button">Go!</button>
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="clearfix"></div>
-
             <crud-table service="products" limit="3" skip="0" ups={table:'test'}>
                     <yield class="pull-right">
                         <button type="button" class="btn btn-success" onclick={triggerData} data-trigger="product_add_items">Add</button>
