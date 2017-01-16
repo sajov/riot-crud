@@ -6,7 +6,7 @@
 <crud-action-menu>
 
 	<div class="btn-group">
-		<a each={action in opts.actions} if={ action.active } onclick={ click } class="btn btn-{ action.buttonClass || 'default'} {dropdown-menu: action.options} btn-sm">{action.label}
+		<a each={action in opts.actions} if={ action.active} onclick={ click } class="btn btn-{ action.buttonClass || 'default'} {dropdown-menu: action.options} btn-sm">{action.label}
 			<!-- <i class="fa fa-save"></i> -->
 		</a>
 
@@ -22,6 +22,7 @@
 				this.mixin(viewActionsMixin);
 			</script>
 
+
 </crud-action-menu>
 
 
@@ -33,6 +34,10 @@
 		}
 		.selectbox {
 			font-size: 150%;
+		}
+
+		.pagination {
+			margin: 0px 0 10px 0 ;
 		}
 	</style>
 
@@ -54,8 +59,10 @@
           </div>
         </div>
         <div class="clearfix"></div>
+
 	    <!-- <yield from="title"/> -->
 	    <!-- <yield from="buttons"/> -->
+
 		<div class="table-responsive">
 			<table id={ opts.id } class="table table-striped jambo_table bulk_action">
 			    <thead>
@@ -83,10 +90,33 @@
 			    </tbody>
 		    </table>
 		</div>
+		<div class="clearfix"></div>
+
+		<nav aria-label="Page navigation" class="pull-right">
+		  <ul class="pagination">
+		    <li>
+		      <a href="#" aria-label="Previous">
+		        <span aria-hidden="true">&laquo;</span>
+		      </a>
+		    </li>
+		    <li><a href="#">1</a></li>
+		    <li><a href="#">2</a></li>
+		    <li><a href="#">3</a></li>
+		    <li><a href="#">4</a></li>
+		    <li><a href="#">5</a></li>
+		    <li>
+		      <a href="#" aria-label="Next">
+		        <span aria-hidden="true">&raquo;</span>
+		      </a>
+		    </li>
+		  </ul>
+		</nav>
+		<div class="clearfix"></div>
+
 		<!-- <yield from="buttons"/> -->
 		<yield></yield>
-		<div class="clearfix"></div>
 	</div>
+	<div class="clearfix"></div>
 
 	<script>
 

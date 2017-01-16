@@ -270,7 +270,6 @@
             if(typeof self.opts.service != 'undefined' && self.opts.view) {
 
                 self.service = self.client.service(self.opts.service);
-console.log(self.opts.service, '!= undefined', '&&' ,self.opts.view, self.service);
 
                 var viewModelKey = [self.opts.service, self.opts.view].join('_');
 

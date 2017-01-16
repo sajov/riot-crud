@@ -4,7 +4,7 @@ var riotCrudTheme =
         '/js/riotcrud/themes/bootstrap';
 
 var dependencyList = {
-    layout: [riotCrudTheme + '/menu.js', riotCrudTheme + '/views/crud-views.js'],
+    layout: [riotCrudTheme + '/menu.js', riotCrudTheme + '/layout.js', riotCrudTheme + '/views/crud-views.js'],
     login: riotCrudTheme + '/login.js',register: riotCrudTheme + '/register.js'
 };
 
@@ -295,12 +295,16 @@ $script.ready('layout', function() {
             tag: 'crud-upload'
         }
     );
-console.log( RiotCrudController.getRouteMenu())
-    riot.mount('side-menu','side-menu', {
+
+
+    /* mount gentella admin layout*/
+    riot.mount('layout');
+
+    riot.mount('#side-menu','side-menu', {
         routes: RiotCrudController.getRouteMenu()
     });
 
-    riot.mount('top-menu','top-menu', {
+    riot.mount('#top-menu','top-menu', {
         services: {
             products: ['created','create','update','updated','removed'],
             categories: ['created','create','update','updated','removed'],
@@ -311,6 +315,7 @@ console.log( RiotCrudController.getRouteMenu())
     if(window.location.hash === "" && window.location.hash != "#dashboard") {
        riot.route('dashboard');
     }
+
 
     RiotCrudController.start();
 
