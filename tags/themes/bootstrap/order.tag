@@ -100,11 +100,11 @@
                                 <div class="col-sm-4 invoice-col">
                                     From
                                     <address>
-                                        <strong if={opts.data.company.name}>{opts.data.company.name}</strong>
+                                        <strong if={opts.data.company.name}><a href="">{opts.data.company.name}</a></strong>
                                         <br if={opts.data.company.name}>
-                                        <strong>{opts.data.name}</strong>
-                                        <br>{opts.data.address.street} {opts.data.address.suite}
-                                        <br>{opts.data.address.city}, {opts.data.address.zipcode}
+                                        <strong><a href="">{opts.data.name}</a></strong>
+                                        <br><a href="">{opts.data.address.street}</a> {opts.data.address.suite}
+                                        <br><a href="">{opts.data.address.city}</a>, {opts.data.address.zipcode}
                                         <br>Phone: {opts.data.phone}
                                         <br>Email: {opts.data.email}
                                     </address>
@@ -243,13 +243,15 @@
     </div>
 
     <link href="/bower_components/gentelella/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+    <link href="/bower_components/x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet">
 
     <script>
         var self = this;
         self.mixin(FeatherClientMixin);
 
         self.dependencies = [
-            '/bower_components/gentelella/vendors/iCheck/icheck.min.js'
+            '/bower_components/gentelella/vendors/iCheck/icheck.min.js',
+            '/bower_components/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.min.js'
         ];
 
         RiotControl.on('product_add_items', (items) => {

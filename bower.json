@@ -16,7 +16,8 @@
     "gentelella": "1.3.0",
     "jsoneditor": "^5.5.11",
     "json-forms": "^1.5.2",
-    "dropzone": "^4.3.0"
+    "dropzone": "^4.3.0",
+    "x-editable": "^1.5.1"
   },
   "ignore": [
     "**/.*",
