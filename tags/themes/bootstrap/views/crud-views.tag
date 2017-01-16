@@ -136,19 +136,11 @@
 			console.info('CRUD-TABLE self', self);
 			console.info('CRUD-TABLE service', self.service);
 			if(self.opts.service) {
-				self.initTable();
+				initTable();
 			}
 		});
 
-		self.on('*', (e) => {
-			console.info('CRUD-TABLE event:', e);
-		})
-
-		self.on('updated', () => {
-
-		})
-
-		triggerData (e) {
+		triggerData = (e) => {
 			RiotControl.trigger(e.target.getAttribute('data-trigger'),
 				self.data.data.reduce(function(prev, curr) {
 					if (self.selection.indexOf(curr._id) === -1)
@@ -159,7 +151,7 @@
 			self.selection = [];
 		}
 
-	    search (e) {
+	    search = (e) => {
              /* search */
             if(e.target.value !== "") {
                 self.query.$or = [];
@@ -173,10 +165,10 @@
             } else {
             	delete self.query.$or;
             }
-            self.getData();
+            getData();
 	    }
 
-	    sort (e) {
+	    sort = (e) => {
 	    	console.log(e.item);
 	    	if(self.query.$sort[e.item.colkey]) {
             	self.query.$sort[e.item.colkey] = self.query.$sort[e.item.colkey] == 1 ? -1 : 1;
@@ -186,7 +178,7 @@
 	    	}
 	    	self.theadSort = self.query.$sort[e.item.colkey] == 1 ? 'asc' : 'desc';
 
-            self.getData();
+            getData();
 	    }
 
 		selectall = (e) => {
@@ -212,13 +204,13 @@
 			// self.update();
 		}
 
-	    initSchema () {
+	    initSchema = () => {
 	    	let schema = {};
 
 	    	// if(opts.schema)
 	    }
 
-	    getRemoteSchema (url, cb) {
+	    getRemoteSchema = (url, cb) => {
 
 	    	var request = new XMLHttpRequest();
 			request.open('GET', url, true);
@@ -256,14 +248,14 @@
 			request.send();
 	    }
 
-	    initTable () {
-	    	self.getRemoteSchema(
+	    initTable = () => {
+	    	getRemoteSchema(
 				'http://localhost:3030/schema/product.json',
-				self.getData
+				getData
 			);
 	    }
 
-	    getData () {
+	    getData = () => {
 	        self.service.find({query:self.query}).then((result) => {
 	        	self.selection = [];
 	            self.data = result;
@@ -273,9 +265,6 @@
 	          console.error('Error', error);
 	        });
 	    }
-
-
-
 	</script>
 </crud-table>
 

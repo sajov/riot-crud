@@ -18,7 +18,7 @@ riot.tag2('crud-jsoneditor', '<link href="/bower_components/jsoneditor/dist/json
         this.on('mount', function() {
             RiotCrudController.loadDependencies(self.dependencies,'crud-jsoneditor', function (argument) {
                 self.initPlugins();
-                if(self.opts.query.id) {
+                if(self.opts.query && self.opts.query.id) {
                     self.get(self.opts.query.id)
                 }
             });

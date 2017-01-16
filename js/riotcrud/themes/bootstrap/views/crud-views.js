@@ -26,19 +26,11 @@ riot.tag2('crud-table', '<div> <div class="page-title"> <div class="title_left">
 			console.info('CRUD-TABLE self', self);
 			console.info('CRUD-TABLE service', self.service);
 			if(self.opts.service) {
-				self.initTable();
+				initTable();
 			}
 		});
 
-		self.on('*', (e) => {
-			console.info('CRUD-TABLE event:', e);
-		})
-
-		self.on('updated', () => {
-
-		})
-
-		this.triggerData = function (e) {
+		triggerData = (e) => {
 			RiotControl.trigger(e.target.getAttribute('data-trigger'),
 				self.data.data.reduce(function(prev, curr) {
 					if (self.selection.indexOf(curr._id) === -1)
@@ -47,9 +39,9 @@ riot.tag2('crud-table', '<div> <div class="page-title"> <div class="title_left">
 				}, [])
 			)
 			self.selection = [];
-		}.bind(this)
+		}
 
-	    this.search = function (e) {
+	    search = (e) => {
 
             if(e.target.value !== "") {
                 self.query.$or = [];
@@ -63,10 +55,10 @@ riot.tag2('crud-table', '<div> <div class="page-title"> <div class="title_left">
             } else {
             	delete self.query.$or;
             }
-            self.getData();
-	    }.bind(this)
+            getData();
+	    }
 
-	    this.sort = function (e) {
+	    sort = (e) => {
 	    	console.log(e.item);
 	    	if(self.query.$sort[e.item.colkey]) {
             	self.query.$sort[e.item.colkey] = self.query.$sort[e.item.colkey] == 1 ? -1 : 1;
@@ -76,8 +68,8 @@ riot.tag2('crud-table', '<div> <div class="page-title"> <div class="title_left">
 	    	}
 	    	self.theadSort = self.query.$sort[e.item.colkey] == 1 ? 'asc' : 'desc';
 
-            self.getData();
-	    }.bind(this)
+            getData();
+	    }
 
 		selectall = (e) => {
 			if (self.selection.length == self.data.data.length) {
@@ -102,12 +94,12 @@ riot.tag2('crud-table', '<div> <div class="page-title"> <div class="title_left">
 
 		}
 
-	    this.initSchema = function () {
+	    initSchema = () => {
 	    	let schema = {};
 
-	    }.bind(this)
+	    }
 
-	    this.getRemoteSchema = function (url, cb) {
+	    getRemoteSchema = (url, cb) => {
 
 	    	var request = new XMLHttpRequest();
 			request.open('GET', url, true);
@@ -143,16 +135,16 @@ riot.tag2('crud-table', '<div> <div class="page-title"> <div class="title_left">
 			};
 
 			request.send();
-	    }.bind(this)
+	    }
 
-	    this.initTable = function () {
-	    	self.getRemoteSchema(
+	    initTable = () => {
+	    	getRemoteSchema(
 				'http://localhost:3030/schema/product.json',
-				self.getData
+				getData
 			);
-	    }.bind(this)
+	    }
 
-	    this.getData = function () {
+	    getData = () => {
 	        self.service.find({query:self.query}).then((result) => {
 	        	self.selection = [];
 	            self.data = result;
@@ -161,7 +153,6 @@ riot.tag2('crud-table', '<div> <div class="page-title"> <div class="title_left">
 	        }).catch((error) => {
 	          console.error('Error', error);
 	        });
-	    }.bind(this)
-
+	    }
 });
 
