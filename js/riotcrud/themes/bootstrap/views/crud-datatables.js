@@ -19,7 +19,8 @@ riot.tag2('crud-datatables', '<link href="https://cdn.datatables.net/v/bs/dt-1.1
             RiotCrudController.loadDependencies(self.dependencies,'crud-datatables', function (argument) {
                  self.initTable();
             });
-            opts.tableHeader = opts.schema.defaultProperties || opts.schema.required;
+            opts.tableHeader = opts.schema.required;
+
         });
 
         self.initTable = function() {

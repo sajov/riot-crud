@@ -106,7 +106,8 @@
             RiotCrudController.loadDependencies(self.dependencies,'crud-datatables', function (argument) {
                  self.initTable();
             });
-            opts.tableHeader = opts.schema.defaultProperties || opts.schema.required;
+            opts.tableHeader = opts.schema.required;
+            // opts.tableHeader = opts.schema.defaultProperties || opts.schema.required;
         });
 
         /**
