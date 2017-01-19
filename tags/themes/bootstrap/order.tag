@@ -63,7 +63,7 @@
                         <h2>{opts.data.name} <small>{opts.data.address.city}</small></h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li>
-                                <crud-action-menu name="{opts.name}" views="{opts.views}" view="{opts.view}" actionMenu="{opts.actionMenu}" query="{opts.query}" defaultviews="{save:true}"></crud-action-menu>
+                                <crud-action-menu name="{opts.name}" views="{opts.views}" view="{opts.view}" buttons="{opts.buttons}" query="{opts.query}" defaultviews="{save:true}"></crud-action-menu>
                             </li>
                             <!-- <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                             <li class="dropdown">
@@ -347,6 +347,10 @@
                 }
             }
             self.calculate();
+        }
+
+        self.getData = () => {
+            return opts.data;
         }
 
         confirm (e) {

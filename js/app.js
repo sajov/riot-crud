@@ -142,11 +142,11 @@ $script.ready('layout', function() {
                 ]
             },
             edit: {
-                tag: 'crud-json-editor',
-                title: 'Edit Products (json-editor demo)',
+                tag: 'crud-jsoneditor',
+                title: 'Edit Products (jsoneditor demo edit)',
                 target: 'div#content',
                 dependencies: [
-                    riotCrudTheme + '/views/crud-json-editor.js'
+                    riotCrudTheme + '/views/crud-jsoneditor.js'
                 ]
             },
             delete: {}
@@ -251,7 +251,7 @@ $script.ready('layout', function() {
             },
             view:{
                 tag: 'order',
-                actionMenu: {save:true},
+                buttons: {save:true},
                 title: 'Order <small>(custom view)</small>',
                 schema: 'http://localhost:3030/schema/order.json',
                 target: 'div#content',
@@ -268,11 +268,11 @@ $script.ready('layout', function() {
                 ]
             },
             edit: {
-                tag: 'crud-json-editor',
-                title: 'Edit Order (json-editor demo)',
+                tag: 'crud-json-forms',
+                title: 'Edit Order (json-forms demo)',
                 target: 'div#content',
                 dependencies: [
-                    riotCrudTheme + '/views/crud-json-editor.js'
+                    riotCrudTheme + '/views/crud-json-forms.js'
                 ]
             },
             delete: {}

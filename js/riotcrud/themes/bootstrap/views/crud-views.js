@@ -5,6 +5,12 @@ riot.tag2('raw', '<span></span>', '', '', function(opts) {
 riot.tag2('crud-action-menu', '<div class="btn-group"> <a each="{action in opts.actions}" if="{action.active}" onclick="{click}" class="btn btn-{action.buttonClass || \'default\'} {dropdown-menu: action.options} btn-sm">{action.label} </a> </div>', '', '', function(opts) {
 				var self = this;
 				this.mixin(viewActionsMixin);
+				self.on('mount', () => {
+					console.warn('crud-action-menu', self.opts.actioMenu);
+					console.warn('crud-action-menu', self.opts.action);
+					console.warn('crud-action-menu', self.opts);
+
+				})
 });
 
 

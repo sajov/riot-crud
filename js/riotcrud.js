@@ -301,7 +301,7 @@
                 });
 
 
-                self.eventKeyEditSave = self.opts.service + '_edit_save';
+                self.eventKeyEditSave = self.opts.service + '_save';
                 RiotControl.on(self.eventKeyEditSave, () => {
                     var data = self.getData();
                     if(data == false) {
@@ -441,9 +441,8 @@
                             break;
 
                     }
-
-                    if(self.opts.buttons && self.opts.buttons.indexOf(action.name) === -1) {
-                        action.active = false;
+                    if(self.opts.buttons && self.opts.buttons[action.name]) {
+                        action.active = true;
                     }
 
                     return action;
@@ -455,14 +454,13 @@
                 var service = self.opts.service || self.opts.name; // TODO: move name
                 var view = self.opts.view;
                 var action = e.item.action.name;
-                var viewModelKey = [service, view, action].join('_');
                 switch(action){
                     case 'delete':
-                        RiotControl.trigger(viewModelKey+'_confirmation')
+                        RiotControl.trigger([service, view, action,'confirmation'].join('_'))
                         break;
                     case 'save':
                     case 'update':
-                        RiotControl.trigger(viewModelKey)
+                        RiotControl.trigger([service, action].join('_'))
                         break;
                     case 'view':
                     case 'edit':
@@ -473,7 +471,7 @@
                         riot.route([service, action].join('/'))
                         break;
                     default:
-                        console.error('unknown event: ' + viewModelKey)
+                        console.error('unknown event: ' + [service, view, action].join('_'))
                         break;
                 }
 

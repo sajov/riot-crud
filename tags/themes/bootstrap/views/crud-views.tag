@@ -20,6 +20,12 @@
 			<script>
 				var self = this;
 				this.mixin(viewActionsMixin);
+				self.on('mount', () => {
+					console.warn('crud-action-menu', self.opts.actioMenu);
+					console.warn('crud-action-menu', self.opts.action);
+					console.warn('crud-action-menu', self.opts);
+
+				})
 			</script>
 
 
