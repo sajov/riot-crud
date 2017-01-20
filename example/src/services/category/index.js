@@ -29,6 +29,8 @@ module.exports = function(){
   // Get our initialize service to that we can bind hooks
   const categoryService = app.service('/categories');
 
+  categoryService.schema = require(process.cwd() + '/public/schema/category.json');
+
   // Set up our before hooks
   categoryService.before(hooks.before);
 

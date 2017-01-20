@@ -7,6 +7,7 @@
 // on hooks.
 
 const Validator = require('jsonschema').Validator;
+var fs = require('fs');
 const v = new Validator();
 
 exports.validateSchema = function(schema) {
@@ -25,9 +26,6 @@ exports.validateSchema = function(schema) {
           hook.result = validation;
           console.errors('validation ERROR',validation);
         }
-
-        // console.log('validation ERRORS 0');
-        // console.log('show in browser');
 
         next();
 
@@ -55,11 +53,20 @@ exports.searchRegex = function () {
             return action;
         });
         query[field] = query[field].concat(plain);
-        console.log('plain', plain);
         console.log('$or', query[field]);
       }
     }
     hook.params.query = query
     return hook
   }
+}
+
+
+exports.schema = function () {
+    return function (hook) {
+        if (hook.id === 'schema' && hook.service.schema) {
+                hook.result = hook.service.schema;
+        }
+        return hook;
+    }
 }

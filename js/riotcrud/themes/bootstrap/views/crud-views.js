@@ -14,7 +14,7 @@ riot.tag2('crud-action-menu', '<div class="btn-group"> <a each="{action in opts.
 });
 
 
-riot.tag2('crud-table', '<div> <div class="page-title"> <div class="title_left"> <h3>{title} <small>{description}</small></h3> </div> <div class="title_right"> <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search"> <div class="input-group"> <input type="text" class="form-control" onkeyup="{search}" placeholder="Search for..."> <span class="input-group-btn"> <button class="btn btn-default" type="button">Go!</button> </span> </div> </div> </div> </div> <div class="clearfix"></div> <div class="table-responsive"> <table id="{opts.id}" class="table table-striped jambo_table bulk_action"> <thead> <tr> <th if="{opts.selection != false}" nowrap> <i onclick="{selectall}" data-value="{selection.length ==  data.data.length ? 1 : 0}" class="fa fa-{\'check-\': selection.length ==  data.data.length}square selectbox"></i> </th> <th each="{colkey, colval in thead}" onclick="{sort}"> {colkey} <small if="{colval.type == \'string\'}" class="fa fa-sort-alpha-{query.$sort[colkey] ? theadSort : \'asc\'}"></small> <small if="{colval.type == \'number\'}" class="fa fa-sort-numeric-{query.$sort[colkey] ? theadSort : \'asc\'}"></small> <small if="{colval.type != \'number\' && colval.type != \'string\'}" class="fa fa-sort-amount-{query.$sort[colkey] ? theadSort : \'asc\'}"></small> </th> <th> <i onclick="{toggleFilter}" class="fa fa-filter"></i> </th> </tr> </thead> <tbody> <tr class="{\'hide\': !showFilter}"> <td if="{opts.selection != false}" nowrap>&nbsp;</td> <td each="{colkey, colval in thead}" onclick="{sort}"> <input type="text" name="{colkey}" placeholder="enter serach"> </td> <td>&nbsp;</td> </tr> <tr each="{row in data.data}" onclick="{selectrow}" class="{\'selected\': selection.indexOf(row._id) != -1}"> <td if="{opts.selection != false}" class="a-center"> <i data-value="{row._id}" class="fa fa-{\'check-\': selection.indexOf(row._id) != -1}square selectbox"></i> </td> <td each="{colkey, colval in thead}" onclick="{selectRow}"> {row[colkey]} </td> <td>&nbsp;</td> </tr> </tbody> </table> </div> <div class="clearfix"></div> <nav aria-label="Page navigation" class="pull-right"> <ul class="pagination"> <li each="{page in pagination}"> <a href="#" onclick="{paginate}" class="{\'disabled\':page.active == false}"> <i class="{page.class}"></i>{page.label} </a> </li> </ul> </nav> <div class="clearfix"></div> <yield></yield> </div> <div class="clearfix"></div>', 'th { white-space: nowrap } .selectbox { font-size: 150%; } .pagination { margin: 0px 0 10px 0 ; }', '', function(opts) {
+riot.tag2('crud-table', '<div> <div class="page-title"> <div class="title_left"> <h3>{title} <small>{description}</small></h3> </div> <div class="title_right"> <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search"> <div class="input-group"> <input type="text" class="form-control" onkeyup="{search}" placeholder="Search for..."> <span class="input-group-btn"> <button class="btn btn-default" type="button">Go!</button> </span> </div> </div> </div> </div> <div class="clearfix"></div> <div class="table-responsive"> <table id="{opts.id}" class="table table-striped jambo_table bulk_action"> <thead> <tr> <th if="{opts.selection != false}" nowrap> <i onclick="{selectall}" data-value="{selection.length ==  data.data.length ? 1 : 0}" class="fa fa-{\'check-\': selection.length ==  data.data.length}square selectbox"></i> </th> <th each="{colkey, colval in thead}" onclick="{sort}"> {colkey} <small if="{colval.type == \'string\'}" class="fa fa-sort-alpha-{query.$sort[colkey] ? theadSort : \'asc\'}"></small> <small if="{colval.type == \'number\'}" class="fa fa-sort-numeric-{query.$sort[colkey] ? theadSort : \'asc\'}"></small> <small if="{colval.type != \'number\' && colval.type != \'string\'}" class="fa fa-sort-amount-{query.$sort[colkey] ? theadSort : \'asc\'}"></small> </th> <th> <i onclick="{toggleFilter}" class="fa fa-filter"></i> </th> </tr> </thead> <tbody> <tr class="{\'hide\': !showFilter}"> <td if="{opts.selection != false}" nowrap>&nbsp;</td> <td each="{colkey, colval in thead}"> <input if="{schema.properties[colkey].type!=\'data\'}" type="text" name="{colkey}" onchange="{filter}" placeholder="enter serach"> <input if="{schema.properties[colkey].type==\'date\'}" name="{colkey}" onchange="{filter}" placeholder="enter serach" type="date"> </td> <td>&nbsp;</td> </tr> <tr each="{row in data.data}" onclick="{selectrow}" class="{\'selected\': selection.indexOf(row._id) != -1}"> <td if="{opts.selection != false}" class="a-center"> <i data-value="{row._id}" class="fa fa-{\'check-\': selection.indexOf(row._id) != -1}square selectbox"></i> </td> <td each="{colkey, colval in thead}" onclick="{selectRow}"> {row[colkey]} </td> <td>&nbsp;</td> </tr> </tbody> </table> </div> <div class="clearfix"></div> <nav if="{pagination.length > 0}" aria-label="Page navigation" class="pull-right"> <ul class="pagination"> <li each="{page in pagination}"> <a href="#" onclick="{paginate}" class="{\'disabled\':page.active == false}"> <i class="{page.class}"></i>{page.label} </a> </li> </ul> </nav> <div class="clearfix"></div> <yield></yield> </div> <div class="clearfix"></div>', 'th { white-space: nowrap } .selectbox { font-size: 150%; } .pagination { margin: 0px 0 10px 0 ; }', '', function(opts) {
 
 		var self = this;
 		self.opts.view = 'list';
@@ -31,6 +31,7 @@ riot.tag2('crud-table', '<div> <div class="page-title"> <div class="title_left">
 
 		self.on('mount', () => {
 			console.info('CRUD-TABLE self', self);
+			console.info('CRUD-TABLE SCHEMA',self.opts.schema);
 			console.info('CRUD-TABLE service', self.service);
 			if(self.opts.service) {
 				initTable();
@@ -63,6 +64,25 @@ riot.tag2('crud-table', '<div> <div class="page-title"> <div class="title_left">
             	delete self.query.$or;
             }
             getData();
+	    }
+
+	    filter = (e) => {
+	    	delete self.query.$or;
+	    	console.error(self.schema,'self.schema')
+
+	    	if(e.target.value !== "") {
+	    		let value = e.target.value
+	    		if(self.schema && self.schema.properties[e.target.name] && self.schema.properties[e.target.name].type) {
+	    			if(self.schema.properties[e.target.name].type === 'number') {
+	    				value = value * 1;
+	    			}
+	    		}
+    			self.query[e.target.name] = value;
+
+	    	} else {
+	    		delete self.query[e.target.name];
+	    	}
+    		getData();
 	    }
 
 	    toggleFilter = (e) => {
@@ -107,59 +127,33 @@ riot.tag2('crud-table', '<div> <div class="page-title"> <div class="title_left">
 		}
 
 	    initSchema = () => {
-	    	let schema = {};
-
-	    }
-
-	    getRemoteSchema = (url, cb) => {
-
-	    	var request = new XMLHttpRequest();
-			request.open('GET', url, true);
-			request.onload = function() {
-
-			  if (request.status >= 200 && request.status < 400) {
-
-			    self.schema = JSON.parse(request.responseText);
-
-			    self.thead = {};
-			    if(opts.fields) {
-			    	for (var i = 0; i < opts.fields.length; i++) {
-			    		self.thead[opts.fields[i]] = self.schema.properties[opts.fields[i]]
-			    	}
-			    } else if(self.schema.defaultProperties) {
-			    	for (var i = 0; i < self.schema.defaultProperties.length; i++) {
-			    		self.thead[self.schema.defaultProperties[i]] = self.schema.properties[self.schema.defaultProperties[i]]
-			    	}
-			    } else {
-			    	self.thead = self.schema.properties;
-			    }
-
-			    console.info('getRemoteSchema', self.schema,self.thead);
-			  } else {
-			    console.error('getRemoteSchema');
-			  }
-			  cb();
-			};
-
-			request.onerror = function() {
-
-			  cb();
-			};
-
-			request.send();
+	    	self.thead = {};
+		    if(opts.fields) {
+		    	for (var i = 0; i < opts.fields.length; i++) {
+		    		self.thead[opts.fields[i]] = self.schema.properties[opts.fields[i]]
+		    	}
+		    } else if(self.schema.defaultProperties) {
+		    	for (var i = 0; i < self.schema.defaultProperties.length; i++) {
+		    		self.thead[self.schema.defaultProperties[i]] = self.schema.properties[self.schema.defaultProperties[i]]
+		    	}
+		    } else {
+		    	self.thead = self.schema.properties;
+		    }
 	    }
 
 	    initTable = () => {
-	    	getRemoteSchema(
-				'http://localhost:3030/schema/product.json',
-				getData
-			);
+	    	self.service.get('schema').then((result) => {
+	        	self.schema = result;
+	        	initSchema();
+	    		getData();
+	        }).catch((error) => {
+	          console.error('Error', error);
+	        });
 	    }
 
 	    initPagination = () => {
 	    	self.pagination = [];
 	    	self.pagecount = 5;
-    		self.pagination.push({label:'', class:'fa fa-angle-double-left',active: self.data.skip == 0,skip:0})
 
     		let start = 1;
     		let end = (Math.ceil(self.data.total/self.data.limit))-1;
@@ -168,24 +162,29 @@ riot.tag2('crud-table', '<div> <div class="page-title"> <div class="title_left">
     			start = Math.ceil(self.data.skip/self.data.limit);
     		}
 
-		    console.info('RANGE start-end',start+ ' - ' + end + ' ??? ' + start+self.pagecount + ' > ' + end);
-    		if((start+self.pagecount) > (end-1)) {
-		    console.warn('RANGE start-end',start+ ' - ' + end);
-    			start = end-4;
+    		if(start > 0 && end > 0) {
+			    console.info('RANGE start-end',start+ ' - ' + end + ' ??? ' + start+self.pagecount + ' > ' + end);
+
+    			self.pagination.push({label:'', class:'fa fa-angle-double-left',active: self.data.skip == 0,skip:0})
+
+	    		if((start+self.pagecount) > (end-1)) {
+	    			start = end-4;
+	    		}
+		    	let range = Array.apply(start, Array(self.pagecount))
+			        .map(function (element, index) {
+
+			          return index + start;
+			    });
+
+			    for (var i = 0; i < range.length; i++) {
+			    		if(range[i] > 0) {
+		    				self.pagination.push({label:range[i],skip:range[i]*self.data.limit})
+			    		}
+			    }
+
+	    		self.pagination.push({label:'', class:'fa fa-angle-double-right', active: (self.data.skip * self.data.skip == 0), skip: end*self.data.limit})
+		    	console.warn('RANGE',range,self.pagination);
     		}
-	    	let range = Array.apply(start, Array(self.pagecount))
-		        .map(function (element, index) {
-
-		          return index + start;
-		    });
-
-		    for (var i = 0; i < range.length; i++) {
-	    			self.pagination.push({label:range[i],skip:range[i]*self.data.limit})
-		    }
-console.error({label:'', class:'fa fa-angle-double-right', active: (self.data.skip * self.data.skip == 0), skip: end})
-    		self.pagination.push({label:'', class:'fa fa-angle-double-right', active: (self.data.skip * self.data.skip == 0), skip: end*self.data.limit})
-
-		    console.warn('RANGE',range,self.pagination);
 	    }
 
 	    paginate = (e) => {

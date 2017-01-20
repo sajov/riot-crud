@@ -261,7 +261,7 @@
 
         self.on('mount', () => {
             RiotCrudController.loadDependencies(self.dependencies,'custom-order', function (argument) {
-                console.info('order mount',self.opts.actionMenu);
+                console.info('order mount',self.opts.schema);
                 if(self.opts.query.id)
                     self.initOrder(self.opts.query.id);
             });
@@ -350,6 +350,7 @@
         }
 
         self.getData = () => {
+            console.warn('schema lölkjkljljlkjkljljkl',opts.schema);
             return opts.data;
         }
 

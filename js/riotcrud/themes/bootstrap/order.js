@@ -22,7 +22,7 @@ riot.tag2('order', '<modal-dialog trigger="order_add_item_modal" trigger-submit=
 
         self.on('mount', () => {
             RiotCrudController.loadDependencies(self.dependencies,'custom-order', function (argument) {
-                console.info('order mount',self.opts.actionMenu);
+                console.info('order mount',self.opts.schema);
                 if(self.opts.query.id)
                     self.initOrder(self.opts.query.id);
             });
@@ -110,6 +110,7 @@ riot.tag2('order', '<modal-dialog trigger="order_add_item_modal" trigger-submit=
         }.bind(this)
 
         self.getData = () => {
+            console.warn('schema lölkjkljljlkjkljljkl',opts.schema);
             return opts.data;
         }
 

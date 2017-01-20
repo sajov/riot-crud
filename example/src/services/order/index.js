@@ -29,6 +29,7 @@ module.exports = function(){
   // Get our initialize service to that we can bind hooks
   const orderService = app.service('/orders');
 
+  orderService.schema = require(process.cwd() + '/public/schema/order.json');
   // Set up our before hooks
   orderService.before(hooks.before);
 

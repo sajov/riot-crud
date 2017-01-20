@@ -94,8 +94,9 @@
 			    <tbody>
 			    	<tr class="{'hide': !showFilter}">
 				      	<td if={ opts.selection != false } nowrap>&nbsp;</td>
-				        <td each="{ colkey, colval in thead }" onclick={ sort }>
-				        	<input type="text" name="{ colkey }" placeholder="enter serach">
+				        <td each="{ colkey, colval in thead }">
+				        	<input if={schema.properties[colkey].type!='data'} type="text" name="{ colkey }" onchange={filter} placeholder="enter serach">
+				        	<input if={schema.properties[colkey].type=='date'} type="date" name="{ colkey }" onchange={filter} placeholder="enter serach">
 				        </td>
 				        <td>&nbsp;</td>
 			      	</tr>
@@ -114,7 +115,7 @@
 		</div>
 		<div class="clearfix"></div>
 
-		<nav aria-label="Page navigation" class="pull-right">
+		<nav if={pagination.length > 0} aria-label="Page navigation" class="pull-right">
 		  <ul class="pagination">
 		    <li each={page in pagination}>
 		    	<a href="#" onclick={paginate} class={'disabled':page.active == false}>
@@ -147,6 +148,7 @@
 
 		self.on('mount', () => {
 			console.info('CRUD-TABLE self', self);
+			console.info('CRUD-TABLE SCHEMA',self.opts.schema);
 			console.info('CRUD-TABLE service', self.service);
 			if(self.opts.service) {
 				initTable();
@@ -179,6 +181,28 @@
             	delete self.query.$or;
             }
             getData();
+	    }
+
+	    filter = (e) => {
+	    	delete self.query.$or;
+	    	console.error(self.schema,'self.schema')
+    		// self.query[e.target.name] = {$search: e.target.value};
+	    	if(e.target.value !== "") {
+	    		let value = e.target.value
+	    		if(self.schema && self.schema.properties[e.target.name] && self.schema.properties[e.target.name].type) {
+	    			if(self.schema.properties[e.target.name].type === 'number') {
+	    				value = value * 1;
+	    			}
+	    		}
+    			self.query[e.target.name] = value;
+	    		// self.query[e.target.name] = {$search: 13};
+    		    // let q = {};
+          //       q[e.target.name] = {$search: e.target.value};
+          //       self.query.$or.push(q);
+	    	} else {
+	    		delete self.query[e.target.name];
+	    	}
+    		getData();
 	    }
 
 	    toggleFilter = (e) => {
@@ -223,60 +247,33 @@
 		}
 
 	    initSchema = () => {
-	    	let schema = {};
-
-	    	// if(opts.schema)
-	    }
-
-	    getRemoteSchema = (url, cb) => {
-
-	    	var request = new XMLHttpRequest();
-			request.open('GET', url, true);
-			request.onload = function() {
-
-			  if (request.status >= 200 && request.status < 400) {
-
-			    self.schema = JSON.parse(request.responseText);
-
-			    self.thead = {};
-			    if(opts.fields) {
-			    	for (var i = 0; i < opts.fields.length; i++) {
-			    		self.thead[opts.fields[i]] = self.schema.properties[opts.fields[i]]
-			    	}
-			    } else if(self.schema.defaultProperties) {
-			    	for (var i = 0; i < self.schema.defaultProperties.length; i++) {
-			    		self.thead[self.schema.defaultProperties[i]] = self.schema.properties[self.schema.defaultProperties[i]]
-			    	}
-			    } else {
-			    	self.thead = self.schema.properties;
-			    }
-
-			    console.info('getRemoteSchema', self.schema,self.thead);
-			  } else {
-			    console.error('getRemoteSchema');
-			  }
-			  cb();
-			};
-
-			request.onerror = function() {
-			  // There was a connection error of some sort
-			  cb();
-			};
-
-			request.send();
+	    	self.thead = {};
+		    if(opts.fields) {
+		    	for (var i = 0; i < opts.fields.length; i++) {
+		    		self.thead[opts.fields[i]] = self.schema.properties[opts.fields[i]]
+		    	}
+		    } else if(self.schema.defaultProperties) {
+		    	for (var i = 0; i < self.schema.defaultProperties.length; i++) {
+		    		self.thead[self.schema.defaultProperties[i]] = self.schema.properties[self.schema.defaultProperties[i]]
+		    	}
+		    } else {
+		    	self.thead = self.schema.properties;
+		    }
 	    }
 
 	    initTable = () => {
-	    	getRemoteSchema(
-				'http://localhost:3030/schema/product.json',
-				getData
-			);
+	    	self.service.get('schema').then((result) => {
+	        	self.schema = result;
+	        	initSchema();
+	    		getData();
+	        }).catch((error) => {
+	          console.error('Error', error);
+	        });
 	    }
 
 	    initPagination = () => {
 	    	self.pagination = [];
 	    	self.pagecount = 5;
-    		self.pagination.push({label:'', class:'fa fa-angle-double-left',active: self.data.skip == 0,skip:0})
 
     		let start = 1;
     		let end = (Math.ceil(self.data.total/self.data.limit))-1;
@@ -285,24 +282,29 @@
     			start = Math.ceil(self.data.skip/self.data.limit);
     		}
 
-		    console.info('RANGE start-end',start+ ' - ' + end + ' ??? ' + start+self.pagecount + ' > ' + end);
-    		if((start+self.pagecount) > (end-1)) {
-		    console.warn('RANGE start-end',start+ ' - ' + end);
-    			start = end-4;
+    		if(start > 0 && end > 0) {
+			    console.info('RANGE start-end',start+ ' - ' + end + ' ??? ' + start+self.pagecount + ' > ' + end);
+
+    			self.pagination.push({label:'', class:'fa fa-angle-double-left',active: self.data.skip == 0,skip:0})
+
+	    		if((start+self.pagecount) > (end-1)) {
+	    			start = end-4;
+	    		}
+		    	let range = Array.apply(start, Array(self.pagecount))
+			        .map(function (element, index) {
+			        	// return {label:index,skip:index*self.data.limit}
+			          return index + start;
+			    });
+
+			    for (var i = 0; i < range.length; i++) {
+			    		if(range[i] > 0) {
+		    				self.pagination.push({label:range[i],skip:range[i]*self.data.limit})
+			    		}
+			    }
+
+	    		self.pagination.push({label:'', class:'fa fa-angle-double-right', active: (self.data.skip * self.data.skip == 0), skip: end*self.data.limit})
+		    	console.warn('RANGE',range,self.pagination);
     		}
-	    	let range = Array.apply(start, Array(self.pagecount))
-		        .map(function (element, index) {
-		        	// return {label:index,skip:index*self.data.limit}
-		          return index + start;
-		    });
-
-		    for (var i = 0; i < range.length; i++) {
-	    			self.pagination.push({label:range[i],skip:range[i]*self.data.limit})
-		    }
-console.error({label:'', class:'fa fa-angle-double-right', active: (self.data.skip * self.data.skip == 0), skip: end})
-    		self.pagination.push({label:'', class:'fa fa-angle-double-right', active: (self.data.skip * self.data.skip == 0), skip: end*self.data.limit})
-
-		    console.warn('RANGE',range,self.pagination);
 	    }
 
 	    paginate = (e) => {
@@ -311,6 +313,8 @@ console.error({label:'', class:'fa fa-angle-double-right', active: (self.data.sk
 	    	console.log(e.item.page.skip);
 	    	getData();
 	    }
+
+
 
 	    getData = () => {
 	        self.service.find({query:self.query}).then((result) => {
