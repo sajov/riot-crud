@@ -1,16 +1,20 @@
-var riotCrudTheme =
-        location.search == '?theme=zurb' ?
-        '/js/riotcrud/themes/zurb' :
-        '/js/riotcrud/themes/bootstrap';
+var theme = location.search == '?theme=material' ?
+        'adminbsb' :
+        'gentella';
+theme  = 'adminbsb';
 
+var riotCrudTheme = '/js/riotcrud/themes/bootstrap';
 var dependencyList = {
-    layout: [riotCrudTheme + '/menu.js', riotCrudTheme + '/layout.js', riotCrudTheme + '/views/crud-views.js'],
+    gentella: [riotCrudTheme + '/gentella.js', riotCrudTheme + '/views/crud-views.js'],
+    adminbsb: [riotCrudTheme + '/adminbsb.js', riotCrudTheme + '/views/crud-views.js'],
     login: riotCrudTheme + '/login.js',register: riotCrudTheme + '/register.js'
 };
 
-$script(dependencyList.layout, 'layout');
 
-$script.ready('layout', function() {
+
+$script(dependencyList[theme], theme);
+
+$script.ready(theme, function() {
 
     /**
      * Riot controller
@@ -41,6 +45,7 @@ $script.ready('layout', function() {
                 riotCrudTheme + '/views/crud-json-forms.js'
             ],
             fn: function(id, action) {
+                alert(1)
                 riot.mount('#content', 'dashboard');
             }
         }

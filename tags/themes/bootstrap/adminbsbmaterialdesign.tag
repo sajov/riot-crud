@@ -1,103 +1,6 @@
-<top-widget>
-
-    <div class="tile-stats">
-      <div class="icon"><i class="fa {opts.icon}"></i></div>
-      <div class="count">{opts.count}</div>
-      <h3>{opts.title}</h3>
-      <p>
-        <a href="#{opts.service}/list" class="btn btn-xs pull-right"><i class="fa fa-list-ul"></i> show list</a>
-    </p>
-
-    </div>
-
-  <script>
-    var self = this;
-    self.mixin(FeatherClientMixin);
-
-    this.on('mount', () => {
-        self.getData();
-    });
-
-    RiotControl.on('updateWidget'+opts.service, () => {
-        self.getData();
-    });
-
-    self.getData = () => {
-        if(typeof opts.service != 'undefined')
-        self.client.service(opts.service)
-                    .find({query:{$sort:{id:-1}}})
-                    .then((result) => {
-                            self.opts.count = result.total;
-                            self.update();
-                    })
-                    .catch((error) => {iotControl.trigger(
-                                'notification',
-                                error.name + ' ' + error.type ,
-                                'error',
-                                error.message
-                            );});
-    }
-
-  </script>
-
-</top-widget>
-
-<todo-list>
-
-    <div class="x_panel">
-        <div class="x_title">
-          <h2>{opts.title}<small>{opts.subtitle}</small></h2>
-          <ul class="nav navbar-right panel_toolbox">
-            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-            </li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-              <ul class="dropdown-menu" role="menu">
-                <li><a href="#">Settings 1</a>
-                </li>
-                <li><a href="#">Settings 2</a>
-                </li>
-              </ul>
-            </li>
-            <li><a class="close-link"><i class="fa fa-close"></i></a>
-            </li>
-          </ul>
-          <div class="clearfix"></div>
-        </div>
-        <div class="x_content">
-
-          <div class="">
-            <ul class="to_do">
-                <li each={data in opts.todos} if={key!='default'}>
-
-                        <p><input type="checkbox" class="flat" checked={ data.done }> {data.todo} </p>
-
-                </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-    <script>
-        opts.todos = [
-            {todo:'Routing (http://riotjs.com/api/route/)', done: true},
-            {todo:'View Models (http://riotjs.com/)', done: true},
-            {todo:'Feathers-Client https://docs.feathersjs.com/clients/readme.html', done: true},
-            {todo:'add view Datatables (https://datatables.net/)', done: true},
-            {todo:'add view Json Editor (https://github.com/jdorn/json-editor)', done: true},
-            {todo:'add view JSON Form (https://github.com/joshfire/jsonform)', done: true},
-            {todo:'Notifications ', done: true},
-            {todo:'add view Steamtables', done: false},
-            {todo:'Data upload/import', done: false},
-            {todo:'add view ALPACA FORMS (http://www.alpacajs.org/)', done: false},
-            {todo:'add view brutusin json-forms (json-forms https://github.com/brutusin/json-forms)', done: true},
-            {todo:'add view X-editable (https://vitalets.github.io/x-editable/)', done: false},
-        ];
-    </script>
-</todo-list>
-
-<dashboard>
-      <div class="container-fluid">
+<layout>
+    <section class="content">
+        <div class="container-fluid">
             <div class="block-header">
                 <h2>DASHBOARD</h2>
             </div>
@@ -402,176 +305,338 @@
                 <!-- #END# Browser Usage -->
             </div>
         </div>
-    <link href="/bower_components/gentelella/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
-    <link href="/bower_components/gentelella/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+    </section>
+</layout>
 
-    <div class="">
+<modal-delete-confirmation>
 
-        <div class="row top_tiles">
+    <!-- Small modal -->
+    <div id="deleteConfirmation" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
 
-            <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                <top-widget title="Orders" description="Lorem ipsum psdea itgum rixt." icon="fa-euro" service="orders"></top-widget>
-            </div>
-            <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                <top-widget title="Categories" description="Lorem ipsum psdea itgum rixt." icon="fa-sitemap" service="categories"></top-widget>
-            </div>
-            <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                <top-widget title="Products" description="Lorem ipsum psdea itgum rixt." icon="fa-caret-square-o-right" service="products"></top-widget>
-            </div>
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel2">Delete <i>{opts.model}</i></h4>
+          </div>
+          <div class="modal-body">
+            id:{opts.id} {opts.text}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Abbort</button>
+            <button type="button" class="btn btn-warning" onclick="{confirm}">Delete</button>
+          </div>
 
         </div>
-
-        <div class="row">
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <todo-list title="Feature List" subtitle="current and following tasks"></todo-list>
-                <div id="jsoneditor-container"></div>
-            </div>
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <div id="json-forms-container"></div>
-            </div>
-        </div>
-
-         <div class="row">
-            <div class="col-md-12 col-sm-12 col-xs-12">
-
-            </div>
-        </div>
-
+      </div>
     </div>
+    <!-- /modals -->
+
+    <script>
+        var self = this;
+
+         RiotControl.on('delete_confirmation_modal', (model, view, id, text) => {
+            self.opts.model = model;
+            self.opts.view = view;
+            self.opts.id = id;
+            self.opts.text = text || 'please confirm';
+            self.update();
+            $('#deleteConfirmation').modal('show');
+        })
+
+        confirm() {
+            $('#deleteConfirmation').modal('hide');
+            RiotControl.trigger([opts.model, opts.view, 'delete'].join('_'), opts.id);
+        }
+
+    </script>
+
+</modal-delete-confirmation>
+
+<top-menu>
+
+    <link href="/bower_components/gentelella/vendors/pnotify/dist/pnotify.css" rel="stylesheet">
+    <link href="/bower_components/gentelella/vendors/pnotify/dist/pnotify.buttons.css" rel="stylesheet">
+    <link href="/bower_components/gentelella/vendors/pnotify/dist/pnotify.nonblock.css" rel="stylesheet">
+    <modal-delete-confirmation></modal-delete-confirmation>
 
     <script>
         var self = this;
         self.mixin(FeatherClientMixin);
-alert(1)
-        self.jsoneditorQuery = {
-            id:1
-        };
+        RiotCrudController.loadDependencies(
+            [
+                '/bower_components/gentelella/vendors/pnotify/dist/pnotify.js',
+                '/bower_components/gentelella/vendors/pnotify/dist/pnotify.buttons.js',
+                '/bower_components/gentelella/vendors/pnotify/dist/pnotify.nonblock.js',
+            ],
+            'top-menu',
+            function (argument) {
 
-        self.dependencies = [
-            riotCrudTheme + '/views/crud-jsoneditor.js', // TODO: bugfix
-            '/bower_components/gentelella/vendors/iCheck/icheck.min.js',
-        ];
+                var services = Object.keys(self.opts.services);
 
-        this.refresh = (opts) => {
-            initJsonForms();
-            initJsonEditor();
-        },
+                for(key in services) {
 
-        this.on('mount', function() {
-             RiotCrudController.loadDependencies(self.dependencies,'crud-jsoneditor', function (argument) {
-                initPlugins();
-                initJsonForms();
-                initJsonEditor();
-                setTimeout(this.fakeOrder, 3000);
-                self.autoOrder = setInterval(this.fakeOrder, 8000);
-            });
-        });
+                    var service = services[key];
+                    // self[service] = self.client.service(service);
+                    var events = self.opts.services[service];
 
-        this.on('before-unmount', function() {
-            clearTimeout(self.autoOrder);
-        });
-
-        initJsonEditor = () => {
-            self.client.service('categories')
-                .find({query:{$sort:{_id:-1},$limit:1}})
-                .then((result) => {
-                    riot.mount('#jsoneditor-container','crud-jsoneditor',
-                         {
-                            model: 'categories',
-                            idField: '_id',
-                            service: 'categories',
-                            title: 'Categories',
-                            description: 'inline category view with jsoneditor',
-                            schema: 'http://localhost:3030/schema/category.json',
-                            tag: 'crud-json-editor',
-                            selection: true,
-                            view: 'edit',
-                            views: ['save'],
-                            filterable: true,
-                            menu:true,
-                            actionMenu: true,
-                            menuGroup: 'models',
-                            // buttons: ['create','save','list'],
-                            title: 'Categories',
-                            schema: 'http://localhost:3030/schema/category.json',
-                            type:'inline',
-                            query: {id:result.data[0]._id}
-                    });
-                })
-                .catch((error) => {});
-        }
-
-        initJsonForms = () => {
-            self.client.service('products')
-                .find({query:{$sort:{_id:-1},$limit:1}})
-                .then((result) => {
-                        riot.mount('#json-forms-container','crud-json-forms',
-                         {
-                            model: 'products',
-                            idField: '_id',
-                            service: 'products',
-                            title: 'Products',
-                            description: 'inline products view with brutusin:json-forms',
-                            schema: 'http://localhost:3030/schema/products.json',
-                            tag: 'crud-json-editor',
-                            selection: true,
-                            view: 'edit',
-                            views: ['save'],
-                            filterable: true,
-                            menu:true,
-                            actionMenu: true,
-                            menuGroup: 'models',
-                            // buttons: ['create','save','list'],
-                            schema: 'http://localhost:3030/schema/category.json',
-                            type:'inline',
-                            query: {id:result.data[0]._id}
-                    });
-                })
-                .catch((error) => {});
-        }
-
-        initPlugins = () => {
-            // iCheck
-            $(document).ready(function() {
-                if ($("input.flat")[0]) {
-                    $('input.flat').iCheck({
-                        checkboxClass: 'icheckbox_flat-green',
-                        radioClass: 'iradio_flat-green'
-                    });
-                }
-            });
-            // /iCheck
-        }
-
-        fakeOrder = () => {
-            self.client.service('orders')
-                .find({query:{$sort:{id:-1},$limit:1}})
-                .then((result) => {
-                        var order = result.data[0];
-                        order._id = (result.total + 100).toString();
-                        self.client.service('orders')
-                            .create(order)
-                            .then((result) => {
-                                RiotControl.trigger('updateWidgetorders');
-                            })
-                            .catch((error) => {RiotControl.trigger(
-                                'notification',
-                                error.name + ' ' + error.type ,
-                                'error',
-                                error.message
+                    for(event in events) {
+                        var event = events[event];
+                        self.event(service, event, function(service, event,response){
+                            var eventTypeMap = {'created':'info', 'updated':'info','removed':'success'};
+                            self.notify(
+                                'Service "' + service + '" has been <i>' + event + '</i>'
+                                , eventTypeMap[event] || event
+                                ,'id: ' + (response.id || response._id)
                             );
-                        });
-                })                              //'notification', (title, type, text)
-                .catch((error) => {iotControl.trigger(
-                        'notification',
-                        error.name + ' ' + error.type ,
-                        'error',
-                        error.message
-                    );
-                });
+                        })
+                    }
+                }
+            }
+        );
+
+
+        RiotControl.on('notification', (title, type, text) => {
+            this.notify(title, type, text);
+        });
+
+        this.on('mount', function(event) {});
+
+        this.event = function(service, event, cb) {
+            self[service] = self.client.service(service);
+            self[service].on(event,function(response){
+                cb(service, event, response);
+            })
         }
+
+        this.notify = function(title, type, text) {
+            var stack_topleft = {"dir1": "down", "dir2": "right", "push": "top"};
+            var stack_bottomleft = {"dir1": "right", "dir2": "up", "push": "top"};
+            var stack_custom = {"dir1": "right", "dir2": "down"};
+            var stack_custom2 = {"dir1": "left", "dir2": "up", "push": "top"};
+            var stack_modal = {"dir1": "down", "dir2": "right", "push": "top", "modal": true, "overlay_close": true};
+            var stack_bar_top = {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0};
+            var stack_bar_bottom = {"dir1": "up", "dir2": "right", "spacing1": 0, "spacing2": 0};
+            /*********** Positioned Stack ***********
+            * This stack is initially positioned through code instead of CSS.
+            * This is done through two extra variables. firstpos1 and firstpos2
+            * are pixel values, relative to a viewport edge. dir1 and dir2,
+            * respectively, determine which edge. It is calculated as follows:
+            *
+            * - dir = "up" - firstpos is relative to the bottom of viewport.
+            * - dir = "down" - firstpos is relative to the top of viewport.
+            * - dir = "right" - firstpos is relative to the left of viewport.
+            * - dir = "left" - firstpos is relative to the right of viewport.
+            */
+            var stack_bottomright = {"dir1": "up", "dir2": "left", "firstpos1": 25, "firstpos2": 25};
+            if(typeof PNotify == 'function')
+            new PNotify({
+                  delay: 3000,
+                  title: title,
+                  type: type,
+                  text: text || '',
+                  // nonblock: {
+                  //     nonblock: true
+                  // },
+                  styling: 'bootstrap3',
+                  // addclass: 'dark'
+                  addclass: "stack-bottomright",
+                  stack: stack_bottomright
+            });
+        }
+
 
     </script>
-</dashboard>
+
+</top-menu>
 
 
+
+
+<side-menu>
+
+    <div class="navbar nav_title" style="border: 0;">
+        <a href="index.html" class="site_title">
+            <i class="fa fa-database"></i> <span>Riotjs crud admin</span>
+        </a>
+    </div>
+    <div class="clearfix"></div>
+
+    <!-- menu profile quick info -->
+    <div class="profile">
+        <div class="profile_pic">
+            <img src="/bower_components/gentelella/production/images/img.jpg" alt="..." class="img-circle profile_img">
+        </div>
+        <div class="profile_info">
+            <span>Welcome,</span>
+            <h2>John Doe</h2>
+        </div>
+    </div>
+    <!-- /menu profile quick info -->
+    <br />
+    <br />
+    <br />
+
+    <!-- sidebar menu -->
+    <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+        <div class="menu_section">
+          <h3>Demos</h3>
+          <ul class="nav side-menu">
+
+            <!-- default routes -->
+            <li each={key,route in opts.routes.default.routes}>
+                <a href="#{ route.route }" onclick="{ routeTo }" style="" view="#{ route.route }"><raw content="{ route.title }" /></a>
+            </li>
+            <!-- end default routes -->
+
+            <!-- custom routes RiotControl.addMenuGroup() -->
+            <li each={key,group in opts.routes} if={key!='default'}>
+                <a if={group.html}>
+                    <raw content="{group.html}" />
+                </a>
+                <ul if={group.html} class="nav child_menu">
+                    <li each={key,route in group.routes} class={ selected: state }>
+                         <a href="#{ route.route }" onclick="{ routeTo }" style="" view="#{ route.route }"><raw content="{ route.title }" /></a>
+                    </li>
+                </ul>
+                <a if={!group.html} each={key,route in group.routes} href="#{ route.route }" onclick="{ routeTo }" style="" view="#{ route.route }">
+                  <raw content="{ route.title }" />
+                </a>
+            </li>
+            <!-- end custom routes RiotControl.addMenuGroup() -->
+
+          </ul>
+        </div>
+    </div>
+    <!-- /sidebar menu -->
+    <!-- /menu footer buttons -->
+    <div class="sidebar-footer hidden-small">
+        <a data-toggle="tooltip" data-placement="top" title="Settings">
+        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+        </a>
+        <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+        <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+        </a>
+        <a data-toggle="tooltip" data-placement="top" title="Lock">
+        <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+        </a>
+        <a data-toggle="tooltip" data-placement="top" title="Logout">
+        <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+        </a>
+    </div>
+    <!-- /menu footer buttons -->
+
+    <script>
+        var self = this;
+
+        RiotControl.on('routeStateChange',(route) => {
+            var $current = $('.sidebar-menu').find('li.active > a.active');
+            if($current.attr('href') == '#'+route) {
+                $current.addClass('active');
+            } else {
+                $current.addClass('active');
+            }
+        });
+
+        this.on('mount', function() {
+          this.initSidebar();
+        });
+
+        this.routeTo = function(e) {
+            riot.route(e.item.route.route || e.item.route.view);
+        }
+
+        this.initSidebar = function() {
+            var CURRENT_URL = window.location.href.split('?')[0],
+            $BODY = $('body'),
+            $MENU_TOGGLE = $('#menu_toggle'),
+            $SIDEBAR_MENU = $('#sidebar-menu'),
+            $SIDEBAR_FOOTER = $('.sidebar-footer'),
+            $LEFT_COL = $('.left_col'),
+            $RIGHT_COL = $('.right_col'),
+            $NAV_MENU = $('.nav_menu'),
+            $FOOTER = $('footer');
+          // Sidebar
+              // TODO: This is some kind of easy fix, maybe we can improve this
+              var setContentHeight = function () {
+                  // reset height
+                  $RIGHT_COL.css('min-height', $(window).height());
+
+                  var bodyHeight = $BODY.outerHeight(),
+                      footerHeight = $BODY.hasClass('footer_fixed') ? 0 : $FOOTER.height(),
+                      leftColHeight = $LEFT_COL.eq(1).height() + $SIDEBAR_FOOTER.height(),
+                      contentHeight = bodyHeight < leftColHeight ? leftColHeight : bodyHeight;
+
+                  // normalize content
+                  contentHeight -= $NAV_MENU.height() + footerHeight;
+
+                  $RIGHT_COL.css('min-height', contentHeight);
+              };
+
+              $SIDEBAR_MENU.find('a').on('click', function(ev) {
+                  var $li = $(this).parent();
+                  if ($li.is('.active')) {
+                      $li.removeClass('active active-sm');
+                      $('ul:first', $li).slideUp(function() {
+                          setContentHeight();
+                      });
+                  } else {
+                      // prevent closing menu if we are on child menu
+                      if (!$li.parent().is('.child_menu')) {
+                          $SIDEBAR_MENU.find('li').removeClass('active active-sm');
+                          $SIDEBAR_MENU.find('li ul').slideUp();
+                      }
+
+                      $li.addClass('active');
+
+                      $('ul:first', $li).slideDown(function() {
+                          setContentHeight();
+                      });
+                  }
+              });
+
+              // // toggle small or large menu
+              // $MENU_TOGGLE.on('click', function() {
+              //     if ($BODY.hasClass('nav-md')) {
+              //         $SIDEBAR_MENU.find('li.active ul').hide();
+              //         $SIDEBAR_MENU.find('li.active').addClass('active-sm').removeClass('active');
+              //     } else {
+              //         $SIDEBAR_MENU.find('li.active-sm ul').show();
+              //         $SIDEBAR_MENU.find('li.active-sm').addClass('active').removeClass('active-sm');
+              //     }
+
+              //     $BODY.toggleClass('nav-md nav-sm');
+
+              //     setContentHeight();
+              // });
+
+              // check active menu
+              $SIDEBAR_MENU.find('a[href="' + CURRENT_URL + '"]').parent('li').addClass('current-page');
+
+              $SIDEBAR_MENU.find('a').filter(function () {
+                  return this.href == CURRENT_URL;
+              }).parent('li').addClass('current-page').parents('ul').slideDown(function() {
+                  setContentHeight();
+              }).parent().addClass('active');
+
+              // recompute content when resizing
+              $(window).smartresize(function(){
+                  setContentHeight();
+              });
+
+              setContentHeight();
+
+              // fixed sidebar
+              if ($.fn.mCustomScrollbar) {
+                  $('.menu_fixed').mCustomScrollbar({
+                      autoHideScrollbar: true,
+                      theme: 'minimal',
+                      mouseWheel:{ preventDefault: true }
+                  });
+              }
+          // /Sidebar
+        }
+    </script>
+
+</side-menu>

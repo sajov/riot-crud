@@ -1,3 +1,9 @@
+<layout>
+    <section class="content">
+
+    </section>
+</layout>
+
 <modal-delete-confirmation>
 
     <!-- Small modal -->
@@ -217,7 +223,7 @@
     </div>
     <!-- /menu footer buttons -->
 
-	<script>
+    <script>
         var self = this;
 
         RiotControl.on('routeStateChange',(route) => {
@@ -327,6 +333,6 @@
               }
           // /Sidebar
         }
-	</script>
+    </script>
 
 </side-menu>
