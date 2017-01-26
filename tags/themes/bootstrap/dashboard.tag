@@ -1,7 +1,7 @@
 <top-widget>
 
 
-    <div class="info-box hover-expand-effect">
+    <div onclick={routeTo} class="info-box hover-expand-effect">
         <div class="icon {opts.color}">
             <i if={opts.icon} class="material-icons col-gray">{opts.icon}</i>
             <div id="pie" if={opts.pie} class="{opts.pie}" data-chartcolor="{opts.color}">{opts.sparklinedata}</div>
@@ -80,6 +80,12 @@
         }
     }
 
+    self.routeTo = (e) => {
+        e.preventDefault();
+        // #{opts.service}/list
+        riot.route(opts.service + '/list');
+    }
+
   </script>
 
 </top-widget>
@@ -103,8 +109,8 @@
             </ul>
         </div>
         <div class="body">
-            <div each={data in opts.todos} if={key!='default'}>
-                <input type="checkbox" id="basic_checkbox_1" checked={ data.done } /><label for="basic_checkbox_1">{data.todo}</label>
+            <div each={data,key in opts.todos} if={key!='default'}>
+                <input type="checkbox" id="basic_checkbox_{key}" checked={ data.done } /><label for="basic_checkbox_{key}">{data.todo}</label>
             </div>
         </div>
     </div>

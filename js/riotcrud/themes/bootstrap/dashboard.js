@@ -1,4 +1,4 @@
-riot.tag2('top-widget', '<div class="info-box hover-expand-effect"> <div class="icon {opts.color}"> <i if="{opts.icon}" class="material-icons col-gray">{opts.icon}</i> <div id="pie" if="{opts.pie}" class="{opts.pie}" data-chartcolor="{opts.color}">{opts.sparklinedata}</div> </div> <div class="content"> <div class="text">{opts.title}</div> <div class="number count-to" data-from="0" data-to="{opts.count}" data-speed="1000" data-fresh-interval="20">{opts.count}</div> </div> </div>', '', '', function(opts) {
+riot.tag2('top-widget', '<div onclick="{routeTo}" class="info-box hover-expand-effect"> <div class="icon {opts.color}"> <i if="{opts.icon}" class="material-icons col-gray">{opts.icon}</i> <div id="pie" if="{opts.pie}" class="{opts.pie}" data-chartcolor="{opts.color}">{opts.sparklinedata}</div> </div> <div class="content"> <div class="text">{opts.title}</div> <div class="number count-to" data-from="0" data-to="{opts.count}" data-speed="1000" data-fresh-interval="20">{opts.count}</div> </div> </div>', '', '', function(opts) {
     var self = this;
     self.mixin(FeatherClientMixin);
 
@@ -64,9 +64,15 @@ riot.tag2('top-widget', '<div class="info-box hover-expand-effect"> <div class="
         }
     }
 
+    self.routeTo = (e) => {
+        e.preventDefault();
+
+        riot.route(opts.service + '/list');
+    }
+
 });
 
-riot.tag2('todo-list', '<div class="card"> <div class="header"> <h2>{opts.title}<small>{opts.subtitle}</small></h2> <ul class="header-dropdown m-r--5"> <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="material-icons">more_vert</i> </a> <ul class="dropdown-menu pull-right"> <li><a href="javascript:void(0);">Action</a></li> <li><a href="javascript:void(0);">Another action</a></li> <li><a href="javascript:void(0);">Something else here</a></li> </ul> </li> </ul> </div> <div class="body"> <div each="{data in opts.todos}" if="{key!=\'default\'}"> <input type="checkbox" id="basic_checkbox_1" __checked="{data.done}"><label for="basic_checkbox_1">{data.todo}</label> </div> </div> </div>', '', '', function(opts) {
+riot.tag2('todo-list', '<div class="card"> <div class="header"> <h2>{opts.title}<small>{opts.subtitle}</small></h2> <ul class="header-dropdown m-r--5"> <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="material-icons">more_vert</i> </a> <ul class="dropdown-menu pull-right"> <li><a href="javascript:void(0);">Action</a></li> <li><a href="javascript:void(0);">Another action</a></li> <li><a href="javascript:void(0);">Something else here</a></li> </ul> </li> </ul> </div> <div class="body"> <div each="{data,key in opts.todos}" if="{key!=\'default\'}"> <input type="checkbox" id="basic_checkbox_{key}" __checked="{data.done}"><label for="basic_checkbox_{key}">{data.todo}</label> </div> </div> </div>', '', '', function(opts) {
         opts.todos = [
             {todo:'Routing (http://riotjs.com/api/route/)', done: true},
             {todo:'View Models (http://riotjs.com/)', done: true},

@@ -32,6 +32,33 @@
 </crud-action-menu>
 
 
+<crud-header-dropdown>
+
+	<ul class="header-dropdown m-r--5">
+        <li class="dropdown">
+            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <i class="material-icons">more_vert</i>
+            </a>
+            <ul class="dropdown-menu pull-right">
+                <li each={action in opts.actions}>
+	        		<a onclick={ click }>{action.label}</a>
+	        	</li>
+            </ul>
+        </li>
+    </ul>
+
+	<script>
+		var self = this;
+		this.mixin(viewActionsMixin);
+		self.on('mount', () => {
+			console.warn('crud-action-menu', self.opts.actioMenu);
+			console.warn('crud-action-menu', self.opts.action);
+			console.warn('crud-action-menu', self.opts);
+
+		})
+	</script>
+
+</crud-header-dropdown>
 <crud-table>
 
 	<style type="text/css">
@@ -48,21 +75,23 @@
 	</style>
 
 	<div>
-		 <div class="page-title">
-          <div class="title_left">
-            <h3>{title} <small>{description}</small></h3>
-          </div>
-
-          <div class="title_right">
-            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-              <div class="input-group">
-                <input type="text" class="form-control" onkeyup={ search } placeholder="Search for...">
-                <span class="input-group-btn">
-                  <button class="btn btn-default" type="button">Go!</button>
-                </span>
-              </div>
+		<div class="page-title">
+            <div class="title_left">
+      			<h3>{title} <small>{description}</small></h3>
             </div>
-          </div>
+
+          	<div class="title_right">
+            	<div class="col-md-4 pull-right">
+                	<div class="input-group">
+                    	<span onclick={ search }  class="input-group-addon">
+                        	<i class="material-icons">search</i>
+                    	</span>
+                    	<div class="form-line">
+                        	<input type="text" onkeyup={ search } class="form-control date" placeholder="search for ...">
+                    	</div>
+                	</div>
+            	</div>
+         	</div>
         </div>
         <div class="clearfix"></div>
 
@@ -76,17 +105,25 @@
 			    <thead>
 			      <tr >
 			      	<th if={ opts.selection != false } nowrap>
-			      		<i onclick={ selectall } data-value="{ selection.length ==  data.data.length ? 1 : 0 }" class="fa fa-{'check-': selection.length ==  data.data.length}square selectbox"></i>
+			      		<!-- <i onclick={ selectall } data-value="{ selection.length ==  data.data.length ? 1 : 0 }" class="fa fa-{'check-': selection.length ==  data.data.length}square selectbox"></i> -->
+
+		      		   <input type="checkbox" id="basic_checkbox_all" checked="">
+                       <label onclick={ selectall }  data-value="{ selection.length ==  data.data.length ? 1 : 0 }" for="basic_checkbox_all"></label>
 					</th>
 			        <!-- <th each="{ colkey, colval in data.data[0] }" onclick={ sort } >{ colkey }</th> -->
 			        <th each="{ colkey, colval in thead }" onclick={ sort }>
 			        	{ colkey }
-			        	<small if={colval.type == 'string'} class="fa fa-sort-alpha-{ query.$sort[colkey] ? theadSort : 'asc'}"></small>
-			        	<small if={colval.type == 'number'} class="fa fa-sort-numeric-{ query.$sort[colkey] ? theadSort : 'asc'}"></small>
-			        	<small if={colval.type != 'number' && colval.type != 'string'} class="fa fa-sort-amount-{ query.$sort[colkey] ? theadSort : 'asc'}"></small>
+			        	<!-- <small if={colval.type == 'string'} class="fa fa-sort-alpha-{ query.$sort[colkey] ? theadSort : 'asc'}"></small> -->
+			        	<i if={colval.type == 'string'} class="material-icons font-14 pull-right">sort_by_alpha</i>
+
+			        	<i if={colval.type != 'string'} class="material-icons font-14 pull-right">sort</i>
+
+			        	<!-- <small if={colval.type == 'number'} class="fa fa-sort-numeric-{ query.$sort[colkey] ? theadSort : 'asc'}"></small>
+
+			        	<small if={colval.type != 'number' && colval.type != 'string'} class="fa fa-sort-amount-{ query.$sort[colkey] ? theadSort : 'asc'}"></small> -->
 			        </th>
 			        <th>
-			        	<i onclick={ toggleFilter } class="fa fa-filter"></i>
+			        	<i onclick={ toggleFilter } class="material-icons">filter_list</i>
 			        </th>
 			      </tr>
 			    </thead>
@@ -103,12 +140,27 @@
 
 			      	<tr each="{ row in data.data }"  onclick={ selectrow } class="{ 'selected': selection.indexOf(row._id) != -1 }">
 				      	<td if={ opts.selection != false } class="a-center">
-				      			<i data-value="{ row._id }" class="fa fa-{'check-': selection.indexOf(row._id) != -1 }square selectbox"></i>
+				      			<!-- <i data-value="{ row._id }" class="fa fa-{'check-': selection.indexOf(row._id) != -1 }square selectbox"></i> -->
+				      			<input data-value="{ row._id }" type="checkbox" id="basic_checkbox_{row._id}" checked="{'checked': selection.indexOf(row._id) != -1}">
+                       			<label data-value="{ row._id }" onclick={ selectall }  data-value="{ selection.length ==  data.data.length ? 1 : 0 }" for="basic_checkbox_{row._id}"></label>
 						</td>
 				        <td each="{ colkey, colval in thead }" onclick={ selectRow } >
 				        	{ row[colkey] }
 				        </td>
-				      	<td>&nbsp;</td>
+				      	<td>
+				      		<div class="btn-group">
+                                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="material-icons">more_vert</i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="javascript:void(0);" class=" waves-effect waves-block">Action</a></li>
+                                        <li><a href="javascript:void(0);" class=" waves-effect waves-block">Another action</a></li>
+                                        <li><a href="javascript:void(0);" class=" waves-effect waves-block">Something else here</a></li>
+                                        <li role="separator" class="divider"></li>
+                                        <li><a href="javascript:void(0);" class=" waves-effect waves-block">Separated link</a></li>
+                                    </ul>
+                                </div>
+				      	</td>
 				    </tr>
 			    </tbody>
 		    </table>

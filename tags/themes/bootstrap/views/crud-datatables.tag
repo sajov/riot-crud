@@ -18,7 +18,35 @@
         }
     </style>
 
-    <div class="">
+    <div class="card">
+        <div class="header">
+            <h2>{opts.title}<small>{opts.description}</small></h2>
+            <crud-header-dropdown if={opts.actionMenu !== false} service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown>
+        </div>
+        <div class="body">
+           <table id="datatable" class="display table table-striped table-bordered datatable-buttons" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th if={opts.selection}><input onclick={rowSelection} type="checkbox" /></th>
+                        <th each="{ colkey, colval in opts.schema.required }" data-type="{colval.type}">{ colkey }</th>
+                        <th></th>
+                    </tr>
+
+                </thead>
+                <tfoot>
+                    <tr id="filterrow"  if={opts.filterable}>
+                        <th></th>
+                        <th each="{ colkey, colval in opts.schema.required }" data-type="{colval.type}">
+                           <small> <input type="text" name="filter_{ colkey }" placeholder="filter { colkey }"></small>
+                        </th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+<!--     <div class="">
         <div class="page-title">
           <div class="title_left">
             <h3>{ opts.title } <small>{ opts.description }</small></h3>
@@ -69,7 +97,7 @@
           </div>
         </div>
     </div>
-
+ -->
 
     <script>
         var self = this;
