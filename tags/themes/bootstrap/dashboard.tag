@@ -1,7 +1,7 @@
 <top-widget>
 
 
-    <div onclick="" class="info-box hover-expand-effect">
+    <div class="info-box hover-expand-effect">
         <div class="icon {opts.color}">
             <i if={opts.icon} class="material-icons col-gray">{opts.icon}</i>
             <div id="pie" if={opts.pie} class="{opts.pie}" data-chartcolor="{opts.color}">{opts.sparklinedata}</div>

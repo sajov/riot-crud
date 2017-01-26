@@ -1,4 +1,4 @@
-riot.tag2('top-widget', '<div onclick="" class="info-box hover-expand-effect"> <div class="icon {opts.color}"> <i if="{opts.icon}" class="material-icons col-gray">{opts.icon}</i> <div id="pie" if="{opts.pie}" class="{opts.pie}" data-chartcolor="{opts.color}">{opts.sparklinedata}</div> </div> <div class="content"> <div class="text">{opts.title}</div> <div class="number count-to" data-from="0" data-to="{opts.count}" data-speed="1000" data-fresh-interval="20">{opts.count}</div> </div> </div>', '', '', function(opts) {
+riot.tag2('top-widget', '<div class="info-box hover-expand-effect"> <div class="icon {opts.color}"> <i if="{opts.icon}" class="material-icons col-gray">{opts.icon}</i> <div id="pie" if="{opts.pie}" class="{opts.pie}" data-chartcolor="{opts.color}">{opts.sparklinedata}</div> </div> <div class="content"> <div class="text">{opts.title}</div> <div class="number count-to" data-from="0" data-to="{opts.count}" data-speed="1000" data-fresh-interval="20">{opts.count}</div> </div> </div>', '', '', function(opts) {
     var self = this;
     self.mixin(FeatherClientMixin);
 
