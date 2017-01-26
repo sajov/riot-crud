@@ -45,7 +45,6 @@ $script.ready(theme, function() {
                 riotCrudTheme + '/views/crud-json-forms.js'
             ],
             fn: function(id, action) {
-                alert(1)
                 riot.mount('#content', 'dashboard');
             }
         }
@@ -305,7 +304,7 @@ $script.ready(theme, function() {
     /* mount gentella admin layout*/
     riot.mount('layout');
 
-    riot.mount('#side-menu','side-menu', {
+    riot.mount('side-menu', {
         routes: RiotCrudController.getRouteMenu()
     });
 
