@@ -6,7 +6,8 @@
 <crud-action-menu>
 
 	<div class="btn-group">
-		<a each={action in opts.actions} if={ action.active} onclick={ click } class="btn btn-{ action.buttonClass || 'default'} {dropdown-menu: action.options} btn-sm">{action.label}
+		<a each={action in opts.actions} if={ action.active} onclick={ click } class="btn btn-{ action.buttonClass || 'default'} {dropdown-menu: action.options} btn-sm">
+			{action.label}
 			<!-- <i class="fa fa-save"></i> -->
 		</a>
 
@@ -41,7 +42,19 @@
             </a>
             <ul class="dropdown-menu pull-right">
                 <li each={action in opts.actions}>
-	        		<a onclick={ click }>{action.label}</a>
+
+	        		<a onclick={ click }>
+
+		        		<i if={action.name == 'create'} class="material-icons">add</i>
+						<i if={action.name == 'view'} class="material-icons">view_compact</i>
+						<i if={action.name == 'delete'} class="material-icons">remove</i>
+						<i if={action.name == 'edit'} class="material-icons">create</i>
+						<i if={action.name == 'save'} class="material-icons">save</i>
+						<i if={action.name == 'list'} class="material-icons">list</i>
+		        		<span>
+		        			{action.label}
+		        		</span>
+		        	</a>
 	        	</li>
             </ul>
         </li>
@@ -72,114 +85,113 @@
 		.pagination {
 			margin: 0px 0 10px 0 ;
 		}
+
+		td {
+		  max-width: 100px;
+		  white-space: pre-wrap;        /* css */
+		  white-space: -moz-pre-wrap;   /* Mozilla */
+		  white-space: -pre-wrap;       /* Chrome*/
+		  white-space: -o-pre-wrap;     /* Opera 7 */
+		  word-wrap: break-word; /* Internet Explorer 5.5+ */
+		}
 	</style>
 
-	<div>
-		<div class="page-title">
-            <div class="title_left">
-      			<h3>{title} <small>{description}</small></h3>
-            </div>
+	<modal-delete-confirmation></modal-delete-confirmation>
 
-          	<div class="title_right">
-            	<div class="col-md-4 pull-right">
-                	<div class="input-group">
-                    	<span onclick={ search }  class="input-group-addon">
-                        	<i class="material-icons">search</i>
-                    	</span>
-                    	<div class="form-line">
-                        	<input type="text" onkeyup={ search } class="form-control date" placeholder="search for ...">
-                    	</div>
-                	</div>
+	<div class="card">
+        <div class="header">
+            <h2>{opts.title}<small>{opts.subtitle}</small></h2>
+
+            <crud-header-dropdown if={opts.actionMenu !== false} service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown>
+
+        	<div class="input-group" style="margin-bottom:0px">
+            	<span onclick={ search }  class="input-group-addon">
+                	<i class="material-icons">search</i>
+            	</span>
+            	<div class="form-line">
+                	<input type="text" onkeyup={ search } class="form-control date" placeholder="search for ...">
             	</div>
-         	</div>
+        	</div>
         </div>
-        <div class="clearfix"></div>
 
-	    <!-- <yield from="title"/> -->
-	    <!-- <yield from="buttons"/> -->
+        <div class="body">
+			<div class="table-responsive">
 
-		<div class="table-responsive">
+					<table id="{ opts.service }_table" class="table table-striped jambo_table bulk_action">
 
-			<table id={ opts.id } class="table table-striped jambo_table bulk_action">
+					    <thead>
+					      <tr >
+					      	<th if={ opts.selection != false } style="width:40px;vertical-align: text-top" nowrap data-colkey="rowSelection" style="{columnWidths['rowSelection'] ? 'width:' + columnWidths['rowSelection'] + 'px': '' }">
+				      		   <input type="checkbox" id="basic_checkbox_all" checked="{ 'checked': selection.length ==  data.data.length }">
+		                       <label onclick={ selectall }  data-value="{ selection.length ==  data.data.length ? 1 : 0 }" for="basic_checkbox_all"></label>
+							</th>
+					        <th each="{ colkey, colval in thead }" data-colkey="{colkey}" onclick={ sort } style="{columnWidths[colkey] ? 'width:' + columnWidths[colkey] + 'px': '' }">
+					        	<i if={colval.type == 'string'} class="material-icons font-14 pull-right">sort_by_alpha</i>
+					        	<i if={colval.type != 'string'} class="material-icons font-14 pull-right">sort</i>
+					        	<span>{ colkey }</span>
+					        </th>
+					        <th data-colkey="filter" style="{columnWidths['filter'] ? 'width:' + columnWidths['filter'] + 'px': '' }">
+					        	<i onclick={ toggleFilter } class="material-icons">filter_list</i>
+					        </th>
+					      </tr>
+					    </thead>
 
-			    <thead>
-			      <tr >
-			      	<th if={ opts.selection != false } nowrap>
-			      		<!-- <i onclick={ selectall } data-value="{ selection.length ==  data.data.length ? 1 : 0 }" class="fa fa-{'check-': selection.length ==  data.data.length}square selectbox"></i> -->
+					    <tbody>
+					    	<tr class="{'hide': !showFilter}">
+						      	<td if={ opts.selection != false } nowrap>&nbsp;</td>
+						        <td each="{ colkey, colval in thead }">
+						        	<input if={schema.properties[colkey].type!='data'} type="text" name="{ colkey }" onchange={filter} placeholder="enter serach">
+						        	<input if={schema.properties[colkey].type=='date'} type="date" name="{ colkey }" onchange={filter} placeholder="enter serach">
+						        </td>
+						        <td>&nbsp;</td>
+					      	</tr>
 
-		      		   <input type="checkbox" id="basic_checkbox_all" checked="">
-                       <label onclick={ selectall }  data-value="{ selection.length ==  data.data.length ? 1 : 0 }" for="basic_checkbox_all"></label>
-					</th>
-			        <!-- <th each="{ colkey, colval in data.data[0] }" onclick={ sort } >{ colkey }</th> -->
-			        <th each="{ colkey, colval in thead }" onclick={ sort }>
-			        	{ colkey }
-			        	<!-- <small if={colval.type == 'string'} class="fa fa-sort-alpha-{ query.$sort[colkey] ? theadSort : 'asc'}"></small> -->
-			        	<i if={colval.type == 'string'} class="material-icons font-14 pull-right">sort_by_alpha</i>
+					      	<tr each="{ row in data.data }" class="{ 'selected': selection.indexOf(row._id) != -1 }">
+						      	<td if={ opts.selection != false } class="a-center">
+						      			<input data-value="{ row._id }" onclick={ selectRow } type="checkbox" id="basic_checkbox_{row._id}" checked="{'checked': selection.indexOf(row._id) != -1}">
+		                       			<label data-value="{ row._id }" onclick={ selectRow }  data-value="{ selection.length ==  data.data.length ? 1 : 0 }" for="basic_checkbox_{row._id}"></label>
+								</td>
+						        <td each="{ colkey, colval in thead }">
+						        	{ row[colkey] }
+						        </td>
+						      	<td>
+                                    <a onclick={viewRow} >
+                                        <i class="material-icons col-grey">pageview</i>
+                                    </a>
+                                    <a onclick={deleteRow} >
+                                        <i class="material-icons col-grey">delete</i>
+                                    </a>
 
-			        	<i if={colval.type != 'string'} class="material-icons font-14 pull-right">sort</i>
 
-			        	<!-- <small if={colval.type == 'number'} class="fa fa-sort-numeric-{ query.$sort[colkey] ? theadSort : 'asc'}"></small>
 
-			        	<small if={colval.type != 'number' && colval.type != 'string'} class="fa fa-sort-amount-{ query.$sort[colkey] ? theadSort : 'asc'}"></small> -->
-			        </th>
-			        <th>
-			        	<i onclick={ toggleFilter } class="material-icons">filter_list</i>
-			        </th>
-			      </tr>
-			    </thead>
 
-			    <tbody>
-			    	<tr class="{'hide': !showFilter}">
-				      	<td if={ opts.selection != false } nowrap>&nbsp;</td>
-				        <td each="{ colkey, colval in thead }">
-				        	<input if={schema.properties[colkey].type!='data'} type="text" name="{ colkey }" onchange={filter} placeholder="enter serach">
-				        	<input if={schema.properties[colkey].type=='date'} type="date" name="{ colkey }" onchange={filter} placeholder="enter serach">
-				        </td>
-				        <td>&nbsp;</td>
-			      	</tr>
+						      	</td>
+						    </tr>
+					    </tbody>
+				    </table>
+			</div>
+			<div class="clearfix"></div>
+			<nav if="{pagination.length > 0}" aria-label="Page navigation" class="pull-right">
+			    <ul class="pagination">
+			   		<li each={page in pagination} class="{'disabled':page.active == false}">
+			    		<a href="#" onclick={paginate} class={'disabled':page.active == false}>
+			        		<i class="{page.class}"></i>{page.label}
+			      		</a>
+			    	</li>
+			  	</ul>
+			</nav>
+			<div class="clearfix"></div>
 
-			      	<tr each="{ row in data.data }"  onclick={ selectrow } class="{ 'selected': selection.indexOf(row._id) != -1 }">
-				      	<td if={ opts.selection != false } class="a-center">
-				      			<!-- <i data-value="{ row._id }" class="fa fa-{'check-': selection.indexOf(row._id) != -1 }square selectbox"></i> -->
-				      			<input data-value="{ row._id }" type="checkbox" id="basic_checkbox_{row._id}" checked="{'checked': selection.indexOf(row._id) != -1}">
-                       			<label data-value="{ row._id }" onclick={ selectall }  data-value="{ selection.length ==  data.data.length ? 1 : 0 }" for="basic_checkbox_{row._id}"></label>
-						</td>
-				        <td each="{ colkey, colval in thead }" onclick={ selectRow } >
-				        	{ row[colkey] }
-				        </td>
-				      	<td>
-				      		<div class="btn-group">
-                                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="material-icons">more_vert</i>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="javascript:void(0);" class=" waves-effect waves-block">Action</a></li>
-                                        <li><a href="javascript:void(0);" class=" waves-effect waves-block">Another action</a></li>
-                                        <li><a href="javascript:void(0);" class=" waves-effect waves-block">Something else here</a></li>
-                                        <li role="separator" class="divider"></li>
-                                        <li><a href="javascript:void(0);" class=" waves-effect waves-block">Separated link</a></li>
-                                    </ul>
-                                </div>
-				      	</td>
-				    </tr>
-			    </tbody>
-		    </table>
-		</div>
-		<div class="clearfix"></div>
+			<!-- <yield from="buttons"/> -->
+			<yield />
+        </div>
+    </div>
 
-		<nav if={pagination.length > 0} aria-label="Page navigation" class="pull-right">
-		  <ul class="pagination">
-		    <li each={page in pagination}>
-		    	<a href="#" onclick={paginate} class={'disabled':page.active == false}>
-		        	<i class="{page.class}"></i>{page.label}
-		      	</a>
-		    </li>
-		  </ul>
-		</nav>
-		<div class="clearfix"></div>
+	<div>
 
-		<!-- <yield from="buttons"/> -->
-		<yield></yield>
+
+
+
 	</div>
 	<div class="clearfix"></div>
 
@@ -287,7 +299,7 @@
 			// self.update();
 		}
 
-		selectrow = (e) => {
+		selectRow = (e) => {
 			let value = e.item.row._id;
 			let index = self.selection.indexOf(value);
 			if (index !== -1) {
@@ -297,6 +309,18 @@
 			}
 			// self.update();
 		}
+
+		deleteRow = (e) => {
+			e.preventDefault();
+			RiotControl.trigger([self.opts.service, self.opts.view, 'delete','confirmation'].join('_'), e.item.row._id)
+		}
+
+		viewRow = (e) => {
+			e.preventDefault();
+			riot.route(opts.service + '/view/' + e.item.row._id);
+		}
+       // <a class="btn btn-info btn-xs" tabindex="0" aria-controls="ajaxdatatables" href="#' + opts.service + '/view/' + row[opts.idField] + '"><i class="fa fa-edit"></i></a>
+       // <a class="btn btn-danger btn-xs" onclick="RiotControl.trigger(\'' + viewModelKey + '\',\''+row[opts.idField]+'\')"><i class="fa fa-trash-o"></i></a>
 
 	    initSchema = () => {
 	    	self.thead = {};
@@ -321,6 +345,23 @@
 	        }).catch((error) => {
 	          console.error('Error', error);
 	        });
+	    }
+
+	    self.refresh = () => {
+	    	getData();
+	    }
+
+	    initColumnWidth = () => {
+	    	if(!self.columnWidths) {
+	    		self.columnWidths = {};
+	    		$('#orders_table th').each(function(){
+	    			console.warn($(this).data('colkey'));
+	    			console.warn($(this).width());
+	    			self.columnWidths[$(this).data('colkey')] = $(this).width();
+	    		})
+	    		self.columnWidths[rowSelection] = 40;
+	    		console.error(self.columnWidths)
+	    	}
 	    }
 
 	    initPagination = () => {
@@ -369,6 +410,8 @@
 
 
 	    getData = () => {
+	    	if(self.data)
+	    		initColumnWidth();
 	        self.service.find({query:self.query}).then((result) => {
 	        	self.selection = [];
 	            self.data = result;

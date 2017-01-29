@@ -279,7 +279,8 @@
                             .then((result) => {
                                 RiotControl.trigger('updateWidgetorders');
                             })
-                            .catch((error) => {RiotControl.trigger(
+                            .catch((error) => {
+                                RiotControl.trigger(
                                 'notification',
                                 error.name + ' ' + error.type ,
                                 'error',

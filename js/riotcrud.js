@@ -40,12 +40,12 @@
     riotCrudController.prototype = {
 
         defaults: (config) => {
-            options = $.extend({}, options, config);
+            options = Object.assign({}, options, config);
             return this;
         },
 
         addRoute: (route, config) => {
-            config = $.extend({}, options, config);
+            config = Object.assign({}, options, config);
             routes[route] = config;
             // if(config.menu) {
             //     menuGroups[config.menuGroup || 'default'].routes = {
@@ -55,8 +55,9 @@
             return this;
         },
 
-        addMenuGroup: (key, html) => {
-            menuGroups[key] = {html: html, routes: {}}
+        addMenuGroup: (key, opts) => {
+            // menuGroups[key] = {html: html, routes: {}}
+            menuGroups[key] = Object.assign({}, opts, {routes: {}})
         },
 
         getRoutes: () => {
@@ -381,37 +382,31 @@
                 {
                   name: 'view',
                   label: 'View',
-                  buttonClass: 'info',
                   active: true
                 },
                 {
                   name: 'edit',
                   label: 'Edit',
-                  buttonClass: 'primary',
                   active: true
                 },
                 {
                   name: 'create',
                   label: 'Create',
-                  buttonClass: 'warning',
                   active: true
                 },
                 {
                   name: 'delete',
                   label: 'Delete',
-                  buttonClass: 'danger',
                   active: true
                 },
                 {
                   name: 'save',
                   label: 'Save',
-                  buttonClass: 'success',
                   active: true
                 },
                 {
                   name: 'list',
                   label: 'List',
-                  buttonClass: 'default',
                   active: true
                 }
             ];

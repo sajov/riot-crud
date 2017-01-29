@@ -2,7 +2,7 @@ riot.tag2('raw', '<span></span>', '', '', function(opts) {
 	this.root.innerHTML = opts.content
 });
 
-riot.tag2('crud-action-menu', '<div class="btn-group"> <a each="{action in opts.actions}" if="{action.active}" onclick="{click}" class="btn btn-{action.buttonClass || \'default\'} {dropdown-menu: action.options} btn-sm">{action.label} </a> </div>', '', '', function(opts) {
+riot.tag2('crud-action-menu', '<div class="btn-group"> <a each="{action in opts.actions}" if="{action.active}" onclick="{click}" class="btn btn-{action.buttonClass || \'default\'} {dropdown-menu: action.options} btn-sm"> {action.label} </a> </div>', '', '', function(opts) {
 				var self = this;
 				this.mixin(viewActionsMixin);
 				self.on('mount', () => {
@@ -14,7 +14,7 @@ riot.tag2('crud-action-menu', '<div class="btn-group"> <a each="{action in opts.
 });
 
 
-riot.tag2('crud-header-dropdown', '<ul class="header-dropdown m-r--5"> <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="material-icons">more_vert</i> </a> <ul class="dropdown-menu pull-right"> <li each="{action in opts.actions}"> <a onclick="{click}">{action.label}</a> </li> </ul> </li> </ul>', '', '', function(opts) {
+riot.tag2('crud-header-dropdown', '<ul class="header-dropdown m-r--5"> <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="material-icons">more_vert</i> </a> <ul class="dropdown-menu pull-right"> <li each="{action in opts.actions}"> <a onclick="{click}"> <i if="{action.name == \'create\'}" class="material-icons">add</i> <i if="{action.name == \'view\'}" class="material-icons">view_compact</i> <i if="{action.name == \'delete\'}" class="material-icons">remove</i> <i if="{action.name == \'edit\'}" class="material-icons">create</i> <i if="{action.name == \'save\'}" class="material-icons">save</i> <i if="{action.name == \'list\'}" class="material-icons">list</i> <span> {action.label} </span> </a> </li> </ul> </li> </ul>', '', '', function(opts) {
 		var self = this;
 		this.mixin(viewActionsMixin);
 		self.on('mount', () => {
@@ -24,7 +24,7 @@ riot.tag2('crud-header-dropdown', '<ul class="header-dropdown m-r--5"> <li class
 
 		})
 });
-riot.tag2('crud-table', '<div> <div class="page-title"> <div class="title_left"> <h3>{title} <small>{description}</small></h3> </div> <div class="title_right"> <div class="col-md-4 pull-right"> <div class="input-group"> <span onclick="{search}" class="input-group-addon"> <i class="material-icons">search</i> </span> <div class="form-line"> <input type="text" onkeyup="{search}" class="form-control date" placeholder="search for ..."> </div> </div> </div> </div> </div> <div class="clearfix"></div> <div class="table-responsive"> <table id="{opts.id}" class="table table-striped jambo_table bulk_action"> <thead> <tr> <th if="{opts.selection != false}" nowrap> <input type="checkbox" id="basic_checkbox_all" checked=""> <label onclick="{selectall}" data-value="{selection.length ==  data.data.length ? 1 : 0}" for="basic_checkbox_all"></label> </th> <th each="{colkey, colval in thead}" onclick="{sort}"> {colkey} <i if="{colval.type == \'string\'}" class="material-icons font-14 pull-right">sort_by_alpha</i> <i if="{colval.type != \'string\'}" class="material-icons font-14 pull-right">sort</i> </th> <th> <i onclick="{toggleFilter}" class="material-icons">filter_list</i> </th> </tr> </thead> <tbody> <tr class="{\'hide\': !showFilter}"> <td if="{opts.selection != false}" nowrap>&nbsp;</td> <td each="{colkey, colval in thead}"> <input if="{schema.properties[colkey].type!=\'data\'}" type="text" name="{colkey}" onchange="{filter}" placeholder="enter serach"> <input if="{schema.properties[colkey].type==\'date\'}" name="{colkey}" onchange="{filter}" placeholder="enter serach" type="date"> </td> <td>&nbsp;</td> </tr> <tr each="{row in data.data}" onclick="{selectrow}" class="{\'selected\': selection.indexOf(row._id) != -1}"> <td if="{opts.selection != false}" class="a-center"> <input data-value="{row._id}" type="checkbox" id="basic_checkbox_{row._id}" __checked="{\'checked\': selection.indexOf(row._id) != -1}"> <label data-value="{row._id}" onclick="{selectall}" data-value="{selection.length ==  data.data.length ? 1 : 0}" for="basic_checkbox_{row._id}"></label> </td> <td each="{colkey, colval in thead}" onclick="{selectRow}"> {row[colkey]} </td> <td> <div class="btn-group"> <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="material-icons">more_vert</i> </button> <ul class="dropdown-menu"> <li><a href="javascript:void(0);" class=" waves-effect waves-block">Action</a></li> <li><a href="javascript:void(0);" class=" waves-effect waves-block">Another action</a></li> <li><a href="javascript:void(0);" class=" waves-effect waves-block">Something else here</a></li> <li role="separator" class="divider"></li> <li><a href="javascript:void(0);" class=" waves-effect waves-block">Separated link</a></li> </ul> </div> </td> </tr> </tbody> </table> </div> <div class="clearfix"></div> <nav if="{pagination.length > 0}" aria-label="Page navigation" class="pull-right"> <ul class="pagination"> <li each="{page in pagination}"> <a href="#" onclick="{paginate}" class="{\'disabled\':page.active == false}"> <i class="{page.class}"></i>{page.label} </a> </li> </ul> </nav> <div class="clearfix"></div> <yield></yield> </div> <div class="clearfix"></div>', 'th { white-space: nowrap } .selectbox { font-size: 150%; } .pagination { margin: 0px 0 10px 0 ; }', '', function(opts) {
+riot.tag2('crud-table', '<modal-delete-confirmation></modal-delete-confirmation> <div class="card"> <div class="header"> <h2>{opts.title}<small>{opts.subtitle}</small></h2> <crud-header-dropdown if="{opts.actionMenu !== false}" service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown> <div class="input-group" style="margin-bottom:0px"> <span onclick="{search}" class="input-group-addon"> <i class="material-icons">search</i> </span> <div class="form-line"> <input type="text" onkeyup="{search}" class="form-control date" placeholder="search for ..."> </div> </div> </div> <div class="body"> <div class="table-responsive"> <table id="{opts.service}_table" class="table table-striped jambo_table bulk_action"> <thead> <tr> <th if="{opts.selection != false}" style="width:40px;vertical-align: text-top" nowrap data-colkey="rowSelection" riot-style="{columnWidths[\'rowSelection\'] ? \'width:\' + columnWidths[\'rowSelection\'] + \'px\': \'\'}"> <input type="checkbox" id="basic_checkbox_all" __checked="{\'checked\': selection.length ==  data.data.length}"> <label onclick="{selectall}" data-value="{selection.length ==  data.data.length ? 1 : 0}" for="basic_checkbox_all"></label> </th> <th each="{colkey, colval in thead}" data-colkey="{colkey}" onclick="{sort}" riot-style="{columnWidths[colkey] ? \'width:\' + columnWidths[colkey] + \'px\': \'\'}"> <i if="{colval.type == \'string\'}" class="material-icons font-14 pull-right">sort_by_alpha</i> <i if="{colval.type != \'string\'}" class="material-icons font-14 pull-right">sort</i> <span>{colkey}</span> </th> <th data-colkey="filter" riot-style="{columnWidths[\'filter\'] ? \'width:\' + columnWidths[\'filter\'] + \'px\': \'\'}"> <i onclick="{toggleFilter}" class="material-icons">filter_list</i> </th> </tr> </thead> <tbody> <tr class="{\'hide\': !showFilter}"> <td if="{opts.selection != false}" nowrap>&nbsp;</td> <td each="{colkey, colval in thead}"> <input if="{schema.properties[colkey].type!=\'data\'}" type="text" name="{colkey}" onchange="{filter}" placeholder="enter serach"> <input if="{schema.properties[colkey].type==\'date\'}" name="{colkey}" onchange="{filter}" placeholder="enter serach" type="date"> </td> <td>&nbsp;</td> </tr> <tr each="{row in data.data}" class="{\'selected\': selection.indexOf(row._id) != -1}"> <td if="{opts.selection != false}" class="a-center"> <input data-value="{row._id}" onclick="{selectRow}" type="checkbox" id="basic_checkbox_{row._id}" __checked="{\'checked\': selection.indexOf(row._id) != -1}"> <label data-value="{row._id}" onclick="{selectRow}" data-value="{selection.length ==  data.data.length ? 1 : 0}" for="basic_checkbox_{row._id}"></label> </td> <td each="{colkey, colval in thead}"> {row[colkey]} </td> <td> <a onclick="{viewRow}"> <i class="material-icons col-grey">pageview</i> </a> <a onclick="{deleteRow}"> <i class="material-icons col-grey">delete</i> </a> </td> </tr> </tbody> </table> </div> <div class="clearfix"></div> <nav if="{pagination.length > 0}" aria-label="Page navigation" class="pull-right"> <ul class="pagination"> <li each="{page in pagination}" class="{\'disabled\':page.active == false}"> <a href="#" onclick="{paginate}" class="{\'disabled\':page.active == false}"> <i class="{page.class}"></i>{page.label} </a> </li> </ul> </nav> <div class="clearfix"></div> <yield></yield> </div> </div> <div> </div> <div class="clearfix"></div>', 'th { white-space: nowrap } .selectbox { font-size: 150%; } .pagination { margin: 0px 0 10px 0 ; } td { max-width: 100px; white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; }', '', function(opts) {
 
 		var self = this;
 		self.opts.view = 'list';
@@ -125,7 +125,7 @@ riot.tag2('crud-table', '<div> <div class="page-title"> <div class="title_left">
 
 		}
 
-		selectrow = (e) => {
+		selectRow = (e) => {
 			let value = e.item.row._id;
 			let index = self.selection.indexOf(value);
 			if (index !== -1) {
@@ -134,6 +134,16 @@ riot.tag2('crud-table', '<div> <div class="page-title"> <div class="title_left">
 				self.selection.push(value)
 			}
 
+		}
+
+		deleteRow = (e) => {
+			e.preventDefault();
+			RiotControl.trigger([self.opts.service, self.opts.view, 'delete','confirmation'].join('_'), e.item.row._id)
+		}
+
+		viewRow = (e) => {
+			e.preventDefault();
+			riot.route(opts.service + '/view/' + e.item.row._id);
 		}
 
 	    initSchema = () => {
@@ -159,6 +169,23 @@ riot.tag2('crud-table', '<div> <div class="page-title"> <div class="title_left">
 	        }).catch((error) => {
 	          console.error('Error', error);
 	        });
+	    }
+
+	    self.refresh = () => {
+	    	getData();
+	    }
+
+	    initColumnWidth = () => {
+	    	if(!self.columnWidths) {
+	    		self.columnWidths = {};
+	    		$('#orders_table th').each(function(){
+	    			console.warn($(this).data('colkey'));
+	    			console.warn($(this).width());
+	    			self.columnWidths[$(this).data('colkey')] = $(this).width();
+	    		})
+	    		self.columnWidths[rowSelection] = 40;
+	    		console.error(self.columnWidths)
+	    	}
 	    }
 
 	    initPagination = () => {
@@ -205,6 +232,8 @@ riot.tag2('crud-table', '<div> <div class="page-title"> <div class="title_left">
 	    }
 
 	    getData = () => {
+	    	if(self.data)
+	    		initColumnWidth();
 	        self.service.find({query:self.query}).then((result) => {
 	        	self.selection = [];
 	            self.data = result;

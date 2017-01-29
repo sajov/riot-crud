@@ -10,9 +10,20 @@
       </div>
     </div>
 
-    RiotControl.on(opts.trigger, () => {
-        $('#modal-dialog').modal('toggle');
-    });
+    <script>
+
+        this.on('mount', () => {
+            RiotControl.on(opts.trigger, () => {
+                $('#modal-dialog').modal('toggle');
+            });
+        });
+
+        this.on('unmount', () => {
+            RiotControl.off(opts.trigger);
+        });
+
+
+    </script>
 
 </modal-dialog>
 
@@ -21,14 +32,14 @@
     <modal-dialog trigger="order_add_item_modal" trigger-submit="crud-table-trigger-selected">
 
         <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <button type="button" class="close waves-effect" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             <h4 class="modal-title" id="myModalLabel2">Add Product</h4>
         </div>
         <div class="modal-body">
             <crud-table service="products" limit="3" skip="0" ups={table:'test'}>
                     <yield class="pull-right">
-                        <button type="button" class="btn btn-success" onclick={triggerData} data-trigger="product_add_items">Add</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal"  onclick={abort}>Abbort</button>
+                        <button type="button" class="btn btn-success waves-effect" onclick={triggerData} data-trigger="product_add_items">Add</button>
+                        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal"  onclick={abort}>Abbort</button>
                     </yield>
             </crud-table>
         </div>
@@ -127,11 +138,13 @@
                                                     </td>
                                                     <td align="right">{item.price_euro} €</td>
                                                     <td align="right">{item.total} €</td>
-                                                    <td align="right"><a href="#" itemKey="{key}" onclick={ deleteItem } class="btn btn-danger btn-xs hidden-print"><i class="fa fa-trash-o"></i></a></td>
+                                                    <td align="right"><a href="#" itemKey="{key}" onclick={ deleteItem } class="btn btn-danger btn-xs hidden-print">
+                                                        <i class="material-icons">remove</i>
+                                                    </a></td>
                                                 </tr>
                                                 <tr>
                                                     <td colspan="8">
-                                                        <button class="btn btn-primary pull-right hidden-print" onclick={ addItemModal } >Add Product</button>
+                                                        <button class="btn btn-primary pull-right hidden-print waves-effect" onclick={ addItemModal } ><i class="material-icons">add</i></button>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -191,10 +204,23 @@
                                 <!-- /.row -->
                                 <!-- this row will not appear when printing -->
                                 <div class="row no-print hidden-print">
-                                    <div class="col-xs-12">
-                                        <button class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit Payment</button>
-                                        <button class="btn btn-default pull-right" onclick="window.print();"><i class="fa fa-print"></i> Print</button>
-                                        <button class="btn btn-primary pull-right" style="margin-right: 5px;"><i class="fa fa-download"></i> Generate PDF</button>
+                                    <div class="btn-group pull-right">
+                                        <button onclick={ save } class="btn btn-danger waves-effect">
+                                            <i class="material-icons">save</i>
+                                            <span>Save</span>
+                                        </button>
+                                        <button class="btn btn-success waves-effect">
+                                            <i class="material-icons">payment</i>
+                                            <span>Submit Payment</span>
+                                        </button>
+                                        <button class="btn btn-default waves-effect" onclick="window.print();">
+                                            <i class="material-icons">print</i>
+                                            <span>Print</span>
+                                        </button>
+                                        <button class="btn btn-primary waves-effect" style="margin-right: 5px;">
+                                            <i class="material-icons">picture_as_pdf</i>
+                                            Generate PDF
+                                        </button>
                                     </div>
                                 </div>
                             </section>
@@ -229,7 +255,14 @@
                 if(self.opts.query.id)
                     self.initOrder(self.opts.query.id);
             });
+
+
         });
+
+
+        self.save = () => {
+            RiotControl.trigger(opts.service + '_save');
+        }
 
         self.refresh = (opts) => {
             if(opts.query.id)
@@ -244,7 +277,7 @@
         self.initOrder = (orderId) => {
           self.service.get(orderId).then((result) => {
                 self.opts.data = result;
-                RiotControl.trigger('order_add_item_modal', opts.id);
+                // RiotControl.trigger('order_add_item_modal', opts.id); // !!!
                 self.update();
           }).catch((error) => {
             console.error('Error', error);

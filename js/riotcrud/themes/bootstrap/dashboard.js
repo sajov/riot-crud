@@ -203,7 +203,8 @@ riot.tag2('dashboard', '<div class="row top_tiles"> <div class="animated flipInY
                             .then((result) => {
                                 RiotControl.trigger('updateWidgetorders');
                             })
-                            .catch((error) => {RiotControl.trigger(
+                            .catch((error) => {
+                                RiotControl.trigger(
                                 'notification',
                                 error.name + ' ' + error.type ,
                                 'error',

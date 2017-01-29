@@ -1,4 +1,4 @@
-riot.tag2('layout', '<section class="content"> <div id="content" class="container-fluid"> <div class="block-header"> <h2>DASHBOARD</h2> </div> </div> </section>', '', '', function(opts) {
+riot.tag2('layout', '<section class="content"> <div id="content" class="container-fluid"> <div class="block-header"> </div> </div> </section>', '', '', function(opts) {
 });
 
 riot.tag2('modal-delete-confirmation', '<div id="deleteConfirmation" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true"> <div class="modal-dialog modal-sm"> <div class="modal-content"> <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span> </button> <h4 class="modal-title" id="myModalLabel2">Delete <i>{opts.model}</i></h4> </div> <div class="modal-body"> id:{opts.id} {opts.text} </div> <div class="modal-footer"> <button type="button" class="btn btn-default" data-dismiss="modal">Abbort</button> <button type="button" class="btn btn-warning" onclick="{confirm}">Delete</button> </div> </div> </div> </div>', '', '', function(opts) {
@@ -97,7 +97,7 @@ riot.tag2('top-menu', '<link href="/bower_components/gentelella/vendors/pnotify/
 
 
 
-riot.tag2('side-menu', '<li class="header">RIOT+FEATHERS CRUD DEMO</li> <li each="{key,route in opts.routes.default.routes}"> <a href="#{route.route}" onclick="{routeTo}" style="" view="#{route.route}"><raw content="{route.title}"></raw></a> </li> <li each="{key,group in opts.routes}" if="{key!=\'default\'}"> <a if="{group.html}"> <raw content="{group.html}"></raw> </a> <ul if="{group.html}" class="nav child_menu"> <li each="{key,route in group.routes}" class="{selected: state}"> <a href="#{route.route}" onclick="{routeTo}" style="" view="#{route.route}"><raw content="{route.title}"></raw></a> </li> </ul> <a if="{!group.html}" each="{key,route in group.routes}" href="#{route.route}" onclick="{routeTo}" style="" view="#{route.route}"> <raw content="{route.title}"></raw> </a> </li> <yield></yield>', '', '', function(opts) {
+riot.tag2('side-menu', '<li class="header">RIOT+FEATHERS CRUD DEMO</li> <li each="{key,route in opts.routes.default.routes}"> <a href="#{route.route}" onclick="{routeTo}" style="" view="#{route.route}"> <i class="material-icons">{route.icon}</i> <span>{route.title}</span> </a> </li> <li each="{key,group in opts.routes}" if="{key!=\'default\'}"> <a if="{group.title}" href="javascript:void(0);" class="menu-toggle"> <i class="material-icons">{group.icon}</i> <span>{group.title}</span> </a> <ul class="ml-menu"> <li each="{key,route in group.routes}" class="{selected: state}"> <a href="#{route.route}" onclick="{routeTo}" style="" view="#{route.route}"> <i class="material-icons">{route.icon || \'widgets\'}</i> <span>{route.title}</span> </a> </li> </ul> </li> <yield></yield>', '', '', function(opts) {
         var self = this;
 
         RiotControl.on('routeStateChange',(route) => {
@@ -110,6 +110,7 @@ riot.tag2('side-menu', '<li class="header">RIOT+FEATHERS CRUD DEMO</li> <li each
         });
 
         this.on('mount', function() {
+            console.log(opts.routes)
           this.initSidebar();
         });
 
@@ -118,6 +119,6 @@ riot.tag2('side-menu', '<li class="header">RIOT+FEATHERS CRUD DEMO</li> <li each
         }
 
         this.initSidebar = function() {
-
+            $.AdminBSB.leftSideBar.activate();
         }
 });

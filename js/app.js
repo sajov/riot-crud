@@ -27,8 +27,10 @@ $script.ready(theme, function() {
     /**
      * Add menu groups
      */
-    RiotCrudController.addMenuGroup('models','<i class="fa fa-table"></i>Models<span class="fa fa-chevron-down"></span>');
-    RiotCrudController.addMenuGroup('views','<i class="fa fa-desktop"></i>Views<span class="fa fa-chevron-down"></span>');
+    // RiotCrudController.addMenuGroup('models','<i class="fa fa-table"></i>Models<span class="fa fa-chevron-down"></span>');
+    // RiotCrudController.addMenuGroup('views','<i class="fa fa-desktop"></i>Views<span class="fa fa-chevron-down"></span>');
+    RiotCrudController.addMenuGroup('models', {title:'MODELS',icon: 'data_usage'});
+    RiotCrudController.addMenuGroup('views', {title:'VIEWS',icon: 'computer'});
 
 
     /**
@@ -36,7 +38,8 @@ $script.ready(theme, function() {
      */
     RiotCrudController.addRoute('dashboard',
         {
-            title: '<i class="fa fa-home"></i>Dashboard',
+            title: 'Dashboard',
+            icon: 'home',
             menu: true,
             route: '/dashboard',
             dependencies: [
@@ -55,9 +58,10 @@ $script.ready(theme, function() {
      */
     RiotCrudController.addRoute('customorders',
         {
-            title: 'Order <small>(custom view)</small>',
+            title: 'Order (custom view)',
             menu: true,
             menuGroup: 'views',
+            icon: 'attach_money',
             route: '/orders/view/10',
             servicename: 'orders',
             endpoint: 'http://localhost:3030',
@@ -74,9 +78,10 @@ $script.ready(theme, function() {
      */
     RiotCrudController.addRoute('jsoneditorcategories',
         {
-            title: 'Category <small>(jsoneditor view)</small>',
+            title: 'Category (jsoneditor view)',
             menu: true,
             menuGroup: 'views',
+            icon: 'reorder',
             route: '/jsoneditorcategories',
             servicename: 'orders',
             endpoint: 'http://localhost:3030',
@@ -111,6 +116,7 @@ $script.ready(theme, function() {
                 filterable: true,
                 menu:true,
                 menuGroup: 'models',
+                icon: 'list',
                 buttons: ['edit','delete'],
                 tag: 'crud-datatables',
                 title: 'Products',
@@ -173,7 +179,7 @@ $script.ready(theme, function() {
                 menu:true,
                 menuGroup: 'models',
                 buttons: ['edit','delete'],
-                tag: 'crud-datatables',
+                tag: 'crud-table',
                 title: 'Categories',
                 schema: 'http://localhost:3030/schema/category.json',
                 target: 'div#content',
@@ -184,10 +190,7 @@ $script.ready(theme, function() {
                             return '<span class="badge badge-success" style="background-color:' + data.base_color + '">' + data.base_color + '</span>';
                         }
                     }
-                },
-                dependencies: [
-                    riotCrudTheme + '/views/crud-datatables.js',
-                ]
+                }
             },
             view:{
                 tag: 'crud-json-editor',
@@ -236,7 +239,7 @@ $script.ready(theme, function() {
                 menu:true,
                 menuGroup: 'models',
                 buttons: ['edit','delete'],
-                tag: 'crud-datatables',
+                tag: 'crud-table',
                 title: 'Orders',
                 schema: 'http://localhost:3030/schema/order.json',
                 target: 'div#content',
@@ -248,15 +251,13 @@ $script.ready(theme, function() {
                             return '<span class="badge badge-success" style="background-color:' + data.base_color + '">' + data.base_color + '</span>';
                         }
                     }
-                },
-                dependencies: [
-                    riotCrudTheme + '/views/crud-datatables.js',
-                ]
+                }
             },
             view:{
                 tag: 'order',
                 buttons: {save:true},
-                title: 'Order <small>(custom view)</small>',
+                title: 'Order (custom view)',
+                icon: 'reorder',
                 schema: 'http://localhost:3030/schema/order.json',
                 target: 'div#content',
                 dependencies: [
@@ -308,7 +309,7 @@ $script.ready(theme, function() {
         routes: RiotCrudController.getRouteMenu()
     });
 
-    riot.mount('#top-menu','top-menu', {
+    riot.mount('top-menu', {
         services: {
             products: ['created','create','update','updated','removed'],
             categories: ['created','create','update','updated','removed'],
