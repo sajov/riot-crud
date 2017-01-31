@@ -11,22 +11,8 @@
 
     <div class="card">
         <div class="header">
-            <h2>{opts.title}<small>{opts.subtitle}</small></h2>
-            <ul class="header-dropdown m-r--5">
-                <li class="dropdown">
-                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                        <i class="material-icons">more_vert</i>
-                    </a>
-                    <ul class="dropdown-menu pull-right">
-                        <li><a href="javascript:void(0);">Action</a></li>
-                        <li><a href="javascript:void(0);">Another action</a></li>
-                        <li><a href="javascript:void(0);">Something else here</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <div class="nav navbar-right panel_toolbox">
-                                <crud-action-menu if={opts.actionMenu !== false} service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}"  buttons="{opts.buttons}"></crud-action-menu>
-                        </div>
+            <h2>{opts.title}<small>{opts.description}</small></h2>
+            <crud-header-dropdown if={opts.actionMenu !== false} service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown>
         </div>
         <div class="body">
             <div id="jsoneditor"></div>

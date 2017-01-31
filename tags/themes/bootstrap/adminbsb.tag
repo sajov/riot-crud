@@ -26,12 +26,15 @@
             <button type="button" class="btn btn-default" data-dismiss="modal">Abbort</button>
             <button type="button" class="btn btn-warning" onclick="{confirm}">Delete</button>
           </div>
-
         </div>
       </div>
     </div>
     <!-- /modals -->
-
+    <style type="text/css">
+        div.modal-backdrop.fade.in {
+            z-index: 7!important;
+        }
+    </style>
     <script>
         var self = this;
 

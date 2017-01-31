@@ -148,6 +148,7 @@
 
             if (typeof route.fn === 'function') {
                 currentName = null;
+                currentTag = null;
                 route.fn(collection, param, action);
             } else {
                 mount(
@@ -352,10 +353,18 @@
                           dataType: "json",
                           async: false,
                           cache: false,
-                          success: function(data){self.schema = data;cb()}
+                          success: function(data){
+                                self.schema = data;
+                                self.opts.schema = data; // ????
+                                cb()
+                            }
                         });
                     }
                 }
+
+                self.on('ALL', function(event){
+                    console.log('FeatherClientMixin', event)
+                })
 
                 self.on('unmount', () => {
                     RiotControl.off(self.eventKeyDelete);
@@ -408,6 +417,26 @@
                   name: 'list',
                   label: 'List',
                   active: true
+                },
+                {
+                  name: 'print',
+                  label: 'Print',
+                  active: false
+                },
+                {
+                  name: 'pdf',
+                  label: 'PDF',
+                  active: false
+                },
+                {
+                  name: 'csv',
+                  label: 'CSV',
+                  active: false
+                },
+                {
+                  name: 'json',
+                  label: 'Json',
+                  active: false
                 }
             ];
 
@@ -415,21 +444,26 @@
 
                 var  view = self.opts.view || 'undefined';
                 self.opts.actions = actions.map((action, index) => {
-                    action.active = true;
+                    action.active = false;
                     switch(view) {
                         case 'view':
-                            if(['view','save'].indexOf(action.name) != -1){
-                                action.active = false;
+                            if(['edit','delete','create','list'].indexOf(action.name) != -1){
+                                action.active = true;
                             }
                             break;
                         case 'edit':
-                            if(['edit'].indexOf(action.name) != -1){
-                                action.active = false;
+                            if(['save','view','delete','list'].indexOf(action.name) != -1){
+                                action.active = true;
                             }
                             break;
                         case 'create':
-                            if(['create','edit','view','delete'].indexOf(action.name) != -1){
-                                action.active = false;
+                            if(['save','list'].indexOf(action.name) != -1){
+                                action.active = true;
+                            }
+                            break;
+                        case 'list':
+                            if(['delete','create','print','pdf','csv','json'].indexOf(action.name) != -1){
+                                action.active = true;
                             }
                             break;
                         default:

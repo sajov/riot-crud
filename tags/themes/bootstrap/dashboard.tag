@@ -30,11 +30,12 @@
             .find({query:{$sort:{id:-1}}})
             .then((result) => {
                     self.opts.count = result.total;
+                    console.log('count',self.opts.count)
                     self.update();
-                if( opts.title == 'Products') {
-                    console.info('getData ' + opts.title);
+                // if( opts.title == 'Products') {
+                //     console.info('getData ' + opts.title);
                     self.initPlugins();
-                }
+                // }
             })
             .catch((error) => {RiotControl.trigger(
                         'notification',
@@ -64,7 +65,7 @@
 
         //Widgets count plugin
         function initCounters() {
-            $('.count-to').countTo();
+            // $('.count-to').countTo();
         }
 
         //Charts

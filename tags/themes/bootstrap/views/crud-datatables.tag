@@ -1,5 +1,48 @@
 <crud-datatables>
 
+    <div class="card">
+        <div class="header">
+            <h2>{opts.title}<small>{opts.subtitle}</small></h2>
+
+            <crud-header-dropdown if={opts.actionMenu !== false} service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown>
+
+            <div class="input-group" style="margin-bottom:0px">
+                <span onclick={ search }  class="input-group-addon">
+                    <i class="material-icons">search</i>
+                </span>
+                <div class="form-line">
+                    <input type="text" onkeyup={ datatableSearch } class="form-control date" placeholder="search for ...">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="body">
+           <table id="datatable" class="display table table-striped table-bordered datatable-buttons" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th if={opts.selection}>
+                            <input type="checkbox" id="basic_checkbox_all" checked="{ 'checked': selection.length ==  data.data.length }">
+                            <label onclick={ selectall }  data-value="{ selection.length ==  data.data.length ? 1 : 0 }" for="basic_checkbox_all"></label>
+                        </th>
+                        <th each="{ colkey, colval in opts.tableHeader }" data-type="{colval.type}">{ colkey }</th>
+                        <th></th>
+                    </tr>
+
+                </thead>
+                <tfoot>
+                    <tr id="filterrow"  if={opts.filterable}>
+                        <th if={opts.selection}></th>
+                        <th each="{ colkey, colval in opts.tableHeader }" data-type="{colval.type}">
+                           <small> <input type="text" name="filter_{ colkey }" placeholder="filter { colkey }"></small>
+                        </th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
     <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/zf/dt-1.10.12/datatables.min.css"> -->
     <link href="https://cdn.datatables.net/v/bs/dt-1.10.13/b-1.2.4/b-colvis-1.2.4/b-flash-1.2.4/b-html5-1.2.4/b-print-1.2.4/cr-1.3.2/fc-3.2.2/fh-3.1.2/kt-2.2.0/r-2.1.0/rr-1.2.0/sc-1.4.2/se-1.2.0/datatables.min.css" rel="stylesheet">
     <link href="/bower_components/gentelella/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
@@ -17,87 +60,6 @@
             outline-offset: -1px;
         }
     </style>
-
-    <div class="card">
-        <div class="header">
-            <h2>{opts.title}<small>{opts.description}</small></h2>
-            <crud-header-dropdown if={opts.actionMenu !== false} service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown>
-        </div>
-        <div class="body">
-           <table id="datatable" class="display table table-striped table-bordered datatable-buttons" cellspacing="0" width="100%">
-                <thead>
-                    <tr>
-                        <th if={opts.selection}><input onclick={rowSelection} type="checkbox" /></th>
-                        <th each="{ colkey, colval in opts.schema.required }" data-type="{colval.type}">{ colkey }</th>
-                        <th></th>
-                    </tr>
-
-                </thead>
-                <tfoot>
-                    <tr id="filterrow"  if={opts.filterable}>
-                        <th></th>
-                        <th each="{ colkey, colval in opts.schema.required }" data-type="{colval.type}">
-                           <small> <input type="text" name="filter_{ colkey }" placeholder="filter { colkey }"></small>
-                        </th>
-                        <th>&nbsp;</th>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-    </div>
-
-<!--     <div class="">
-        <div class="page-title">
-          <div class="title_left">
-            <h3>{ opts.title } <small>{ opts.description }</small></h3>
-          </div>
-
-          <div class="title_right">
-            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-              <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search for...">
-                <span class="input-group-btn">
-                  <button class="btn btn-default" type="button">Go!</button>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="clearfix"></div>
-
-        <div class="row">
-          <div class="col-md-12 col-sm-12 col-xs-12">
-            <div class="x_panel">
-
-              <div class="x_content">
-
-                <table id="datatable" class="display table table-striped table-bordered datatable-buttons" cellspacing="0" width="100%">
-                    <thead>
-                        <tr>
-                            <th if={opts.selection}><input onclick={rowSelection} type="checkbox" /></th>
-                            <th each="{ colkey, colval in opts.schema.required }" data-type="{colval.type}">{ colkey }</th>
-                            <th></th>
-                        </tr>
-
-                    </thead>
-                    <tfoot>
-                        <tr id="filterrow"  if={opts.filterable}>
-                            <th></th>
-                            <th each="{ colkey, colval in opts.schema.required }" data-type="{colval.type}">
-                               <small> <input type="text" name="filter_{ colkey }" placeholder="filter { colkey }"></small>
-                            </th>
-                            <th>&nbsp;</th>
-                        </tr>
-                    </tfoot>
-                </table>
-
-              </div>
-            </div>
-          </div>
-        </div>
-    </div>
- -->
 
     <script>
         var self = this;
@@ -123,40 +85,47 @@
         ];
 
         self.refresh = function(query) {
+            console.info('Datatable REFRESH ' + query);
             self.datatable.draw();
         }
-
+        self.on('*', (event) => {
+            console.info('Datatable event ' + opts.service, event);
+        })
         self.on('before-unmount', () => {
             self.datatable.destroy();
         })
 
-        self.on('mount', function(params, options) {
+
+        self.on('updated', function(params, options) {
+            if(opts.tableHeader) {
+                self.initTable();
+            }
+        })
+
+        self.on('before-mount', function(params, options) {
             RiotCrudController.loadDependencies(self.dependencies,'crud-datatables', function (argument) {
-                 self.initTable();
+
+                 self.service.get('schema').then((result) => {
+                        opts.schema = result;
+                        opts.tableHeader = opts.schema.defaultProperties || opts.schema.required || opts.schema.properties;
+                        console.info('Datatable before-mount opts.tableHeaderTest', opts.tableHeader);
+                        self.update();
+                        // self.initTable();
+                    }).catch((error) => {
+                        console.error('console.errorconsole.errorconsole.errorconsole.error')
+                    });
             });
-            opts.tableHeader = opts.schema.required;
-            // opts.tableHeader = opts.schema.defaultProperties || opts.schema.required;
         });
 
         /**
          * Init Datatable
          */
         self.initTable = function() {
-            self.datatable = $('#datatable').DataTable(self.getDatatableConfig());
-
-            $('#datatable tfoot input').on('change keyup', function () {
-                self.datatable
-                    .column( $(this).parent().index()+':visible' )
-                    .search( self.value )
-                    .draw();
-            } );
-
-            $('.top_search input').on('change', function() {
-                self.datatable
-                    .search( $(this).val() )
-                    .draw();
-            });
-
+            try {
+                self.datatable = $('#datatable').DataTable(self.getDatatableConfig());
+            } catch(e) {
+                console.log(e);
+            }
         }
 
         /**
@@ -166,11 +135,11 @@
             var config = {
                 order: [[0,'asc']],
                 columns: [],
-                "ajax": opts.baseUrl + '/' + opts.model,
+                // "ajax": opts.baseUrl + '/' + opts.model,
                 "processing": true,
                 "serverSide": true,
                 // dom: "Bfrtip",
-                select:true,
+                // select:true,
                 dom: "fBfrtip",
                 // dom: "<Blf<t>ip>",
                 // dom: "Bfrtip",
@@ -217,7 +186,7 @@
                 responsive: true,
                 fixedHeader: true,
                 keys: true,
-                "fnServerData": self.datatableSearch
+                "fnServerData": self._fnServerData
             }
 
             if(opts.selection) {
@@ -229,20 +198,23 @@
                         "orderable": false,
                         // "defaultContent": "<button>Click!</button>",
                         "render": function ( data, type, row ) {
-                            return '<input type="checkbox" value="'+ row[opts.idField] + '"/>';
+                            // return '<input type="checkbox" value="'+ row[opts.idField] + '"/>';
+                            return '<input type="checkbox" id="basic_checkbox_' + row[opts.idField] + '" value="'+ row[opts.idField] + '">' +
+                                    '<label  data-value="0" for="basic_checkbox_' + row[opts.idField] + '"></label>';
                         }
                     }
                 )
                 config.order = [[1, 'asc']];
             }
 
-
+            opts.columns =  opts.columns ||  {};
             for (var i = 0;i < opts.tableHeader.length; i++) {
                 var  col = opts.columns[opts.tableHeader[i]] || {data: opts.tableHeader[i]};
                 config.columns.push(col);
             }
 
             if(opts.buttons) {
+
                 var viewModelKey = [self.opts.service, self.opts.view, 'delete', 'confirmation'].join('_');
                 config.columns.push(
                     {
@@ -252,10 +224,14 @@
                         // "defaultContent": "<button>Click!</button>",
                         "render": function ( data, type, row ) {
                             // return data +' ('+ row.sku+')';
-                            return '<div class="dt-buttons btn-group">' +
-                                        '<a class="btn btn-info btn-xs" tabindex="0" aria-controls="ajaxdatatables" href="#' + opts.service + '/view/' + row[opts.idField] + '"><i class="fa fa-edit"></i></a>' +
-                                        '<a class="btn btn-danger btn-xs" onclick="RiotControl.trigger(\'' + viewModelKey + '\',\''+row[opts.idField]+'\')"><i class="fa fa-trash-o"></i></a>' +
-                                    '</div>';
+                            return '<td>' +
+                                    '<a href="#/' + opts.service  + '/view/' + row[opts.idField] + '">' +
+                                        '<i class="material-icons col-grey">pageview</i>' +
+                                    '</a>' +
+                                    '<a onclick="RiotControl.trigger(\'' + viewModelKey + '\',\''+row[opts.idField]+'\')" >' +
+                                        '<i class="material-icons col-grey">delete</i>' +
+                                    '</a>' +
+                                '</td>';
                         }
                     }
                 );
@@ -266,7 +242,7 @@
         /**
          * Data Table Search Function
          */
-        self.datatableSearch = function ( sSource, aoData, fnCallback ) {
+        self._fnServerData = function ( sSource, aoData, fnCallback ) {
                 /* reorganize query */
                 var query = {};
                 var queryObj = {};
@@ -274,7 +250,6 @@
                     // console.log('CRUD-datatables aoData[i].name',aoData[i].name);
                     queryObj[aoData[i].name] = aoData[i];
                 }
-
                 /* limit / offset */
                 query.$limit = queryObj['length'].value;
                 query.$skip = queryObj['start'].value;
@@ -302,6 +277,7 @@
                 }
 
                 self.service.find({query:query}).then(function(result){
+
                     fnCallback({
                         error: false,
                         recordsTotal: result.total,
@@ -315,6 +291,13 @@
                     })
                 });
         }
+
+        self.datatableSearch = (e) => {
+                self.datatable
+                    .search( e.target.value )
+                    .draw();
+        }
+
 
         self.rowSelection =  function(e) {
             // console.log(e);

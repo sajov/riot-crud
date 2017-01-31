@@ -2,6 +2,13 @@ riot.tag2('raw', '<span></span>', '', '', function(opts) {
 	this.root.innerHTML = opts.content
 });
 
+riot.tag2('crud-test', '', '', '', function(opts) {
+		var self = this;
+		this.on('*', (event) => {
+			console.info('CRUD-TEST: ' + event, opts.name)
+		});
+});
+
 riot.tag2('crud-action-menu', '<div class="btn-group"> <a each="{action in opts.actions}" if="{action.active}" onclick="{click}" class="btn btn-{action.buttonClass || \'default\'} {dropdown-menu: action.options} btn-sm"> {action.label} </a> </div>', '', '', function(opts) {
 				var self = this;
 				this.mixin(viewActionsMixin);
@@ -14,7 +21,7 @@ riot.tag2('crud-action-menu', '<div class="btn-group"> <a each="{action in opts.
 });
 
 
-riot.tag2('crud-header-dropdown', '<ul class="header-dropdown m-r--5"> <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="material-icons">more_vert</i> </a> <ul class="dropdown-menu pull-right"> <li each="{action in opts.actions}"> <a onclick="{click}"> <i if="{action.name == \'create\'}" class="material-icons">add</i> <i if="{action.name == \'view\'}" class="material-icons">view_compact</i> <i if="{action.name == \'delete\'}" class="material-icons">remove</i> <i if="{action.name == \'edit\'}" class="material-icons">create</i> <i if="{action.name == \'save\'}" class="material-icons">save</i> <i if="{action.name == \'list\'}" class="material-icons">list</i> <span> {action.label} </span> </a> </li> </ul> </li> </ul>', '', '', function(opts) {
+riot.tag2('crud-header-dropdown', '<ul class="header-dropdown m-r--5"> <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="material-icons">more_vert</i> </a> <ul class="dropdown-menu pull-right"> <li each="{action in opts.actions}"> <a if="{action.active}" onclick="{click}"> <i if="{action.name == \'create\'}" class="material-icons">add</i> <i if="{action.name == \'view\'}" class="material-icons">view_compact</i> <i if="{action.name == \'delete\'}" class="material-icons">remove</i> <i if="{action.name == \'edit\'}" class="material-icons">mode_edit</i> <i if="{action.name == \'save\'}" class="material-icons">save</i> <i if="{action.name == \'list\'}" class="material-icons">format_list_bulleted</i> <span if="{action.active}"> {action.label} {action.count ? \'(\' + action.count +\')\' : \'\'} </span> </a> </li> </ul> </li> </ul>', '', '', function(opts) {
 		var self = this;
 		this.mixin(viewActionsMixin);
 		self.on('mount', () => {
@@ -183,7 +190,7 @@ riot.tag2('crud-table', '<modal-delete-confirmation></modal-delete-confirmation>
 	    			console.warn($(this).width());
 	    			self.columnWidths[$(this).data('colkey')] = $(this).width();
 	    		})
-	    		self.columnWidths[rowSelection] = 40;
+	    		self.columnWidths['rowSelection'] = 40;
 	    		console.error(self.columnWidths)
 	    	}
 	    }

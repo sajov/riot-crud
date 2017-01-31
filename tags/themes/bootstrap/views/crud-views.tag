@@ -3,6 +3,16 @@
 	this.root.innerHTML = opts.content
 </raw>
 
+<crud-test>
+
+	<script>
+		var self = this;
+		this.on('*', (event) => {
+			console.info('CRUD-TEST: ' + event, opts.name)
+		});
+	</script>
+</crud-test>
+
 <crud-action-menu>
 
 	<div class="btn-group">
@@ -43,16 +53,16 @@
             <ul class="dropdown-menu pull-right">
                 <li each={action in opts.actions}>
 
-	        		<a onclick={ click }>
+	        		<a if={action.active} onclick={ click }>
 
 		        		<i if={action.name == 'create'} class="material-icons">add</i>
 						<i if={action.name == 'view'} class="material-icons">view_compact</i>
 						<i if={action.name == 'delete'} class="material-icons">remove</i>
-						<i if={action.name == 'edit'} class="material-icons">create</i>
+						<i if={action.name == 'edit'} class="material-icons">mode_edit</i>
 						<i if={action.name == 'save'} class="material-icons">save</i>
-						<i if={action.name == 'list'} class="material-icons">list</i>
-		        		<span>
-		        			{action.label}
+						<i if={action.name == 'list'} class="material-icons">format_list_bulleted</i>
+		        		<span  if={action.active} >
+		        			{action.label} {action.count ? '(' + action.count +')' : ''}
 		        		</span>
 		        	</a>
 	        	</li>
@@ -161,10 +171,6 @@
                                     <a onclick={deleteRow} >
                                         <i class="material-icons col-grey">delete</i>
                                     </a>
-
-
-
-
 						      	</td>
 						    </tr>
 					    </tbody>
@@ -359,7 +365,7 @@
 	    			console.warn($(this).width());
 	    			self.columnWidths[$(this).data('colkey')] = $(this).width();
 	    		})
-	    		self.columnWidths[rowSelection] = 40;
+	    		self.columnWidths['rowSelection'] = 40;
 	    		console.error(self.columnWidths)
 	    	}
 	    }

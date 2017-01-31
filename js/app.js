@@ -78,10 +78,10 @@ $script.ready(theme, function() {
      */
     RiotCrudController.addRoute('jsoneditorcategories',
         {
-            title: 'Category (jsoneditor view)',
+            title: 'Category (jsoneditor)',
             menu: true,
             menuGroup: 'views',
-            icon: 'reorder',
+            icon: 'view_compact',
             route: '/jsoneditorcategories',
             servicename: 'orders',
             endpoint: 'http://localhost:3030',
@@ -93,6 +93,40 @@ $script.ready(theme, function() {
         }
     );
 
+        /**
+     * Add jsoneditor view Order
+     */
+    RiotCrudController.addRoute('datatables',
+        {
+            title: 'Products List (datatables.js)',
+            menu: true,
+            menuGroup: 'views',
+            icon: 'format_list_bulleted',
+            route: '/datatables/list',
+            service: 'products',
+            view: 'list',
+            idField: '_id',
+            target: 'div#content',
+            tag: 'crud-datatables',
+            buttons: ['edit','delete'],
+            selection: true,
+            servicename: 'products', // ???
+            endpoint: 'http://localhost:3030',
+            columns: {
+                    base_color: {
+                        "data": null,
+                        "render": function ( data, type, row ) {
+                            return '<span class="badge badge-success" style="background-color:' + data.base_color + '">' + data.base_color + '</span>';
+                        }
+                    }
+                },
+            // fn: function(id, action) {
+            //     var tag = riot.mount('#content', 'crud-jsoneditor')[0];
+            //     console.log('TAG',tag)
+            // }
+            dependencies: [riotCrudTheme + '/views/crud-datatables.js'],
+        }
+    );
 
     /**
      * Add a model with it's views
@@ -153,7 +187,8 @@ $script.ready(theme, function() {
             },
             edit: {
                 tag: 'crud-jsoneditor',
-                title: 'Edit Products (jsoneditor demo edit)',
+                title: 'Edit Products',
+                description: 'jsoneditor.js demo',
                 target: 'div#content',
                 dependencies: [
                     riotCrudTheme + '/views/crud-jsoneditor.js'
@@ -256,7 +291,8 @@ $script.ready(theme, function() {
             view:{
                 tag: 'order',
                 buttons: {save:true},
-                title: 'Order (custom view)',
+                title: 'Order',
+                description: 'Custom view',
                 icon: 'reorder',
                 schema: 'http://localhost:3030/schema/order.json',
                 target: 'div#content',
@@ -266,7 +302,8 @@ $script.ready(theme, function() {
             },
             create: {
                 tag: 'crud-json-editor',
-                title: 'Create Order (json-editor demo)',
+                title: 'Create Order',
+                description: 'json-editor demo',
                 target: 'div#content',
                 dependencies: [
                     riotCrudTheme + '/views/crud-json-editor.js'
@@ -274,7 +311,8 @@ $script.ready(theme, function() {
             },
             edit: {
                 tag: 'crud-json-forms',
-                title: 'Edit Order (json-forms demo)',
+                title: 'Edit Order',
+                description: 'json-forms.js demo',
                 target: 'div#content',
                 dependencies: [
                     riotCrudTheme + '/views/crud-json-forms.js'
@@ -320,6 +358,9 @@ $script.ready(theme, function() {
     if(window.location.hash === "" && window.location.hash != "#dashboard") {
        riot.route('dashboard');
     }
+
+
+    // riot.mount('crud-test',{name:'my tag name',service:'klo'})
 
 
     RiotCrudController.start();

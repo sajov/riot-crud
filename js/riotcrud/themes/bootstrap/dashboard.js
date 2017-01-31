@@ -16,11 +16,11 @@ riot.tag2('top-widget', '<div onclick="{routeTo}" class="info-box hover-expand-e
             .find({query:{$sort:{id:-1}}})
             .then((result) => {
                     self.opts.count = result.total;
+                    console.log('count',self.opts.count)
                     self.update();
-                if( opts.title == 'Products') {
-                    console.info('getData ' + opts.title);
+
                     self.initPlugins();
-                }
+
             })
             .catch((error) => {RiotControl.trigger(
                         'notification',
@@ -49,7 +49,7 @@ riot.tag2('top-widget', '<div onclick="{routeTo}" class="info-box hover-expand-e
         initCharts();
 
         function initCounters() {
-            $('.count-to').countTo();
+
         }
 
         function initCharts() {

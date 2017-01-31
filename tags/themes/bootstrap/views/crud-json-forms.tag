@@ -3,17 +3,16 @@
 
     <link href="/bower_components/json-forms/dist/css/brutusin-json-forms.min.css" rel="stylesheet">
 
-        <div class="card">
-            <div class="header">
-                <h2>{opts.title}<small>{opts.subtitle}</small></h2>
-                <crud-header-dropdown if={opts.actionMenu !== false} service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown>
-            </div>
-            <div class="body">
-                <div id="json-forms"></div>
-            </div>
+    <div class="card">
+        <div class="header">
+            <h2>{opts.title}<small>{opts.description}</small></h2>
+            <crud-header-dropdown if={opts.actionMenu !== false} service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown>
         </div>
-
+        <div class="body">
+            <div id="json-forms"></div>
+        </div>
     </div>
+
     <script>
         var self = this;
         self.mixin(FeatherClientMixin);
