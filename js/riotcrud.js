@@ -374,7 +374,12 @@
                     RiotControl.off(self.eventKeyCreateSave);
                 })
 
+                console.info('FeatherClientMixin service loaded ' + self.opts.service);
+            } else {
+                console.warn('FeatherClientMixin no service');
             }
+
+
         }
     }
     if (!window.FeatherClientMixin) {

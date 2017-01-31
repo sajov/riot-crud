@@ -1,5 +1,5 @@
 
-riot.tag2('crud-jsoneditor', '<link href="/bower_components/jsoneditor/dist/jsoneditor.min.css" rel="stylesheet"> <div class="card"> <div class="header"> <h2>{opts.title}<small>{opts.description}</small></h2> <crud-header-dropdown if="{opts.actionMenu !== false}" service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown> </div> <div class="body"> <div id="jsoneditor"></div> </div> </div>', 'div.jsoneditor-menu{ }', '', function(opts) {
+riot.tag2('crud-jsoneditor', '<div class="card"> <div class="header"> <h2>{opts.title}<small>{opts.description}</small></h2> <crud-header-dropdown if="{opts.actionMenu !== false}" service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown> </div> <div class="body"> <div id="jsoneditor"></div> </div> </div> <link href="/bower_components/jsoneditor/dist/jsoneditor.min.css" rel="stylesheet">', 'div.jsoneditor-menu{ }', '', function(opts) {
         var self = this;
         self.mixin(FeatherClientMixin);
 
@@ -15,12 +15,18 @@ riot.tag2('crud-jsoneditor', '<link href="/bower_components/jsoneditor/dist/json
             }
         },
 
-        this.on('mount', function() {
+        self.on('before-mount', function(params, options) {
             RiotCrudController.loadDependencies(self.dependencies,'crud-jsoneditor', function (argument) {
-                self.initPlugins();
-                if(self.opts.query && self.opts.query.id) {
-                    self.get(self.opts.query.id)
-                }
+                self.service.get('schema').then((result) => {
+                    opts.schema = result;
+                    self.initPlugins();
+                    if(self.opts.query && self.opts.query.id) {
+                        self.get(self.opts.query.id)
+                    }
+                }).catch((error) => {
+                    console.error('console.errorconsole.errorconsole.errorconsole.error')
+                });
+
             });
         });
 

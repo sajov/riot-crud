@@ -78,18 +78,18 @@ $script.ready(theme, function() {
      */
     RiotCrudController.addRoute('jsoneditorcategories',
         {
-            title: 'Category (jsoneditor)',
+            title: 'Category',
+            description: 'jsoneditor.js demo',
             menu: true,
             menuGroup: 'views',
             icon: 'view_compact',
-            route: '/jsoneditorcategories',
+            route: '/jsoneditorcategories/10',
             servicename: 'orders',
+            service: 'orders',
+            tag: 'crud-jsoneditor',
             endpoint: 'http://localhost:3030',
             dependencies: [riotCrudTheme + '/views/crud-jsoneditor.js'],
-            fn: function(id, action) {
-                var tag = riot.mount('#content', 'crud-jsoneditor')[0];
-                console.log('TAG',tag)
-            }
+
         }
     );
 
@@ -113,13 +113,13 @@ $script.ready(theme, function() {
             servicename: 'products', // ???
             endpoint: 'http://localhost:3030',
             columns: {
-                    base_color: {
-                        "data": null,
-                        "render": function ( data, type, row ) {
-                            return '<span class="badge badge-success" style="background-color:' + data.base_color + '">' + data.base_color + '</span>';
-                        }
+                base_color: {
+                    "data": null,
+                    "render": function ( data, type, row ) {
+                        return '<span class="badge badge-success" style="background-color:' + data.base_color + '">' + data.base_color + '</span>';
                     }
-                },
+                }
+            },
             // fn: function(id, action) {
             //     var tag = riot.mount('#content', 'crud-jsoneditor')[0];
             //     console.log('TAG',tag)
@@ -208,7 +208,6 @@ $script.ready(theme, function() {
         },
         {
             list: {
-                description: 'Listing View with datatables.net',
                 selection: true,
                 filterable: true,
                 menu:true,
@@ -216,6 +215,7 @@ $script.ready(theme, function() {
                 buttons: ['edit','delete'],
                 tag: 'crud-table',
                 title: 'Categories',
+                description: 'Listing riot-crud listind',
                 schema: 'http://localhost:3030/schema/category.json',
                 target: 'div#content',
                 columns: {
@@ -328,7 +328,8 @@ $script.ready(theme, function() {
     RiotCrudController.addMenuGroup('last');
     RiotCrudController.addRoute('upload',
         {
-            title: '<i class="fa fa-upload"></i>Data upload',
+            title: 'Upload',
+            description: 'Upload',
             menu: true,
             menuGroup: 'last',
             route: '/upload',

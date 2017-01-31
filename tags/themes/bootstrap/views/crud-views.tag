@@ -45,6 +45,7 @@
 
 <crud-header-dropdown>
 
+
 	<ul class="header-dropdown m-r--5">
         <li class="dropdown">
             <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -60,9 +61,13 @@
 						<i if={action.name == 'delete'} class="material-icons">remove</i>
 						<i if={action.name == 'edit'} class="material-icons">mode_edit</i>
 						<i if={action.name == 'save'} class="material-icons">save</i>
-						<i if={action.name == 'list'} class="material-icons">format_list_bulleted</i>
-		        		<span  if={action.active} >
-		        			{action.label} {action.count ? '(' + action.count +')' : ''}
+						<i if={action.name == 'list'} class="material-icons">view_list</i>
+						<i if={action.name == 'print'} class="material-icons">local_printshop</i>
+						<i if={action.name == 'pdf'} class="material-icons">picture_as_pdf</i>
+						<i if={action.name == 'csv'} class="material-icons">insert_drive_file</i>
+						<i if={action.name == 'json'} class="material-icons">insert_drive_file</i>
+						<span  if={action.active} >
+		        			{action.label}
 		        		</span>
 		        	</a>
 	        	</li>
@@ -110,9 +115,9 @@
 
 	<div class="card">
         <div class="header">
-            <h2>{opts.title}<small>{opts.subtitle}</small></h2>
-
-            <crud-header-dropdown if={opts.actionMenu !== false} service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown>
+            <h2>{opts.title}<small>{opts.description}</small></h2>
+            <span if={opts.selection} class="label-count bg-pink font-6">{opts.selection.length}ds</span>
+            <crud-header-dropdown if={opts.actionMenu !== false} selection="{selection.length}" service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown>
 
         	<div class="input-group" style="margin-bottom:0px">
             	<span onclick={ search }  class="input-group-addon">
@@ -306,6 +311,7 @@
 		}
 
 		selectRow = (e) => {
+
 			let value = e.item.row._id;
 			let index = self.selection.indexOf(value);
 			if (index !== -1) {
@@ -313,7 +319,7 @@
 			} else{
 				self.selection.push(value)
 			}
-			// self.update();
+			self.update();
 		}
 
 		deleteRow = (e) => {

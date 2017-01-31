@@ -1,13 +1,6 @@
 <!-- jsoneditor https://github.com/josdejong/jsoneditor/blob/master/bower.json -->
 <crud-jsoneditor>
 
-    <link href="/bower_components/jsoneditor/dist/jsoneditor.min.css" rel="stylesheet">
-    <style type="text/css">
-        div.jsoneditor-menu{
-            /*color: rgb(115,135,156);
-            background: white!important;*/
-        }
-    </style>
 
     <div class="card">
         <div class="header">
@@ -20,6 +13,13 @@
     </div>
 
 
+    <link href="/bower_components/jsoneditor/dist/jsoneditor.min.css" rel="stylesheet">
+    <style type="text/css">
+        div.jsoneditor-menu{
+            /*color: rgb(115,135,156);
+            background: white!important;*/
+        }
+    </style>
     <script>
         var self = this;
         self.mixin(FeatherClientMixin);
@@ -37,14 +37,21 @@
             }
         },
 
-        this.on('mount', function() {
+        self.on('before-mount', function(params, options) {
             RiotCrudController.loadDependencies(self.dependencies,'crud-jsoneditor', function (argument) {
-                self.initPlugins();
-                if(self.opts.query && self.opts.query.id) {
-                    self.get(self.opts.query.id)
-                }
+                self.service.get('schema').then((result) => {
+                    opts.schema = result;
+                    self.initPlugins();
+                    if(self.opts.query && self.opts.query.id) {
+                        self.get(self.opts.query.id)
+                    }
+                }).catch((error) => {
+                    console.error('console.errorconsole.errorconsole.errorconsole.error')
+                });
+
             });
         });
+
 
         self.get = function(id) {
             if(typeof id != 'undefined') {
