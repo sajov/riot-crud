@@ -29,9 +29,10 @@
         ];
 
         // this can move into serviceMixins
-        this.refresh = (opts) => {
+        self.refresh = (opts) => {
             self.opts = opts;
             self.update();
+            alert(1)
             if(self.opts.query.id) {
                 self.get(self.opts.query.id);
             }
@@ -42,6 +43,8 @@
                 self.service.get('schema').then((result) => {
                     opts.schema = result;
                     self.initPlugins();
+
+                    console.error('console.errorconsole.errorconsole.errorconsole.error',self.opts.query)
                     if(self.opts.query && self.opts.query.id) {
                         self.get(self.opts.query.id)
                     }
@@ -59,6 +62,7 @@
                     if(typeof self.editor == 'undefined') {
                         self.initPlugins();
                     }
+
                     self.data = result;
                     self.editor.set(result);
                 }).catch(function(error){

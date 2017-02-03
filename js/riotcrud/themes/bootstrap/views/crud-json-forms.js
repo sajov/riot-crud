@@ -28,7 +28,6 @@ riot.tag2('crud-json-forms', '<link href="/bower_components/json-forms/dist/css/
         self.get = function(id) {
             if(typeof id != 'undefined') {
                 self.service.get(id).then(function(result){
-
                     self.data = result;
                     self.initPlugins(result);
                 }).catch(function(error){
@@ -233,6 +232,7 @@ riot.tag2('crud-json-forms', '<link href="/bower_components/json-forms/dist/css/
         self.getData = () => {
             var validation = self.editor.validate();
             if(validation) {
+                self.data = self.editor.getData();
                 return self.editor.getData();
             } else {
                 console.log(self.editor.getData(),validation);

@@ -130,6 +130,7 @@
      * - exec fn
      */
     function handler(collection, action, param) {
+            console.error('RiotCrudController no route found',collection, action, param);
         if (typeof routes[collection] == 'undefined' && typeof routes[collection+action] == 'undefined') {
             console.error('RiotCrudController no route found',{
                 collection: collection,
@@ -178,7 +179,10 @@
 
     function riotCrudModel() {
         this.opts = {
-            idField:'_id'
+            idField:'_id',
+            showHeader: true,
+            showPagination: true,
+            changeLimit: true,
         };
     }
 
@@ -309,7 +313,7 @@
                     if(data == false) {
                         return false;
                     }
-
+console.log('?????', data, self.opts.idField, data[self.opts.idField]);
                     self.service.update(data[self.opts.idField],data)
                                 .then(function(result){})
                                 .catch(function(error){

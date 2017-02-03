@@ -12,7 +12,7 @@
         </div>
         <div class="body">
             <div id="jsoneditor"></div>
-                        <a class="btn success" href="#" onclick={ saveJSONEditor }>Speichern</a>
+                <a class="btn success" href="#" onclick={ saveJSONEditor }>Speichern</a>
         </div>
     </div>
 
@@ -32,11 +32,23 @@
             self.get(self.opts.query.id);
         },
 
-        this.on('mount', function() {
+        self.on('before-mount', function(params, options) {
             RiotCrudController.loadDependencies(self.dependencies,'crud-json-editor', function (argument) {
-                self.initJSONEditor();
-                self.get(self.opts.query.id)
+
+                 self.service.get('schema').then((result) => {
+                        opts.schema = result;
+                        opts.tableHeader = opts.schema.defaultProperties || opts.schema.required || opts.schema.properties;
+                        self.initJSONEditor();
+                        self.get(self.opts.query.id)
+                        // self.initTable();
+                    }).catch((error) => {
+                        console.error('console.errorconsole.errorconsole.errorconsole.error')
+                    });
             });
+        });
+
+
+        this.on('mount', function() {
         });
 
         self.get = function(id) {

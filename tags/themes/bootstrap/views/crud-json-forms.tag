@@ -43,10 +43,6 @@
         self.get = function(id) {
             if(typeof id != 'undefined') {
                 self.service.get(id).then(function(result){
-                    // if(typeof self.editor == 'undefined') {
-                    //     self.initPlugins();
-                    // }
-
                     self.data = result;
                     self.initPlugins(result);
                 }).catch(function(error){
@@ -253,6 +249,7 @@
         self.getData = () => {
             var validation = self.editor.validate();
             if(validation) {
+                self.data = self.editor.getData();
                 return self.editor.getData();
             } else {
                 console.log(self.editor.getData(),validation);

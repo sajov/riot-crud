@@ -59,7 +59,7 @@ $script.ready(theme, function() {
      */
     RiotCrudController.addRoute('customorders',
         {
-            title: 'Order (custom view)',
+            title: 'Custom view (order)',
             menu: true,
             menuGroup: 'views',
             icon: 'attach_money',
@@ -77,20 +77,64 @@ $script.ready(theme, function() {
     /**
      * Add jsoneditor view Order
      */
-    RiotCrudController.addRoute('jsoneditorcategories',
+    RiotCrudController.addRoute('categoriesjsoneditor',
         {
-            title: 'Category',
+            title: 'Demo jsoneditor.js (category)',
             description: 'jsoneditor.js demo',
             menu: true,
             menuGroup: 'views',
             icon: 'view_compact',
-            route: '/jsoneditorcategories/10',
+            route: '/categories/jsoneditor/10',
             servicename: 'orders',
+            view: 'edit',
+            idField: '_id',
             service: 'orders',
             tag: 'crud-jsoneditor',
             endpoint: 'http://localhost:3030',
             dependencies: [riotCrudTheme + '/views/crud-jsoneditor.js'],
+        }
+    );
 
+        /**
+     * Add jsoneditor view Order
+     */
+    RiotCrudController.addRoute('categoriesjson-forms',
+        {
+            title: 'Demo json-forms.js (category)',
+            description: 'json-forms.js demo',
+            menu: true,
+            menuGroup: 'views',
+            idField: '_id',
+            icon: 'view_compact',
+            route: '/categories/json-forms/10',
+            servicename: 'orders',
+            view: 'edit',
+            service: 'orders',
+            tag: 'crud-json-forms',
+            endpoint: 'http://localhost:3030',
+            dependencies: [riotCrudTheme + '/views/crud-json-forms.js'],
+        }
+    );
+
+
+    /**
+     * Add jsoneditor view Order
+     */
+    RiotCrudController.addRoute('categoriesjson-editor',
+        {
+            title: 'Demo jsone-ditor.js (products)',
+            description: 'json-editor.js demo',
+            menu: true,
+            menuGroup: 'views',
+            icon: 'view_compact',
+            route: '/categories/json-editor/10',
+            servicename: 'products',
+            view: 'edit',
+            idField: '_id',
+            service: 'products',
+            tag: 'crud-json-editor',
+            endpoint: 'http://localhost:3030',
+            dependencies: [riotCrudTheme + '/views/crud-json-editor.js'],
         }
     );
 
@@ -99,7 +143,7 @@ $script.ready(theme, function() {
      */
     RiotCrudController.addRoute('datatables',
         {
-            title: 'Products List (datatables.js)',
+            title: 'Demo datatables.js (products)',
             menu: true,
             menuGroup: 'views',
             icon: 'format_list_bulleted',

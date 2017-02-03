@@ -111,7 +111,17 @@
 		.basic_checkbox_all {
 			top:10px;
 		}
-		td {
+		.table-responsive td{
+			/*white-space:nowrap;overflow: hidden; width: 200px;*/
+			max-width: 100px;
+		    overflow: hidden;
+		    text-overflow: ellipsis;
+		    white-space: nowrap;
+		}
+		.table-responsive i.material-icons {
+			color:#999;
+		}
+		.NOtd {
 		  max-width: 100px;
 		  white-space: pre-wrap;        /* css */
 		  white-space: -moz-pre-wrap;   /* Mozilla */
@@ -124,11 +134,13 @@
 	<modal-delete-confirmation></modal-delete-confirmation>
 
 	<div class="card">
-        <div class="header">
+        <div if={opts.showHeader} class="header">
             <h2>{opts.title}<small>{opts.description}</small></h2>
             <span if={selection.length > 0} class="label-count bg-pink font-6">{selection.length}</span>
             <crud-header-dropdown if={opts.actionMenu !== false} selection="{selection.length}" service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown>
+        </div>
 
+        <div class="body">
         	<div class="input-group" style="margin-bottom:0px">
             	<span onclick={ search }  class="input-group-addon">
                 	<i class="material-icons">search</i>
@@ -137,9 +149,6 @@
                 	<input type="text" onkeyup={ search } class="form-control date" placeholder="search for ...">
             	</div>
         	</div>
-        </div>
-
-        <div class="body">
 			<div class="table-responsive">
 
 					<table id="{ opts.service }_table" class="table table-striped jambo_table bulk_action">
@@ -151,9 +160,12 @@
 		                       <label onclick={ selectall }  data-value="{ selection.length ==  data.data.length ? 1 : 0 }" for="basic_checkbox_all" class="basic_checkbox_all"></label>
 							</th>
 					        <th each="{ colkey, colval in thead }" data-colkey="{colkey}" onclick={ sort } style="{columnWidths[colkey] ? 'width:' + columnWidths[colkey] + 'px': '' }">
-					        	<i if={colval.type == 'string'} class="material-icons font-14 pull-right">sort_by_alpha</i>
-					        	<i if={colval.type != 'string'} class="material-icons font-14 pull-right">sort</i>
-					        	<span>{ colkey }</span>
+					        	<i if={query.$sort[colkey] && query.$sort[colkey] == '-1'} class="material-icons pull-right">keyboard_arrow_down</i>
+					        	<i if={query.$sort[colkey] && query.$sort[colkey] == '1'} class="material-icons pull-right">keyboard_arrow_up</i>
+					        	<i if={!query.$sort[colkey]} class="material-icons pull-right">sort</i>
+
+
+					        	<label>{ colkey }</label>
 					        </th>
 					        <th data-colkey="filter" style="{columnWidths['filter'] ? 'width:' + columnWidths['filter'] + 'px': '' }">
 					        	<i onclick={ toggleFilter } class="material-icons">filter_list</i>
@@ -192,21 +204,22 @@
 				    </table>
 			</div>
 			<div class="clearfix"></div>
-			<div class="btn-group dropup">
+			<div if={opts.changeLimit} class="pull-left btn-group dropup">
                     <button type="button" class="btn btn-default waves-effect">{data.limit} / {data.total}</button>
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                         <span class="caret"></span>
                         <span class="sr-only">Toggle Dropdown</span>
                     </button>
                     <ul class="dropdown-menu">
+                        <li><a href="#" onclick={changeLimit} data-limit="5" class="waves-effect waves-block">5</a></li>
                         <li><a href="#" onclick={changeLimit} data-limit="10" class="waves-effect waves-block">10</a></li>
                         <li><a href="#" onclick={changeLimit} data-limit="50" class="waves-effect waves-block">50</a></li>
                         <li><a href="#" onclick={changeLimit} data-limit="100" class="waves-effect waves-block">100</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="#" onclick={changeLimit} data-limit="ALL" class="waves-effect waves-block">ALL</a></li>
                     </ul>
-            </div></div>
-	        <div class="pull-right btn-toolbar">
+            </div>
+	        <div if={opts.showPagination} class="pull-right btn-toolbar">
 				<div if={pagination.start} class="btn-group" role="group" aria-label="First group">
 		            <button onclick={paginate} data-page="{pagination.start}" type="button" class="btn btn-info {'disabled':page.active == false} waves-effect">{pagination.start}</button>
 		        </div>
