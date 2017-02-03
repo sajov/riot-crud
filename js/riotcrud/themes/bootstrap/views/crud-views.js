@@ -21,17 +21,16 @@ riot.tag2('crud-action-menu', '<div class="btn-group"> <a each="{action in opts.
 });
 
 
-riot.tag2('crud-header-dropdown', '<ul class="header-dropdown m-r--5"> <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="material-icons">more_vert</i> </a> <ul class="dropdown-menu pull-right"> <li each="{action in opts.actions}"> <a if="{action.active}" onclick="{click}"> <i if="{action.name == \'create\'}" class="material-icons">add</i> <i if="{action.name == \'view\'}" class="material-icons">view_compact</i> <i if="{action.name == \'delete\'}" class="material-icons">remove</i> <i if="{action.name == \'edit\'}" class="material-icons">mode_edit</i> <i if="{action.name == \'save\'}" class="material-icons">save</i> <i if="{action.name == \'list\'}" class="material-icons">view_list</i> <i if="{action.name == \'print\'}" class="material-icons">local_printshop</i> <i if="{action.name == \'pdf\'}" class="material-icons">picture_as_pdf</i> <i if="{action.name == \'csv\'}" class="material-icons">insert_drive_file</i> <i if="{action.name == \'json\'}" class="material-icons">insert_drive_file</i> <span if="{action.active}"> {action.label} </span> </a> </li> </ul> </li> </ul>', '', '', function(opts) {
+riot.tag2('crud-header-dropdown', '<ul class="header-dropdown m-r--5"> <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="material-icons">more_vert</i> </a> <ul class="dropdown-menu pull-right"> <li each="{action in opts.actions}"> <a if="{action.active}" href="#" onclick="{click}"> <i if="{action.name == \'create\'}" class="material-icons">add</i> <i if="{action.name == \'view\'}" class="material-icons">view_compact</i> <i if="{action.name == \'delete\'}" class="material-icons">remove</i> <i if="{action.name == \'edit\'}" class="material-icons">mode_edit</i> <i if="{action.name == \'save\'}" class="material-icons">save</i> <i if="{action.name == \'list\'}" class="material-icons">view_list</i> <i if="{action.name == \'print\'}" class="material-icons">local_printshop</i> <i if="{action.name == \'pdf\'}" class="material-icons">picture_as_pdf</i> <i if="{action.name == \'csv\'}" class="material-icons">insert_drive_file</i> <i if="{action.name == \'json\'}" class="material-icons">insert_drive_file</i> <hr if="{action.name == \'upload\'}"> <i if="{action.name == \'upload\'}" class="material-icons">file_upload</i> <span if="{action.active}" class="{action.count === 0 ? \'font-line-through font-italic\' : \'font-bold\'}"> {action.label} <small if="{action.count >= 0}">({action.count})</small> </span> </a> </li> </ul> </li> </ul>', '', '', function(opts) {
 		var self = this;
 		this.mixin(viewActionsMixin);
+
 		self.on('mount', () => {
-			console.warn('crud-action-menu', self.opts.actioMenu);
-			console.warn('crud-action-menu', self.opts.action);
-			console.warn('crud-action-menu', self.opts);
+			console.info('crud-action-menu', self.opts);
 
 		})
 });
-riot.tag2('crud-table', '<modal-delete-confirmation></modal-delete-confirmation> <div class="card"> <div class="header"> <h2>{opts.title}<small>{opts.description}</small></h2> <span if="{opts.selection}" class="label-count bg-pink font-6">{opts.selection.length}ds</span> <crud-header-dropdown if="{opts.actionMenu !== false}" selection="{selection.length}" service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown> <div class="input-group" style="margin-bottom:0px"> <span onclick="{search}" class="input-group-addon"> <i class="material-icons">search</i> </span> <div class="form-line"> <input type="text" onkeyup="{search}" class="form-control date" placeholder="search for ..."> </div> </div> </div> <div class="body"> <div class="table-responsive"> <table id="{opts.service}_table" class="table table-striped jambo_table bulk_action"> <thead> <tr> <th if="{opts.selection != false}" style="width:40px;vertical-align: text-top" nowrap data-colkey="rowSelection" riot-style="{columnWidths[\'rowSelection\'] ? \'width:\' + columnWidths[\'rowSelection\'] + \'px\': \'\'}"> <input type="checkbox" id="basic_checkbox_all" __checked="{\'checked\': selection.length ==  data.data.length}"> <label onclick="{selectall}" data-value="{selection.length ==  data.data.length ? 1 : 0}" for="basic_checkbox_all"></label> </th> <th each="{colkey, colval in thead}" data-colkey="{colkey}" onclick="{sort}" riot-style="{columnWidths[colkey] ? \'width:\' + columnWidths[colkey] + \'px\': \'\'}"> <i if="{colval.type == \'string\'}" class="material-icons font-14 pull-right">sort_by_alpha</i> <i if="{colval.type != \'string\'}" class="material-icons font-14 pull-right">sort</i> <span>{colkey}</span> </th> <th data-colkey="filter" riot-style="{columnWidths[\'filter\'] ? \'width:\' + columnWidths[\'filter\'] + \'px\': \'\'}"> <i onclick="{toggleFilter}" class="material-icons">filter_list</i> </th> </tr> </thead> <tbody> <tr class="{\'hide\': !showFilter}"> <td if="{opts.selection != false}" nowrap>&nbsp;</td> <td each="{colkey, colval in thead}"> <input if="{schema.properties[colkey].type!=\'data\'}" type="text" name="{colkey}" onchange="{filter}" placeholder="enter serach"> <input if="{schema.properties[colkey].type==\'date\'}" name="{colkey}" onchange="{filter}" placeholder="enter serach" type="date"> </td> <td>&nbsp;</td> </tr> <tr each="{row in data.data}" class="{\'selected\': selection.indexOf(row._id) != -1}"> <td if="{opts.selection != false}" class="a-center"> <input data-value="{row._id}" onclick="{selectRow}" type="checkbox" id="basic_checkbox_{row._id}" __checked="{\'checked\': selection.indexOf(row._id) != -1}"> <label data-value="{row._id}" onclick="{selectRow}" data-value="{selection.length ==  data.data.length ? 1 : 0}" for="basic_checkbox_{row._id}"></label> </td> <td each="{colkey, colval in thead}"> {row[colkey]} </td> <td> <a onclick="{viewRow}"> <i class="material-icons col-grey">pageview</i> </a> <a onclick="{deleteRow}"> <i class="material-icons col-grey">delete</i> </a> </td> </tr> </tbody> </table> </div> <div class="clearfix"></div> <nav if="{pagination.length > 0}" aria-label="Page navigation" class="pull-right"> <ul class="pagination"> <li each="{page in pagination}" class="{\'disabled\':page.active == false}"> <a href="#" onclick="{paginate}" class="{\'disabled\':page.active == false}"> <i class="{page.class}"></i>{page.label} </a> </li> </ul> </nav> <div class="clearfix"></div> <yield></yield> </div> </div> <div> </div> <div class="clearfix"></div>', 'th { white-space: nowrap } .selectbox { font-size: 150%; } .pagination { margin: 0px 0 10px 0 ; } td { max-width: 100px; white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; }', '', function(opts) {
+riot.tag2('crud-table', '<modal-delete-confirmation></modal-delete-confirmation> <div class="card"> <div class="header"> <h2>{opts.title}<small>{opts.description}</small></h2> <span if="{selection.length > 0}" class="label-count bg-pink font-6">{selection.length}</span> <crud-header-dropdown if="{opts.actionMenu !== false}" selection="{selection.length}" service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown> <div class="input-group" style="margin-bottom:0px"> <span onclick="{search}" class="input-group-addon"> <i class="material-icons">search</i> </span> <div class="form-line"> <input type="text" onkeyup="{search}" class="form-control date" placeholder="search for ..."> </div> </div> </div> <div class="body"> <div class="table-responsive"> <table id="{opts.service}_table" class="table table-striped jambo_table bulk_action"> <thead> <tr> <th if="{opts.selection != false}" style="width:40px;vertical-align: text-top" nowrap data-colkey="rowSelection" riot-style="{columnWidths[\'rowSelection\'] ? \'width:\' + columnWidths[\'rowSelection\'] + \'px\': \'\'}"> <input type="checkbox" id="basic_checkbox_all" __checked="{\'checked\': selection.length ==  data.data.length}"> <label onclick="{selectall}" data-value="{selection.length ==  data.data.length ? 1 : 0}" for="basic_checkbox_all" class="basic_checkbox_all"></label> </th> <th each="{colkey, colval in thead}" data-colkey="{colkey}" onclick="{sort}" riot-style="{columnWidths[colkey] ? \'width:\' + columnWidths[colkey] + \'px\': \'\'}"> <i if="{colval.type == \'string\'}" class="material-icons font-14 pull-right">sort_by_alpha</i> <i if="{colval.type != \'string\'}" class="material-icons font-14 pull-right">sort</i> <span>{colkey}</span> </th> <th data-colkey="filter" riot-style="{columnWidths[\'filter\'] ? \'width:\' + columnWidths[\'filter\'] + \'px\': \'\'}"> <i onclick="{toggleFilter}" class="material-icons">filter_list</i> </th> </tr> </thead> <tbody> <tr class="{\'hide\': !showFilter}"> <td if="{opts.selection != false}" nowrap>&nbsp;</td> <td each="{colkey, colval in thead}"> <input if="{schema.properties[colkey].type!=\'data\'}" type="text" name="{colkey}" onchange="{filter}" placeholder="enter serach"> <input if="{schema.properties[colkey].type==\'date\'}" name="{colkey}" onchange="{filter}" placeholder="enter serach" type="date"> </td> <td>&nbsp;</td> </tr> <tr each="{row in data.data}" class="{\'selected\': selection.indexOf(row._id) != -1}"> <td if="{opts.selection != false}" class="a-center"> <input data-value="{row._id}" onclick="{selectRow}" type="checkbox" id="basic_checkbox_{row._id}" __checked="{\'checked\': selection.indexOf(row._id) != -1}"> <label data-value="{row._id}" onclick="{selectRow}" data-value="{selection.length ==  data.data.length ? 1 : 0}" for="basic_checkbox_{row._id}"></label> </td> <td each="{colkey, colval in thead}"> {row[colkey]} </td> <td> <a href="#" onclick="{viewRow}"> <i class="material-icons col-grey">pageview</i> </a> <a href="#" onclick="{deleteRow}"> <i class="material-icons col-grey">delete</i> </a> </td> </tr> </tbody> </table> </div> <div class="clearfix"></div> <div class="btn-group dropup"> <button type="button" class="btn btn-default waves-effect">{data.limit} / {data.total}</button> <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"> <span class="caret"></span> <span class="sr-only">Toggle Dropdown</span> </button> <ul class="dropdown-menu"> <li><a href="#" onclick="{changeLimit}" data-limit="10" class="waves-effect waves-block">10</a></li> <li><a href="#" onclick="{changeLimit}" data-limit="50" class="waves-effect waves-block">50</a></li> <li><a href="#" onclick="{changeLimit}" data-limit="100" class="waves-effect waves-block">100</a></li> <li role="separator" class="divider"></li> <li><a href="#" onclick="{changeLimit}" data-limit="ALL" class="waves-effect waves-block">ALL</a></li> </ul> </div></div> <div class="pull-right btn-toolbar"> <div if="{pagination.start}" class="btn-group" role="group" aria-label="First group"> <button onclick="{paginate}" data-page="{pagination.start}" type="button" class="btn btn-info {\'disabled\':page.active == false} waves-effect">{pagination.start}</button> </div> <div class="btn-group" role="group" aria-label="First group"> <button each="{page in pagination.range}" onclick="{paginate}" type="button" data-page="{page}" class="btn btn-info {\'disabled\':page.active == false} waves-effect">{page}</button> </div> <div if="{pagination.end}" class="btn-group" role="group" aria-label="First group"> <button onclick="{paginate}" data-page="{pagination.end}" type="button" class="btn btn-info {\'disabled\':page.active == false} waves-effect">{pagination.end}</button> </div> </div> <div class="clearfix"></div> <yield></yield> </div> </div> <div> </div> <div class="clearfix"></div>', 'th { white-space: nowrap } .selectbox { font-size: 150%; } .pagination { margin: 0px 0 10px 0 ; } .basic_checkbox_all { top:10px; } td { max-width: 100px; white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; }', '', function(opts) {
 
 		var self = this;
 		self.opts.view = 'list';
@@ -42,9 +41,14 @@ riot.tag2('crud-table', '<modal-delete-confirmation></modal-delete-confirmation>
             $sort: {}
 		};
 		self.selection = [];
+		self.selectionLength = [];
+
 		self.showFilter = false;
 
 		this.mixin(FeatherClientMixin);
+
+		self.on('update', () => {
+		});
 
 		self.on('mount', () => {
 			console.info('CRUD-TABLE self', self);
@@ -197,45 +201,49 @@ riot.tag2('crud-table', '<modal-delete-confirmation></modal-delete-confirmation>
 	    }
 
 	    initPagination = () => {
-	    	self.pagination = [];
-	    	self.pagecount = 5;
-
+	    	self.next = 2;
+	    	let current = (Math.ceil(self.data.skip/self.data.limit)) || 1;
     		let start = 1;
     		let end = (Math.ceil(self.data.total/self.data.limit))-1;
+    		let nextTo = 2;
 
-    		if(self.data.skip > 0){
-    			start = Math.ceil(self.data.skip/self.data.limit);
-    		}
+	    	let rangeStart = current - nextTo;
+	    	let rangeEnd = current + nextTo;
+	    	if(rangeStart <= 0) {
+	    		rangeStart = start;
+	    	}
+	    	if(rangeEnd >= end) {
+	    		rangeEnd = end;
+	    	}
 
-    		if(start > 0 && end > 0) {
-			    console.info('RANGE start-end',start+ ' - ' + end + ' ??? ' + start+self.pagecount + ' > ' + end);
+	    	self.pagination = {
+	    		start:rangeStart == start ? false : 1,
+	    		rangeStart:rangeStart,
+	    		current:current,
+	    		rangeEnd:rangeEnd,
+	    		range:[],
+	    		end:rangeEnd == end ? false : end
+	    	};
 
-    			self.pagination.push({label:'', class:'fa fa-angle-double-left',active: self.data.skip == 0,skip:0})
-
-	    		if((start+self.pagecount) > (end-1)) {
-	    			start = end-4;
-	    		}
-		    	let range = Array.apply(start, Array(self.pagecount))
-			        .map(function (element, index) {
-
-			          return index + start;
-			    });
-
-			    for (var i = 0; i < range.length; i++) {
-			    		if(range[i] > 0) {
-		    				self.pagination.push({label:range[i],skip:range[i]*self.data.limit})
-			    		}
-			    }
-
-	    		self.pagination.push({label:'', class:'fa fa-angle-double-right', active: (self.data.skip * self.data.skip == 0), skip: end*self.data.limit})
-		    	console.warn('RANGE',range,self.pagination);
-    		}
+	    	for (var i = rangeStart; i <= rangeEnd; i++) {
+	    		self.pagination.range.push(i);
+	    	}
 	    }
 
 	    paginate = (e) => {
 	    	e.preventDefault();
-	    	self.query.$skip = e.item.page.skip;
-	    	console.log(e.item.page.skip);
+	    	self.query.$skip = parseInt(e.target.getAttribute('data-page')) * self.query.$limit;
+	    	getData();
+	    }
+
+	    changeLimit = (e)  => {
+	    	e.preventDefault();
+	    	let limit = e.target.getAttribute('data-limit');
+	    	if(limit === 'ALL') {
+	    		self.query.$limit = self.data.total;
+	    	} else {
+	    		self.query.$limit = parseInt(limit);
+	    	}
 	    	getData();
 	    }
 

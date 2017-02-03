@@ -54,7 +54,7 @@
             <ul class="dropdown-menu pull-right">
                 <li each={action in opts.actions}>
 
-	        		<a if={action.active} onclick={ click }>
+	        		<a if={action.active} href="#" onclick={ click }>
 
 		        		<i if={action.name == 'create'} class="material-icons">add</i>
 						<i if={action.name == 'view'} class="material-icons">view_compact</i>
@@ -66,10 +66,17 @@
 						<i if={action.name == 'pdf'} class="material-icons">picture_as_pdf</i>
 						<i if={action.name == 'csv'} class="material-icons">insert_drive_file</i>
 						<i if={action.name == 'json'} class="material-icons">insert_drive_file</i>
-						<span  if={action.active} >
+
+						<hr if={action.name == 'upload'} />
+						<i if={action.name == 'upload'} class="material-icons">file_upload</i>
+
+						<span  if={action.active}  class="{action.count === 0 ? 'font-line-through font-italic' : 'font-bold'}">
 		        			{action.label}
+		        			<small if={action.count >= 0}>({action.count})</small>
 		        		</span>
+
 		        	</a>
+
 	        	</li>
             </ul>
         </li>
@@ -78,10 +85,11 @@
 	<script>
 		var self = this;
 		this.mixin(viewActionsMixin);
+		// self.on('update', () => {
+		// 	console.info('crud-action-menu update ', opts.selection);
+		// });
 		self.on('mount', () => {
-			console.warn('crud-action-menu', self.opts.actioMenu);
-			console.warn('crud-action-menu', self.opts.action);
-			console.warn('crud-action-menu', self.opts);
+			console.info('crud-action-menu', self.opts);
 
 		})
 	</script>
@@ -100,7 +108,9 @@
 		.pagination {
 			margin: 0px 0 10px 0 ;
 		}
-
+		.basic_checkbox_all {
+			top:10px;
+		}
 		td {
 		  max-width: 100px;
 		  white-space: pre-wrap;        /* css */
@@ -116,7 +126,7 @@
 	<div class="card">
         <div class="header">
             <h2>{opts.title}<small>{opts.description}</small></h2>
-            <span if={opts.selection} class="label-count bg-pink font-6">{opts.selection.length}ds</span>
+            <span if={selection.length > 0} class="label-count bg-pink font-6">{selection.length}</span>
             <crud-header-dropdown if={opts.actionMenu !== false} selection="{selection.length}" service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown>
 
         	<div class="input-group" style="margin-bottom:0px">
@@ -138,7 +148,7 @@
 					      <tr >
 					      	<th if={ opts.selection != false } style="width:40px;vertical-align: text-top" nowrap data-colkey="rowSelection" style="{columnWidths['rowSelection'] ? 'width:' + columnWidths['rowSelection'] + 'px': '' }">
 				      		   <input type="checkbox" id="basic_checkbox_all" checked="{ 'checked': selection.length ==  data.data.length }">
-		                       <label onclick={ selectall }  data-value="{ selection.length ==  data.data.length ? 1 : 0 }" for="basic_checkbox_all"></label>
+		                       <label onclick={ selectall }  data-value="{ selection.length ==  data.data.length ? 1 : 0 }" for="basic_checkbox_all" class="basic_checkbox_all"></label>
 							</th>
 					        <th each="{ colkey, colval in thead }" data-colkey="{colkey}" onclick={ sort } style="{columnWidths[colkey] ? 'width:' + columnWidths[colkey] + 'px': '' }">
 					        	<i if={colval.type == 'string'} class="material-icons font-14 pull-right">sort_by_alpha</i>
@@ -170,10 +180,10 @@
 						        	{ row[colkey] }
 						        </td>
 						      	<td>
-                                    <a onclick={viewRow} >
+                                    <a href="#" onclick={viewRow} >
                                         <i class="material-icons col-grey">pageview</i>
                                     </a>
-                                    <a onclick={deleteRow} >
+                                    <a href="#" onclick={deleteRow} >
                                         <i class="material-icons col-grey">delete</i>
                                     </a>
 						      	</td>
@@ -182,15 +192,31 @@
 				    </table>
 			</div>
 			<div class="clearfix"></div>
-			<nav if="{pagination.length > 0}" aria-label="Page navigation" class="pull-right">
-			    <ul class="pagination">
-			   		<li each={page in pagination} class="{'disabled':page.active == false}">
-			    		<a href="#" onclick={paginate} class={'disabled':page.active == false}>
-			        		<i class="{page.class}"></i>{page.label}
-			      		</a>
-			    	</li>
-			  	</ul>
-			</nav>
+			<div class="btn-group dropup">
+                    <button type="button" class="btn btn-default waves-effect">{data.limit} / {data.total}</button>
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" onclick={changeLimit} data-limit="10" class="waves-effect waves-block">10</a></li>
+                        <li><a href="#" onclick={changeLimit} data-limit="50" class="waves-effect waves-block">50</a></li>
+                        <li><a href="#" onclick={changeLimit} data-limit="100" class="waves-effect waves-block">100</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#" onclick={changeLimit} data-limit="ALL" class="waves-effect waves-block">ALL</a></li>
+                    </ul>
+            </div></div>
+	        <div class="pull-right btn-toolbar">
+				<div if={pagination.start} class="btn-group" role="group" aria-label="First group">
+		            <button onclick={paginate} data-page="{pagination.start}" type="button" class="btn btn-info {'disabled':page.active == false} waves-effect">{pagination.start}</button>
+		        </div>
+				<div class="btn-group" role="group" aria-label="First group">
+		            <button each={page in pagination.range} onclick={paginate} type="button" data-page="{page}" class="btn btn-info {'disabled':page.active == false} waves-effect">{page}</button>
+		        </div>
+		        <div if={pagination.end} class="btn-group" role="group" aria-label="First group">
+		            <button onclick={paginate} data-page="{pagination.end}" type="button" class="btn btn-info {'disabled':page.active == false} waves-effect">{pagination.end}</button>
+		        </div>
+	        </div>
 			<div class="clearfix"></div>
 
 			<!-- <yield from="buttons"/> -->
@@ -217,9 +243,14 @@
             $sort: {}
 		};
 		self.selection = [];
+		self.selectionLength = [];
+
 		self.showFilter = false;
 
 		this.mixin(FeatherClientMixin);
+
+		self.on('update', () => {
+		});
 
 		self.on('mount', () => {
 			console.info('CRUD-TABLE self', self);
@@ -377,48 +408,51 @@
 	    }
 
 	    initPagination = () => {
-	    	self.pagination = [];
-	    	self.pagecount = 5;
-
+	    	self.next = 2;
+	    	let current = (Math.ceil(self.data.skip/self.data.limit)) || 1;
     		let start = 1;
     		let end = (Math.ceil(self.data.total/self.data.limit))-1;
+    		let nextTo = 2;
 
-    		if(self.data.skip > 0){
-    			start = Math.ceil(self.data.skip/self.data.limit);
-    		}
+	    	let rangeStart = current - nextTo;
+	    	let rangeEnd = current + nextTo;
+	    	if(rangeStart <= 0) {
+	    		rangeStart = start;
+	    	}
+	    	if(rangeEnd >= end) {
+	    		rangeEnd = end;
+	    	}
 
-    		if(start > 0 && end > 0) {
-			    console.info('RANGE start-end',start+ ' - ' + end + ' ??? ' + start+self.pagecount + ' > ' + end);
+	    	self.pagination = {
+	    		start:rangeStart == start ? false : 1,
+	    		rangeStart:rangeStart,
+	    		current:current,
+	    		rangeEnd:rangeEnd,
+	    		range:[],
+	    		end:rangeEnd == end ? false : end
+	    	};
 
-    			self.pagination.push({label:'', class:'fa fa-angle-double-left',active: self.data.skip == 0,skip:0})
-
-	    		if((start+self.pagecount) > (end-1)) {
-	    			start = end-4;
-	    		}
-		    	let range = Array.apply(start, Array(self.pagecount))
-			        .map(function (element, index) {
-			        	// return {label:index,skip:index*self.data.limit}
-			          return index + start;
-			    });
-
-			    for (var i = 0; i < range.length; i++) {
-			    		if(range[i] > 0) {
-		    				self.pagination.push({label:range[i],skip:range[i]*self.data.limit})
-			    		}
-			    }
-
-	    		self.pagination.push({label:'', class:'fa fa-angle-double-right', active: (self.data.skip * self.data.skip == 0), skip: end*self.data.limit})
-		    	console.warn('RANGE',range,self.pagination);
-    		}
+	    	for (var i = rangeStart; i <= rangeEnd; i++) {
+	    		self.pagination.range.push(i);
+	    	}
 	    }
 
 	    paginate = (e) => {
 	    	e.preventDefault();
-	    	self.query.$skip = e.item.page.skip;
-	    	console.log(e.item.page.skip);
+	    	self.query.$skip = parseInt(e.target.getAttribute('data-page')) * self.query.$limit;
 	    	getData();
 	    }
 
+	    changeLimit = (e)  => {
+	    	e.preventDefault();
+	    	let limit = e.target.getAttribute('data-limit');
+	    	if(limit === 'ALL') {
+	    		self.query.$limit = self.data.total;
+	    	} else {
+	    		self.query.$limit = parseInt(limit);
+	    	}
+	    	getData();
+	    }
 
 
 	    getData = () => {

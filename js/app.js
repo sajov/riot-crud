@@ -22,6 +22,7 @@ $script.ready(theme, function() {
      */
     RiotCrudController.defaults({
         target: '#content',
+        endpoint: 'http://localhost:3030'
     });
 
     /**

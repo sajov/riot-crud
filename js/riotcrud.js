@@ -395,61 +395,62 @@
             var actions = [
                 {
                   name: 'view',
-                  label: 'View',
-                  active: true
+                  label: 'View'
                 },
                 {
                   name: 'edit',
-                  label: 'Edit',
-                  active: true
+                  label: 'Edit'
                 },
                 {
                   name: 'create',
-                  label: 'Create',
-                  active: true
+                  label: 'Create'
                 },
                 {
                   name: 'delete',
-                  label: 'Delete',
-                  active: true
+                  label: 'Delete'
                 },
                 {
                   name: 'save',
-                  label: 'Save',
-                  active: true
+                  label: 'Save'
                 },
                 {
                   name: 'list',
-                  label: 'List',
-                  active: true
+                  label: 'List'
                 },
                 {
                   name: 'print',
-                  label: 'Print',
-                  active: false
+                  label: 'Print'
                 },
                 {
                   name: 'pdf',
-                  label: 'PDF',
-                  active: false
+                  label: 'PDF'
                 },
                 {
                   name: 'csv',
-                  label: 'CSV',
-                  active: false
+                  label: 'CSV'
                 },
                 {
                   name: 'json',
-                  label: 'Json',
-                  active: false
+                  label: 'Json'
+                },
+                {
+                  name: 'upload',
+                  label: 'Upload'
                 }
             ];
 
             self.on('update', () => {
-
                 var  view = self.opts.view || 'undefined';
+
                 self.opts.actions = actions.map((action, index) => {
+
                     action.active = false;
+                    if(['delete','print','pdf','csv','json'].indexOf(action.name) != -1){
+                        action.count = self.opts.selection || 0;
+                    }
+
+                    console.info('crud-action-menu update ', self.opts.selection);
+
                     switch(view) {
                         case 'view':
                             if(['edit','delete','create','list'].indexOf(action.name) != -1){
@@ -467,7 +468,7 @@
                             }
                             break;
                         case 'list':
-                            if(['delete','create','print','pdf','csv','json'].indexOf(action.name) != -1){
+                            if(['delete','create','print','pdf','csv','json','upload'].indexOf(action.name) != -1){
                                 action.active = true;
                             }
                             break;
@@ -475,6 +476,7 @@
                             break;
 
                     }
+
                     if(self.opts.buttons && self.opts.buttons[action.name]) {
                         action.active = true;
                     }
@@ -485,6 +487,9 @@
 
             self.click = (e) => {
                 e.preventDefault();
+                if(e.item.action.count === 0) {
+                    return;
+                }
                 var service = self.opts.service || self.opts.name; // TODO: move name
                 var view = self.opts.view;
                 var action = e.item.action.name;
