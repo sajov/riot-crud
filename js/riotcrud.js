@@ -459,11 +459,13 @@ console.log('?????', data, self.opts.idField, data[self.opts.idField]);
                         case 'view':
                             if(['edit','delete','create','list'].indexOf(action.name) != -1){
                                 action.active = true;
+                                delete action.count;
                             }
                             break;
                         case 'edit':
                             if(['save','view','delete','list'].indexOf(action.name) != -1){
                                 action.active = true;
+                                delete action.count;
                             }
                             break;
                         case 'create':
