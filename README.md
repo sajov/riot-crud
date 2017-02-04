@@ -11,7 +11,7 @@ If you are interest in alternatives more lose coupled and less full stack go ahe
 * [feathers](https://github.com/feathersjs/feathers) An open source REST and realtime API layer for modern applications.
 * [feathers-client](https://github.com/feathersjs/feathers-client) Client side Feathers for REST and websockets that works with NodeJS, React Native and any client framework
 * [riot](https://github.com/riot/riot) Simple and elegant component-based UI library
-* [gentelella](https://github.com/puikinsh/gentelella) Free Bootstrap 3 Admin Template
+* [AdminBSBMaterialDesign](https://github.com/gurayyarar/AdminBSBMaterialDesign) AdminBSB - Free admin panel that is based on Bootstrap 3.x with Material Design
 
 > Many thanks to all these Contributors for their huge work!
 
