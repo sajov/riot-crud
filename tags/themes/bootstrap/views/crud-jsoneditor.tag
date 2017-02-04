@@ -1,6 +1,18 @@
 <!-- jsoneditor https://github.com/josdejong/jsoneditor/blob/master/bower.json -->
 <crud-jsoneditor>
 
+
+    <div class="card">
+        <div class="header">
+            <h2>{opts.title}<small>{opts.description}</small></h2>
+            <crud-header-dropdown if={opts.actionMenu !== false} service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown>
+        </div>
+        <div class="body">
+            <div id="jsoneditor"></div>
+        </div>
+    </div>
+
+
     <link href="/bower_components/jsoneditor/dist/jsoneditor.min.css" rel="stylesheet">
     <style type="text/css">
         div.jsoneditor-menu{
@@ -8,47 +20,6 @@
             background: white!important;*/
         }
     </style>
-    <div>
-        <div if={opts.type != 'inline'} class="page-title">
-          <div class="title_left">
-            <h3>{opts.title} <small>{opts.description}</small></h3>
-          </div>
-
-          <div class="title_right">
-            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-              <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search for...">
-                <span class="input-group-btn">
-                  <button class="btn btn-default" type="button">Go!</button>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-        </div>
-
-
-        <div class="row">
-            <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                    <div class="x_title hidden-print">
-                        <h2>{opts.title} <small>{opts.description}</small></h2>
-
-                        <div class="nav navbar-right panel_toolbox">
-                                <crud-action-menu if={opts.actionMenu !== false} service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}"  buttons="{opts.buttons}"></crud-action-menu>
-                        </div>
-                        <div class="pull-right"></div>
-                        <div class="clearfix"></div>
-                        <div class="x_content">
-                            <br>
-                            <div id="jsoneditor"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="clearfix"></div>
-    </div>
     <script>
         var self = this;
         self.mixin(FeatherClientMixin);
@@ -58,22 +29,32 @@
         ];
 
         // this can move into serviceMixins
-        this.refresh = (opts) => {
+        self.refresh = (opts) => {
             self.opts = opts;
             self.update();
+            alert(1)
             if(self.opts.query.id) {
                 self.get(self.opts.query.id);
             }
         },
 
-        this.on('mount', function() {
+        self.on('before-mount', function(params, options) {
             RiotCrudController.loadDependencies(self.dependencies,'crud-jsoneditor', function (argument) {
-                self.initPlugins();
-                if(self.opts.query && self.opts.query.id) {
-                    self.get(self.opts.query.id)
-                }
+                self.service.get('schema').then((result) => {
+                    opts.schema = result;
+                    self.initPlugins();
+
+                    console.error('console.errorconsole.errorconsole.errorconsole.error',self.opts.query)
+                    if(self.opts.query && self.opts.query.id) {
+                        self.get(self.opts.query.id)
+                    }
+                }).catch((error) => {
+                    console.error('console.errorconsole.errorconsole.errorconsole.error')
+                });
+
             });
         });
+
 
         self.get = function(id) {
             if(typeof id != 'undefined') {
@@ -81,6 +62,7 @@
                     if(typeof self.editor == 'undefined') {
                         self.initPlugins();
                     }
+
                     self.data = result;
                     self.editor.set(result);
                 }).catch(function(error){

@@ -40,12 +40,12 @@
     riotCrudController.prototype = {
 
         defaults: (config) => {
-            options = $.extend({}, options, config);
+            options = Object.assign({}, options, config);
             return this;
         },
 
         addRoute: (route, config) => {
-            config = $.extend({}, options, config);
+            config = Object.assign({}, options, config);
             routes[route] = config;
             // if(config.menu) {
             //     menuGroups[config.menuGroup || 'default'].routes = {
@@ -55,8 +55,9 @@
             return this;
         },
 
-        addMenuGroup: (key, html) => {
-            menuGroups[key] = {html: html, routes: {}}
+        addMenuGroup: (key, opts) => {
+            // menuGroups[key] = {html: html, routes: {}}
+            menuGroups[key] = Object.assign({}, opts, {routes: {}})
         },
 
         getRoutes: () => {
@@ -129,6 +130,7 @@
      * - exec fn
      */
     function handler(collection, action, param) {
+            console.error('RiotCrudController no route found',collection, action, param);
         if (typeof routes[collection] == 'undefined' && typeof routes[collection+action] == 'undefined') {
             console.error('RiotCrudController no route found',{
                 collection: collection,
@@ -147,6 +149,7 @@
 
             if (typeof route.fn === 'function') {
                 currentName = null;
+                currentTag = null;
                 route.fn(collection, param, action);
             } else {
                 mount(
@@ -176,7 +179,10 @@
 
     function riotCrudModel() {
         this.opts = {
-            idField:'_id'
+            idField:'_id',
+            showHeader: true,
+            showPagination: true,
+            changeLimit: true,
         };
     }
 
@@ -307,7 +313,7 @@
                     if(data == false) {
                         return false;
                     }
-
+console.log('?????', data, self.opts.idField, data[self.opts.idField]);
                     self.service.update(data[self.opts.idField],data)
                                 .then(function(result){})
                                 .catch(function(error){
@@ -351,10 +357,18 @@
                           dataType: "json",
                           async: false,
                           cache: false,
-                          success: function(data){self.schema = data;cb()}
+                          success: function(data){
+                                self.schema = data;
+                                self.opts.schema = data; // ????
+                                cb()
+                            }
                         });
                     }
                 }
+
+                self.on('ALL', function(event){
+                    console.log('FeatherClientMixin', event)
+                })
 
                 self.on('unmount', () => {
                     RiotControl.off(self.eventKeyDelete);
@@ -364,7 +378,12 @@
                     RiotControl.off(self.eventKeyCreateSave);
                 })
 
+                console.info('FeatherClientMixin service loaded ' + self.opts.service);
+            } else {
+                console.warn('FeatherClientMixin no service');
             }
+
+
         }
     }
     if (!window.FeatherClientMixin) {
@@ -380,67 +399,90 @@
             var actions = [
                 {
                   name: 'view',
-                  label: 'View',
-                  buttonClass: 'info',
-                  active: true
+                  label: 'View'
                 },
                 {
                   name: 'edit',
-                  label: 'Edit',
-                  buttonClass: 'primary',
-                  active: true
+                  label: 'Edit'
                 },
                 {
                   name: 'create',
-                  label: 'Create',
-                  buttonClass: 'warning',
-                  active: true
+                  label: 'Create'
                 },
                 {
                   name: 'delete',
-                  label: 'Delete',
-                  buttonClass: 'danger',
-                  active: true
+                  label: 'Delete'
                 },
                 {
                   name: 'save',
-                  label: 'Save',
-                  buttonClass: 'success',
-                  active: true
+                  label: 'Save'
                 },
                 {
                   name: 'list',
-                  label: 'List',
-                  buttonClass: 'default',
-                  active: true
+                  label: 'List'
+                },
+                {
+                  name: 'print',
+                  label: 'Print'
+                },
+                {
+                  name: 'pdf',
+                  label: 'PDF'
+                },
+                {
+                  name: 'csv',
+                  label: 'CSV'
+                },
+                {
+                  name: 'json',
+                  label: 'Json'
+                },
+                {
+                  name: 'upload',
+                  label: 'Upload'
                 }
             ];
 
             self.on('update', () => {
-
                 var  view = self.opts.view || 'undefined';
+
                 self.opts.actions = actions.map((action, index) => {
-                    action.active = true;
+
+                    action.active = false;
+                    if(['delete','print','pdf','csv','json'].indexOf(action.name) != -1){
+                        action.count = self.opts.selection || 0;
+                    }
+
+                    console.info('crud-action-menu update ', self.opts.selection);
+
                     switch(view) {
                         case 'view':
-                            if(['view','save'].indexOf(action.name) != -1){
-                                action.active = false;
+                            if(['edit','delete','create','list'].indexOf(action.name) != -1){
+                                action.active = true;
+                                delete action.count;
                             }
                             break;
                         case 'edit':
-                            if(['edit'].indexOf(action.name) != -1){
-                                action.active = false;
+                            if(['save','view','delete','list'].indexOf(action.name) != -1){
+                                action.active = true;
+                                delete action.count;
                             }
                             break;
                         case 'create':
-                            if(['create','edit','view','delete'].indexOf(action.name) != -1){
-                                action.active = false;
+                            if(['save','list'].indexOf(action.name) != -1){
+                                action.active = true;
+                            }
+                            break;
+                        case 'list':
+                            if(['delete','create','print','pdf','csv','json','upload'].indexOf(action.name) != -1){
+                                action.active = true;
                             }
                             break;
                         default:
                             break;
 
                     }
+
                     if(self.opts.buttons && self.opts.buttons[action.name]) {
                         action.active = true;
                     }
@@ -451,6 +493,9 @@
 
             self.click = (e) => {
                 e.preventDefault();
+                if(e.item.action.count === 0) {
+                    return;
+                }
                 var service = self.opts.service || self.opts.name; // TODO: move name
                 var view = self.opts.view;
                 var action = e.item.action.name;

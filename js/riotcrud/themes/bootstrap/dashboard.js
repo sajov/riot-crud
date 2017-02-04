@@ -1,4 +1,4 @@
-riot.tag2('top-widget', '<div class="tile-stats"> <div class="icon"><i class="fa {opts.icon}"></i></div> <div class="count">{opts.count}</div> <h3>{opts.title}</h3> <p> <a href="#{opts.service}/list" class="btn btn-xs pull-right"><i class="fa fa-list-ul"></i> show list</a> </p> </div>', '', '', function(opts) {
+riot.tag2('top-widget', '<div onclick="{routeTo}" class="info-box hover-expand-effect"> <div class="icon {opts.color}"> <i if="{opts.icon}" class="material-icons col-gray">{opts.icon}</i> <div id="pie" if="{opts.pie}" class="{opts.pie}" data-chartcolor="{opts.color}">{opts.sparklinedata}</div> </div> <div class="content"> <div class="text">{opts.title}</div> <div class="number count-to" data-from="0" data-to="{opts.count}" data-speed="1000" data-fresh-interval="20">{opts.count}</div> </div> </div>', '', '', function(opts) {
     var self = this;
     self.mixin(FeatherClientMixin);
 
@@ -13,22 +13,66 @@ riot.tag2('top-widget', '<div class="tile-stats"> <div class="icon"><i class="fa
     self.getData = () => {
         if(typeof opts.service != 'undefined')
         self.client.service(opts.service)
-                    .find({query:{$sort:{id:-1}}})
-                    .then((result) => {
-                            self.opts.count = result.total;
-                            self.update();
-                    })
-                    .catch((error) => {iotControl.trigger(
-                                'notification',
-                                error.name + ' ' + error.type ,
-                                'error',
-                                error.message
-                            );});
+            .find({query:{$sort:{id:-1}}})
+            .then((result) => {
+                    self.opts.count = result.total;
+                    console.log('count',self.opts.count)
+                    self.update();
+
+                    self.initPlugins();
+
+            })
+            .catch((error) => {RiotControl.trigger(
+                        'notification',
+                        error.name + ' ' + error.type ,
+                        'error',
+                        error.message
+                    );});
+    }
+
+    self.on('*', (event) => {
+        if( opts.title == 'Products')
+        console.info('dashboard event ' + opts.title  , event);
+    });
+
+    self.on('updated', () => {
+        if(self.opts.count) {
+
+            if( opts.title == 'Products')
+            console.info('dashboard event UPDATED' + opts.title);
+
+        }
+    });
+
+    self.initPlugins = () => {
+        initCounters();
+        initCharts();
+
+        function initCounters() {
+
+        }
+
+        function initCharts() {
+            var chartColor = $.AdminBSB.options.colors[opts.color];
+            $(self.pie).sparkline(undefined, {
+                type: opts.sparkline ||  'bar',
+                barColor: chartColor,
+                negBarColor: chartColor,
+                barWidth: '8px',
+                height: '34px'
+            });
+        }
+    }
+
+    self.routeTo = (e) => {
+        e.preventDefault();
+
+        riot.route(opts.service + '/list');
     }
 
 });
 
-riot.tag2('todo-list', '<div class="x_panel"> <div class="x_title"> <h2>{opts.title}<small>{opts.subtitle}</small></h2> <ul class="nav navbar-right panel_toolbox"> <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li> <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a> <ul class="dropdown-menu" role="menu"> <li><a href="#">Settings 1</a> </li> <li><a href="#">Settings 2</a> </li> </ul> </li> <li><a class="close-link"><i class="fa fa-close"></i></a> </li> </ul> <div class="clearfix"></div> </div> <div class="x_content"> <div class=""> <ul class="to_do"> <li each="{data in opts.todos}" if="{key!=\'default\'}"> <p><input type="checkbox" class="flat" __checked="{data.done}"> {data.todo} </p> </li> </ul> </div> </div> </div>', '', '', function(opts) {
+riot.tag2('todo-list', '<div class="card"> <div class="header"> <h2>{opts.title}<small>{opts.subtitle}</small></h2> <ul class="header-dropdown m-r--5"> <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="material-icons">more_vert</i> </a> <ul class="dropdown-menu pull-right"> <li><a href="javascript:void(0);">Action</a></li> <li><a href="javascript:void(0);">Another action</a></li> <li><a href="javascript:void(0);">Something else here</a></li> </ul> </li> </ul> </div> <div class="body"> <div each="{data,key in opts.todos}" if="{key!=\'default\'}"> <input type="checkbox" id="basic_checkbox_{key}" __checked="{data.done}"><label for="basic_checkbox_{key}">{data.todo}</label> </div> </div> </div>', '', '', function(opts) {
         opts.todos = [
             {todo:'Routing (http://riotjs.com/api/route/)', done: true},
             {todo:'View Models (http://riotjs.com/)', done: true},
@@ -45,10 +89,9 @@ riot.tag2('todo-list', '<div class="x_panel"> <div class="x_title"> <h2>{opts.ti
         ];
 });
 
-riot.tag2('dashboard', '<link href="/bower_components/gentelella/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/iCheck/skins/flat/green.css" rel="stylesheet"> <div class=""> <div class="row top_tiles"> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Orders" description="Lorem ipsum psdea itgum rixt." icon="fa-euro" service="orders"></top-widget> </div> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Categories" description="Lorem ipsum psdea itgum rixt." icon="fa-sitemap" service="categories"></top-widget> </div> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Products" description="Lorem ipsum psdea itgum rixt." icon="fa-caret-square-o-right" service="products"></top-widget> </div> </div> <div class="row"> <div class="col-md-6 col-sm-6 col-xs-12"> <todo-list title="Feature List" subtitle="current and following tasks"></todo-list> <div id="jsoneditor-container"></div> </div> <div class="col-md-6 col-sm-6 col-xs-12"> <div id="json-forms-container"></div> </div> </div> <div class="row"> <div class="col-md-12 col-sm-12 col-xs-12"> </div> </div> </div>', '', '', function(opts) {
+riot.tag2('dashboard', '<div class="row top_tiles"> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Orders" description="" sparkline="bar" icon="shopping_cart" service="orders" color="bg-red"></top-widget> </div> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Categories" description="" sparkline="line" sparklinedata="30, 35, 25, 8" color="cyan" icon="list" service="categories"></top-widget> </div> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Products" description="" pie="chart chart-pie" sparklinedata="30, 35, 25, 8" color="cyan" service="products"></top-widget> </div> </div> <div class="row"> <div class="col-md-6 col-sm-6 col-xs-12"> <todo-list title="Feature List" subtitle="current and following tasks"></todo-list> <div id="jsoneditor-container"></div> </div> <div class="col-md-6 col-sm-6 col-xs-12"> <div id="json-forms-container"></div> </div> </div> <div class="row"> <div class="col-md-12 col-sm-12 col-xs-12"> </div> </div>', '', '', function(opts) {
         var self = this;
         self.mixin(FeatherClientMixin);
-
         self.jsoneditorQuery = {
             id:1
         };
@@ -160,7 +203,8 @@ riot.tag2('dashboard', '<link href="/bower_components/gentelella/vendors/bootstr
                             .then((result) => {
                                 RiotControl.trigger('updateWidgetorders');
                             })
-                            .catch((error) => {RiotControl.trigger(
+                            .catch((error) => {
+                                RiotControl.trigger(
                                 'notification',
                                 error.name + ' ' + error.type ,
                                 'error',
