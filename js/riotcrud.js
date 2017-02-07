@@ -282,11 +282,14 @@
                 self.eventKeyDelete = viewModelKey + '_delete';
                 self.eventKeyDeleteConfirmation = viewModelKey + '_delete_confirmation';
                 RiotControl.on(self.eventKeyDeleteConfirmation, (id) => {
-                    RiotControl.trigger('delete_confirmation_modal', self.opts.service, self.opts.view, id || self.opts.query.id)
+                    RiotControl.trigger('delete_confirmation_modal', self.opts.service, self.opts.view, id || self.opts.query.id || self.selection)
                 });
 
                 self.eventKeyDeleteConfirmed = viewModelKey + '_delete';
                 RiotControl.on(self.eventKeyDeleteConfirmed, (id) => {
+                    if(typeof id === "object") {
+                        id  = { id: { $in: id }};
+                    }
                     self.service.remove(id)
                                 .then(function(result){
                                     if(self.opts.view != 'list') {
@@ -313,7 +316,6 @@
                     if(data == false) {
                         return false;
                     }
-console.log('?????', data, self.opts.idField, data[self.opts.idField]);
                     self.service.update(data[self.opts.idField],data)
                                 .then(function(result){})
                                 .catch(function(error){
