@@ -288,10 +288,14 @@
                 self.eventKeyDeleteConfirmed = viewModelKey + '_delete';
                 RiotControl.on(self.eventKeyDeleteConfirmed, (id) => {
                     if(typeof id === "object") {
-                        id  = { id: { $in: id }};
+                        var ids = id.map(function(_id){return _id.toString()});
+                        var query = {query:{ _id: { $in: ids}}};
+                        id  = null;
                     }
-                    self.service.remove(id)
+                    self.service.remove(id,query)
                                 .then(function(result){
+                                    console.info(
+                                        'result', result)
                                     if(self.opts.view != 'list') {
                                         riot.route([self.opts.service, 'list'].join('/'))
                                     } else {
@@ -299,6 +303,7 @@
                                     }
                                 })
                                 .catch(function(error){
+                                    console.error(error);
                                     RiotControl.trigger(
                                         'notification',
                                         error.errorType + ' ' + self.eventKeyDeleteConfirmed,
