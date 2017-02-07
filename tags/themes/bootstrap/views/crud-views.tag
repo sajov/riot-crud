@@ -221,13 +221,13 @@
             </div>
 	        <div if={opts.showPagination} class="pull-right btn-toolbar">
 				<div if={pagination.start} class="btn-group" role="group" aria-label="First group">
-		            <button onclick={paginate} data-page="{pagination.start}" type="button" class="btn btn-info {'disabled':page.active == false} waves-effect">{pagination.start}</button>
+		            <button onclick={paginate} data-page="{pagination.start}" type="button" class="btn btn-{pagination.current == page ? 'info' : 'default'} {'disabled':page.active == false} waves-effect">{pagination.start}</button>
 		        </div>
 				<div class="btn-group" role="group" aria-label="First group">
-		            <button each={page in pagination.range} onclick={paginate} type="button" data-page="{page}" class="btn btn-info {'disabled':page.active == false} waves-effect">{page}</button>
+		            <button each={page in pagination.range} onclick={paginate} type="button" data-page="{page}" class="btn btn-{pagination.current == page ? 'info' : 'default'} {'disabled':page.active == false} waves-effect">{page}</button>
 		        </div>
 		        <div if={pagination.end} class="btn-group" role="group" aria-label="First group">
-		            <button onclick={paginate} data-page="{pagination.end}" type="button" class="btn btn-info {'disabled':page.active == false} waves-effect">{pagination.end}</button>
+		            <button onclick={paginate} data-page="{pagination.end}" type="button" class="btn btn-{pagination.current == page ? 'info' : 'default'} {'disabled':page.active == false} waves-effect">{pagination.end}</button>
 		        </div>
 	        </div>
 			<div class="clearfix"></div>

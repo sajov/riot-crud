@@ -282,13 +282,20 @@
                 self.eventKeyDelete = viewModelKey + '_delete';
                 self.eventKeyDeleteConfirmation = viewModelKey + '_delete_confirmation';
                 RiotControl.on(self.eventKeyDeleteConfirmation, (id) => {
-                    RiotControl.trigger('delete_confirmation_modal', self.opts.service, self.opts.view, id || self.opts.query.id)
+                    RiotControl.trigger('delete_confirmation_modal', self.opts.service, self.opts.view, id || self.opts.query.id || self.selection)
                 });
 
                 self.eventKeyDeleteConfirmed = viewModelKey + '_delete';
                 RiotControl.on(self.eventKeyDeleteConfirmed, (id) => {
-                    self.service.remove(id)
+                    if(typeof id === "object") {
+                        var ids = id.map(function(_id){return _id.toString()});
+                        var query = {query:{ _id: { $in: ids}}};
+                        id  = null;
+                    }
+                    self.service.remove(id,query)
                                 .then(function(result){
+                                    console.info(
+                                        'result', result)
                                     if(self.opts.view != 'list') {
                                         riot.route([self.opts.service, 'list'].join('/'))
                                     } else {
@@ -296,6 +303,7 @@
                                     }
                                 })
                                 .catch(function(error){
+                                    console.error(error);
                                     RiotControl.trigger(
                                         'notification',
                                         error.errorType + ' ' + self.eventKeyDeleteConfirmed,
@@ -313,7 +321,6 @@
                     if(data == false) {
                         return false;
                     }
-console.log('?????', data, self.opts.idField, data[self.opts.idField]);
                     self.service.update(data[self.opts.idField],data)
                                 .then(function(result){})
                                 .catch(function(error){

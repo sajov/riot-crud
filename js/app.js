@@ -190,14 +190,14 @@ $script.ready(theme, function() {
         {
             list: {
 
-                description: 'Listing View with datatables.net',
+                description: '#/products/list',
                 selection: true,
                 filterable: true,
                 menu:true,
                 menuGroup: 'models',
                 icon: 'list',
                 buttons: ['edit','delete'],
-                tag: 'crud-datatables',
+                tag: 'crud-table',
                 title: 'Products',
                 schema: 'http://localhost:3030/schema/product.json',
                 target: 'div#content',
