@@ -208,7 +208,7 @@
                             service: 'categories',
                             title: 'Categories',
                             description: 'inline category view with jsoneditor',
-                            schema: 'http://localhost:3030/schema/category.json',
+                            schema: 'http://' + window.location.hostname+ ':3030/schema/category.json',
                             tag: 'crud-json-editor',
                             selection: true,
                             view: 'edit',
@@ -219,7 +219,7 @@
                             menuGroup: 'models',
                             // buttons: ['create','save','list'],
                             title: 'Categories',
-                            schema: 'http://localhost:3030/schema/category.json',
+                            schema: 'http://' + window.location.hostname+ ':3030/schema/category.json',
                             type:'inline',
                             query: {id:result.data[0]._id}
                     });
@@ -238,7 +238,7 @@
                             service: 'products',
                             title: 'Products',
                             description: 'inline products view with brutusin:json-forms',
-                            schema: 'http://localhost:3030/schema/products.json',
+                            schema: 'http://' + window.location.hostname+ ':3030/schema/products.json',
                             tag: 'crud-json-editor',
                             selection: true,
                             view: 'edit',
@@ -248,7 +248,7 @@
                             actionMenu: true,
                             menuGroup: 'models',
                             // buttons: ['create','save','list'],
-                            schema: 'http://localhost:3030/schema/category.json',
+                            schema: 'http://' + window.location.hostname+ ':3030/schema/category.json',
                             type:'inline',
                             query: {id:result.data[0]._id}
                     });

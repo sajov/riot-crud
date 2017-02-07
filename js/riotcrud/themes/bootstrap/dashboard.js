@@ -131,7 +131,7 @@ riot.tag2('dashboard', '<div class="row top_tiles"> <div class="animated flipInY
                             service: 'categories',
                             title: 'Categories',
                             description: 'inline category view with jsoneditor',
-                            schema: 'http://localhost:3030/schema/category.json',
+                            schema: 'http://' + window.location.hostname+ ':3030/schema/category.json',
                             tag: 'crud-json-editor',
                             selection: true,
                             view: 'edit',
@@ -142,7 +142,7 @@ riot.tag2('dashboard', '<div class="row top_tiles"> <div class="animated flipInY
                             menuGroup: 'models',
 
                             title: 'Categories',
-                            schema: 'http://localhost:3030/schema/category.json',
+                            schema: 'http://' + window.location.hostname+ ':3030/schema/category.json',
                             type:'inline',
                             query: {id:result.data[0]._id}
                     });
@@ -161,7 +161,7 @@ riot.tag2('dashboard', '<div class="row top_tiles"> <div class="animated flipInY
                             service: 'products',
                             title: 'Products',
                             description: 'inline products view with brutusin:json-forms',
-                            schema: 'http://localhost:3030/schema/products.json',
+                            schema: 'http://' + window.location.hostname+ ':3030/schema/products.json',
                             tag: 'crud-json-editor',
                             selection: true,
                             view: 'edit',
@@ -171,7 +171,7 @@ riot.tag2('dashboard', '<div class="row top_tiles"> <div class="animated flipInY
                             actionMenu: true,
                             menuGroup: 'models',
 
-                            schema: 'http://localhost:3030/schema/category.json',
+                            schema: 'http://' + window.location.hostname+ ':3030/schema/category.json',
                             type:'inline',
                             query: {id:result.data[0]._id}
                     });
