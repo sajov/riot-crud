@@ -78,7 +78,7 @@
                             'notification',
                             'File Upload Success',
                             'success',
-                            'File ed21810aeff776f42cab262584abb1553c9b2323c17b7ab9fe36f379b8904d0f.m4a cerated'
+                            'File ' + file.name + ' cerated'
                         );
                     });
                 }
