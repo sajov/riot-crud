@@ -22,7 +22,7 @@ $script.ready(theme, function() {
      */
     RiotCrudController.defaults({
         target: '#content',
-        endpoint: 'http://localhost:3030'
+        endpoint: 'http://' + window.location.hostname + ':3030'
     });
 
     /**
@@ -65,7 +65,7 @@ $script.ready(theme, function() {
             icon: 'attach_money',
             route: '/orders/view/10',
             servicename: 'orders',
-            endpoint: 'http://localhost:3030',
+            endpoint: 'http://' + window.location.hostname + ':3030',
             dependencies: [riotCrudTheme + '/order.js'],
             fn: function(id, action) {
                 // var tag = riot.mount('#content', 'order')[0];
@@ -90,7 +90,7 @@ $script.ready(theme, function() {
             idField: '_id',
             service: 'orders',
             tag: 'crud-jsoneditor',
-            endpoint: 'http://localhost:3030',
+            endpoint: 'http://' + window.location.hostname + ':3030',
             dependencies: [riotCrudTheme + '/views/crud-jsoneditor.js'],
         }
     );
@@ -111,7 +111,7 @@ $script.ready(theme, function() {
             view: 'edit',
             service: 'orders',
             tag: 'crud-json-forms',
-            endpoint: 'http://localhost:3030',
+            endpoint: 'http://' + window.location.hostname + ':3030',
             dependencies: [riotCrudTheme + '/views/crud-json-forms.js'],
         }
     );
@@ -133,7 +133,7 @@ $script.ready(theme, function() {
             idField: '_id',
             service: 'products',
             tag: 'crud-json-editor',
-            endpoint: 'http://localhost:3030',
+            endpoint: 'http://' + window.location.hostname + ':3030',
             dependencies: [riotCrudTheme + '/views/crud-json-editor.js'],
         }
     );
@@ -156,7 +156,7 @@ $script.ready(theme, function() {
             buttons: ['edit','delete'],
             selection: true,
             servicename: 'products', // ???
-            endpoint: 'http://localhost:3030',
+            endpoint: 'http://' + window.location.hostname + ':3030',
             columns: {
                 base_color: {
                     "data": null,
@@ -192,7 +192,7 @@ $script.ready(theme, function() {
             buttons: ['edit','delete'],
             selection: true,
             servicename: 'products', // ???
-            endpoint: 'http://localhost:3030',
+            endpoint: 'http://' + window.location.hostname + ':3030',
             columns: {
                 base_color: {
                     "data": null,
@@ -217,9 +217,9 @@ $script.ready(theme, function() {
             service: 'products',
             title: 'Products',
             description: 'Views',
-            schema: 'http://localhost:3030/schema/product.json',
+            schema: 'http://' + window.location.hostname + ':3030/schema/product.json',
             target: 'div#content',
-            endpoint: 'http://localhost:3030',
+            endpoint: 'http://' + window.location.hostname + ':3030',
             tag: 'crud-json-editor',
 
         },
@@ -235,7 +235,7 @@ $script.ready(theme, function() {
                 buttons: ['edit','delete'],
                 tag: 'crud-table',
                 title: 'Products',
-                schema: 'http://localhost:3030/schema/product.json',
+                schema: 'http://' + window.location.hostname + ':3030/schema/product.json',
                 target: 'div#content',
                 columns: {
                     base_color: {
@@ -252,7 +252,7 @@ $script.ready(theme, function() {
             view:{
                 tag: 'crud-json-editor',
                 title: 'Product Demo',
-                schema: 'http://localhost:3030/schema/product.json',
+                schema: 'http://' + window.location.hostname + ':3030/schema/product.json',
                 target: 'div#content',
                 dependencies: [
                     riotCrudTheme + '/views/crud-json-editor.js',
@@ -284,7 +284,7 @@ $script.ready(theme, function() {
             service: 'categories',
             title: 'Categories',
             description: '/categories/list',
-            schema: 'http://localhost:3030/schema/category.json',
+            schema: 'http://' + window.location.hostname + ':3030/schema/category.json',
             tag: 'crud-json-editor',
         },
         {
@@ -297,7 +297,7 @@ $script.ready(theme, function() {
                 tag: 'crud-table',
                 title: 'Categories',
                 description: 'Listing riot-crud listind',
-                schema: 'http://localhost:3030/schema/category.json',
+                schema: 'http://' + window.location.hostname + ':3030/schema/category.json',
                 target: 'div#content',
                 columns: {
                     base_color: {
@@ -311,7 +311,7 @@ $script.ready(theme, function() {
             view:{
                 tag: 'crud-json-editor',
                 title: 'Category Demo',
-                schema: 'http://localhost:3030/schema/product.json',
+                schema: 'http://' + window.location.hostname + ':3030/schema/product.json',
                 dependencies: [
                     riotCrudTheme + '/views/crud-json-editor.js',
                 ]
@@ -342,9 +342,9 @@ $script.ready(theme, function() {
             service: 'orders',
             title: 'Orders',
             dependencies: [riotCrudTheme + '/order.js'],
-            schema: 'http://localhost:3030/schema/order.json',
+            schema: 'http://' + window.location.hostname + ':3030/schema/order.json',
             target: 'div#content',
-            endpoint: 'http://localhost:3030',
+            endpoint: 'http://' + window.location.hostname + ':3030',
             tag: 'crud-json-editor',
         },
         {
@@ -357,7 +357,7 @@ $script.ready(theme, function() {
                 buttons: ['edit','delete'],
                 tag: 'crud-table',
                 title: 'Orders',
-                schema: 'http://localhost:3030/schema/order.json',
+                schema: 'http://' + window.location.hostname + ':3030/schema/order.json',
                 target: 'div#content',
                 // endpoint: '/api/product/list',
                 columns: {
@@ -375,7 +375,7 @@ $script.ready(theme, function() {
                 title: 'Order',
                 description: 'Custom view',
                 icon: 'reorder',
-                schema: 'http://localhost:3030/schema/order.json',
+                schema: 'http://' + window.location.hostname + ':3030/schema/order.json',
                 target: 'div#content',
                 dependencies: [
                     riotCrudTheme + '/order.js'
