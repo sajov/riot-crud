@@ -130,7 +130,6 @@
      * - exec fn
      */
     function handler(collection, action, param) {
-            console.error('RiotCrudController no route found',collection, action, param);
         if (typeof routes[collection] == 'undefined' && typeof routes[collection+action] == 'undefined') {
             console.error('RiotCrudController no route found',{
                 collection: collection,

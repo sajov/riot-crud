@@ -83,7 +83,7 @@ $script.ready(theme, function() {
             description: 'jsoneditor.js demo',
             menu: true,
             menuGroup: 'views',
-            icon: 'view_compact',
+            icon: 'widgets',
             route: '/categories/jsoneditor/10',
             servicename: 'orders',
             view: 'edit',
@@ -105,7 +105,7 @@ $script.ready(theme, function() {
             menu: true,
             menuGroup: 'views',
             idField: '_id',
-            icon: 'view_compact',
+            icon: 'widgets',
             route: '/categories/json-forms/10',
             servicename: 'orders',
             view: 'edit',
@@ -126,7 +126,7 @@ $script.ready(theme, function() {
             description: 'json-editor.js demo',
             menu: true,
             menuGroup: 'views',
-            icon: 'view_compact',
+            icon: 'widgets',
             route: '/categories/json-editor/10',
             servicename: 'products',
             view: 'edit',
@@ -138,7 +138,7 @@ $script.ready(theme, function() {
         }
     );
 
-        /**
+    /**
      * Add jsoneditor view Order
      */
     RiotCrudController.addRoute('datatables',
@@ -174,7 +174,43 @@ $script.ready(theme, function() {
     );
 
     /**
-     * Add a model with it's views
+     * Add jsoneditor view Order
+     */
+    RiotCrudController.addRoute('upload',
+        {
+            title: 'Upload data',
+            description: 'Demo dropzone.js',
+            menu: true,
+            showHeader: true,
+            menuGroup: 'views',
+            icon: 'file_upload',
+            route: '/upload/data',
+            view: 'upload',
+            idField: '_id',
+            target: 'div#content',
+            tag: 'crud-upload',
+            buttons: ['edit','delete'],
+            selection: true,
+            servicename: 'products', // ???
+            endpoint: 'http://localhost:3030',
+            columns: {
+                base_color: {
+                    "data": null,
+                    "render": function ( data, type, row ) {
+                        return '<span class="badge badge-success" style="background-color:' + data.base_color + '">' + data.base_color + '</span>';
+                    }
+                }
+            },
+            // fn: function(id, action) {
+            //     var tag = riot.mount('#content', 'crud-jsoneditor')[0];
+            //     console.log('TAG',tag)
+            // }
+            dependencies: [riotCrudTheme + '/views/crud-upload.js'],
+        }
+    );
+
+    /**
+     * Add crud models with it's views
      */
     RiotCrudModel.addModel('products',
         {
@@ -371,19 +407,19 @@ $script.ready(theme, function() {
      * Add data upload from
      */
     RiotCrudController.addMenuGroup('last');
-    RiotCrudController.addRoute('upload',
-        {
-            title: 'Upload',
-            description: 'Upload',
-            menu: true,
-            menuGroup: 'last',
-            route: '/upload',
-            dependencies: [
-                riotCrudTheme + '/views/crud-upload.js',
-            ],
-            tag: 'crud-upload'
-        }
-    );
+    // RiotCrudController.addRoute('upload',
+    //     {
+    //         title: 'Upload',
+    //         description: 'Upload',
+    //         menu: true,
+    //         menuGroup: 'last',
+    //         route: '/upload',
+    //         dependencies: [
+    //             riotCrudTheme + '/views/crud-upload.js',
+    //         ],
+    //         tag: 'crud-upload'
+    //     }
+    // );
 
 
     /* mount gentella admin layout*/

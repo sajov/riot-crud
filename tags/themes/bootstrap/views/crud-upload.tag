@@ -2,50 +2,28 @@
 <crud-upload>
 
     <link rel="stylesheet" href="/bower_components/dropzone/dist/dropzone.css">
-    <div>
-        <div if={opts.type != 'inline'} class="page-title">
-          <div class="title_left">
-            <h3>
-                <raw content="{opts.title}" /><small>{opts.description}</small></h3>
-          </div>
 
-
+    <div class="card">
+        <div class="header">
+            <h2>{opts.title}<small>{opts.description}</small></h2>
+            <span if={selection.length > 0} class="label-count bg-pink font-6">{selection.length}</span>
+            <crud-header-dropdown if={opts.actionMenu !== false} selection="{selection.length}" service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown>
         </div>
+        <div class="body">
+            <form action="http://localhost:3030/datauploads" class="dropzone"
+              id="my-awesome-dropzone">
+                    <label for="model-selection">Models</label>
+                    <select id="model-selection">
+                        <option>Products</option>
+                        <option>Categories</option>
+                        <option>Orders</option>
+                    </select>
+            </form>
         </div>
-
-
-        <div class="row">
-            <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                    <div class="x_title hidden-print">
-
-                        <div class="nav navbar-right panel_toolbox">
-
-                        </div>
-                        <div class="pull-right"></div>
-                        <div class="clearfix"></div>
-                        <div class="x_content">
-                            <br>
-                            <h1>Let's upload some files!</h1>
-                            <form action="http://localhost:3030/datauploads"
-                              class="dropzone"
-                              id="my-awesome-dropzone">
-                                <label for="model-selection">Models</label>
-                                  <select id="model-selection">
-                                      <option>Products</option>
-                                      <option>Categories</option>
-                                      <option>Orders</option>
-                                  </select>
-                              </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="clearfix"></div>
     </div>
     <script>
         var self = this;
+
         self.mixin(FeatherClientMixin);
 
         self.dependencies = [
@@ -53,14 +31,18 @@
                 '/bower_components/dropzone/dist/dropzone.js'
         ];
 
-        this.on('mount', function() {
+        this.on('*', function(event) {
+            console.info('opts.showHeader', event, opts.showHeader || 'df')
+        });
+
+        this.on('before-mount', function() {
             RiotCrudController.loadDependencies(self.dependencies,'crud-upload', function (argument) {
                 self.initPlugins();
             });
         });
 
-
         self.initPlugins = function() {
+            console.info(opts.showHeader)
             // Now with Real-Time Support!
             self.client.service('datauploads').on('created', function(file){
                 console.log('Received file created event!', file);
@@ -85,7 +67,7 @@
                 init: function(){
                     this.on('uploadprogress', function(file, progress){
                         console.log('progresss', progress);
-                        NProgress.set(progress)
+                        // NProgress.set(progress)
                     });
                     this.on('sending', function(file, xhr, formData) {
                         formData.append("dyndata", 'dude');

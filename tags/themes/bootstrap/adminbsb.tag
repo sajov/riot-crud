@@ -176,7 +176,7 @@
                 <ul class="ml-menu">
                     <li each={key,route in group.routes} class={ selected: state }>
                          <a href="#{ route.route }" onclick="{ routeTo }" style="" view="#{ route.route }">
-                            <i class="material-icons">{route.icon || 'widgets'}</i>
+                            <i class="material-icons">{route.icon || 'list'}</i>
                             <span>{route.title}</span>
                          </a>
                     </li>
