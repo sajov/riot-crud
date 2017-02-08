@@ -21,8 +21,6 @@ riot.tag2('crud-jsoneditor', '<div class="card"> <div class="header"> <h2>{opts.
                 self.service.get('schema').then((result) => {
                     opts.schema = result;
                     self.initPlugins();
-
-                    console.error('console.errorconsole.errorconsole.errorconsole.error',self.opts.query)
                     if(self.opts.query && self.opts.query.id) {
                         self.get(self.opts.query.id)
                     }
