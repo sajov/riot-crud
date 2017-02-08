@@ -6,7 +6,7 @@ theme  = 'adminbsb';
 var riotCrudTheme = '/js/riotcrud/themes/bootstrap';
 var dependencyList = {
     gentella: [riotCrudTheme + '/gentella.js', riotCrudTheme + '/views/crud-views.js'],
-    adminbsb: [riotCrudTheme + '/adminbsb.js', riotCrudTheme + '/views/crud-views.js'],
+    adminbsb: [riotCrudTheme + '/adminbsb.js', riotCrudTheme + '/views/crud-views.js', 'http://' + window.location.hostname + ':3030/socket.io/socket.io.js'],
     login: riotCrudTheme + '/login.js',register: riotCrudTheme + '/register.js'
 };
 
