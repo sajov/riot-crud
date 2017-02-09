@@ -58,7 +58,7 @@ riot.tag2('top-widget', '<div onclick="{routeTo}" class="info-box hover-expand-e
     self.routeTo = (e) => {
         e.preventDefault();
 
-        riot.route(opts.service + '/list');
+        route(opts.service + '/list');
     }
 
 });

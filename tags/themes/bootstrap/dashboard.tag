@@ -79,7 +79,7 @@
     self.routeTo = (e) => {
         e.preventDefault();
         // #{opts.service}/list
-        riot.route(opts.service + '/list');
+        route(opts.service + '/list');
     }
 
   </script>

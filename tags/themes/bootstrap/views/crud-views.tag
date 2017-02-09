@@ -144,11 +144,12 @@
 
 					    <thead>
 					      <tr >
-					      	<th if={ opts.selection != false } style="width:40px;vertical-align: text-top" nowrap data-colkey="rowSelection" style="{columnWidths['rowSelection'] ? 'width:' + columnWidths['rowSelection'] + 'px': '' }">
+					      	<th if={ opts.selection != false } style="width:40px;vertical-align: text-top" nowrap data-colkey="rowSelection">
 				      		   <input type="checkbox" id="basic_checkbox_all" checked="{ 'checked': selection.length ==  data.data.length }">
 		                       <label onclick={ selectall }  data-value="{ selection.length ==  data.data.length ? 1 : 0 }" for="basic_checkbox_all" class="basic_checkbox_all"></label>
 							</th>
-					        <th each="{ colkey, colval in thead }" data-colkey="{colkey}" onclick={ sort } style="{columnWidths[colkey] ? 'width:' + columnWidths[colkey] + 'px': '' }">
+
+					        <th each="{ colval, colkey in thead }" data-colkey="{colkey}" onclick={ sort }>
 					        	<i if={query.$sort[colkey] && query.$sort[colkey] == '-1'} class="material-icons pull-right">keyboard_arrow_down</i>
 					        	<i if={query.$sort[colkey] && query.$sort[colkey] == '1'} class="material-icons pull-right">keyboard_arrow_up</i>
 					        	<i if={!query.$sort[colkey]} class="material-icons pull-right">sort</i>
@@ -156,7 +157,7 @@
 
 					        	<label>{ colkey }</label>
 					        </th>
-					        <th data-colkey="filter" style="{columnWidths['filter'] ? 'width:' + columnWidths['filter'] + 'px': '' }">
+					        <th data-colkey="filter" >
 					        	<i onclick={ toggleFilter } class="material-icons">filter_list</i>
 					        </th>
 					      </tr>
@@ -165,7 +166,7 @@
 					    <tbody>
 					    	<tr class="{'hide': !showFilter}">
 						      	<td if={ opts.selection != false } nowrap>&nbsp;</td>
-						        <td each="{ colkey, colval in thead }">
+						        <td each="{ colval, colkey in thead }">
 						        	<input if={schema.properties[colkey].type!='data'} type="text" name="{ colkey }" onchange={filter} placeholder="enter serach">
 						        	<input if={schema.properties[colkey].type=='date'} type="date" name="{ colkey }" onchange={filter} placeholder="enter serach">
 						        </td>
@@ -177,7 +178,7 @@
 						      			<input data-value="{ row._id }" onclick={ selectRow } type="checkbox" id="basic_checkbox_{row._id}" checked="{'checked': selection.indexOf(row._id) != -1}">
 		                       			<label data-value="{ row._id }" onclick={ selectRow }  data-value="{ selection.length ==  data.data.length ? 1 : 0 }" for="basic_checkbox_{row._id}"></label>
 								</td>
-						        <td each="{ colkey, colval in thead }">
+						        <td each="{ colval, colkey in thead }">
 						        	{ row[colkey] }
 						        </td>
 						      	<td>
@@ -194,7 +195,7 @@
 			</div>
 			<div class="clearfix"></div>
 			<div if={opts.changeLimit} class="pull-left btn-group dropup">
-                    <button type="button" class="btn btn-default waves-effect">{data.limit} / {data.total}</button>
+                    <button  if={opts.data} type="button" class="btn btn-default waves-effect">{opts.data.limit} / {opts.data.total}</button>
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                         <span class="caret"></span>
                         <span class="sr-only">Toggle Dropdown</span>
@@ -208,7 +209,7 @@
                         <li><a href="#" onclick={changeLimit} data-limit="ALL" class="waves-effect waves-block">ALL</a></li>
                     </ul>
             </div>
-	        <div if={opts.showPagination} class="pull-right btn-toolbar">
+	        <div if={opts.data && opts.showPagination} class="pull-right btn-toolbar">
 				<div if={pagination.start} class="btn-group" role="group" aria-label="First group">
 		            <button onclick={paginate} data-page="{pagination.start}" type="button" class="btn btn-{pagination.current == page ? 'info' : 'default'} {'disabled':page.active == false} waves-effect">{pagination.start}</button>
 		        </div>
@@ -244,6 +245,12 @@
             $skip: opts.skip || 0,
             $sort: {}
 		};
+		self.data = {
+			'limit': opts.limit,
+			'skip': opts.skip,
+			'total': 0,
+			data:[]
+		};
 		self.selection = [];
 		self.selectionLength = [];
 
@@ -251,7 +258,8 @@
 
 		this.mixin(FeatherClientMixin);
 
-		self.on('update', () => {
+		self.on('*', (event) => {
+			console.info('TABLE event', event,self.data);
 		});
 
 		self.on('mount', () => {
@@ -397,16 +405,16 @@
 	    }
 
 	    initColumnWidth = () => {
-	    	if(!self.columnWidths) {
-	    		self.columnWidths = {};
-	    		$('#orders_table th').each(function(){
-	    			console.warn($(this).data('colkey'));
-	    			console.warn($(this).width());
-	    			self.columnWidths[$(this).data('colkey')] = $(this).width();
-	    		})
-	    		self.columnWidths['rowSelection'] = 40;
-	    		console.error(self.columnWidths)
-	    	}
+    		self.columnWidths = {};
+
+    		$('#orders_table th').each(function(){
+    			console.warn($(this).data('colkey'));
+    			console.warn($(this).width());
+    			self.columnWidths[$(this).data('colkey')] = $(this).width();
+    		})
+    		self.columnWidths['rowSelection'] = 40;
+    		alert(self.columnWidths['rowSelection']);
+    		console.error(self.columnWidths)
 	    }
 
 	    initPagination = () => {
@@ -458,14 +466,13 @@
 
 
 	    getData = () => {
-	    	if(self.data)
-	    		initColumnWidth();
+    		// initColumnWidth();
 	        self.service.find({query:self.query}).then((result) => {
 	        	self.selection = [];
 	            self.data = result;
 	            initPagination();
-	    		console.log('get data',self.query, result);
-	    		self.update();
+	            self.update();
+	    		console.error('get data',self.query, result);
 	        }).catch((error) => {
 	          console.error('Error', error);
 	        });

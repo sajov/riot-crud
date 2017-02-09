@@ -221,7 +221,7 @@
             var options = $.extend({model:name}, this.opts, config || {} );
 
             for (var view in views) {
-                var model = $.extend({name: name, route: '/' + name + '/' + view}, options, views[view]);
+                var model = $.extend({name: name, route: name + '/' + view}, options, views[view]);
                 model.view = view;
                 model.views = Object.keys(views);
 

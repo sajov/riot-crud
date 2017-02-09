@@ -153,16 +153,13 @@
 
 </top-menu>
 
-
-
-
 <side-menu>
     <li class="header">RIOT+FEATHERS CRUD DEMO</li>
     <!-- default routes -->
-    <li each={r, key in opts.routes.default.routes}>
-        <a href="#{ r.route }" onclick="{ routeTo }" style="" view="#{ r.route }">
-            <i class="material-icons">{r.icon}</i>
-            <span>{ r.title }</span>
+    <li each={route, key in opts.routes.default.routes}>
+        <a href="#{ route.route }" onclick="{ routeTo }" style="" view="#{ route.route }">
+            <i class="material-icons">{route.icon}</i>
+            <span>{ route.title }</span>
         </a>
     </li>
     <!-- end default routes -->
@@ -174,25 +171,23 @@
             <span>{group.title}</span>
         </a>
         <ul class="ml-menu">
-            <li each={r, key in group.routes} class={ selected: state }>
-                 <a href="#{ r.route }" onclick="{ routeTo }" style="" view="#{ r.route }">
-                    <i class="material-icons">{r.icon || 'list'}</i>
-                    <span>{r.title}</span>
+            <li each={route, key in group.routes} class={ selected: state }>
+                 <a href="#{ route.route }" onclick="{ routeTo }" style="" view="#{ route.route }">
+                    <i class="material-icons">{route.icon || 'list'}</i>
+                    <span>{route.title}</span>
                  </a>
             </li>
         </ul>
-
     </li>
     <!-- end custom routes RiotControl.addMenuGroup() -->
 
 
     <yield/>
     <script>
-        var self = this;
 
-        RiotControl.on('routeStateChange',(route) => {
+        RiotControl.on('routeStateChange',(path) => {
             var $current = $('.sidebar-menu').find('li.active > a.active');
-            if($current.attr('href') == '#'+route) {
+            if($current.attr('href') == '#'+path) {
                 $current.addClass('active');
             } else {
                 $current.addClass('active');
@@ -200,19 +195,18 @@
         });
 
         this.on('*', (event) => {
-            console.error('SIDE_MENU event:', event, opts.routes)
+            // console.error('SIDE_MENU event:', event, opts.routes)
         });
 
-        this.on('mount', function() {
-            console.log(opts.routes)
-          this.initSidebar();
+        this.on('mount', () => {
+            this.initPlugins();
         });
 
-        this.routeTo = function(e) {
+        this.routeTo = (e) => {
             route(e.item.route.route || e.item.route.view);
         }
 
-        this.initSidebar = function() {
+        this.initPlugins = () => {
             $.AdminBSB.leftSideBar.activate();
         }
     </script>
