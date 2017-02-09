@@ -7,6 +7,9 @@ Also check out [rfx-stack](https://github.com/foxhound87/rfx-stack) if you like 
 
 If you are interest in alternatives more lose coupled and less full stack go ahead.
 
+## Demo:
+[Online Demo](http://crud.sajo-media.de)
+
 ## Dependencies:
 * [feathers](https://github.com/feathersjs/feathers) An open source REST and realtime API layer for modern applications.
 * [feathers-client](https://github.com/feathersjs/feathers-client) Client side Feathers for REST and websockets that works with NodeJS, React Native and any client framework
