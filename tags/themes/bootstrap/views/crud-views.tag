@@ -174,9 +174,15 @@
 					      	</tr>
 
 					      	<tr each="{ row in data.data }" class="{ 'selected': selection.indexOf(row._id) != -1 }">
-						      	<td if={ opts.selection != false } class="a-center">
-						      			<input data-value="{ row._id }" onclick={ selectRow } type="checkbox" id="basic_checkbox_{row._id}" checked="{'checked': selection.indexOf(row._id) != -1}">
+						      	<td if={ selection !== false } class="a-center">
+						      		<div if="{selection.indexOf(row._id) > -1}">
+						      			<input  data-value="{ row._id }" type="checkbox" id="basic_checkbox_on_{row._id}" checked="checked">
+		                       			<label data-value="{ row._id }" onclick={ selectRow }  data-value="{ selection.length ==  data.data.length ? 1 : 0 }" for="basic_checkbox_on_{row._id}"></label>
+						      		</div>
+						      		<div if="{selection.indexOf(row._id) === -1}">
+						      			<input data-value="{ row._id }" type="checkbox" id="basic_checkbox_{row._id}">
 		                       			<label data-value="{ row._id }" onclick={ selectRow }  data-value="{ selection.length ==  data.data.length ? 1 : 0 }" for="basic_checkbox_{row._id}"></label>
+						      		</div>
 								</td>
 						        <td each="{ colval, colkey in thead }">
 						        	{ row[colkey] }
@@ -259,13 +265,10 @@
 		this.mixin(FeatherClientMixin);
 
 		self.on('*', (event) => {
-			console.info('TABLE event', event,self.data);
+			console.info('TABLE event', event,self.selection);
 		});
 
 		self.on('mount', () => {
-			console.info('CRUD-TABLE self', self);
-			console.info('CRUD-TABLE SCHEMA',self.opts.schema);
-			console.info('CRUD-TABLE service', self.service);
 			if(self.opts.service) {
 				initTable();
 			}
@@ -343,6 +346,7 @@
 			if (self.selection.length == self.data.data.length) {
 				self.selection = [];
 			} else {
+
 				self.selection = self.data.data.reduce(function(prev, curr) {
 				  return prev.concat(curr._id);
 				}, []);
@@ -352,7 +356,6 @@
 		}
 
 		selectRow = (e) => {
-
 			let value = e.item.row._id;
 			let index = self.selection.indexOf(value);
 			if (index !== -1) {
@@ -360,7 +363,6 @@
 			} else{
 				self.selection.push(value)
 			}
-			self.update();
 		}
 
 		deleteRow = (e) => {
@@ -402,19 +404,6 @@
 
 	    self.refresh = () => {
 	    	getData();
-	    }
-
-	    initColumnWidth = () => {
-    		self.columnWidths = {};
-
-    		$('#orders_table th').each(function(){
-    			console.warn($(this).data('colkey'));
-    			console.warn($(this).width());
-    			self.columnWidths[$(this).data('colkey')] = $(this).width();
-    		})
-    		self.columnWidths['rowSelection'] = 40;
-    		alert(self.columnWidths['rowSelection']);
-    		console.error(self.columnWidths)
 	    }
 
 	    initPagination = () => {
@@ -466,7 +455,6 @@
 
 
 	    getData = () => {
-    		// initColumnWidth();
 	        self.service.find({query:self.query}).then((result) => {
 	        	self.selection = [];
 	            self.data = result;

@@ -224,18 +224,6 @@
                 var model = $.extend({name: name, route: name + '/' + view}, options, views[view]);
                 model.view = view;
                 model.views = Object.keys(views);
-
-                //TODO: remove, use json-editor ajax mode
-                if(model.schema && typeof model.schema === 'string') {
-                    $.ajax({
-                      url: model.schema,
-                      dataType: "json",
-                      async: false,
-                      cache: false,
-                      success: function(data){model.schema = data;}
-                    });
-                }
-
                 RiotCrudController.addRoute(name+view,model);
             }
 
@@ -378,23 +366,6 @@
 
                                 });
                 });
-
-                self.getSchema = (cb) => {
-                        //TODO: remove, use json-editor ajax mode
-                    if(self.schema && typeof self.schema === 'string') {
-                        $.ajax({
-                          url: self.schema,
-                          dataType: "json",
-                          async: false,
-                          cache: false,
-                          success: function(data){
-                                self.schema = data;
-                                self.opts.schema = data; // ????
-                                cb()
-                            }
-                        });
-                    }
-                }
 
                 self.on('ALL', function(event){
                     console.log('FeatherClientMixin', event)
