@@ -31,10 +31,10 @@
             .then((result) => {
                     self.opts.count = result.total;
                     self.update();
-                // if( opts.title == 'Products') {
-                //     console.info('getData ' + opts.title);
+                if( opts.title == 'Products') {
+                    console.info('getData ' + opts.title);
                     self.initPlugins();
-                // }
+                }
             })
             .catch((error) => {RiotControl.trigger(
                         'notification',
@@ -65,8 +65,8 @@
 
         //Charts
         function initCharts() {
-            var chartColor = $.AdminBSB.options.colors[opts.color];
-            $(self.pie).sparkline(undefined, {
+            var chartColor = $.AdminBSB.options.colors[opts.color] || 'red';
+            $('#pie').sparkline(undefined, {
                 type: opts.sparkline ||  'bar', // line, pie, bar
                 barColor: chartColor,
                 negBarColor: chartColor,

@@ -161,7 +161,7 @@ riot.tag2('crud-table', '<modal-delete-confirmation></modal-delete-confirmation>
 
 		viewRow = (e) => {
 			e.preventDefault();
-			riot.route(opts.service + '/view/' + e.item.row._id);
+			route(opts.service + '/view/' + e.item.row._id);
 		}
 
 	    initSchema = () => {

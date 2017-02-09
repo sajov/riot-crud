@@ -17,9 +17,10 @@ riot.tag2('top-widget', '<div onclick="{routeTo}" class="info-box hover-expand-e
             .then((result) => {
                     self.opts.count = result.total;
                     self.update();
-
+                if( opts.title == 'Products') {
+                    console.info('getData ' + opts.title);
                     self.initPlugins();
-
+                }
             })
             .catch((error) => {RiotControl.trigger(
                         'notification',
@@ -44,8 +45,8 @@ riot.tag2('top-widget', '<div onclick="{routeTo}" class="info-box hover-expand-e
         }
 
         function initCharts() {
-            var chartColor = $.AdminBSB.options.colors[opts.color];
-            $(self.pie).sparkline(undefined, {
+            var chartColor = $.AdminBSB.options.colors[opts.color] || 'red';
+            $('#pie').sparkline(undefined, {
                 type: opts.sparkline ||  'bar',
                 barColor: chartColor,
                 negBarColor: chartColor,

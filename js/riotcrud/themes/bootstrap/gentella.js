@@ -114,7 +114,7 @@ riot.tag2('side-menu', '<div class="navbar nav_title" style="border: 0;"> <a hre
         });
 
         this.routeTo = function(e) {
-            riot.route(e.item.route.route || e.item.route.view);
+            route(e.item.route.route || e.item.route.view);
         }
 
         this.initSidebar = function() {

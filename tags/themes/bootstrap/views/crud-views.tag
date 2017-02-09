@@ -370,7 +370,7 @@
 
 		viewRow = (e) => {
 			e.preventDefault();
-			riot.route(opts.service + '/view/' + e.item.row._id);
+			route(opts.service + '/view/' + e.item.row._id);
 		}
        // <a class="btn btn-info btn-xs" tabindex="0" aria-controls="ajaxdatatables" href="#' + opts.service + '/view/' + row[opts.idField] + '"><i class="fa fa-edit"></i></a>
        // <a class="btn btn-danger btn-xs" onclick="RiotControl.trigger(\'' + viewModelKey + '\',\''+row[opts.idField]+'\')"><i class="fa fa-trash-o"></i></a>
