@@ -30,7 +30,6 @@
             .find({query:{$sort:{id:-1}}})
             .then((result) => {
                     self.opts.count = result.total;
-                    console.log('count',self.opts.count)
                     self.update();
                 // if( opts.title == 'Products') {
                 //     console.info('getData ' + opts.title);
@@ -45,16 +44,12 @@
                     );});
     }
 
-    self.on('*', (event) => {
-        if( opts.title == 'Products')
-        console.info('dashboard event ' + opts.title  , event);
-    });
+    // self.on('*', (event) => {
+    //     console.info('dashboard event ' + opts.title  , event);
+    // });
 
     self.on('updated', () => {
         if(self.opts.count) {
-
-            if( opts.title == 'Products')
-            console.info('dashboard event UPDATED' + opts.title);
 
         }
     });

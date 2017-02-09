@@ -157,36 +157,36 @@
 
 
 <side-menu>
-            <li class="header">RIOT+FEATHERS CRUD DEMO</li>
-            <!-- default routes -->
-            <li each={key,route in opts.routes.default.routes}>
-                <a href="#{ route.route }" onclick="{ routeTo }" style="" view="#{ route.route }">
-                    <i class="material-icons">{route.icon}</i>
-                    <span>{ route.title }</span>
-                </a>
+    <li class="header">RIOT+FEATHERS CRUD DEMO</li>
+    <!-- default routes -->
+    <li each={r, key in opts.routes.default.routes}>
+        <a href="#{ r.route }" onclick="{ routeTo }" style="" view="#{ r.route }">
+            <i class="material-icons">{r.icon}</i>
+            <span>{ r.title }</span>
+        </a>
+    </li>
+    <!-- end default routes -->
+
+    <!-- custom routes RiotControl.addMenuGroup() -->
+    <li each={group, key in opts.routes} if={key!='default'}>
+        <a if={group.title} href="javascript:void(0);" class="menu-toggle">
+            <i class="material-icons">{group.icon}</i>
+            <span>{group.title}</span>
+        </a>
+        <ul class="ml-menu">
+            <li each={r, key in group.routes} class={ selected: state }>
+                 <a href="#{ r.route }" onclick="{ routeTo }" style="" view="#{ r.route }">
+                    <i class="material-icons">{r.icon || 'list'}</i>
+                    <span>{r.title}</span>
+                 </a>
             </li>
-            <!-- end default routes -->
+        </ul>
 
-            <!-- custom routes RiotControl.addMenuGroup() -->
-            <li each={key,group in opts.routes} if={key!='default'}>
-                <a if={group.title} href="javascript:void(0);" class="menu-toggle">
-                    <i class="material-icons">{group.icon}</i>
-                    <span>{group.title}</span>
-                </a>
-                <ul class="ml-menu">
-                    <li each={key,route in group.routes} class={ selected: state }>
-                         <a href="#{ route.route }" onclick="{ routeTo }" style="" view="#{ route.route }">
-                            <i class="material-icons">{route.icon || 'list'}</i>
-                            <span>{route.title}</span>
-                         </a>
-                    </li>
-                </ul>
-
-            </li>
-            <!-- end custom routes RiotControl.addMenuGroup() -->
+    </li>
+    <!-- end custom routes RiotControl.addMenuGroup() -->
 
 
-            <yield/>
+    <yield/>
     <script>
         var self = this;
 
@@ -199,13 +199,17 @@
             }
         });
 
+        this.on('*', (event) => {
+            console.error('SIDE_MENU event:', event, opts.routes)
+        });
+
         this.on('mount', function() {
             console.log(opts.routes)
           this.initSidebar();
         });
 
         this.routeTo = function(e) {
-            riot.route(e.item.route.route || e.item.route.view);
+            route(e.item.route.route || e.item.route.view);
         }
 
         this.initSidebar = function() {

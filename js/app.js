@@ -283,7 +283,7 @@ $script.ready(theme, function() {
         {
             service: 'categories',
             title: 'Categories',
-            description: '/categories/list',
+            description: 'categories/list',
             schema: 'http://' + window.location.hostname + ':3030/schema/category.json',
             tag: 'crud-json-editor',
         },
@@ -437,15 +437,11 @@ $script.ready(theme, function() {
         }
     });
 
-    if(window.location.hash === "" && window.location.hash != "#dashboard") {
-       riot.route('dashboard');
-    }
+    // if(window.location.hash === "" && window.location.hash != "#dashboard") {
+    //    route('dashboard');
+    // }
 
-
-    // riot.mount('crud-test',{name:'my tag name',service:'klo'})
-
-
-    RiotCrudController.start();
+    // RiotCrudController.start();
 
 })
 

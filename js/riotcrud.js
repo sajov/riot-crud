@@ -6,7 +6,7 @@
  * @return {[type]}         [description]
  */
 ;
-(function(window, riot, $script) {
+(function(window, riot, route, $script) {
     'use strict';
 
     var currentTag = null;
@@ -44,9 +44,9 @@
             return this;
         },
 
-        addRoute: (route, config) => {
+        addRoute: (path, config) => {
             config = Object.assign({}, options, config);
-            routes[route] = config;
+            routes[path] = config;
             // if(config.menu) {
             //     menuGroups[config.menuGroup || 'default'].routes = {
 
@@ -96,12 +96,11 @@
             }
         },
 
-        start: (route) => {
-            riot.route(handler)
-            riot.route.start();
-            riot.route.exec();
+        start: (path) => {
+            route.parser(handler);
+            route.start(true);
             if (route)
-                riot.route(route);
+                route(path);
 
             return this;
         },
@@ -130,31 +129,56 @@
      * - exec fn
      */
     function handler(collection, action, param) {
+
+        var raw = collection.split('?'),
+              uri = raw[0].split('/'),
+              qs = raw[1],
+              params = {}
+
+        if (qs) {
+            qs.split('&').forEach(function(v) {
+                var c = v.split('=')
+                params[c[0]] = c[1]
+            })
+        }
+
+        var collection = uri[0];
+        var action = uri[1];
+        var param = uri[2];
+
+        // uri.push(params)
+        // return uri;
+
+
         if (typeof routes[collection] == 'undefined' && typeof routes[collection+action] == 'undefined') {
             console.error('RiotCrudController no route found',{
                 collection: collection,
                 action: action,
-                param: param
-            });
+                param: param,
+                routes: routes,
+                uri:uri,
+                qs:qs,
+                params:params,
+                           });
             return;
         }
 
-        var route = routes[collection] || routes[collection+action];
+        var view = routes[collection] || routes[collection+action];
 
-        route.query = {id: param, query: riot.route.query()};
-        RiotCrudController.loadDependencies(route.dependencies, route.route, function() {
+        view.query = {id: param, query: route.query()};
+        RiotCrudController.loadDependencies(view.dependencies, view.route, function() {
 
-            RiotControl.trigger('routeStateChange',route.route);
+            RiotControl.trigger('routeStateChange',view.route);
 
-            if (typeof route.fn === 'function') {
+            if (typeof view.fn === 'function') {
                 currentName = null;
                 currentTag = null;
-                route.fn(collection, param, action);
+                view.fn(collection, param, action);
             } else {
                 mount(
-                    route.target || target,
-                    route.tag || collection + '-' + action,
-                    route
+                    view.target || target,
+                    view.tag || collection + '-' + action,
+                    view
                 );
             }
         })
@@ -164,7 +188,7 @@
         window.RiotCrudController = new riotCrudController;
     }
 
-}(window, riot, $script));
+}(window, riot, route, $script));
 
 /**
  * Riot crud model
@@ -296,7 +320,7 @@
                                     console.info(
                                         'result', result)
                                     if(self.opts.view != 'list') {
-                                        riot.route([self.opts.service, 'list'].join('/'))
+                                        route([self.opts.service, 'list'].join('/'))
                                     } else {
                                         self.refresh();
                                     }
@@ -401,7 +425,6 @@
         observable: riot.observable(),
         init: function(){
             var self = this;
-
             var actions = [
                 {
                   name: 'view',
@@ -449,7 +472,11 @@
                 }
             ];
 
-            self.on('update', () => {
+
+            // this.on('*', (event) => {
+            //     console.error('VIEWACTIONSMIXIN event: ', event)
+            // });
+            this.on('before-mount', () => {
                 var  view = self.opts.view || 'undefined';
 
                 self.opts.actions = actions.map((action, index) => {
@@ -458,8 +485,6 @@
                     if(['delete','print','pdf','csv','json'].indexOf(action.name) != -1){
                         action.count = self.opts.selection || 0;
                     }
-
-                    console.info('crud-action-menu update ', self.opts.selection);
 
                     switch(view) {
                         case 'view':
@@ -495,7 +520,9 @@
 
                     return action;
                 });
+
             })
+
 
             self.click = (e) => {
                 e.preventDefault();
@@ -515,11 +542,11 @@
                         break;
                     case 'view':
                     case 'edit':
-                        riot.route([service, action, self.opts.query.id].join('/'))
+                        route([service, action, self.opts.query.id].join('/'))
                         break;
                     case 'list':
                     case 'create':
-                        riot.route([service, action].join('/'))
+                        route([service, action].join('/'))
                         break;
                     default:
                         console.error('unknown event: ' + [service, view, action].join('_'))

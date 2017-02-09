@@ -18,26 +18,18 @@
 	<div class="btn-group">
 		<a each={action in opts.actions} if={ action.active} onclick={ click } class="btn btn-{ action.buttonClass || 'default'} {dropdown-menu: action.options} btn-sm">
 			{action.label}
-			<!-- <i class="fa fa-save"></i> -->
 		</a>
+	</div>
+	<script>
+		var self = this;
+		this.mixin(viewActionsMixin);
+		self.on('mount', () => {
+			console.warn('crud-action-menu', self.opts.actioMenu);
+			console.warn('crud-action-menu', self.opts.action);
+			console.warn('crud-action-menu', self.opts);
 
- <!--        <a data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle" type="a" aria-expanded="false">
-						Actions <span class="caret"></span>
-				 </a>
-				<ul role="menu" class="dropdown-menu">
-					<li each={option in ['Copy','CSV','Excel','Print','divider','Import']} class="{divider: option == 'divider'}"><a if={option != 'divider'} href="#">{option}</a></li>
-				</ul> -->
-			</div>
-			<script>
-				var self = this;
-				this.mixin(viewActionsMixin);
-				self.on('mount', () => {
-					console.warn('crud-action-menu', self.opts.actioMenu);
-					console.warn('crud-action-menu', self.opts.action);
-					console.warn('crud-action-menu', self.opts);
-
-				})
-			</script>
+		})
+	</script>
 
 
 </crud-action-menu>
@@ -45,7 +37,7 @@
 
 <crud-header-dropdown>
 
-	<ul if={opts.actions.length} class="header-dropdown m-r--5">
+	<ul class="header-dropdown m-r--5">
         <li class="dropdown">
             <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                 <i class="material-icons">more_vert</i>
@@ -84,11 +76,9 @@
 	<script>
 		var self = this;
 		this.mixin(viewActionsMixin);
-		// self.on('update', () => {
-		// 	console.info('crud-action-menu update ', opts.selection);
-		// });
+
 		self.on('mount', () => {
-			console.info('crud-action-menu', self.opts);
+			// console.info('crud-action-menu', self.opts);
 
 		})
 	</script>

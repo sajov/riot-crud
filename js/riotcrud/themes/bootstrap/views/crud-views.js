@@ -10,23 +10,22 @@ riot.tag2('crud-test', '', '', '', function(opts) {
 });
 
 riot.tag2('crud-action-menu', '<div class="btn-group"> <a each="{action in opts.actions}" if="{action.active}" onclick="{click}" class="btn btn-{action.buttonClass || \'default\'} {dropdown-menu: action.options} btn-sm"> {action.label} </a> </div>', '', '', function(opts) {
-				var self = this;
-				this.mixin(viewActionsMixin);
-				self.on('mount', () => {
-					console.warn('crud-action-menu', self.opts.actioMenu);
-					console.warn('crud-action-menu', self.opts.action);
-					console.warn('crud-action-menu', self.opts);
+		var self = this;
+		this.mixin(viewActionsMixin);
+		self.on('mount', () => {
+			console.warn('crud-action-menu', self.opts.actioMenu);
+			console.warn('crud-action-menu', self.opts.action);
+			console.warn('crud-action-menu', self.opts);
 
-				})
+		})
 });
 
 
-riot.tag2('crud-header-dropdown', '<ul if="{opts.actions.length}" class="header-dropdown m-r--5"> <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="material-icons">more_vert</i> </a> <ul class="dropdown-menu pull-right"> <li each="{action in opts.actions}"> <a if="{action.active}" href="#" onclick="{click}"> <i if="{action.name == \'create\'}" class="material-icons">add</i> <i if="{action.name == \'view\'}" class="material-icons">view_compact</i> <i if="{action.name == \'delete\'}" class="material-icons">remove</i> <i if="{action.name == \'edit\'}" class="material-icons">mode_edit</i> <i if="{action.name == \'save\'}" class="material-icons">save</i> <i if="{action.name == \'list\'}" class="material-icons">view_list</i> <i if="{action.name == \'print\'}" class="material-icons">local_printshop</i> <i if="{action.name == \'pdf\'}" class="material-icons">picture_as_pdf</i> <i if="{action.name == \'csv\'}" class="material-icons">insert_drive_file</i> <i if="{action.name == \'json\'}" class="material-icons">insert_drive_file</i> <hr if="{action.name == \'upload\'}"> <i if="{action.name == \'upload\'}" class="material-icons">file_upload</i> <span if="{action.active}" class="{action.count === 0 ? \'font-line-through font-italic\' : \'font-bold\'}"> {action.label} <small if="{action.count >= 0}">({action.count})</small> </span> </a> </li> </ul> </li> </ul>', '', '', function(opts) {
+riot.tag2('crud-header-dropdown', '<ul class="header-dropdown m-r--5"> <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="material-icons">more_vert</i> </a> <ul class="dropdown-menu pull-right"> <li each="{action in opts.actions}"> <a if="{action.active}" href="#" onclick="{click}"> <i if="{action.name == \'create\'}" class="material-icons">add</i> <i if="{action.name == \'view\'}" class="material-icons">view_compact</i> <i if="{action.name == \'delete\'}" class="material-icons">remove</i> <i if="{action.name == \'edit\'}" class="material-icons">mode_edit</i> <i if="{action.name == \'save\'}" class="material-icons">save</i> <i if="{action.name == \'list\'}" class="material-icons">view_list</i> <i if="{action.name == \'print\'}" class="material-icons">local_printshop</i> <i if="{action.name == \'pdf\'}" class="material-icons">picture_as_pdf</i> <i if="{action.name == \'csv\'}" class="material-icons">insert_drive_file</i> <i if="{action.name == \'json\'}" class="material-icons">insert_drive_file</i> <hr if="{action.name == \'upload\'}"> <i if="{action.name == \'upload\'}" class="material-icons">file_upload</i> <span if="{action.active}" class="{action.count === 0 ? \'font-line-through font-italic\' : \'font-bold\'}"> {action.label} <small if="{action.count >= 0}">({action.count})</small> </span> </a> </li> </ul> </li> </ul>', '', '', function(opts) {
 		var self = this;
 		this.mixin(viewActionsMixin);
 
 		self.on('mount', () => {
-			console.info('crud-action-menu', self.opts);
 
 		})
 });
