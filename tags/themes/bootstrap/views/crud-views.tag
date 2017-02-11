@@ -123,7 +123,7 @@
 	<modal-delete-confirmation></modal-delete-confirmation>
 
 	<div class="card">
-        <div if={opts.showHeader} class="header">
+        <div if={opts.showheader} class="header">
             <h2>{opts.title}<small>{opts.description}</small></h2>
             <span if={selection.length > 0} class="label-count bg-pink font-6">{selection.length}</span>
             <crud-header-dropdown if={opts.actionMenu !== false} selection="{selection.length}" service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown>
@@ -164,7 +164,7 @@
 					    </thead>
 
 					    <tbody>
-					    	<tr class="{'hide': !showFilter}">
+					    	<tr class="{'hide': !showfilter}">
 						      	<td if={ opts.selection != false } nowrap>&nbsp;</td>
 						        <td each="{ colval, colkey in thead }">
 						        	<input if={schema.properties[colkey].type!='data'} type="text" name="{ colkey }" onchange={filter} placeholder="enter serach">
@@ -200,8 +200,8 @@
 				    </table>
 			</div>
 			<div class="clearfix"></div>
-			<div if={opts.changeLimit} class="pull-left btn-group dropup">
-                    <button  if={opts.data} type="button" class="btn btn-default waves-effect">{opts.data.limit} / {opts.data.total}</button>
+			<div if={opts.changelimit} class="pull-left btn-group dropup">
+                    <button if={opts.data} type="button" class="btn btn-default waves-effect">{opts.data.limit} / {opts.data.total}</button>
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                         <span class="caret"></span>
                         <span class="sr-only">Toggle Dropdown</span>
@@ -215,15 +215,15 @@
                         <li><a href="#" onclick={changeLimit} data-limit="ALL" class="waves-effect waves-block">ALL</a></li>
                     </ul>
             </div>
-	        <div if={opts.data && opts.showPagination} class="pull-right btn-toolbar">
+	        <div if={opts.showpagination} class="pull-right btn-toolbar">
 				<div if={pagination.start} class="btn-group" role="group" aria-label="First group">
-		            <button onclick={paginate} data-page="{pagination.start}" type="button" class="btn btn-{pagination.current == page ? 'info' : 'default'} {'disabled':page.active == false} waves-effect">{pagination.start}</button>
+		            <button onclick={paginate} data-page="{pagination.start}" type="button" class="btn btn-{pagination.current ==  pagination.start ? 'info' : 'default'} waves-effect">{pagination.start}</button>
 		        </div>
 				<div class="btn-group" role="group" aria-label="First group">
 		            <button each={page in pagination.range} onclick={paginate} type="button" data-page="{page}" class="btn btn-{pagination.current == page ? 'info' : 'default'} {'disabled':page.active == false} waves-effect">{page}</button>
 		        </div>
 		        <div if={pagination.end} class="btn-group" role="group" aria-label="First group">
-		            <button onclick={paginate} data-page="{pagination.end}" type="button" class="btn btn-{pagination.current == page ? 'info' : 'default'} {'disabled':page.active == false} waves-effect">{pagination.end}</button>
+		            <button onclick={paginate} data-page="{pagination.end}" type="button" class="btn btn-{pagination.current == pagination.end ? 'info' : 'default'}  waves-effect">{pagination.end}</button>
 		        </div>
 	        </div>
 			<div class="clearfix"></div>
@@ -233,23 +233,22 @@
         </div>
     </div>
 
-	<div>
-
-
-
-
-	</div>
 	<div class="clearfix"></div>
 
 	<script>
 
 		var self = this;
 		self.opts.view = 'list';
-		self.pagination = [];
+		self.opts.showheader = true;
+		self.opts.showfilter = true;
+		self.opts.showpagination = true;
+		self.pagination = {
+			range:[]
+		};
 		self.query = {
 			$limit: opts.limit || 10,
             $skip: opts.skip || 0,
-            $sort: {}
+            $sort: opts.sortfield ? JSON.parse('{"' + opts.sortfield + '":' + (opts.sortdir || 1) + '}') : {}
 		};
 		self.data = {
 			'limit': opts.limit,
@@ -260,7 +259,7 @@
 		self.selection = [];
 		self.selectionLength = [];
 
-		self.showFilter = false;
+		self.showfilter = false;
 
 		this.mixin(FeatherClientMixin);
 
@@ -325,7 +324,7 @@
 	    }
 
 	    toggleFilter = (e) => {
-	    	self.showFilter = self.showFilter == true ? false : true;
+	    	self.showfilter = self.showfilter == true ? false : true;
 	    	self.update();
 	    }
 
@@ -380,6 +379,7 @@
 	    initSchema = () => {
 	    	self.thead = {};
 		    if(opts.fields) {
+		    	opts.fields = opts.fields.split(',');
 		    	for (var i = 0; i < opts.fields.length; i++) {
 		    		self.thead[opts.fields[i]] = self.schema.properties[opts.fields[i]]
 		    	}
@@ -396,7 +396,7 @@
 	    	self.service.get('schema').then((result) => {
 	        	self.schema = result;
 	        	initSchema();
-	    		getData();
+	        	getData();
 	        }).catch((error) => {
 	          console.error('Error', error);
 	        });
