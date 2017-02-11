@@ -153,10 +153,11 @@
                     service="orders"
                     showheader="true"
                     limit="4"
-                    fields="_id,name,createdAt"
-                    sortfield="createdAt"
+                    fields="orderId,total,createdAt"
+                    sortfield="orderId"
                     sortdir="-1"
                     showpagination="1"
+                    changelimit="1"
                     skip="0"
                     ups={table:'test'}>
                 </crud-table>
@@ -281,15 +282,18 @@
 
         fakeOrder = () => {
             self.client.service('orders')
-                .find({query:{$sort:{id:-1},$limit:1}})
+                .find({query:{$sort:{orderId:-1},$limit:1}})
                 .then((result) => {
                         var order = result.data[0];
                         order._id = (result.total + 100).toString();
+                        order.orderId = order.orderId + 1;
+                        order.createdAt = new Date();
+                        console.info('dashboard order.orderId',order,order.orderId);
                         self.client.service('orders')
                             .create(order)
                             .then((result) => {
                                 RiotControl.trigger('updateWidgetorders');
-                                // self.ref.ordertable.update();
+                                self.refs.ordertable.reInit();
                             })
                             .catch((error) => {
                                 RiotControl.trigger(
@@ -299,7 +303,7 @@
                                 error.message
                             );
                         });
-                })                              //'notification', (title, type, text)
+                })
                 .catch((error) => {iotControl.trigger(
                         'notification',
                         error.name + ' ' + error.type ,

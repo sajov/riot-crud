@@ -346,7 +346,7 @@
 
                 });
 
-                self.eventKeyCreateSave = self.opts.service + '_create_save';
+                self.eventKeyCreateSave = self.opts.service + '_create';
                 RiotControl.on(self.eventKeyCreateSave, () => {
                     var data = self.getData();
                     if(data == false) {
@@ -509,6 +509,9 @@
                         break;
                     case 'save':
                     case 'update':
+                        if(view == 'create'){
+                            action = 'create';
+                        }
                         RiotControl.trigger([service, action].join('_'))
                         break;
                     case 'view':

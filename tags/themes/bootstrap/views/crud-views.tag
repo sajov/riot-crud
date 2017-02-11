@@ -139,8 +139,7 @@
             	</div>
         	</div>
 			<div class="table-responsive">
-
-					<table id="{ opts.service }_table" class="table table-striped jambo_table bulk_action">
+				<table id="{ opts.service }_table" class="table table-striped jambo_table bulk_action">
 
 					    <thead>
 					      <tr >
@@ -197,23 +196,23 @@
 						      	</td>
 						    </tr>
 					    </tbody>
-				    </table>
+			    </table>
 			</div>
 			<div class="clearfix"></div>
 			<div if={opts.changelimit} class="pull-left btn-group dropup">
-                    <button if={opts.data} type="button" class="btn btn-default waves-effect">{opts.data.limit} / {opts.data.total}</button>
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        <span class="caret"></span>
-                        <span class="sr-only">Toggle Dropdown</span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a href="#" onclick={changeLimit} data-limit="5" class="waves-effect waves-block">5</a></li>
-                        <li><a href="#" onclick={changeLimit} data-limit="10" class="waves-effect waves-block">10</a></li>
-                        <li><a href="#" onclick={changeLimit} data-limit="50" class="waves-effect waves-block">50</a></li>
-                        <li><a href="#" onclick={changeLimit} data-limit="100" class="waves-effect waves-block">100</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="#" onclick={changeLimit} data-limit="ALL" class="waves-effect waves-block">ALL</a></li>
-                    </ul>
+                <button if={data.data} type="button" class="btn btn-default waves-effect">{opts.limit} / {data.total}</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="#" onclick={changeLimit} data-limit="5" class="waves-effect waves-block">5</a></li>
+                    <li><a href="#" onclick={changeLimit} data-limit="10" class="waves-effect waves-block">10</a></li>
+                    <li><a href="#" onclick={changeLimit} data-limit="50" class="waves-effect waves-block">50</a></li>
+                    <li><a href="#" onclick={changeLimit} data-limit="100" class="waves-effect waves-block">100</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#" onclick={changeLimit} data-limit="ALL" class="waves-effect waves-block">ALL</a></li>
+                </ul>
             </div>
 	        <div if={opts.showpagination} class="pull-right btn-toolbar">
 				<div if={pagination.start} class="btn-group" role="group" aria-label="First group">
@@ -394,6 +393,7 @@
 
 	    initTable = () => {
 	    	self.service.get('schema').then((result) => {
+	          console.error('Error schema', result);
 	        	self.schema = result;
 	        	initSchema();
 	        	getData();
@@ -402,7 +402,18 @@
 	        });
 	    }
 
+	    /* deprecated use reInit */
 	    self.refresh = () => {
+	    	getData();
+	    }
+
+	    /**
+	     * Reinit view
+	     * list, edit and show requery
+	     * @param  {[type]} query [description]
+	     * @return {[type]}       [description]
+	     */
+	    self.reInit = (query) => {
 	    	getData();
 	    }
 

@@ -12,7 +12,6 @@
         </div>
         <div class="body">
             <div id="jsoneditor"></div>
-                <a class="btn success" href="#" onclick={ saveJSONEditor }>Speichern</a>
         </div>
     </div>
 
@@ -36,6 +35,7 @@
             RiotCrudController.loadDependencies(self.dependencies,'crud-json-editor', function (argument) {
 
                  self.service.get('schema').then((result) => {
+                    delete result.properties.id || result.properties._id;
                         opts.schema = result;
                         opts.tableHeader = opts.schema.defaultProperties || opts.schema.required || opts.schema.properties;
                         self.initJSONEditor();
