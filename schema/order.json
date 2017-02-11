@@ -6,6 +6,9 @@
     "id": {
       "type": "number"
     },
+    "orderId": {
+      "type": "number"
+    },
     "name": {
       "type": "string"
     },

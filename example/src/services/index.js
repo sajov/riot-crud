@@ -1,4 +1,5 @@
 'use strict';
+const download = require('./download');
 const dataupload = require('./dataupload');
 const order = require('./order');
 const memory = require('./memory');
@@ -18,4 +19,5 @@ module.exports = function() {
   app.configure(memory);
   app.configure(order);
   app.configure(dataupload);
+  app.configure(download);
 };

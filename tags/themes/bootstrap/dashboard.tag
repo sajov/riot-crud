@@ -1,5 +1,8 @@
+<!--
+    TOP WIDGET
+    A custom view example.
+ -->
 <top-widget>
-
 
     <div onclick={routeTo} class="info-box hover-expand-effect">
         <div class="icon {opts.color}">
@@ -12,87 +15,79 @@
         </div>
     </div>
 
-  <script>
-    var self = this;
-    self.mixin(FeatherClientMixin);
+    <script>
+        var self = this;
+        self.mixin(FeatherClientMixin);
 
-    this.on('mount', () => {
-        self.getData();
-    });
+        this.on('mount', () => {
+            self.getData();
+        });
 
-    RiotControl.on('updateWidget'+opts.service, () => {
-        self.getData();
-    });
+        RiotControl.on('updateWidget'+opts.service, () => {
+            self.getData();
+        });
 
-    self.getData = () => {
-        if(typeof opts.service != 'undefined')
-        self.client.service(opts.service)
-            .find({query:{$sort:{id:-1}}})
-            .then((result) => {
-                    self.opts.count = result.total;
-                    console.log('count',self.opts.count)
-                    self.update();
-                // if( opts.title == 'Products') {
-                //     console.info('getData ' + opts.title);
-                    self.initPlugins();
-                // }
-            })
-            .catch((error) => {RiotControl.trigger(
-                        'notification',
-                        error.name + ' ' + error.type ,
-                        'error',
-                        error.message
-                    );});
-    }
-
-    self.on('*', (event) => {
-        if( opts.title == 'Products')
-        console.info('dashboard event ' + opts.title  , event);
-    });
-
-    self.on('updated', () => {
-        if(self.opts.count) {
-
-            if( opts.title == 'Products')
-            console.info('dashboard event UPDATED' + opts.title);
-
-        }
-    });
-
-    self.initPlugins = () => {
-        initCounters();
-        initCharts();
-
-        //Widgets count plugin
-        function initCounters() {
-            // $('.count-to').countTo();
+        self.getData = () => {
+            if(typeof opts.service != 'undefined')
+            self.client.service(opts.service)
+                .find({query:{$sort:{id:-1}}})
+                .then((result) => {
+                        self.opts.count = result.total;
+                        self.update();
+                    if( opts.title == 'Products') {
+                        console.info('getData ' + opts.title);
+                        self.initPlugins();
+                    }
+                })
+                .catch((error) => {RiotControl.trigger(
+                            'notification',
+                            error.name + ' ' + error.type ,
+                            'error',
+                            error.message
+                        );});
         }
 
-        //Charts
-        function initCharts() {
-            var chartColor = $.AdminBSB.options.colors[opts.color];
-            $(self.pie).sparkline(undefined, {
-                type: opts.sparkline ||  'bar', // line, pie, bar
-                barColor: chartColor,
-                negBarColor: chartColor,
-                barWidth: '8px',
-                height: '34px'
-            });
+        // self.on('*', (event) => {
+        //     console.info('dashboard event ' + opts.title  , event);
+        // });
+
+        self.on('updated', () => {
+            if(self.opts.count) {
+
+            }
+        });
+
+        self.initPlugins = () => {
+            initCounters();
+            initCharts();
+
+            //Widgets count plugin
+            function initCounters() {
+                // $('.count-to').countTo();
+            }
+
+            //Charts
+            function initCharts() {
+                var chartColor = $.AdminBSB.options.colors[opts.color] || 'red';
+                $('#pie').sparkline(undefined, {
+                    type: opts.sparkline ||  'bar', // line, pie, bar
+                    barColor: chartColor,
+                    negBarColor: chartColor,
+                    barWidth: '8px',
+                    height: '34px'
+                });
+            }
         }
-    }
 
-    self.routeTo = (e) => {
-        e.preventDefault();
-        // #{opts.service}/list
-        riot.route(opts.service + '/list');
-    }
-
-  </script>
-
+        self.routeTo = (e) => {
+            e.preventDefault();
+            // #{opts.service}/list
+            route(opts.service + '/list');
+        }
+    </script>
 </top-widget>
 
 <todo-list>
-
     <div class="card">
         <div class="header">
             <h2>{opts.title}<small>{opts.subtitle}</small></h2>
@@ -135,36 +130,48 @@
 </todo-list>
 
 <dashboard>
+    <div class="row top_tiles">
 
-        <div class="row top_tiles">
-
-            <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                <top-widget title="Orders" description="" sparkline="bar" icon="shopping_cart" service="orders" color="bg-red"></top-widget>
-            </div>
-            <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                <top-widget title="Categories" description="" sparkline="line" sparklinedata="30, 35, 25, 8" color="cyan" icon="list" service="categories"></top-widget>
-            </div>
-            <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                <top-widget title="Products" description="" pie="chart chart-pie" sparklinedata="30, 35, 25, 8" color="cyan" service="products"></top-widget>
-            </div>
+        <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
+            <top-widget title="Orders" description="" sparkline="bar" icon="shopping_cart" service="orders" color="bg-red"></top-widget>
         </div>
-
-        <div class="row">
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <todo-list title="Feature List" subtitle="current and following tasks"></todo-list>
-                <div id="jsoneditor-container"></div>
-            </div>
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <div id="json-forms-container"></div>
-            </div>
+        <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
+            <top-widget title="Categories" description="" sparkline="line" sparklinedata="30, 35, 25, 8" color="cyan" icon="list" service="categories"></top-widget>
         </div>
-
-         <div class="row">
-            <div class="col-md-12 col-sm-12 col-xs-12">
-
-            </div>
+        <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
+            <top-widget title="Products" description="" pie="chart chart-pie" sparklinedata="30, 35, 25, 8" color="cyan" service="products"></top-widget>
         </div>
-
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-sm-6 col-xs-12">
+             <crud-table
+                ref="ordertable"
+                title="Orders List"
+                description="riot-crud Table"
+                service="orders"
+                showheader="true"
+                limit="4"
+                fields="orderId,total,createdAt"
+                sortfield="orderId"
+                sortdir="-1"
+                showpagination="1"
+                changelimit="1"
+                skip="0"
+                ups={table:'test'}>
+            </crud-table>
+        </div>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+            <todo-list title="Feature List" subtitle="current and following tasks"></todo-list>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-sm-6 col-xs-12">
+            <div id="jsoneditor-container"></div>
+        </div>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+            <div id="json-forms-container"></div>
+        </div>
+    </div>
 
     <script>
         var self = this;
@@ -208,7 +215,7 @@
                             service: 'categories',
                             title: 'Categories',
                             description: 'inline category view with jsoneditor',
-                            schema: 'http://localhost:3030/schema/category.json',
+                            schema: 'http://' + window.location.hostname+ ':3030/schema/category.json',
                             tag: 'crud-json-editor',
                             selection: true,
                             view: 'edit',
@@ -219,7 +226,7 @@
                             menuGroup: 'models',
                             // buttons: ['create','save','list'],
                             title: 'Categories',
-                            schema: 'http://localhost:3030/schema/category.json',
+                            schema: 'http://' + window.location.hostname+ ':3030/schema/category.json',
                             type:'inline',
                             query: {id:result.data[0]._id}
                     });
@@ -238,7 +245,7 @@
                             service: 'products',
                             title: 'Products',
                             description: 'inline products view with brutusin:json-forms',
-                            schema: 'http://localhost:3030/schema/products.json',
+                            schema: 'http://' + window.location.hostname+ ':3030/schema/products.json',
                             tag: 'crud-json-editor',
                             selection: true,
                             view: 'edit',
@@ -248,7 +255,7 @@
                             actionMenu: true,
                             menuGroup: 'models',
                             // buttons: ['create','save','list'],
-                            schema: 'http://localhost:3030/schema/category.json',
+                            schema: 'http://' + window.location.hostname+ ':3030/schema/category.json',
                             type:'inline',
                             query: {id:result.data[0]._id}
                     });
@@ -271,14 +278,19 @@
 
         fakeOrder = () => {
             self.client.service('orders')
-                .find({query:{$sort:{id:-1},$limit:1}})
+                .find({query:{$sort:{orderId:-1},$limit:1}})
                 .then((result) => {
                         var order = result.data[0];
                         order._id = (result.total + 100).toString();
+                        order.orderId = order.orderId + 1;
+                        order.createdAt = new Date();
+                        order.total = (Math.random() * (137.50 - 19.5) + 0.0200).toFixed(2);
+                        console.info('dashboard order.orderId',order,order.orderId);
                         self.client.service('orders')
                             .create(order)
                             .then((result) => {
                                 RiotControl.trigger('updateWidgetorders');
+                                self.refs.ordertable.reInit();
                             })
                             .catch((error) => {
                                 RiotControl.trigger(
@@ -288,7 +300,7 @@
                                 error.message
                             );
                         });
-                })                              //'notification', (title, type, text)
+                })
                 .catch((error) => {iotControl.trigger(
                         'notification',
                         error.name + ' ' + error.type ,
@@ -297,7 +309,6 @@
                     );
                 });
         }
-
     </script>
 </dashboard>
 

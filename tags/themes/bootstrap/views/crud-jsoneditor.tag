@@ -43,8 +43,6 @@
                 self.service.get('schema').then((result) => {
                     opts.schema = result;
                     self.initPlugins();
-
-                    console.error('console.errorconsole.errorconsole.errorconsole.error',self.opts.query)
                     if(self.opts.query && self.opts.query.id) {
                         self.get(self.opts.query.id)
                     }

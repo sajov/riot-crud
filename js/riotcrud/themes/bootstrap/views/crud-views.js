@@ -10,54 +10,65 @@ riot.tag2('crud-test', '', '', '', function(opts) {
 });
 
 riot.tag2('crud-action-menu', '<div class="btn-group"> <a each="{action in opts.actions}" if="{action.active}" onclick="{click}" class="btn btn-{action.buttonClass || \'default\'} {dropdown-menu: action.options} btn-sm"> {action.label} </a> </div>', '', '', function(opts) {
-				var self = this;
-				this.mixin(viewActionsMixin);
-				self.on('mount', () => {
-					console.warn('crud-action-menu', self.opts.actioMenu);
-					console.warn('crud-action-menu', self.opts.action);
-					console.warn('crud-action-menu', self.opts);
-
-				})
-});
-
-
-riot.tag2('crud-header-dropdown', '<ul if="{opts.actions.length}" class="header-dropdown m-r--5"> <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="material-icons">more_vert</i> </a> <ul class="dropdown-menu pull-right"> <li each="{action in opts.actions}"> <a if="{action.active}" href="#" onclick="{click}"> <i if="{action.name == \'create\'}" class="material-icons">add</i> <i if="{action.name == \'view\'}" class="material-icons">view_compact</i> <i if="{action.name == \'delete\'}" class="material-icons">remove</i> <i if="{action.name == \'edit\'}" class="material-icons">mode_edit</i> <i if="{action.name == \'save\'}" class="material-icons">save</i> <i if="{action.name == \'list\'}" class="material-icons">view_list</i> <i if="{action.name == \'print\'}" class="material-icons">local_printshop</i> <i if="{action.name == \'pdf\'}" class="material-icons">picture_as_pdf</i> <i if="{action.name == \'csv\'}" class="material-icons">insert_drive_file</i> <i if="{action.name == \'json\'}" class="material-icons">insert_drive_file</i> <hr if="{action.name == \'upload\'}"> <i if="{action.name == \'upload\'}" class="material-icons">file_upload</i> <span if="{action.active}" class="{action.count === 0 ? \'font-line-through font-italic\' : \'font-bold\'}"> {action.label} <small if="{action.count >= 0}">({action.count})</small> </span> </a> </li> </ul> </li> </ul>', '', '', function(opts) {
 		var self = this;
 		this.mixin(viewActionsMixin);
-
 		self.on('mount', () => {
-			console.info('crud-action-menu', self.opts);
+			console.warn('crud-action-menu', self.opts.actioMenu);
+			console.warn('crud-action-menu', self.opts.action);
+			console.warn('crud-action-menu', self.opts);
 
 		})
 });
-riot.tag2('crud-table', '<modal-delete-confirmation></modal-delete-confirmation> <div class="card"> <div if="{opts.showHeader}" class="header"> <h2>{opts.title}<small>{opts.description}</small></h2> <span if="{selection.length > 0}" class="label-count bg-pink font-6">{selection.length}</span> <crud-header-dropdown if="{opts.actionMenu !== false}" selection="{selection.length}" service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown> </div> <div class="body"> <div class="input-group" style="margin-bottom:0px"> <span onclick="{search}" class="input-group-addon"> <i class="material-icons">search</i> </span> <div class="form-line"> <input type="text" onkeyup="{search}" class="form-control date" placeholder="search for ..."> </div> </div> <div class="table-responsive"> <table id="{opts.service}_table" class="table table-striped jambo_table bulk_action"> <thead> <tr> <th if="{opts.selection != false}" style="width:40px;vertical-align: text-top" nowrap data-colkey="rowSelection" riot-style="{columnWidths[\'rowSelection\'] ? \'width:\' + columnWidths[\'rowSelection\'] + \'px\': \'\'}"> <input type="checkbox" id="basic_checkbox_all" __checked="{\'checked\': selection.length ==  data.data.length}"> <label onclick="{selectall}" data-value="{selection.length ==  data.data.length ? 1 : 0}" for="basic_checkbox_all" class="basic_checkbox_all"></label> </th> <th each="{colkey, colval in thead}" data-colkey="{colkey}" onclick="{sort}" riot-style="{columnWidths[colkey] ? \'width:\' + columnWidths[colkey] + \'px\': \'\'}"> <i if="{query.$sort[colkey] && query.$sort[colkey] == \'-1\'}" class="material-icons pull-right">keyboard_arrow_down</i> <i if="{query.$sort[colkey] && query.$sort[colkey] == \'1\'}" class="material-icons pull-right">keyboard_arrow_up</i> <i if="{!query.$sort[colkey]}" class="material-icons pull-right">sort</i> <label>{colkey}</label> </th> <th data-colkey="filter" riot-style="{columnWidths[\'filter\'] ? \'width:\' + columnWidths[\'filter\'] + \'px\': \'\'}"> <i onclick="{toggleFilter}" class="material-icons">filter_list</i> </th> </tr> </thead> <tbody> <tr class="{\'hide\': !showFilter}"> <td if="{opts.selection != false}" nowrap>&nbsp;</td> <td each="{colkey, colval in thead}"> <input if="{schema.properties[colkey].type!=\'data\'}" type="text" name="{colkey}" onchange="{filter}" placeholder="enter serach"> <input if="{schema.properties[colkey].type==\'date\'}" name="{colkey}" onchange="{filter}" placeholder="enter serach" type="date"> </td> <td>&nbsp;</td> </tr> <tr each="{row in data.data}" class="{\'selected\': selection.indexOf(row._id) != -1}"> <td if="{opts.selection != false}" class="a-center"> <input data-value="{row._id}" onclick="{selectRow}" type="checkbox" id="basic_checkbox_{row._id}" __checked="{\'checked\': selection.indexOf(row._id) != -1}"> <label data-value="{row._id}" onclick="{selectRow}" data-value="{selection.length ==  data.data.length ? 1 : 0}" for="basic_checkbox_{row._id}"></label> </td> <td each="{colkey, colval in thead}"> {row[colkey]} </td> <td> <a href="#" onclick="{viewRow}"> <i class="material-icons col-grey">pageview</i> </a> <a href="#" onclick="{deleteRow}"> <i class="material-icons col-grey">delete</i> </a> </td> </tr> </tbody> </table> </div> <div class="clearfix"></div> <div if="{opts.changeLimit}" class="pull-left btn-group dropup"> <button type="button" class="btn btn-default waves-effect">{data.limit} / {data.total}</button> <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"> <span class="caret"></span> <span class="sr-only">Toggle Dropdown</span> </button> <ul class="dropdown-menu"> <li><a href="#" onclick="{changeLimit}" data-limit="5" class="waves-effect waves-block">5</a></li> <li><a href="#" onclick="{changeLimit}" data-limit="10" class="waves-effect waves-block">10</a></li> <li><a href="#" onclick="{changeLimit}" data-limit="50" class="waves-effect waves-block">50</a></li> <li><a href="#" onclick="{changeLimit}" data-limit="100" class="waves-effect waves-block">100</a></li> <li role="separator" class="divider"></li> <li><a href="#" onclick="{changeLimit}" data-limit="ALL" class="waves-effect waves-block">ALL</a></li> </ul> </div> <div if="{opts.showPagination}" class="pull-right btn-toolbar"> <div if="{pagination.start}" class="btn-group" role="group" aria-label="First group"> <button onclick="{paginate}" data-page="{pagination.start}" type="button" class="btn btn-{pagination.current == page ? \'info\' : \'default\'} {\'disabled\':page.active == false} waves-effect">{pagination.start}</button> </div> <div class="btn-group" role="group" aria-label="First group"> <button each="{page in pagination.range}" onclick="{paginate}" type="button" data-page="{page}" class="btn btn-{pagination.current == page ? \'info\' : \'default\'} {\'disabled\':page.active == false} waves-effect">{page}</button> </div> <div if="{pagination.end}" class="btn-group" role="group" aria-label="First group"> <button onclick="{paginate}" data-page="{pagination.end}" type="button" class="btn btn-{pagination.current == page ? \'info\' : \'default\'} {\'disabled\':page.active == false} waves-effect">{pagination.end}</button> </div> </div> <div class="clearfix"></div> <yield></yield> </div> </div> <div> </div> <div class="clearfix"></div>', 'th { white-space: nowrap } .selectbox { font-size: 150%; } .pagination { margin: 0px 0 10px 0 ; } .basic_checkbox_all { top:10px; } .table-responsive td{ max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .table-responsive i.material-icons { color:#999; } .NOtd { max-width: 100px; white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; }', '', function(opts) {
+
+riot.tag2('crud-header-dropdown', '<ul class="header-dropdown m-r--5"> <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="material-icons">more_vert</i> </a> <ul class="dropdown-menu pull-right"> <li each="{action in opts.actions}"> <a if="{action.active}" href="#" onclick="{click}"> <i if="{action.name == \'create\'}" class="material-icons">add</i> <i if="{action.name == \'view\'}" class="material-icons">view_compact</i> <i if="{action.name == \'delete\'}" class="material-icons">remove</i> <i if="{action.name == \'edit\'}" class="material-icons">mode_edit</i> <i if="{action.name == \'save\'}" class="material-icons">save</i> <i if="{action.name == \'list\'}" class="material-icons">view_list</i> <i if="{action.name == \'print\'}" class="material-icons">local_printshop</i> <i if="{action.name == \'pdf\'}" class="material-icons">picture_as_pdf</i> <i if="{action.name == \'csv\'}" class="material-icons">insert_drive_file</i> <i if="{action.name == \'json\'}" class="material-icons">insert_drive_file</i> <hr if="{action.name == \'upload\'}"> <i if="{action.name == \'upload\'}" class="material-icons">file_upload</i> <span if="{action.active}" class="{action.count === 0 ? \'font-line-through font-italic\' : \'font-bold\'}"> {action.label} <small if="{action.count >= 0}">({action.count})</small> </span> </a> </li> </ul> </li> </ul>', '', '', function(opts) {
+		var self = this;
+		this.mixin(viewActionsMixin);
+});
+riot.tag2('crud-table', '<modal-delete-confirmation></modal-delete-confirmation> <div class="card"> <div if="{opts.showheader}" class="header"> <h2>{opts.title}<small>{opts.description}</small></h2> <span if="{selection.length > 0}" class="label-count bg-pink font-6">{selection.length}</span> <crud-header-dropdown if="{opts.actionMenu !== false}" selection="{selection.length}" service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown> </div> <div class="body"> <div class="input-group" style="margin-bottom:0px"> <span onclick="{search}" class="input-group-addon"> <i class="material-icons">search</i> </span> <div class="form-line"> <input type="text" onkeyup="{search}" class="form-control date" placeholder="search for ..."> </div> </div> <div class="table-responsive"> <table id="{opts.service}_table" class="table table-striped jambo_table bulk_action"> <thead> <tr> <th if="{opts.selection != false}" style="width:40px;vertical-align: text-top" nowrap data-colkey="rowSelection"> <input type="checkbox" id="basic_checkbox_all" __checked="{\'checked\': selection.length}"> <label onclick="{selectall}" data-value="{selection.length ==  data.data.length ? 1 : 0}" for="basic_checkbox_all" class="basic_checkbox_all"></label> </th> <th each="{colval, colkey in thead}" data-colkey="{colkey}" onclick="{sort}"> <i if="{query.$sort[colkey] && query.$sort[colkey] == \'-1\'}" class="material-icons pull-right">keyboard_arrow_down</i> <i if="{query.$sort[colkey] && query.$sort[colkey] == \'1\'}" class="material-icons pull-right">keyboard_arrow_up</i> <i if="{!query.$sort[colkey]}" class="material-icons pull-right">sort</i> <label>{colkey}</label> </th> <th data-colkey="filter"> <i onclick="{toggleFilter}" class="material-icons">filter_list</i> </th> </tr> </thead> <tbody> <tr class="{\'hide\': !showfilter}"> <td if="{opts.selection != false}" nowrap>&nbsp;</td> <td each="{colval, colkey in thead}"> <input if="{schema.properties[colkey].type!=\'data\'}" type="text" name="{colkey}" onchange="{filter}" placeholder="enter serach"> <input if="{schema.properties[colkey].type==\'date\'}" name="{colkey}" onchange="{filter}" placeholder="enter serach" type="date"> </td> <td>&nbsp;</td> </tr> <tr each="{row in data.data}" class="{\'selected\': selection.indexOf(row._id) != -1}"> <td if="{selection !== false}" class="a-center"> <div if="{selection.indexOf(row._id) > -1}"> <input data-value="{row._id}" type="checkbox" id="basic_checkbox_on_{row._id}" checked="checked"> <label data-value="{row._id}" onclick="{selectRow}" data-value="{selection.length ==  data.data.length ? 1 : 0}" for="basic_checkbox_on_{row._id}"></label> </div> <div if="{selection.indexOf(row._id) === -1}"> <input data-value="{row._id}" type="checkbox" id="basic_checkbox_{row._id}"> <label data-value="{row._id}" onclick="{selectRow}" data-value="{selection.length ==  data.data.length ? 1 : 0}" for="basic_checkbox_{row._id}"></label> </div> </td> <td each="{colval, colkey in thead}"> {row[colkey]} </td> <td> <a href="#" onclick="{viewRow}"> <i class="material-icons col-grey">pageview</i> </a> <a href="#" onclick="{deleteRow}"> <i class="material-icons col-grey">delete</i> </a> </td> </tr> </tbody> </table> </div> <div class="clearfix"></div> <div if="{opts.changelimit}" class="pull-left btn-group dropup"> <button if="{data.data}" type="button" class="btn btn-default waves-effect">{opts.limit} / {data.total}</button> <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"> <span class="caret"></span> <span class="sr-only">Toggle Dropdown</span> </button> <ul class="dropdown-menu"> <li><a href="#" onclick="{changeLimit}" data-limit="5" class="waves-effect waves-block">5</a></li> <li><a href="#" onclick="{changeLimit}" data-limit="10" class="waves-effect waves-block">10</a></li> <li><a href="#" onclick="{changeLimit}" data-limit="50" class="waves-effect waves-block">50</a></li> <li><a href="#" onclick="{changeLimit}" data-limit="100" class="waves-effect waves-block">100</a></li> <li role="separator" class="divider"></li> <li><a href="#" onclick="{changeLimit}" data-limit="ALL" class="waves-effect waves-block">ALL</a></li> </ul> </div> <div if="{opts.showpagination}" class="pull-right btn-toolbar"> <div if="{pagination.start}" class="btn-group" role="group" aria-label="First group"> <button onclick="{paginate}" data-page="{pagination.start}" type="button" class="btn btn-{pagination.current ==  pagination.start ? \'info\' : \'default\'} waves-effect">{pagination.start}</button> </div> <div class="btn-group" role="group" aria-label="First group"> <button each="{page in pagination.range}" onclick="{paginate}" type="button" data-page="{page}" class="btn btn-{pagination.current == page ? \'info\' : \'default\'} {\'disabled\':page.active == false} waves-effect">{page}</button> </div> <div if="{pagination.end}" class="btn-group" role="group" aria-label="First group"> <button onclick="{paginate}" data-page="{pagination.end}" type="button" class="btn btn-{pagination.current == pagination.end ? \'info\' : \'default\'} waves-effect">{pagination.end}</button> </div> </div> <div class="clearfix"></div> <yield></yield> </div> </div> <div class="clearfix"></div>', 'th { white-space: nowrap } .selectbox { font-size: 150%; } .pagination { margin: 0px 0 10px 0 ; } .basic_checkbox_all { top:10px; } .table-responsive td{ max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .table-responsive i.material-icons { color:#999; } .NOtd { max-width: 100px; white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; }', '', function(opts) {
 
 		var self = this;
 		self.opts.view = 'list';
-		self.pagination = [];
+		self.opts.showheader = true;
+		self.opts.showfilter = true;
+		self.opts.showpagination = true;
+		self.pagination = {
+			range:[]
+		};
 		self.query = {
 			$limit: opts.limit || 10,
             $skip: opts.skip || 0,
-            $sort: {}
+            $sort: opts.sortfield ? JSON.parse('{"' + opts.sortfield + '":' + (opts.sortdir || 1) + '}') : {}
+		};
+		self.data = {
+			'limit': opts.limit,
+			'skip': opts.skip,
+			'total': 0,
+			data:[]
 		};
 		self.selection = [];
 		self.selectionLength = [];
 
-		self.showFilter = false;
+		self.showfilter = false;
 
 		this.mixin(FeatherClientMixin);
 
-		self.on('update', () => {
+		self.on('*', (event) => {
+			console.info('TABLE event', event,self.selection);
 		});
 
 		self.on('mount', () => {
-			console.info('CRUD-TABLE self', self);
-			console.info('CRUD-TABLE SCHEMA',self.opts.schema);
-			console.info('CRUD-TABLE service', self.service);
 			if(self.opts.service) {
 				initTable();
 			}
 		});
+
+	    self.refresh = () => {
+	    	getData();
+	    }
+
+	    self.reInit = (query) => {
+	    	getData();
+	    }
 
 		triggerData = (e) => {
 			RiotControl.trigger(e.target.getAttribute('data-trigger'),
@@ -107,7 +118,7 @@ riot.tag2('crud-table', '<modal-delete-confirmation></modal-delete-confirmation>
 	    }
 
 	    toggleFilter = (e) => {
-	    	self.showFilter = self.showFilter == true ? false : true;
+	    	self.showfilter = self.showfilter == true ? false : true;
 	    	self.update();
 	    }
 
@@ -128,6 +139,7 @@ riot.tag2('crud-table', '<modal-delete-confirmation></modal-delete-confirmation>
 			if (self.selection.length == self.data.data.length) {
 				self.selection = [];
 			} else {
+
 				self.selection = self.data.data.reduce(function(prev, curr) {
 				  return prev.concat(curr._id);
 				}, []);
@@ -137,7 +149,6 @@ riot.tag2('crud-table', '<modal-delete-confirmation></modal-delete-confirmation>
 		}
 
 		selectRow = (e) => {
-
 			let value = e.item.row._id;
 			let index = self.selection.indexOf(value);
 			if (index !== -1) {
@@ -145,7 +156,6 @@ riot.tag2('crud-table', '<modal-delete-confirmation></modal-delete-confirmation>
 			} else{
 				self.selection.push(value)
 			}
-			self.update();
 		}
 
 		deleteRow = (e) => {
@@ -155,12 +165,13 @@ riot.tag2('crud-table', '<modal-delete-confirmation></modal-delete-confirmation>
 
 		viewRow = (e) => {
 			e.preventDefault();
-			riot.route(opts.service + '/view/' + e.item.row._id);
+			route(opts.service + '/view/' + e.item.row._id);
 		}
 
 	    initSchema = () => {
 	    	self.thead = {};
 		    if(opts.fields) {
+		    	opts.fields = opts.fields.split(',');
 		    	for (var i = 0; i < opts.fields.length; i++) {
 		    		self.thead[opts.fields[i]] = self.schema.properties[opts.fields[i]]
 		    	}
@@ -175,29 +186,13 @@ riot.tag2('crud-table', '<modal-delete-confirmation></modal-delete-confirmation>
 
 	    initTable = () => {
 	    	self.service.get('schema').then((result) => {
+	          console.error('Error schema', result);
 	        	self.schema = result;
 	        	initSchema();
-	    		getData();
+	        	getData();
 	        }).catch((error) => {
 	          console.error('Error', error);
 	        });
-	    }
-
-	    self.refresh = () => {
-	    	getData();
-	    }
-
-	    initColumnWidth = () => {
-	    	if(!self.columnWidths) {
-	    		self.columnWidths = {};
-	    		$('#orders_table th').each(function(){
-	    			console.warn($(this).data('colkey'));
-	    			console.warn($(this).width());
-	    			self.columnWidths[$(this).data('colkey')] = $(this).width();
-	    		})
-	    		self.columnWidths['rowSelection'] = 40;
-	    		console.error(self.columnWidths)
-	    	}
 	    }
 
 	    initPagination = () => {
@@ -248,14 +243,11 @@ riot.tag2('crud-table', '<modal-delete-confirmation></modal-delete-confirmation>
 	    }
 
 	    getData = () => {
-	    	if(self.data)
-	    		initColumnWidth();
 	        self.service.find({query:self.query}).then((result) => {
 	        	self.selection = [];
 	            self.data = result;
 	            initPagination();
-	    		console.log('get data',self.query, result);
-	    		self.update();
+	            self.update();
 	        }).catch((error) => {
 	          console.error('Error', error);
 	        });

@@ -94,31 +94,30 @@ riot.tag2('top-menu', '<link href="/bower_components/gentelella/vendors/pnotify/
 
 });
 
+riot.tag2('side-menu', '<li class="header">RIOT+FEATHERS CRUD DEMO</li> <li each="{route, key in opts.routes.default.routes}"> <a href="#{route.route}" onclick="{routeTo}" style="" view="#{route.route}"> <i class="material-icons">{route.icon}</i> <span>{route.title}</span> </a> </li> <li each="{group, key in opts.routes}" if="{key!=\'default\'}"> <a if="{group.title}" href="javascript:void(0);" class="menu-toggle"> <i class="material-icons">{group.icon}</i> <span>{group.title}</span> </a> <ul class="ml-menu"> <li each="{route, key in group.routes}" class="{selected: state}"> <a href="#{route.route}" onclick="{routeTo}" style="" view="#{route.route}"> <i class="material-icons">{route.icon || \'list\'}</i> <span>{route.title}</span> </a> </li> </ul> </li> <yield></yield>', '', '', function(opts) {
 
-
-
-riot.tag2('side-menu', '<li class="header">RIOT+FEATHERS CRUD DEMO</li> <li each="{key,route in opts.routes.default.routes}"> <a href="#{route.route}" onclick="{routeTo}" style="" view="#{route.route}"> <i class="material-icons">{route.icon}</i> <span>{route.title}</span> </a> </li> <li each="{key,group in opts.routes}" if="{key!=\'default\'}"> <a if="{group.title}" href="javascript:void(0);" class="menu-toggle"> <i class="material-icons">{group.icon}</i> <span>{group.title}</span> </a> <ul class="ml-menu"> <li each="{key,route in group.routes}" class="{selected: state}"> <a href="#{route.route}" onclick="{routeTo}" style="" view="#{route.route}"> <i class="material-icons">{route.icon || \'list\'}</i> <span>{route.title}</span> </a> </li> </ul> </li> <yield></yield>', '', '', function(opts) {
-        var self = this;
-
-        RiotControl.on('routeStateChange',(route) => {
+        RiotControl.on('routeStateChange',(path) => {
             var $current = $('.sidebar-menu').find('li.active > a.active');
-            if($current.attr('href') == '#'+route) {
+            if($current.attr('href') == '#'+path) {
                 $current.addClass('active');
             } else {
                 $current.addClass('active');
             }
         });
 
-        this.on('mount', function() {
-            console.log(opts.routes)
-          this.initSidebar();
+        this.on('*', (event) => {
+
         });
 
-        this.routeTo = function(e) {
-            riot.route(e.item.route.route || e.item.route.view);
+        this.on('mount', () => {
+            this.initPlugins();
+        });
+
+        this.routeTo = (e) => {
+            route(e.item.route.route || e.item.route.view);
         }
 
-        this.initSidebar = function() {
+        this.initPlugins = () => {
             $.AdminBSB.leftSideBar.activate();
         }
 });

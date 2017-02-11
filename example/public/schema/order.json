@@ -6,6 +6,12 @@
     "_id": {
       "type": "string"
     },
+    "orderId": {
+      "type": "number"
+    },
+    "total": {
+      "type": "number"
+    },
     "name": {
       "type": "string"
     },

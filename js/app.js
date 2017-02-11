@@ -6,7 +6,7 @@ theme  = 'adminbsb';
 var riotCrudTheme = '/js/riotcrud/themes/bootstrap';
 var dependencyList = {
     gentella: [riotCrudTheme + '/gentella.js', riotCrudTheme + '/views/crud-views.js'],
-    adminbsb: [riotCrudTheme + '/adminbsb.js', riotCrudTheme + '/views/crud-views.js'],
+    adminbsb: [riotCrudTheme + '/adminbsb.js', riotCrudTheme + '/views/crud-views.js', 'http://' + window.location.hostname + ':3030/socket.io/socket.io.js'],
     login: riotCrudTheme + '/login.js',register: riotCrudTheme + '/register.js'
 };
 
@@ -42,7 +42,7 @@ $script.ready(theme, function() {
             title: 'Dashboard',
             icon: 'home',
             menu: true,
-            route: '/dashboard',
+            route: 'dashboard',
             dependencies: [
                 riotCrudTheme + '/dashboard.js',
                 riotCrudTheme + '/views/crud-jsoneditor.js',
@@ -63,7 +63,7 @@ $script.ready(theme, function() {
             menu: true,
             menuGroup: 'views',
             icon: 'attach_money',
-            route: '/orders/view/10',
+            route: 'orders/view/10',
             servicename: 'orders',
             endpoint: 'http://' + window.location.hostname + ':3030',
             dependencies: [riotCrudTheme + '/order.js'],
@@ -84,7 +84,7 @@ $script.ready(theme, function() {
             menu: true,
             menuGroup: 'views',
             icon: 'widgets',
-            route: '/categories/jsoneditor/10',
+            route: 'categories/jsoneditor/10',
             servicename: 'orders',
             view: 'edit',
             idField: '_id',
@@ -106,7 +106,7 @@ $script.ready(theme, function() {
             menuGroup: 'views',
             idField: '_id',
             icon: 'widgets',
-            route: '/categories/json-forms/10',
+            route: 'categories/json-forms/10',
             servicename: 'orders',
             view: 'edit',
             service: 'orders',
@@ -122,12 +122,12 @@ $script.ready(theme, function() {
      */
     RiotCrudController.addRoute('categoriesjson-editor',
         {
-            title: 'Demo jsone-ditor.js (products)',
-            description: 'json-editor.js demo',
+            title: 'Demo json-editor.js',
+            description: 'json-editor.js products demo',
             menu: true,
             menuGroup: 'views',
             icon: 'widgets',
-            route: '/categories/json-editor/10',
+            route: 'categories/json-editor/10',
             servicename: 'products',
             view: 'edit',
             idField: '_id',
@@ -147,7 +147,7 @@ $script.ready(theme, function() {
             menu: true,
             menuGroup: 'views',
             icon: 'format_list_bulleted',
-            route: '/datatables/list',
+            route: 'datatables/list',
             service: 'products',
             view: 'list',
             idField: '_id',
@@ -184,7 +184,7 @@ $script.ready(theme, function() {
             showHeader: true,
             menuGroup: 'views',
             icon: 'file_upload',
-            route: '/upload/data',
+            route: 'upload/data',
             view: 'upload',
             idField: '_id',
             target: 'div#content',
@@ -283,7 +283,7 @@ $script.ready(theme, function() {
         {
             service: 'categories',
             title: 'Categories',
-            description: '/categories/list',
+            description: 'categories/list',
             schema: 'http://' + window.location.hostname + ':3030/schema/category.json',
             tag: 'crud-json-editor',
         },
@@ -438,12 +438,8 @@ $script.ready(theme, function() {
     });
 
     if(window.location.hash === "" && window.location.hash != "#dashboard") {
-       riot.route('dashboard');
+       route('dashboard');
     }
-
-
-    // riot.mount('crud-test',{name:'my tag name',service:'klo'})
-
 
     RiotCrudController.start();
 

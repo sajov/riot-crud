@@ -50,184 +50,180 @@
 
     </modal-dialog>
 
-    <div class="card">
+    <div if={opts.data} class="card">
         <div class="header">
             <h2>Order<small>{opts.data.orderId}</small></h2>
             <crud-header-dropdown if={opts.actionMenu !== false} service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown>
         </div>
         <div class="body">
-
-
-                    <div class="">
-                        <div class="x_title hidden-print">
-                            <h2>{opts.data.name} <small>{opts.data.address.city}</small><small class="pull-right">Date: {opts.data.createdAt}</small></h2>
-                            <div class="clearfix"></div>
+            <div class="">
+                <div class="x_title hidden-print">
+                    <h2>{opts.data.name} <small>{opts.data.address.city}</small><small class="pull-right">Date: {opts.data.createdAt}</small></h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <section class="invoice">
+                    <div class="clearfix"></div>
+                    <br>
+                    <br>
+                    <br>
+                        <!-- info row -->
+                        <div class="row invoice-info">
+                            <div class="col-sm-4 invoice-col">
+                                From
+                                <address>
+                                    <strong if={opts.data.company.name}><a href="">{opts.data.company.name}</a></strong>
+                                    <br if={opts.data.company.name}>
+                                    <strong><a href="">{opts.data.name}</a></strong>
+                                    <br><a href="">{opts.data.address.street}</a> {opts.data.address.suite}
+                                    <br><a href="">{opts.data.address.city}</a>, {opts.data.address.zipcode}
+                                    <br>Phone: {opts.data.phone}
+                                    <br>Email: {opts.data.email}
+                                </address>
+                            </div>
+                            <!-- /.col -->
+                            <div class="col-sm-4 invoice-col">
+                                To
+                                <address>
+                                    <strong>{opts.data.shippingAddress.name}</strong>
+                                    <br>{opts.data.shippingAddress.street}, {opts.data.shippingAddress.suite}
+                                    <br>{opts.data.shippingAddress.city}, {opts.data.shippingAddress.zipcode}
+                                    <br>Phone: {opts.data.phone}
+                                    <br>Email: {opts.data.email}
+                                </address>
+                            </div>
+                            <!-- /.col -->
+                            <div class="col-sm-4 invoice-col">
+                                <b>Invoice #007612</b>
+                                <br>
+                                <br>
+                                <b>Order ID:</b> {opts.data.orderId}
+                                <br>
+                                <b>Payment Due:</b> 2/22/2014
+                                <br>
+                                <b>Account:</b> {opts.data.account}
+                            </div>
+                            <!-- /.col -->
                         </div>
-                        <div class="x_content">
-                            <section class="invoice">
-                            <div class="clearfix"></div>
-                            <br>
-                            <br>
-                            <br>
-                                <!-- info row -->
-                                <div class="row invoice-info">
-                                    <div class="col-sm-4 invoice-col">
-                                        From
-                                        <address>
-                                            <strong if={opts.data.company.name}><a href="">{opts.data.company.name}</a></strong>
-                                            <br if={opts.data.company.name}>
-                                            <strong><a href="">{opts.data.name}</a></strong>
-                                            <br><a href="">{opts.data.address.street}</a> {opts.data.address.suite}
-                                            <br><a href="">{opts.data.address.city}</a>, {opts.data.address.zipcode}
-                                            <br>Phone: {opts.data.phone}
-                                            <br>Email: {opts.data.email}
-                                        </address>
-                                    </div>
-                                    <!-- /.col -->
-                                    <div class="col-sm-4 invoice-col">
-                                        To
-                                        <address>
-                                            <strong>{opts.data.shippingAddress.name}</strong>
-                                            <br>{opts.data.shippingAddress.street}, {opts.data.shippingAddress.suite}
-                                            <br>{opts.data.shippingAddress.city}, {opts.data.shippingAddress.zipcode}
-                                            <br>Phone: {opts.data.phone}
-                                            <br>Email: {opts.data.email}
-                                        </address>
-                                    </div>
-                                    <!-- /.col -->
-                                    <div class="col-sm-4 invoice-col">
-                                        <b>Invoice #007612</b>
-                                        <br>
-                                        <br>
-                                        <b>Order ID:</b> {opts.data.orderId}
-                                        <br>
-                                        <b>Payment Due:</b> 2/22/2014
-                                        <br>
-                                        <b>Account:</b> {opts.data.account}
-                                    </div>
-                                    <!-- /.col -->
-                                </div>
-                                <!-- /.row -->
+                        <!-- /.row -->
 
 
-                                <!-- ITEMS Table row  -->
-                                <div class="row">
-                                    <div class="col-xs-12 table">
-                                    <table class="table table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th>SKU</th>
-                                                    <th>Product</th>
-                                                    <th>Image</th>
-                                                    <th style="width: 59%">Description</th>
-                                                    <th>Qty</th>
-                                                    <th>Price</th>
-                                                    <th>Subtotal</th>
-                                                    <th>&nbsp;</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr each={ item, key in opts.data.items }>
-                                                    <td>{item.sku} </td>
-                                                    <td><img src="{item.image}" width="60"></td>
-                                                    <td>{item.name}</td>
-                                                    <td>{item.description}</td>
-                                                    <td>
-                                                        <input type="text" name="qty" onchange={ changeQty } value="{item.qty}" class="hidden-print text-right" size="3">
-                                                        <span class="visible-print">{item.qty}</span>
-                                                    </td>
-                                                    <td align="right">{item.price_euro} €</td>
-                                                    <td align="right">{item.total} €</td>
-                                                    <td align="right"><a href="#" itemKey="{key}" onclick={ deleteItem } class="btn btn-danger btn-xs hidden-print">
-                                                        <i class="material-icons">remove</i>
-                                                    </a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="8">
-                                                        <button class="btn btn-primary pull-right hidden-print waves-effect" onclick={ addItemModal } ><i class="material-icons">add</i></button>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <!-- /.col -->
-                                </div>
-                                <!-- /.row -->
-
-
-                                <div class="row">
-                                    <!-- accepted payments column -->
-                                    <div class="col-xs-9">
-                                        <p class="lead">Payment Methods:</p>
-                                        <img src="/bower_components/gentelella/production/images/visa.png" alt="Visa">
-                                        <img src="/bower_components/gentelella/production/images/mastercard.png" alt="Mastercard">
-                                        <img src="/bower_components/gentelella/production/images/american-express.png" alt="American Express">
-                                        <img src="/bower_components/gentelella/production/images/paypal2.png" alt="Paypal">
-                                        <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
-                                            Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem plugg dopplr jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
-                                        </p>
-                                    </div>
-                                    <!-- /.col -->
-
-                                    <!-- TOTALS -->
-                                    <div class="col-xs-3">
-                                        <p class="lead">Amount Due 2/22/2014</p>
-                                        <div class="table-responsive">
-                                            <table class="table">
-                                                 <tbody>
-                                                    <tr>
-                                                        <th style="width:50%">Subtotal:</th>
-                                                        <td align="right">{opts.data.subtotal} €</td>
-                                                    </tr>
-                                                    <tr ifNO="{opts.data.discount}">
-                                                        <th style="width:50%">Discount:</th>
-                                                        <td align="right"><input type="text" onkeyup={ changeDiscount } name="discount" value="{opts.data.discount}" class="text-right" size="10"> €</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Tax ({opts.data.taxRate}%)</th>
-                                                        <td align="right">{opts.data.tax} €</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Shipping:</th>
-                                                        <td align="right"><input type="text" onkeyup={ changeShipping } name="discount" value="{opts.data.shipping}" class="text-right" size="10"> €</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Total:</th>
-                                                        <td align="right">{opts.data.total} €</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <!-- /.col -->
-                                </div>
-                                <!-- /.row -->
-                                <!-- this row will not appear when printing -->
-                                <div class="row no-print hidden-print">
-                                    <div class="btn-group pull-right">
-                                        <button onclick={ save } class="btn btn-danger waves-effect">
-                                            <i class="material-icons">save</i>
-                                            <span>Save</span>
-                                        </button>
-                                        <button class="btn btn-success waves-effect">
-                                            <i class="material-icons">payment</i>
-                                            <span>Submit Payment</span>
-                                        </button>
-                                        <button class="btn btn-default waves-effect" onclick="window.print();">
-                                            <i class="material-icons">print</i>
-                                            <span>Print</span>
-                                        </button>
-                                        <button class="btn btn-primary waves-effect" style="margin-right: 5px;">
-                                            <i class="material-icons">picture_as_pdf</i>
-                                            Generate PDF
-                                        </button>
-                                    </div>
-                                </div>
-                            </section>
+                        <!-- ITEMS Table row  -->
+                        <div class="row">
+                            <div class="col-xs-12 table">
+                            <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>SKU</th>
+                                            <th>Product</th>
+                                            <th>Image</th>
+                                            <th style="width: 59%">Description</th>
+                                            <th>Qty</th>
+                                            <th>Price</th>
+                                            <th>Subtotal</th>
+                                            <th>&nbsp;</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr each={ item, key in opts.data.items }>
+                                            <td>{item.sku} </td>
+                                            <td><img src="{item.image}" width="60"></td>
+                                            <td>{item.name}</td>
+                                            <td>{item.description}</td>
+                                            <td>
+                                                <input type="text" name="qty" onchange={ changeQty } value="{item.qty}" class="hidden-print text-right" size="3">
+                                                <span class="visible-print">{item.qty}</span>
+                                            </td>
+                                            <td align="right">{item.price_euro} €</td>
+                                            <td align="right">{item.total} €</td>
+                                            <td align="right"><a href="#" itemKey="{key}" onclick={ deleteItem } class="btn btn-danger btn-xs hidden-print">
+                                                <i class="material-icons">remove</i>
+                                            </a></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="8">
+                                                <button class="btn btn-primary pull-right hidden-print waves-effect" onclick={ addItemModal } ><i class="material-icons">add</i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.col -->
                         </div>
-                    </div>
+                        <!-- /.row -->
 
 
+                        <div class="row">
+                            <!-- accepted payments column -->
+                            <div class="col-xs-9">
+                                <p class="lead">Payment Methods:</p>
+                                <img src="/bower_components/gentelella/production/images/visa.png" alt="Visa">
+                                <img src="/bower_components/gentelella/production/images/mastercard.png" alt="Mastercard">
+                                <img src="/bower_components/gentelella/production/images/american-express.png" alt="American Express">
+                                <img src="/bower_components/gentelella/production/images/paypal2.png" alt="Paypal">
+                                <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
+                                    Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem plugg dopplr jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
+                                </p>
+                            </div>
+                            <!-- /.col -->
+
+                            <!-- TOTALS -->
+                            <div class="col-xs-3">
+                                <p class="lead">Amount Due 2/22/2014</p>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                         <tbody>
+                                            <tr>
+                                                <th style="width:50%">Subtotal:</th>
+                                                <td align="right">{opts.data.subtotal} €</td>
+                                            </tr>
+                                            <tr ifNO="{opts.data.discount}">
+                                                <th style="width:50%">Discount:</th>
+                                                <td align="right"><input type="text" onkeyup={ changeDiscount } name="discount" value="{opts.data.discount}" class="text-right" size="10"> €</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Tax ({opts.data.taxRate}%)</th>
+                                                <td align="right">{opts.data.tax} €</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Shipping:</th>
+                                                <td align="right"><input type="text" onkeyup={ changeShipping } name="discount" value="{opts.data.shipping}" class="text-right" size="10"> €</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Total:</th>
+                                                <td align="right">{opts.data.total} €</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                        <!-- /.row -->
+                        <!-- this row will not appear when printing -->
+                        <div class="row no-print hidden-print">
+                            <div class="btn-group pull-right">
+                                <button onclick={ save } class="btn btn-danger waves-effect">
+                                    <i class="material-icons">save</i>
+                                    <span>Save</span>
+                                </button>
+                                <button class="btn btn-success waves-effect">
+                                    <i class="material-icons">payment</i>
+                                    <span>Submit Payment</span>
+                                </button>
+                                <button class="btn btn-default waves-effect" onclick="window.print();">
+                                    <i class="material-icons">print</i>
+                                    <span>Print</span>
+                                </button>
+                                <button class="btn btn-primary waves-effect" style="margin-right: 5px;">
+                                    <i class="material-icons">picture_as_pdf</i>
+                                    Generate PDF
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
         </div>
     </div>
 
