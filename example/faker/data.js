@@ -142,7 +142,7 @@ exports.order = function(app, count) {
     var shippingAddress = faker.helpers.userCard();
 
     order._id = (i+1).toString();
-    order.orderId = faker.random.number();
+    order.orderId = 100000 + i;
     order.account = '#'+faker.finance.account();
     order.name = shippingAddress.name;
     order.dob = dateFormat(order.dob);

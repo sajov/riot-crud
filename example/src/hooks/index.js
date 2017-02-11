@@ -70,3 +70,12 @@ exports.schema = function () {
         return hook;
     }
 }
+
+exports.csv = function () {
+    return function (hook) {
+        if (hook.id === 'csv' && hook.service.schema) {
+                hook.result = hook.service.schema;
+        }
+        return hook;
+    }
+}

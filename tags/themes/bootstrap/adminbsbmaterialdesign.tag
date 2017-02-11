@@ -544,7 +544,7 @@
         });
 
         this.routeTo = function(e) {
-            riot.route(e.item.route.route || e.item.route.view);
+            route(e.item.route.route || e.item.route.view);
         }
 
         this.initSidebar = function() {
