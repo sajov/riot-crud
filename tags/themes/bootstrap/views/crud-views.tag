@@ -30,10 +30,7 @@
 
 		})
 	</script>
-
-
 </crud-action-menu>
-
 
 <crud-header-dropdown>
 
@@ -76,11 +73,6 @@
 	<script>
 		var self = this;
 		this.mixin(viewActionsMixin);
-
-		self.on('mount', () => {
-			// console.info('crud-action-menu', self.opts);
-
-		})
 	</script>
 
 </crud-header-dropdown>
@@ -140,62 +132,57 @@
         	</div>
 			<div class="table-responsive">
 				<table id="{ opts.service }_table" class="table table-striped jambo_table bulk_action">
+				    <thead>
+				      <tr >
+				      	<th if={ opts.selection != false } style="width:40px;vertical-align: text-top" nowrap data-colkey="rowSelection">
+			      		   <input type="checkbox" id="basic_checkbox_all" checked="{ 'checked': selection.length }">
+	                       <label onclick={ selectall }  data-value="{ selection.length ==  data.data.length ? 1 : 0 }" for="basic_checkbox_all" class="basic_checkbox_all"></label>
+						</th>
+				        <th each="{ colval, colkey in thead }" data-colkey="{colkey}" onclick={ sort }>
+				        	<i if={query.$sort[colkey] && query.$sort[colkey] == '-1'} class="material-icons pull-right">keyboard_arrow_down</i>
+				        	<i if={query.$sort[colkey] && query.$sort[colkey] == '1'} class="material-icons pull-right">keyboard_arrow_up</i>
+				        	<i if={!query.$sort[colkey]} class="material-icons pull-right">sort</i>
+				        	<label>{ colkey }</label>
+				        </th>
+				        <th data-colkey="filter" >
+				        	<i onclick={ toggleFilter } class="material-icons">filter_list</i>
+				        </th>
+				      </tr>
+				    </thead>
 
-					    <thead>
-					      <tr >
-					      	<th if={ opts.selection != false } style="width:40px;vertical-align: text-top" nowrap data-colkey="rowSelection">
-				      		   <input type="checkbox" id="basic_checkbox_all" checked="{ 'checked': selection.length ==  data.data.length }">
-		                       <label onclick={ selectall }  data-value="{ selection.length ==  data.data.length ? 1 : 0 }" for="basic_checkbox_all" class="basic_checkbox_all"></label>
-							</th>
-
-					        <th each="{ colval, colkey in thead }" data-colkey="{colkey}" onclick={ sort }>
-					        	<i if={query.$sort[colkey] && query.$sort[colkey] == '-1'} class="material-icons pull-right">keyboard_arrow_down</i>
-					        	<i if={query.$sort[colkey] && query.$sort[colkey] == '1'} class="material-icons pull-right">keyboard_arrow_up</i>
-					        	<i if={!query.$sort[colkey]} class="material-icons pull-right">sort</i>
-
-
-					        	<label>{ colkey }</label>
-					        </th>
-					        <th data-colkey="filter" >
-					        	<i onclick={ toggleFilter } class="material-icons">filter_list</i>
-					        </th>
-					      </tr>
-					    </thead>
-
-					    <tbody>
-					    	<tr class="{'hide': !showfilter}">
-						      	<td if={ opts.selection != false } nowrap>&nbsp;</td>
-						        <td each="{ colval, colkey in thead }">
-						        	<input if={schema.properties[colkey].type!='data'} type="text" name="{ colkey }" onchange={filter} placeholder="enter serach">
-						        	<input if={schema.properties[colkey].type=='date'} type="date" name="{ colkey }" onchange={filter} placeholder="enter serach">
-						        </td>
-						        <td>&nbsp;</td>
-					      	</tr>
-
-					      	<tr each="{ row in data.data }" class="{ 'selected': selection.indexOf(row._id) != -1 }">
-						      	<td if={ selection !== false } class="a-center">
-						      		<div if="{selection.indexOf(row._id) > -1}">
-						      			<input  data-value="{ row._id }" type="checkbox" id="basic_checkbox_on_{row._id}" checked="checked">
-		                       			<label data-value="{ row._id }" onclick={ selectRow }  data-value="{ selection.length ==  data.data.length ? 1 : 0 }" for="basic_checkbox_on_{row._id}"></label>
-						      		</div>
-						      		<div if="{selection.indexOf(row._id) === -1}">
-						      			<input data-value="{ row._id }" type="checkbox" id="basic_checkbox_{row._id}">
-		                       			<label data-value="{ row._id }" onclick={ selectRow }  data-value="{ selection.length ==  data.data.length ? 1 : 0 }" for="basic_checkbox_{row._id}"></label>
-						      		</div>
-								</td>
-						        <td each="{ colval, colkey in thead }">
-						        	{ row[colkey] }
-						        </td>
-						      	<td>
-                                    <a href="#" onclick={viewRow} >
-                                        <i class="material-icons col-grey">pageview</i>
-                                    </a>
-                                    <a href="#" onclick={deleteRow} >
-                                        <i class="material-icons col-grey">delete</i>
-                                    </a>
-						      	</td>
-						    </tr>
-					    </tbody>
+				    <tbody>
+				    	<tr class="{'hide': !showfilter}">
+					      	<td if={ opts.selection != false } nowrap>&nbsp;</td>
+					        <td each="{ colval, colkey in thead }">
+					        	<input if={schema.properties[colkey].type!='data'} type="text" name="{ colkey }" onchange={filter} placeholder="enter serach">
+					        	<input if={schema.properties[colkey].type=='date'} type="date" name="{ colkey }" onchange={filter} placeholder="enter serach">
+					        </td>
+					        <td>&nbsp;</td>
+				      	</tr>
+				      	<tr each="{ row in data.data }" class="{ 'selected': selection.indexOf(row._id) != -1 }">
+					      	<td if={ selection !== false } class="a-center">
+					      		<div if="{selection.indexOf(row._id) > -1}">
+					      			<input  data-value="{ row._id }" type="checkbox" id="basic_checkbox_on_{row._id}" checked="checked">
+	                       			<label data-value="{ row._id }" onclick={ selectRow }  data-value="{ selection.length ==  data.data.length ? 1 : 0 }" for="basic_checkbox_on_{row._id}"></label>
+					      		</div>
+					      		<div if="{selection.indexOf(row._id) === -1}">
+					      			<input data-value="{ row._id }" type="checkbox" id="basic_checkbox_{row._id}">
+	                       			<label data-value="{ row._id }" onclick={ selectRow }  data-value="{ selection.length ==  data.data.length ? 1 : 0 }" for="basic_checkbox_{row._id}"></label>
+					      		</div>
+							</td>
+					        <td each="{ colval, colkey in thead }">
+					        	{ row[colkey] }
+					        </td>
+					      	<td>
+                                <a href="#" onclick={viewRow} >
+                                    <i class="material-icons col-grey">pageview</i>
+                                </a>
+                                <a href="#" onclick={deleteRow} >
+                                    <i class="material-icons col-grey">delete</i>
+                                </a>
+					      	</td>
+					    </tr>
+				    </tbody>
 			    </table>
 			</div>
 			<div class="clearfix"></div>
@@ -271,6 +258,21 @@
 				initTable();
 			}
 		});
+
+	    /* deprecated use reInit */
+	    self.refresh = () => {
+	    	getData();
+	    }
+
+	    /**
+	     * Reinit view
+	     * list, edit and show requery
+	     * @param  {[type]} query [description]
+	     * @return {[type]}       [description]
+	     */
+	    self.reInit = (query) => {
+	    	getData();
+	    }
 
 		triggerData = (e) => {
 			RiotControl.trigger(e.target.getAttribute('data-trigger'),
@@ -402,20 +404,7 @@
 	        });
 	    }
 
-	    /* deprecated use reInit */
-	    self.refresh = () => {
-	    	getData();
-	    }
 
-	    /**
-	     * Reinit view
-	     * list, edit and show requery
-	     * @param  {[type]} query [description]
-	     * @return {[type]}       [description]
-	     */
-	    self.reInit = (query) => {
-	    	getData();
-	    }
 
 	    initPagination = () => {
 	    	self.next = 2;
@@ -471,7 +460,6 @@
 	            self.data = result;
 	            initPagination();
 	            self.update();
-	    		console.error('get data',self.query, result);
 	        }).catch((error) => {
 	          console.error('Error', error);
 	        });

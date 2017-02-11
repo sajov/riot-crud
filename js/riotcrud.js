@@ -447,7 +447,7 @@
             // this.on('*', (event) => {
             //     console.error('VIEWACTIONSMIXIN event: ', event)
             // });
-            this.on('before-mount', () => {
+            this.on('*', () => {
                 var  view = self.opts.view || 'undefined';
 
                 self.opts.actions = actions.map((action, index) => {

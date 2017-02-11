@@ -1,67 +1,67 @@
+
 riot.tag2('top-widget', '<div onclick="{routeTo}" class="info-box hover-expand-effect"> <div class="icon {opts.color}"> <i if="{opts.icon}" class="material-icons col-gray">{opts.icon}</i> <div id="pie" if="{opts.pie}" class="{opts.pie}" data-chartcolor="{opts.color}">{opts.sparklinedata}</div> </div> <div class="content"> <div class="text">{opts.title}</div> <div class="number count-to" data-from="0" data-to="{opts.count}" data-speed="1000" data-fresh-interval="20">{opts.count}</div> </div> </div>', '', '', function(opts) {
-    var self = this;
-    self.mixin(FeatherClientMixin);
+        var self = this;
+        self.mixin(FeatherClientMixin);
 
-    this.on('mount', () => {
-        self.getData();
-    });
+        this.on('mount', () => {
+            self.getData();
+        });
 
-    RiotControl.on('updateWidget'+opts.service, () => {
-        self.getData();
-    });
+        RiotControl.on('updateWidget'+opts.service, () => {
+            self.getData();
+        });
 
-    self.getData = () => {
-        if(typeof opts.service != 'undefined')
-        self.client.service(opts.service)
-            .find({query:{$sort:{id:-1}}})
-            .then((result) => {
-                    self.opts.count = result.total;
-                    self.update();
-                if( opts.title == 'Products') {
-                    console.info('getData ' + opts.title);
-                    self.initPlugins();
-                }
-            })
-            .catch((error) => {RiotControl.trigger(
-                        'notification',
-                        error.name + ' ' + error.type ,
-                        'error',
-                        error.message
-                    );});
-    }
-
-    self.on('updated', () => {
-        if(self.opts.count) {
-
-        }
-    });
-
-    self.initPlugins = () => {
-        initCounters();
-        initCharts();
-
-        function initCounters() {
-
+        self.getData = () => {
+            if(typeof opts.service != 'undefined')
+            self.client.service(opts.service)
+                .find({query:{$sort:{id:-1}}})
+                .then((result) => {
+                        self.opts.count = result.total;
+                        self.update();
+                    if( opts.title == 'Products') {
+                        console.info('getData ' + opts.title);
+                        self.initPlugins();
+                    }
+                })
+                .catch((error) => {RiotControl.trigger(
+                            'notification',
+                            error.name + ' ' + error.type ,
+                            'error',
+                            error.message
+                        );});
         }
 
-        function initCharts() {
-            var chartColor = $.AdminBSB.options.colors[opts.color] || 'red';
-            $('#pie').sparkline(undefined, {
-                type: opts.sparkline ||  'bar',
-                barColor: chartColor,
-                negBarColor: chartColor,
-                barWidth: '8px',
-                height: '34px'
-            });
+        self.on('updated', () => {
+            if(self.opts.count) {
+
+            }
+        });
+
+        self.initPlugins = () => {
+            initCounters();
+            initCharts();
+
+            function initCounters() {
+
+            }
+
+            function initCharts() {
+                var chartColor = $.AdminBSB.options.colors[opts.color] || 'red';
+                $('#pie').sparkline(undefined, {
+                    type: opts.sparkline ||  'bar',
+                    barColor: chartColor,
+                    negBarColor: chartColor,
+                    barWidth: '8px',
+                    height: '34px'
+                });
+            }
         }
-    }
 
-    self.routeTo = (e) => {
-        e.preventDefault();
+        self.routeTo = (e) => {
+            e.preventDefault();
 
-        route(opts.service + '/list');
-    }
-
+            route(opts.service + '/list');
+        }
 });
 
 riot.tag2('todo-list', '<div class="card"> <div class="header"> <h2>{opts.title}<small>{opts.subtitle}</small></h2> <ul class="header-dropdown m-r--5"> <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="material-icons">more_vert</i> </a> <ul class="dropdown-menu pull-right"> <li><a href="javascript:void(0);">Action</a></li> <li><a href="javascript:void(0);">Another action</a></li> <li><a href="javascript:void(0);">Something else here</a></li> </ul> </li> </ul> </div> <div class="body"> <div each="{data,key in opts.todos}" if="{key!=\'default\'}"> <input type="checkbox" id="basic_checkbox_{key}" __checked="{data.done}"><label for="basic_checkbox_{key}">{data.todo}</label> </div> </div> </div>', '', '', function(opts) {
@@ -192,6 +192,7 @@ riot.tag2('dashboard', '<div class="row top_tiles"> <div class="animated flipInY
                         order._id = (result.total + 100).toString();
                         order.orderId = order.orderId + 1;
                         order.createdAt = new Date();
+                        order.total = (Math.random() * (137.50 - 19.5) + 0.0200).toFixed(2);
                         console.info('dashboard order.orderId',order,order.orderId);
                         self.client.service('orders')
                             .create(order)
@@ -216,7 +217,6 @@ riot.tag2('dashboard', '<div class="row top_tiles"> <div class="animated flipInY
                     );
                 });
         }
-
 });
 
 
