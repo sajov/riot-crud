@@ -146,17 +146,32 @@
 
         <div class="row">
             <div class="col-md-6 col-sm-6 col-xs-12">
-                <todo-list title="Feature List" subtitle="current and following tasks"></todo-list>
-                <div id="jsoneditor-container"></div>
+                 <crud-table
+                    ref="ordertable"
+                    title="Orders List"
+                    description="riot-crud Table"
+                    service="orders"
+                    showheader="true"
+                    limit="4"
+                    fields="_id,name,createdAt"
+                    sortfield="createdAt"
+                    sortdir="-1"
+                    showpagination="1"
+                    skip="0"
+                    ups={table:'test'}>
+                </crud-table>
             </div>
             <div class="col-md-6 col-sm-6 col-xs-12">
-                <div id="json-forms-container"></div>
+                <todo-list title="Feature List" subtitle="current and following tasks"></todo-list>
             </div>
         </div>
 
          <div class="row">
-            <div class="col-md-12 col-sm-12 col-xs-12">
-
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <div id="jsoneditor-container"></div>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <div id="json-forms-container"></div>
             </div>
         </div>
 
@@ -274,6 +289,7 @@
                             .create(order)
                             .then((result) => {
                                 RiotControl.trigger('updateWidgetorders');
+                                // self.ref.ordertable.update();
                             })
                             .catch((error) => {
                                 RiotControl.trigger(
