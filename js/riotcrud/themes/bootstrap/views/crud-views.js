@@ -24,20 +24,21 @@ riot.tag2('crud-header-dropdown', '<ul class="header-dropdown m-r--5"> <li class
 		var self = this;
 		this.mixin(viewActionsMixin);
 });
-riot.tag2('crud-table', '<modal-delete-confirmation></modal-delete-confirmation> <div class="card"> <div if="{opts.showheader}" class="header"> <h2>{opts.title}<small>{opts.description}</small></h2> <span if="{selection.length > 0}" class="label-count bg-pink font-6">{selection.length}</span> <crud-header-dropdown if="{opts.actionMenu !== false}" selection="{selection.length}" service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown> </div> <div class="body"> <div class="input-group" style="margin-bottom:0px"> <span onclick="{search}" class="input-group-addon"> <i class="material-icons">search</i> </span> <div class="form-line"> <input type="text" onkeyup="{search}" class="form-control date" placeholder="search for ..."> </div> </div> <div class="table-responsive"> <table id="{opts.service}_table" class="table table-striped jambo_table bulk_action"> <thead> <tr> <th if="{opts.selection != false}" style="width:40px;vertical-align: text-top" nowrap data-colkey="rowSelection"> <input type="checkbox" id="basic_checkbox_all" __checked="{\'checked\': selection.length}"> <label onclick="{selectall}" data-value="{selection.length ==  data.data.length ? 1 : 0}" for="basic_checkbox_all" class="basic_checkbox_all"></label> </th> <th each="{colval, colkey in thead}" data-colkey="{colkey}" onclick="{sort}"> <i if="{query.$sort[colkey] && query.$sort[colkey] == \'-1\'}" class="material-icons pull-right">keyboard_arrow_down</i> <i if="{query.$sort[colkey] && query.$sort[colkey] == \'1\'}" class="material-icons pull-right">keyboard_arrow_up</i> <i if="{!query.$sort[colkey]}" class="material-icons pull-right">sort</i> <label>{colkey}</label> </th> <th data-colkey="filter"> <i onclick="{toggleFilter}" class="material-icons">filter_list</i> </th> </tr> </thead> <tbody> <tr class="{\'hide\': !showfilter}"> <td if="{opts.selection != false}" nowrap>&nbsp;</td> <td each="{colval, colkey in thead}"> <input if="{schema.properties[colkey].type!=\'data\'}" type="text" name="{colkey}" onchange="{filter}" placeholder="enter serach"> <input if="{schema.properties[colkey].type==\'date\'}" name="{colkey}" onchange="{filter}" placeholder="enter serach" type="date"> </td> <td>&nbsp;</td> </tr> <tr each="{row in data.data}" class="{\'selected\': selection.indexOf(row._id) != -1}"> <td if="{selection !== false}" class="a-center"> <div if="{selection.indexOf(row._id) > -1}"> <input data-value="{row._id}" type="checkbox" id="basic_checkbox_on_{row._id}" checked="checked"> <label data-value="{row._id}" onclick="{selectRow}" data-value="{selection.length ==  data.data.length ? 1 : 0}" for="basic_checkbox_on_{row._id}"></label> </div> <div if="{selection.indexOf(row._id) === -1}"> <input data-value="{row._id}" type="checkbox" id="basic_checkbox_{row._id}"> <label data-value="{row._id}" onclick="{selectRow}" data-value="{selection.length ==  data.data.length ? 1 : 0}" for="basic_checkbox_{row._id}"></label> </div> </td> <td each="{colval, colkey in thead}"> {row[colkey]} </td> <td> <a href="#" onclick="{viewRow}"> <i class="material-icons col-grey">pageview</i> </a> <a href="#" onclick="{deleteRow}"> <i class="material-icons col-grey">delete</i> </a> </td> </tr> </tbody> </table> </div> <div class="clearfix"></div> <div if="{opts.changelimit}" class="pull-left btn-group dropup"> <button if="{data.data}" type="button" class="btn btn-default waves-effect">{opts.limit} / {data.total}</button> <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"> <span class="caret"></span> <span class="sr-only">Toggle Dropdown</span> </button> <ul class="dropdown-menu"> <li><a href="#" onclick="{changeLimit}" data-limit="5" class="waves-effect waves-block">5</a></li> <li><a href="#" onclick="{changeLimit}" data-limit="10" class="waves-effect waves-block">10</a></li> <li><a href="#" onclick="{changeLimit}" data-limit="50" class="waves-effect waves-block">50</a></li> <li><a href="#" onclick="{changeLimit}" data-limit="100" class="waves-effect waves-block">100</a></li> <li role="separator" class="divider"></li> <li><a href="#" onclick="{changeLimit}" data-limit="ALL" class="waves-effect waves-block">ALL</a></li> </ul> </div> <div if="{opts.showpagination}" class="pull-right btn-toolbar"> <div if="{pagination.start}" class="btn-group" role="group" aria-label="First group"> <button onclick="{paginate}" data-page="{pagination.start}" type="button" class="btn btn-{pagination.current ==  pagination.start ? \'info\' : \'default\'} waves-effect">{pagination.start}</button> </div> <div class="btn-group" role="group" aria-label="First group"> <button each="{page in pagination.range}" onclick="{paginate}" type="button" data-page="{page}" class="btn btn-{pagination.current == page ? \'info\' : \'default\'} {\'disabled\':page.active == false} waves-effect">{page}</button> </div> <div if="{pagination.end}" class="btn-group" role="group" aria-label="First group"> <button onclick="{paginate}" data-page="{pagination.end}" type="button" class="btn btn-{pagination.current == pagination.end ? \'info\' : \'default\'} waves-effect">{pagination.end}</button> </div> </div> <div class="clearfix"></div> <yield></yield> </div> </div> <div class="clearfix"></div>', 'th { white-space: nowrap } .selectbox { font-size: 150%; } .pagination { margin: 0px 0 10px 0 ; } .basic_checkbox_all { top:10px; } .table-responsive td{ max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .table-responsive i.material-icons { color:#999; } .NOtd { max-width: 100px; white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; }', '', function(opts) {
+riot.tag2('crud-table', '<modal-delete-confirmation></modal-delete-confirmation> <div class="card"> <div if="{opts.showheader}" class="header"> <h2>{opts.title}<small>{opts.description}</small></h2> <span if="{selection.length > 0}" class="label-count bg-pink font-6">{selection.length}</span> <crud-header-dropdown if="{opts.actionMenu !== false}" selection="{selection.length}" service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown> </div> <div class="body"> <div class="input-group" style="margin-bottom:0px"> <span onclick="{search}" class="input-group-addon"> <i class="material-icons">search</i> </span> <div class="form-line"> <input type="text" onkeyup="{search}" class="form-control date" placeholder="search for ..."> </div> </div> <div class="table-responsive"> <table id="{opts.service}_table" class="table table-striped jambo_table bulk_action"> <thead> <tr> <th if="{opts.selection != false}" style="width:40px;vertical-align: text-top" nowrap data-colkey="rowSelection"> <input if="{selection.length ==  data.data.length}" type="checkbox" id="basic_checkbox_{selection.length ==  data.data.length ? \'all\' : \'\'}" checked="checked"> <input if="{selection.length !=  data.data.length}" type="checkbox" id="basic_checkbox_{selection.length !=  data.data.length ? \'all\' : \'\'}"> <label onclick="{selectall}" data-value="{selection.length ==  data.data.length ? 1 : 0}" for="basic_checkbox_all" class="basic_checkbox_all"></label> </th> <th each="{colval, colkey in thead}" data-colkey="{colkey}" onclick="{sort}"> <label>{colkey}</label> <i if="{query.$sort[colkey] && query.$sort[colkey] == \'-1\'}" class="material-icons">keyboard_arrow_down</i> <i if="{query.$sort[colkey] && query.$sort[colkey] == \'1\'}" class="material-icons">keyboard_arrow_up</i> </th> <th data-colkey="filter"> <i onclick="{toggleFilter}" class="material-icons">filter_list</i> </th> </tr> </thead> <tbody> <tr class="{\'hide\': !showfilter}"> <td if="{opts.selection != false}" nowrap>&nbsp;</td> <td each="{colval, colkey in thead}"> <input if="{schema.properties[colkey].type!=\'data\'}" type="text" name="{colkey}" onchange="{filter}" placeholder="enter serach"> <input if="{schema.properties[colkey].type==\'date\'}" name="{colkey}" onchange="{filter}" placeholder="enter serach" type="date"> </td> <td>&nbsp;</td> </tr> <tr each="{row in data.data}" class="{\'selected\': selection.indexOf(row._id) != -1}"> <td if="{selection !== false}" class="a-center"> <div if="{selection.indexOf(row._id) > -1}"> <input data-value="{row._id}" type="checkbox" id="basic_checkbox_on_{row._id}" checked="checked"> <label data-value="{row._id}" onclick="{selectRow}" data-value="{selection.length ==  data.data.length ? 1 : 0}" for="basic_checkbox_on_{row._id}"></label> </div> <div if="{selection.indexOf(row._id) === -1}"> <input data-value="{row._id}" type="checkbox" id="basic_checkbox_{row._id}"> <label data-value="{row._id}" onclick="{selectRow}" data-value="{selection.length ==  data.data.length ? 1 : 0}" for="basic_checkbox_{row._id}"></label> </div> </td> <td each="{colval, colkey in thead}"> {row[colkey]} </td> <td> <a href="#" onclick="{viewRow}"> <i class="material-icons col-grey">pageview</i> </a> <a href="#" onclick="{deleteRow}"> <i class="material-icons col-grey">delete</i> </a> </td> </tr> </tbody> </table> </div> <div class="clearfix"></div> <div if="{opts.showlimit}" class="pull-left btn-group dropup"> <button if="{data.data}" type="button" class="btn btn-default waves-effect">{opts.limit || data.limit} / {data.total}</button> <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"> <span class="caret"></span> <span class="sr-only">Toggle Dropdown</span> </button> <ul class="dropdown-menu"> <li><a href="#" onclick="{changeLimit}" data-limit="5" class="waves-effect waves-block">5</a></li> <li><a href="#" onclick="{changeLimit}" data-limit="10" class="waves-effect waves-block">10</a></li> <li><a href="#" onclick="{changeLimit}" data-limit="50" class="waves-effect waves-block">50</a></li> <li><a href="#" onclick="{changeLimit}" data-limit="100" class="waves-effect waves-block">100</a></li> <li role="separator" class="divider"></li> <li><a href="#" onclick="{changeLimit}" data-limit="ALL" class="waves-effect waves-block">ALL</a></li> </ul> </div> <div if="{opts.showpagination}" class="pull-right btn-toolbar"> <div if="{pagination.start}" class="btn-group" role="group" aria-label="First group"> <button onclick="{paginate}" data-page="{pagination.start}" type="button" class="btn btn-{pagination.current ==  pagination.start ? \'info\' : \'default\'} waves-effect">{pagination.start}</button> </div> <div class="btn-group" role="group" aria-label="First group"> <button each="{page in pagination.range}" onclick="{paginate}" type="button" data-page="{page}" class="btn btn-{pagination.current == page ? \'info\' : \'default\'} {\'disabled\':page.active == false} waves-effect">{page}</button> </div> <div if="{pagination.end}" class="btn-group" role="group" aria-label="First group"> <button onclick="{paginate}" data-page="{pagination.end}" type="button" class="btn btn-{pagination.current == pagination.end ? \'info\' : \'default\'} waves-effect">{pagination.end}</button> </div> </div> <div class="clearfix"></div> <yield></yield> </div> </div> <div class="clearfix"></div>', 'th { white-space: nowrap } table input { width: 100%; } .selectbox { font-size: 150%; } .pagination { margin: 0px 0 10px 0 ; } .basic_checkbox_all { top:10px; } .table-responsive td{ max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .table-responsive i.material-icons { color:#999; position: relative; top: 6px; } .NOtd { max-width: 100px; white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; }', '', function(opts) {
 
 		var self = this;
 		self.opts.view = 'list';
 		self.opts.showheader = true;
 		self.opts.showfilter = true;
 		self.opts.showpagination = true;
+		self.opts.showlimit = true;
 		self.pagination = {
 			range:[]
 		};
 		self.query = {
 			$limit: opts.limit || 10,
             $skip: opts.skip || 0,
-            $sort: opts.sortfield ? JSON.parse('{"' + opts.sortfield + '":' + (opts.sortdir || 1) + '}') : {}
+            $sort: JSON.parse('{"' + (opts.sortfield || opts.idField) + '":' + (opts.sortdir || 1) + '}'),
 		};
 		self.data = {
 			'limit': opts.limit,
@@ -53,6 +54,7 @@ riot.tag2('crud-table', '<modal-delete-confirmation></modal-delete-confirmation>
 
 	    self.refresh = () => {
 	    	getData();
+
 	    }
 
 	    self.reInit = (query) => {
@@ -131,16 +133,16 @@ riot.tag2('crud-table', '<modal-delete-confirmation></modal-delete-confirmation>
 	    }
 
 		selectall = (e) => {
+			e.preventDefault();
+
 			if (self.selection.length == self.data.data.length) {
 				self.selection = [];
 			} else {
-
 				self.selection = self.data.data.reduce(function(prev, curr) {
 				  return prev.concat(curr._id);
 				}, []);
-
 			}
-
+			self.update();
 		}
 
 		selectRow = (e) => {
@@ -181,7 +183,6 @@ riot.tag2('crud-table', '<modal-delete-confirmation></modal-delete-confirmation>
 
 	    initTable = () => {
 	    	self.service.get('schema').then((result) => {
-	          console.error('Error schema', result);
 	        	self.schema = result;
 	        	initSchema();
 	        	getData();
@@ -196,9 +197,9 @@ riot.tag2('crud-table', '<modal-delete-confirmation></modal-delete-confirmation>
     		let start = 1;
     		let end = (Math.ceil(self.data.total/self.data.limit))-1;
     		let nextTo = 2;
-
 	    	let rangeStart = current - nextTo;
 	    	let rangeEnd = current + nextTo;
+
 	    	if(rangeStart <= 0) {
 	    		rangeStart = start;
 	    	}

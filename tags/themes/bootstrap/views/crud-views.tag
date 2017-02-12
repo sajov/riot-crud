@@ -82,6 +82,11 @@
 		th {
 			white-space: nowrap
 		}
+
+		table input {
+			width: 100%;
+		}
+
 		.selectbox {
 			font-size: 150%;
 		}
@@ -101,6 +106,8 @@
 		}
 		.table-responsive i.material-icons {
 			color:#999;
+			position: relative;
+			top: 6px;
 		}
 		.NOtd {
 		  max-width: 100px;
@@ -130,26 +137,26 @@
                 	<input type="text" onkeyup={ search } class="form-control date" placeholder="search for ...">
             	</div>
         	</div>
+			<!-- TABLE -->
 			<div class="table-responsive">
 				<table id="{ opts.service }_table" class="table table-striped jambo_table bulk_action">
 				    <thead>
 				      <tr >
 				      	<th if={ opts.selection != false } style="width:40px;vertical-align: text-top" nowrap data-colkey="rowSelection">
-			      		   <input type="checkbox" id="basic_checkbox_all" checked="{ 'checked': selection.length }">
-	                       <label onclick={ selectall }  data-value="{ selection.length ==  data.data.length ? 1 : 0 }" for="basic_checkbox_all" class="basic_checkbox_all"></label>
+		      			    <input if={selection.length ==  data.data.length} type="checkbox" id="basic_checkbox_{selection.length ==  data.data.length ? 'all' : ''}" checked="checked">
+		      			    <input if={selection.length !=  data.data.length} type="checkbox" id="basic_checkbox_{selection.length !=  data.data.length ? 'all' : ''}" >
+	                        <label onclick={ selectall }  data-value="{ selection.length ==  data.data.length ? 1 : 0 }" for="basic_checkbox_all" class="basic_checkbox_all"></label>
 						</th>
 				        <th each="{ colval, colkey in thead }" data-colkey="{colkey}" onclick={ sort }>
-				        	<i if={query.$sort[colkey] && query.$sort[colkey] == '-1'} class="material-icons pull-right">keyboard_arrow_down</i>
-				        	<i if={query.$sort[colkey] && query.$sort[colkey] == '1'} class="material-icons pull-right">keyboard_arrow_up</i>
-				        	<i if={!query.$sort[colkey]} class="material-icons pull-right">sort</i>
 				        	<label>{ colkey }</label>
+				        	<i if={query.$sort[colkey] && query.$sort[colkey] == '-1'} class="material-icons">keyboard_arrow_down</i>
+				        	<i if={query.$sort[colkey] && query.$sort[colkey] == '1'} class="material-icons">keyboard_arrow_up</i>
 				        </th>
 				        <th data-colkey="filter" >
 				        	<i onclick={ toggleFilter } class="material-icons">filter_list</i>
 				        </th>
 				      </tr>
 				    </thead>
-
 				    <tbody>
 				    	<tr class="{'hide': !showfilter}">
 					      	<td if={ opts.selection != false } nowrap>&nbsp;</td>
@@ -185,9 +192,12 @@
 				    </tbody>
 			    </table>
 			</div>
+			<!-- TABLE end -->
+
 			<div class="clearfix"></div>
-			<div if={opts.changelimit} class="pull-left btn-group dropup">
-                <button if={data.data} type="button" class="btn btn-default waves-effect">{opts.limit} / {data.total}</button>
+
+			<div if={opts.showlimit} class="pull-left btn-group dropup">
+                <button if={data.data} type="button" class="btn btn-default waves-effect">{opts.limit || data.limit} / {data.total}</button>
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                     <span class="caret"></span>
                     <span class="sr-only">Toggle Dropdown</span>
@@ -228,13 +238,14 @@
 		self.opts.showheader = true;
 		self.opts.showfilter = true;
 		self.opts.showpagination = true;
+		self.opts.showlimit = true;
 		self.pagination = {
 			range:[]
 		};
 		self.query = {
 			$limit: opts.limit || 10,
             $skip: opts.skip || 0,
-            $sort: opts.sortfield ? JSON.parse('{"' + opts.sortfield + '":' + (opts.sortdir || 1) + '}') : {}
+            $sort: JSON.parse('{"' + (opts.sortfield || opts.idField) + '":' + (opts.sortdir || 1) + '}'),
 		};
 		self.data = {
 			'limit': opts.limit,
@@ -247,10 +258,10 @@
 		self.showfilter = false;
 
 		this.mixin(FeatherClientMixin);
-
 	    /* deprecated use reInit */
 	    self.refresh = () => {
 	    	getData();
+
 	    }
 
 	    /**
@@ -335,16 +346,18 @@
 	    }
 
 		selectall = (e) => {
+			e.preventDefault();
+			// console.log(e.target.getAttribute('data-value'));
+			// alert(self.basic_checkbox_all);
+
 			if (self.selection.length == self.data.data.length) {
 				self.selection = [];
 			} else {
-
 				self.selection = self.data.data.reduce(function(prev, curr) {
 				  return prev.concat(curr._id);
 				}, []);
-
 			}
-			// self.update();
+			self.update();
 		}
 
 		selectRow = (e) => {
@@ -366,8 +379,6 @@
 			e.preventDefault();
 			route(opts.service + '/view/' + e.item.row._id);
 		}
-       // <a class="btn btn-info btn-xs" tabindex="0" aria-controls="ajaxdatatables" href="#' + opts.service + '/view/' + row[opts.idField] + '"><i class="fa fa-edit"></i></a>
-       // <a class="btn btn-danger btn-xs" onclick="RiotControl.trigger(\'' + viewModelKey + '\',\''+row[opts.idField]+'\')"><i class="fa fa-trash-o"></i></a>
 
 	    initSchema = () => {
 	    	self.thead = {};
@@ -387,7 +398,6 @@
 
 	    initTable = () => {
 	    	self.service.get('schema').then((result) => {
-	          console.error('Error schema', result);
 	        	self.schema = result;
 	        	initSchema();
 	        	getData();
@@ -396,17 +406,15 @@
 	        });
 	    }
 
-
-
 	    initPagination = () => {
 	    	self.next = 2;
 	    	let current = (Math.ceil(self.data.skip/self.data.limit)) || 1;
     		let start = 1;
     		let end = (Math.ceil(self.data.total/self.data.limit))-1;
     		let nextTo = 2;
-
 	    	let rangeStart = current - nextTo;
 	    	let rangeEnd = current + nextTo;
+
 	    	if(rangeStart <= 0) {
 	    		rangeStart = start;
 	    	}
@@ -444,7 +452,6 @@
 	    	}
 	    	getData();
 	    }
-
 
 	    getData = () => {
 	        self.service.find({query:self.query}).then((result) => {
