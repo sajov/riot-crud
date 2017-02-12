@@ -4,7 +4,6 @@
 </raw>
 
 <crud-test>
-
 	<script>
 		var self = this;
 		this.on('*', (event) => {
@@ -34,6 +33,8 @@
 
 <crud-header-dropdown>
 
+	<modal-delete-confirmation></modal-delete-confirmation>
+
 	<ul class="header-dropdown m-r--5">
         <li class="dropdown">
             <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -41,9 +42,7 @@
             </a>
             <ul class="dropdown-menu pull-right">
                 <li each={action in opts.actions}>
-
 	        		<a if={action.active} href="#" onclick={ click }>
-
 		        		<i if={action.name == 'create'} class="material-icons">add</i>
 						<i if={action.name == 'view'} class="material-icons">view_compact</i>
 						<i if={action.name == 'delete'} class="material-icons">remove</i>
@@ -62,9 +61,7 @@
 		        			{action.label}
 		        			<small if={action.count >= 0}>({action.count})</small>
 		        		</span>
-
 		        	</a>
-
 	        	</li>
             </ul>
         </li>
@@ -76,6 +73,57 @@
 	</script>
 
 </crud-header-dropdown>
+
+
+<modal-delete-confirmation>
+
+    <!-- Small modal -->
+    <div id="deleteConfirmation" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel2">Delete <i>{opts.model}</i></h4>
+          </div>
+          <div class="modal-body">
+            id:{opts.id} {opts.text}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Abbort</button>
+            <button type="button" class="btn btn-warning" onclick="{confirm}">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /modals -->
+    <style type="text/css">
+        div.modal-backdrop.fade.in {
+            z-index: 7!important;
+        }
+    </style>
+    <script>
+        var self = this;
+
+         RiotControl.on('delete_confirmation_modal', (model, view, id, text) => {
+            self.opts.model = model;
+            self.opts.view = view;
+            self.opts.id = id;
+            self.opts.text = text || 'please confirm';
+            self.update();
+            $('#deleteConfirmation').modal('show');
+        })
+
+        confirm() {
+            $('#deleteConfirmation').modal('hide');
+            RiotControl.trigger([opts.model, opts.view, 'delete'].join('_'), opts.id);
+        }
+
+    </script>
+
+</modal-delete-confirmation>
+
 <crud-table>
 
 	<style type="text/css">
@@ -118,8 +166,6 @@
 		  word-wrap: break-word; /* Internet Explorer 5.5+ */
 		}
 	</style>
-
-	<modal-delete-confirmation></modal-delete-confirmation>
 
 	<div class="card">
         <div if={opts.showheader} class="header">
@@ -347,9 +393,6 @@
 
 		selectall = (e) => {
 			e.preventDefault();
-			// console.log(e.target.getAttribute('data-value'));
-			// alert(self.basic_checkbox_all);
-
 			if (self.selection.length == self.data.data.length) {
 				self.selection = [];
 			} else {

@@ -7,61 +7,12 @@
     </section>
 </layout>
 
-<modal-delete-confirmation>
-
-    <!-- Small modal -->
-    <div id="deleteConfirmation" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
-            </button>
-            <h4 class="modal-title" id="myModalLabel2">Delete <i>{opts.model}</i></h4>
-          </div>
-          <div class="modal-body">
-            id:{opts.id} {opts.text}
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Abbort</button>
-            <button type="button" class="btn btn-warning" onclick="{confirm}">Delete</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- /modals -->
-    <style type="text/css">
-        div.modal-backdrop.fade.in {
-            z-index: 7!important;
-        }
-    </style>
-    <script>
-        var self = this;
-
-         RiotControl.on('delete_confirmation_modal', (model, view, id, text) => {
-            self.opts.model = model;
-            self.opts.view = view;
-            self.opts.id = id;
-            self.opts.text = text || 'please confirm';
-            self.update();
-            $('#deleteConfirmation').modal('show');
-        })
-
-        confirm() {
-            $('#deleteConfirmation').modal('hide');
-            RiotControl.trigger([opts.model, opts.view, 'delete'].join('_'), opts.id);
-        }
-
-    </script>
-
-</modal-delete-confirmation>
 
 <top-menu>
 
     <link href="/bower_components/gentelella/vendors/pnotify/dist/pnotify.css" rel="stylesheet">
     <link href="/bower_components/gentelella/vendors/pnotify/dist/pnotify.buttons.css" rel="stylesheet">
     <link href="/bower_components/gentelella/vendors/pnotify/dist/pnotify.nonblock.css" rel="stylesheet">
-    <modal-delete-confirmation></modal-delete-confirmation>
 
     <script>
         var self = this;

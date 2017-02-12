@@ -1,26 +1,8 @@
 riot.tag2('layout', '<section class="content"> <div id="content" class="container-fluid"> <div class="block-header"> </div> </div> </section>', '', '', function(opts) {
 });
 
-riot.tag2('modal-delete-confirmation', '<div id="deleteConfirmation" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true"> <div class="modal-dialog modal-sm"> <div class="modal-content"> <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span> </button> <h4 class="modal-title" id="myModalLabel2">Delete <i>{opts.model}</i></h4> </div> <div class="modal-body"> id:{opts.id} {opts.text} </div> <div class="modal-footer"> <button type="button" class="btn btn-default" data-dismiss="modal">Abbort</button> <button type="button" class="btn btn-warning" onclick="{confirm}">Delete</button> </div> </div> </div> </div>', 'div.modal-backdrop.fade.in { z-index: 7!important; }', '', function(opts) {
-        var self = this;
 
-         RiotControl.on('delete_confirmation_modal', (model, view, id, text) => {
-            self.opts.model = model;
-            self.opts.view = view;
-            self.opts.id = id;
-            self.opts.text = text || 'please confirm';
-            self.update();
-            $('#deleteConfirmation').modal('show');
-        })
-
-        this.confirm = function() {
-            $('#deleteConfirmation').modal('hide');
-            RiotControl.trigger([opts.model, opts.view, 'delete'].join('_'), opts.id);
-        }.bind(this)
-
-});
-
-riot.tag2('top-menu', '<link href="/bower_components/gentelella/vendors/pnotify/dist/pnotify.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/pnotify/dist/pnotify.buttons.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/pnotify/dist/pnotify.nonblock.css" rel="stylesheet"> <modal-delete-confirmation></modal-delete-confirmation>', '', '', function(opts) {
+riot.tag2('top-menu', '<link href="/bower_components/gentelella/vendors/pnotify/dist/pnotify.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/pnotify/dist/pnotify.buttons.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/pnotify/dist/pnotify.nonblock.css" rel="stylesheet">', '', '', function(opts) {
         var self = this;
         self.mixin(FeatherClientMixin);
         RiotCrudController.loadDependencies(
