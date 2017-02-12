@@ -47,20 +47,9 @@ riot.tag2('crud-table', '<modal-delete-confirmation></modal-delete-confirmation>
 		};
 		self.selection = [];
 		self.selectionLength = [];
-
 		self.showfilter = false;
 
 		this.mixin(FeatherClientMixin);
-
-		self.on('*', (event) => {
-			console.info('TABLE event', event,self.selection);
-		});
-
-		self.on('mount', () => {
-			if(self.opts.service) {
-				initTable();
-			}
-		});
 
 	    self.refresh = () => {
 	    	getData();
@@ -69,6 +58,16 @@ riot.tag2('crud-table', '<modal-delete-confirmation></modal-delete-confirmation>
 	    self.reInit = (query) => {
 	    	getData();
 	    }
+
+	    self.on('*', (event) => {
+			console.info('TABLE event', event,self.selection);
+		});
+
+		self.on('mount', () => {
+			if(self.opts.service) {
+				initTable();
+			}
+		});
 
 		triggerData = (e) => {
 			RiotControl.trigger(e.target.getAttribute('data-trigger'),
@@ -85,7 +84,6 @@ riot.tag2('crud-table', '<modal-delete-confirmation></modal-delete-confirmation>
 
             if(e.target.value !== "") {
                 self.query.$or = [];
-                console.log('self.thead',self.thead.length);
                 let theadFields = Object.keys(self.thead);
                 for (var i = 0;i < theadFields.length; i++) {
                     let q = {};
@@ -100,8 +98,6 @@ riot.tag2('crud-table', '<modal-delete-confirmation></modal-delete-confirmation>
 
 	    filter = (e) => {
 	    	delete self.query.$or;
-	    	console.error(self.schema,'self.schema')
-
 	    	if(e.target.value !== "") {
 	    		let value = e.target.value
 	    		if(self.schema && self.schema.properties[e.target.name] && self.schema.properties[e.target.name].type) {
@@ -110,7 +106,6 @@ riot.tag2('crud-table', '<modal-delete-confirmation></modal-delete-confirmation>
 	    			}
 	    		}
     			self.query[e.target.name] = value;
-
 	    	} else {
 	    		delete self.query[e.target.name];
 	    	}

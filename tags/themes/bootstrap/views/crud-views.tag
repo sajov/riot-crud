@@ -244,20 +244,9 @@
 		};
 		self.selection = [];
 		self.selectionLength = [];
-
 		self.showfilter = false;
 
 		this.mixin(FeatherClientMixin);
-
-		self.on('*', (event) => {
-			console.info('TABLE event', event,self.selection);
-		});
-
-		self.on('mount', () => {
-			if(self.opts.service) {
-				initTable();
-			}
-		});
 
 	    /* deprecated use reInit */
 	    self.refresh = () => {
@@ -274,6 +263,16 @@
 	    	getData();
 	    }
 
+	    self.on('*', (event) => {
+			console.info('TABLE event', event,self.selection);
+		});
+
+		self.on('mount', () => {
+			if(self.opts.service) {
+				initTable();
+			}
+		});
+
 		triggerData = (e) => {
 			RiotControl.trigger(e.target.getAttribute('data-trigger'),
 				self.data.data.reduce(function(prev, curr) {
@@ -289,7 +288,6 @@
              /* search */
             if(e.target.value !== "") {
                 self.query.$or = [];
-                console.log('self.thead',self.thead.length);
                 let theadFields = Object.keys(self.thead);
                 for (var i = 0;i < theadFields.length; i++) {
                     let q = {};
@@ -304,8 +302,6 @@
 
 	    filter = (e) => {
 	    	delete self.query.$or;
-	    	console.error(self.schema,'self.schema')
-    		// self.query[e.target.name] = {$search: e.target.value};
 	    	if(e.target.value !== "") {
 	    		let value = e.target.value
 	    		if(self.schema && self.schema.properties[e.target.name] && self.schema.properties[e.target.name].type) {
@@ -314,10 +310,6 @@
 	    			}
 	    		}
     			self.query[e.target.name] = value;
-	    		// self.query[e.target.name] = {$search: 13};
-    		    // let q = {};
-          //       q[e.target.name] = {$search: e.target.value};
-          //       self.query.$or.push(q);
 	    	} else {
 	    		delete self.query[e.target.name];
 	    	}

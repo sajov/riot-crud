@@ -1,10 +1,14 @@
 
-riot.tag2('top-widget', '<div onclick="{routeTo}" class="info-box hover-expand-effect"> <div class="icon {opts.color}"> <i if="{opts.icon}" class="material-icons col-gray">{opts.icon}</i> <div id="pie" if="{opts.pie}" class="{opts.pie}" data-chartcolor="{opts.color}">{opts.sparklinedata}</div> </div> <div class="content"> <div class="text">{opts.title}</div> <div class="number count-to" data-from="0" data-to="{opts.count}" data-speed="1000" data-fresh-interval="20">{opts.count}</div> </div> </div>', '', '', function(opts) {
+riot.tag2('top-widget', '<div onclick="{routeTo}" class="info-box hover-expand-effect"> <div class="icon {opts.color}"> <i if="{opts.icon}" class="material-icons col-gray">{opts.icon}</i> <div id="pie-{opts.service}" if="{opts.pie}" class="pie {opts.pie}" data-chartcolor="{opts.color}">{opts.sparklinedata}</div> </div> <div class="content"> <div class="text">{opts.title}</div> <div class="number count-to" data-from="0" data-to="{opts.count}" data-speed="1000" data-fresh-interval="20">{opts.count}</div> </div> </div>', '', '', function(opts) {
         var self = this;
         self.mixin(FeatherClientMixin);
 
         this.on('mount', () => {
             self.getData();
+        });
+
+        this.on('updated', () => {
+            self.initPlugins();
         });
 
         RiotControl.on('updateWidget'+opts.service, () => {
@@ -14,14 +18,19 @@ riot.tag2('top-widget', '<div onclick="{routeTo}" class="info-box hover-expand-e
         self.getData = () => {
             if(typeof opts.service != 'undefined')
             self.client.service(opts.service)
-                .find({query:{$sort:{id:-1}}})
+                .find({query:{$sort:{orderId:-1,id:-1}}})
                 .then((result) => {
                         self.opts.count = result.total;
+                        if(opts.datafield) {
+                            opts.sparklinedata = [];
+                            for (var i = 0; i < result.data.length; i++) {
+                                console.info('dashboard',parseInt(result.data[i].total));
+                                opts.sparklinedata.push(parseInt(result.data[i].total))
+                            }
+                        }
+                        console.info('dashboard  opts.sparklinedata', (opts.sparklinedata));
                         self.update();
-                    if( opts.title == 'Products') {
-                        console.info('getData ' + opts.title);
-                        self.initPlugins();
-                    }
+
                 })
                 .catch((error) => {RiotControl.trigger(
                             'notification',
@@ -46,8 +55,8 @@ riot.tag2('top-widget', '<div onclick="{routeTo}" class="info-box hover-expand-e
             }
 
             function initCharts() {
-                var chartColor = $.AdminBSB.options.colors[opts.color] || 'red';
-                $('#pie').sparkline(undefined, {
+                var chartColor = $.AdminBSB.options.colors[opts.color] || 'white';
+                $('#pie-'+opts.service).sparkline(opts.sparklinedata, {
                     type: opts.sparkline ||  'bar',
                     barColor: chartColor,
                     negBarColor: chartColor,
@@ -81,7 +90,7 @@ riot.tag2('todo-list', '<div class="card"> <div class="header"> <h2>{opts.title}
         ];
 });
 
-riot.tag2('dashboard', '<div class="row top_tiles"> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Orders" description="" sparkline="bar" icon="shopping_cart" service="orders" color="bg-red"></top-widget> </div> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Categories" description="" sparkline="line" sparklinedata="30, 35, 25, 8" color="cyan" icon="list" service="categories"></top-widget> </div> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Products" description="" pie="chart chart-pie" sparklinedata="30, 35, 25, 8" color="cyan" service="products"></top-widget> </div> </div> <div class="row"> <div class="col-md-6 col-sm-6 col-xs-12"> <crud-table ref="ordertable" title="Orders List" description="riot-crud Table" service="orders" showheader="true" limit="4" fields="orderId,total,createdAt" sortfield="orderId" sortdir="-1" showpagination="1" changelimit="1" skip="0" ups="{table:\'test\'}"> </crud-table> </div> <div class="col-md-6 col-sm-6 col-xs-12"> <todo-list title="Feature List" subtitle="current and following tasks"></todo-list> </div> </div> <div class="row"> <div class="col-md-6 col-sm-6 col-xs-12"> <div id="jsoneditor-container"></div> </div> <div class="col-md-6 col-sm-6 col-xs-12"> <div id="json-forms-container"></div> </div> </div>', '', '', function(opts) {
+riot.tag2('dashboard', '<div class="row top_tiles"> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Orders" description="" pie="chart chart-pie" sortdir="-1" sortfield="orderId" datafield="total" service="orders" color="red"></top-widget> </div> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Categories" description="" sparkline="line" sparklinedata="30,35,25,8" color="cyan" icon="list" service="categories"></top-widget> </div> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Products" description="" pie="chart chart-pie" sparklinedata="30,35,25,12" color="cyan" service="products"></top-widget> </div> </div> <div class="row"> <div class="col-md-6 col-sm-6 col-xs-12"> <crud-table ref="ordertable" title="Orders List" description="riot-crud Table" service="orders" showheader="true" limit="4" fields="orderId,total,name,createdAt" sortfield="orderId" sortdir="-1" showpagination="1" changelimit="1" skip="0" ups="{table:\'test\'}"> </crud-table> </div> <div class="col-md-6 col-sm-6 col-xs-12"> <todo-list title="Feature List" subtitle="current and following tasks"></todo-list> </div> </div> <div class="row"> <div class="col-md-6 col-sm-6 col-xs-12"> <div id="jsoneditor-container"></div> </div> <div class="col-md-6 col-sm-6 col-xs-12"> <div id="json-forms-container"></div> </div> </div>', '', '', function(opts) {
         var self = this;
         self.mixin(FeatherClientMixin);
         self.jsoneditorQuery = {
