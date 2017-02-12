@@ -6,8 +6,8 @@
 
     <div onclick={routeTo} class="info-box hover-expand-effect">
         <div class="icon {opts.bgcolor}">
-            <i if={opts.icon} class="material-icons col-{opts.color}">{opts.icon}</i>
-            <div id="pie-{opts.service}" if={opts.pie} class="pie {opts.pie}" data-chartcolor="{opts.color}">{opts.sparklinedata}</div>
+            <i if={opts.icon} class="material-icons col-{color}">{opts.icon}</i>
+            <div id="pie-{opts.service}" if={opts.pie} class="pie {opts.pie}">{opts.sparklinedata}</div>
         </div>
         <div class="content">
             <div class="text">{opts.title}</div>
@@ -18,6 +18,12 @@
     <script>
         var self = this;
         self.mixin(FeatherClientMixin);
+        self.color = $('body').attr('class').replace('theme-','');
+
+        $('.right-sidebar .demo-choose-skin li').on('click', function () {
+            self.color = $('body').attr('class').replace('theme-','');
+            self.update();
+        });
 
         this.on('mount', () => {
             self.getData();
@@ -77,7 +83,7 @@
 
             //Charts
             function initCharts() {
-                var chartColor = $.AdminBSB.options.colors[opts.color] || 'white';
+                var chartColor =    $.AdminBSB.options.colors[self.color] || $.AdminBSB.options.colors[opts.color] || 'white';
                 $('#pie-'+opts.service).sparkline(opts.sparklinedata, {
                     type: opts.sparkline ||  'bar', // line, pie, bar
                     barColor: chartColor,
@@ -142,7 +148,7 @@
     <div class="row top_tiles">
 
         <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
-            <top-widget title="Orders" description="" pie="chart chart-pie" sortdir="-1" sortfield="orderId" datafield="total" service="orders" color="cyan"></top-widget>
+            <top-widget title="Orders" description="" pie="chart chart-pie" sortdir="-1" sortfield="orderId" datafield="total" service="orders"></top-widget>
         </div>
         <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
             <top-widget title="Categories" description="" sparkline="line" sparklinedata="30,35,25,8" color="cyan" icon="list" service="categories"></top-widget>

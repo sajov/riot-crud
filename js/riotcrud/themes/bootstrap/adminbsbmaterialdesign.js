@@ -80,15 +80,15 @@ riot.tag2('top-menu', '<link href="/bower_components/gentelella/vendors/pnotify/
             var stack_bottomright = {"dir1": "up", "dir2": "left", "firstpos1": 25, "firstpos2": 25};
             if(typeof PNotify == 'function')
             new PNotify({
-                  delay: 3000,
+                  delay: 13000,
                   title: title,
-                  type: type,
+
                   text: text || '',
 
-                  styling: 'bootstrap3',
+                  newest_on_top: true,
+                  addclass: 'bg-red ' + (self.color),
 
-                  addclass: "stack-bottomright",
-                  stack: stack_bottomright
+                  stack: stack_topleft
             });
         }
 

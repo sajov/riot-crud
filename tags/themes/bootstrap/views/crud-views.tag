@@ -43,6 +43,7 @@
             <ul class="dropdown-menu pull-right">
                 <li each={action in opts.actions}>
 	        		<a if={action.active} href="#" onclick={ click }>
+
 		        		<i if={action.name == 'create'} class="material-icons">add</i>
 						<i if={action.name == 'view'} class="material-icons">view_compact</i>
 						<i if={action.name == 'delete'} class="material-icons">remove</i>
@@ -189,8 +190,8 @@
 				    <thead>
 				      <tr >
 				      	<th if={ opts.selection != false } style="width:40px;vertical-align: text-top" nowrap data-colkey="rowSelection">
-		      			    <input if={selection.length ==  data.data.length} type="checkbox" id="basic_checkbox_{selection.length ==  data.data.length ? 'all' : ''}" checked="checked">
-		      			    <input if={selection.length !=  data.data.length} type="checkbox" id="basic_checkbox_{selection.length !=  data.data.length ? 'all' : ''}" >
+		      			    <input if={selection.length ==  data.data.length} type="checkbox" class="chk-col-{color}" id="basic_checkbox_{selection.length ==  data.data.length ? 'all' : ''}" checked="checked">
+		      			    <input if={selection.length !=  data.data.length} type="checkbox" class="chk-col-{color}" id="basic_checkbox_{selection.length !=  data.data.length ? 'all' : ''}" >
 	                        <label onclick={ selectall }  data-value="{ selection.length ==  data.data.length ? 1 : 0 }" for="basic_checkbox_all" class="basic_checkbox_all"></label>
 						</th>
 				        <th each="{ colval, colkey in thead }" data-colkey="{colkey}" onclick={ sort }>
@@ -215,7 +216,7 @@
 				      	<tr each="{ row in data.data }" class="{ 'selected': selection.indexOf(row._id) != -1 }">
 					      	<td if={ selection !== false } class="a-center">
 					      		<div if="{selection.indexOf(row._id) > -1}">
-					      			<input  data-value="{ row._id }" type="checkbox" id="basic_checkbox_on_{row._id}" checked="checked">
+					      			<input  data-value="{ row._id }" type="checkbox" class="chk-col-{color}" id="basic_checkbox_on_{row._id}" checked="checked">
 	                       			<label data-value="{ row._id }" onclick={ selectRow }  data-value="{ selection.length ==  data.data.length ? 1 : 0 }" for="basic_checkbox_on_{row._id}"></label>
 					      		</div>
 					      		<div if="{selection.indexOf(row._id) === -1}">
@@ -262,7 +263,7 @@
 		            <button onclick={paginate} data-page="{pagination.start}" type="button" class="btn btn-{pagination.current ==  pagination.start ? 'info' : 'default'} waves-effect">{pagination.start}</button>
 		        </div>
 				<div class="btn-group" role="group" aria-label="First group">
-		            <button each={page in pagination.range} onclick={paginate} type="button" data-page="{page}" class="btn btn-{pagination.current == page ? 'info' : 'default'} {'disabled':page.active == false} waves-effect">{page}</button>
+		            <button each={page in pagination.range} onclick={paginate} type="button" data-page="{page}" class="btn NObtn-{pagination.current == page ? 'info' : 'default'} {'disabled':page.active == false} btn-{pagination.current != page ? 'default' : ''} bg-{pagination.current == page ? color : ''} waves-effect">{page}</button>
 		        </div>
 		        <div if={pagination.end} class="btn-group" role="group" aria-label="First group">
 		            <button onclick={paginate} data-page="{pagination.end}" type="button" class="btn btn-{pagination.current == pagination.end ? 'info' : 'default'}  waves-effect">{pagination.end}</button>
@@ -302,6 +303,13 @@
 		self.selection = [];
 		self.selectionLength = [];
 		self.showfilter = false;
+
+		self.color = $('body').attr('class').replace('theme-','');
+        $('.right-sidebar .demo-choose-skin li').on('click', function () {
+            self.color = $('body').attr('class').replace('theme-','');
+            self.update();
+        });
+
 
 		this.mixin(FeatherClientMixin);
 	    /* deprecated use reInit */

@@ -64,12 +64,11 @@ riot.tag2('top-menu', '<link href="/bower_components/gentelella/vendors/pnotify/
             new PNotify({
                   delay: 3000,
                   title: title,
-                  type: type,
+
                   text: text || '',
 
-                  styling: 'bootstrap3',
-
-                  addclass: "stack-bottomright",
+                  newest_on_top: true,
+                  addclass: 'stack-bottomright bg-' + ($('body').attr('class').replace('theme-','') || 'red'),
                   stack: stack_bottomright
             });
         }

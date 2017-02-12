@@ -15,6 +15,17 @@
 
     <link href="/bower_components/jsoneditor/dist/jsoneditor.min.css" rel="stylesheet">
     <style type="text/css">
+        div.jsoneditor,
+        div.jsoneditor-mode-tree{
+            border:1px solid  #eee!important;
+        }
+
+        div.jsoneditor-menu {
+            color: #fff;
+            background-color: #eee!important;
+            border-bottom: 1px solid #eee!important;
+        }
+
         div.jsoneditor-menu{
             /*color: rgb(115,135,156);
             background: white!important;*/

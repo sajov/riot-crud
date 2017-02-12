@@ -49,7 +49,6 @@
             }
         );
 
-
         RiotControl.on('notification', (title, type, text) => {
             this.notify(title, type, text);
         });
@@ -87,14 +86,14 @@
             new PNotify({
                   delay: 3000,
                   title: title,
-                  type: type,
+                  // type: type,
                   text: text || '',
                   // nonblock: {
                   //     nonblock: true
                   // },
-                  styling: 'bootstrap3',
-                  // addclass: 'dark'
-                  addclass: "stack-bottomright",
+                  // styling: 'bootstrap3',
+                  newest_on_top: true,
+                  addclass: 'stack-bottomright bg-' + ($('body').attr('class').replace('theme-','') || 'red'),
                   stack: stack_bottomright
             });
         }

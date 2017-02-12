@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="http://cdn.jsdelivr.net/select2/3.4.8/select2.css">
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css">
 
+
     <div class="card">
         <div class="header">
             <h2>{opts.title}<small>{opts.description}</small></h2>

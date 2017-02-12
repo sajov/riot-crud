@@ -397,6 +397,7 @@
         );
 
 
+
         RiotControl.on('notification', (title, type, text) => {
             this.notify(title, type, text);
         });
@@ -432,17 +433,18 @@
             var stack_bottomright = {"dir1": "up", "dir2": "left", "firstpos1": 25, "firstpos2": 25};
             if(typeof PNotify == 'function')
             new PNotify({
-                  delay: 3000,
+                  delay: 13000,
                   title: title,
-                  type: type,
+                  // type: type,
                   text: text || '',
                   // nonblock: {
                   //     nonblock: true
                   // },
-                  styling: 'bootstrap3',
-                  // addclass: 'dark'
-                  addclass: "stack-bottomright",
-                  stack: stack_bottomright
+                  // styling: 'bootstrap3',
+                  newest_on_top: true,
+                  addclass: 'bg-red ' + (self.color),
+                  //addclass: "stack-bottomright",
+                  stack: stack_topleft
             });
         }
 
