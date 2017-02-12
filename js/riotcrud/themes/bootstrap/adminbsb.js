@@ -5,7 +5,13 @@ riot.tag2('layout', '<section class="content"> <div id="content" class="containe
 riot.tag2('top-menu', '<link href="/bower_components/gentelella/vendors/pnotify/dist/pnotify.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/pnotify/dist/pnotify.buttons.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/pnotify/dist/pnotify.nonblock.css" rel="stylesheet">', '', '', function(opts) {
         var self = this;
         self.mixin(FeatherClientMixin);
-        RiotCrudController.loadDependencies(
+
+        RiotControl.on('notification', (title, type, text) => {
+            this.notify(title, type, text);
+        });
+
+        self.on('before-mount', () => {
+            RiotCrudController.loadDependencies(
             [
                 '/bower_components/gentelella/vendors/pnotify/dist/pnotify.js',
                 '/bower_components/gentelella/vendors/pnotify/dist/pnotify.buttons.js',
@@ -36,10 +42,7 @@ riot.tag2('top-menu', '<link href="/bower_components/gentelella/vendors/pnotify/
                 }
             }
         );
-
-        RiotControl.on('notification', (title, type, text) => {
-            this.notify(title, type, text);
-        });
+        })
 
         this.on('mount', function(event) {});
 
@@ -75,18 +78,14 @@ riot.tag2('top-menu', '<link href="/bower_components/gentelella/vendors/pnotify/
 
 });
 
-riot.tag2('side-menu', '<li class="header">RIOT+FEATHERS CRUD DEMO</li> <li each="{route, key in opts.routes.default.routes}"> <a href="#{route.route}" onclick="{routeTo}" style="" view="#{route.route}"> <i class="material-icons">{route.icon}</i> <span>{route.title}</span> </a> </li> <li each="{group, key in opts.routes}" if="{key!=\'default\'}"> <a if="{group.title}" href="javascript:void(0);" class="menu-toggle"> <i class="material-icons">{group.icon}</i> <span>{group.title}</span> </a> <ul class="ml-menu"> <li each="{route, key in group.routes}" class="{selected: state}"> <a href="#{route.route}" onclick="{routeTo}" style="" view="#{route.route}"> <i class="material-icons">{route.icon || \'list\'}</i> <span>{route.title}</span> </a> </li> </ul> </li> <yield></yield>', '', '', function(opts) {
+riot.tag2('side-menu', '<li class="header">RIOT+FEATHERS CRUD DEMO</li> <li each="{route, key in opts.routes.default.routes}"> <a href="#{route.route}" onclick="{routeTo}" style="" view="#{route.route}"> <i class="material-icons">{route.icon}</i> <span>{route.title}</span> </a> </li> <li each="{group, key in opts.routes}" if="{key!=\'default\'}"> <a if="{group.title}" href="javascript:void(0);" class="menu-toggle"> <i class="material-icons">{group.icon}</i> <span>{group.title}</span> </a> <ul class="ml-menu"> <li each="{route, key in group.routes}" class="{active: window.location.hash == (\'#\'+route.route)}"> <a href="#{route.route}" onclick="{routeTo}" style="" view="#{route.route}"> <i class="material-icons">{route.icon || \'list\'}</i> <span>{route.title}</span> </a> </li> </ul> </li> <yield></yield>', '', '', function(opts) {
 
         RiotControl.on('routeStateChange',(path) => {
-            var $current = $('.sidebar-menu').find('li.active > a.active');
-            if($current.attr('href') == '#'+path) {
-                $current.addClass('active');
-            } else {
-                $current.addClass('active');
-            }
+            $('.menu').find('li.active, a.active').removeClass('active');
+            $('.menu').find('a[href="' + window.location.hash + '"]').parent('li').addClass('active');
         });
 
-        this.on('*', (event) => {
+        this.on('update', (event) => {
 
         });
 

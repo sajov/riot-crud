@@ -30,11 +30,9 @@ riot.tag2('top-widget', '<div onclick="{routeTo}" class="info-box hover-expand-e
                         if(opts.datafield) {
                             opts.sparklinedata = [];
                             for (var i = 0; i < result.data.length; i++) {
-                                console.info('dashboard',parseInt(result.data[i].total));
                                 opts.sparklinedata.push(parseInt(result.data[i].total))
                             }
                         }
-                        console.info('dashboard  opts.sparklinedata', (opts.sparklinedata));
                         self.update();
 
                 })

@@ -46,11 +46,9 @@
                         if(opts.datafield) {
                             opts.sparklinedata = [];
                             for (var i = 0; i < result.data.length; i++) {
-                                console.info('dashboard',parseInt(result.data[i].total));
                                 opts.sparklinedata.push(parseInt(result.data[i].total))
                             }
                         }
-                        console.info('dashboard  opts.sparklinedata', (opts.sparklinedata));
                         self.update();
 
                 })

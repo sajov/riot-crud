@@ -17,7 +17,13 @@
     <script>
         var self = this;
         self.mixin(FeatherClientMixin);
-        RiotCrudController.loadDependencies(
+
+        RiotControl.on('notification', (title, type, text) => {
+            this.notify(title, type, text);
+        });
+
+        self.on('before-mount', () => {
+            RiotCrudController.loadDependencies(
             [
                 '/bower_components/gentelella/vendors/pnotify/dist/pnotify.js',
                 '/bower_components/gentelella/vendors/pnotify/dist/pnotify.buttons.js',
@@ -48,10 +54,8 @@
                 }
             }
         );
+        })
 
-        RiotControl.on('notification', (title, type, text) => {
-            this.notify(title, type, text);
-        });
 
         this.on('mount', function(event) {});
 
@@ -121,7 +125,7 @@
             <span>{group.title}</span>
         </a>
         <ul class="ml-menu">
-            <li each={route, key in group.routes} class={ selected: state }>
+            <li each={route, key in group.routes} class="{active: window.location.hash == ('#'+route.route)}">
                  <a href="#{ route.route }" onclick="{ routeTo }" style="" view="#{ route.route }">
                     <i class="material-icons">{route.icon || 'list'}</i>
                     <span>{route.title}</span>
@@ -136,16 +140,12 @@
     <script>
 
         RiotControl.on('routeStateChange',(path) => {
-            var $current = $('.sidebar-menu').find('li.active > a.active');
-            if($current.attr('href') == '#'+path) {
-                $current.addClass('active');
-            } else {
-                $current.addClass('active');
-            }
+            $('.menu').find('li.active, a.active').removeClass('active');
+            $('.menu').find('a[href="' + window.location.hash + '"]').parent('li').addClass('active');
         });
 
-        this.on('*', (event) => {
-            // console.error('SIDE_MENU event:', event, opts.routes)
+        this.on('update', (event) => {
+
         });
 
         this.on('mount', () => {
