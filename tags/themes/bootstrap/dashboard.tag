@@ -5,8 +5,8 @@
 <top-widget>
 
     <div onclick={routeTo} class="info-box hover-expand-effect">
-        <div class="icon {opts.color}">
-            <i if={opts.icon} class="material-icons col-gray">{opts.icon}</i>
+        <div class="icon {opts.bgcolor}">
+            <i if={opts.icon} class="material-icons col-{opts.color}">{opts.icon}</i>
             <div id="pie-{opts.service}" if={opts.pie} class="pie {opts.pie}" data-chartcolor="{opts.color}">{opts.sparklinedata}</div>
         </div>
         <div class="content">
@@ -142,13 +142,13 @@
     <div class="row top_tiles">
 
         <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
-            <top-widget title="Orders" description="" pie="chart chart-pie" sortdir="-1" sortfield="orderId" datafield="total" service="orders" color="red"></top-widget>
+            <top-widget title="Orders" description="" pie="chart chart-pie" sortdir="-1" sortfield="orderId" datafield="total" service="orders" color="cyan"></top-widget>
         </div>
         <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
             <top-widget title="Categories" description="" sparkline="line" sparklinedata="30,35,25,8" color="cyan" icon="list" service="categories"></top-widget>
         </div>
         <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
-            <top-widget title="Products" description="" pie="chart chart-pie" sparklinedata="30,35,25,12" color="cyan" service="products"></top-widget>
+            <top-widget title="Products" description="" icon="shopping_cart" color="cyan" service="products"></top-widget>
         </div>
     </div>
     <div class="row">
