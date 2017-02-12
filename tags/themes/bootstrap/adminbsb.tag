@@ -144,6 +144,9 @@
             $('.menu').find('a[href="' + window.location.hash + '"]').parent('li').addClass('active');
         });
 
+
+
+
         this.on('update', (event) => {
 
         });

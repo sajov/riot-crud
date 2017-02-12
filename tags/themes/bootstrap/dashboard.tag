@@ -119,7 +119,7 @@
         </div>
         <div class="body">
             <div each={data,key in opts.todos} if={key!='default'}>
-                <input type="checkbox" id="basic_checkbox_{key}" checked={ data.done } /><label for="basic_checkbox_{key}">{data.todo}</label>
+                <input type="checkbox" id="basic_checkbox_{key}" class="filled-in" checked={ data.done } /><label for="basic_checkbox_{key}">{data.todo}</label>
             </div>
         </div>
     </div>

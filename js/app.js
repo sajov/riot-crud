@@ -30,8 +30,8 @@ $script.ready(theme, function() {
      */
     // RiotCrudController.addMenuGroup('models','<i class="fa fa-table"></i>Models<span class="fa fa-chevron-down"></span>');
     // RiotCrudController.addMenuGroup('views','<i class="fa fa-desktop"></i>Views<span class="fa fa-chevron-down"></span>');
-    RiotCrudController.addMenuGroup('models', {title:'MODELS',icon: 'data_usage'});
-    RiotCrudController.addMenuGroup('views', {title:'VIEWS',icon: 'computer'});
+    RiotCrudController.addMenuGroup('models', {title:'CRUD',icon: 'data_usage'});
+    RiotCrudController.addMenuGroup('views', {title:'CUSTOM VIEWS',icon: 'computer'});
 
 
     /**
@@ -39,7 +39,7 @@ $script.ready(theme, function() {
      */
     RiotCrudController.addRoute('dashboard',
         {
-            title: 'Dashboard',
+            title: 'DASHBOARD',
             icon: 'home',
             menu: true,
             route: 'dashboard',

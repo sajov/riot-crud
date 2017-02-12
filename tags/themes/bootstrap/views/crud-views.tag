@@ -190,8 +190,8 @@
 				    <thead>
 				      <tr >
 				      	<th if={ opts.selection != false } style="width:40px;vertical-align: text-top" nowrap data-colkey="rowSelection">
-		      			    <input if={selection.length ==  data.data.length} type="checkbox" class="chk-col-{color}" id="basic_checkbox_{selection.length ==  data.data.length ? 'all' : ''}" checked="checked">
-		      			    <input if={selection.length !=  data.data.length} type="checkbox" class="chk-col-{color}" id="basic_checkbox_{selection.length !=  data.data.length ? 'all' : ''}" >
+		      			    <input if={selection.length ==  data.data.length} type="checkbox" class="filled-in chk-col-{color}" id="basic_checkbox_{selection.length ==  data.data.length ? 'all' : ''}" checked="checked">
+		      			    <input if={selection.length !=  data.data.length} type="checkbox" class="filled-in chk-col-{color}" id="basic_checkbox_{selection.length !=  data.data.length ? 'all' : ''}" >
 	                        <label onclick={ selectall }  data-value="{ selection.length ==  data.data.length ? 1 : 0 }" for="basic_checkbox_all" class="basic_checkbox_all"></label>
 						</th>
 				        <th each="{ colval, colkey in thead }" data-colkey="{colkey}" onclick={ sort }>
@@ -216,7 +216,7 @@
 				      	<tr each="{ row in data.data }" class="{ 'selected': selection.indexOf(row._id) != -1 }">
 					      	<td if={ selection !== false } class="a-center">
 					      		<div if="{selection.indexOf(row._id) > -1}">
-					      			<input  data-value="{ row._id }" type="checkbox" class="chk-col-{color}" id="basic_checkbox_on_{row._id}" checked="checked">
+					      			<input  data-value="{ row._id }" type="checkbox" class="filled-in chk-col-{color}" id="basic_checkbox_on_{row._id}" checked="checked">
 	                       			<label data-value="{ row._id }" onclick={ selectRow }  data-value="{ selection.length ==  data.data.length ? 1 : 0 }" for="basic_checkbox_on_{row._id}"></label>
 					      		</div>
 					      		<div if="{selection.indexOf(row._id) === -1}">
