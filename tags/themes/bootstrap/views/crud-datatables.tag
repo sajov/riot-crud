@@ -198,9 +198,9 @@
                         "orderable": false,
                         // "defaultContent": "<button>Click!</button>",
                         "render": function ( data, type, row ) {
-                            // return '<input type="checkbox" value="'+ row[opts.idField] + '"/>';
-                            return '<input type="checkbox" id="basic_checkbox_' + row[opts.idField] + '" value="'+ row[opts.idField] + '">' +
-                                    '<label  data-value="0" for="basic_checkbox_' + row[opts.idField] + '"></label>';
+                            // return '<input type="checkbox" value="'+ row[opts.idfield] + '"/>';
+                            return '<input type="checkbox" id="basic_checkbox_' + row[opts.idfield] + '" value="'+ row[opts.idfield] + '">' +
+                                    '<label  data-value="0" for="basic_checkbox_' + row[opts.idfield] + '"></label>';
                         }
                     }
                 )
@@ -225,10 +225,10 @@
                         "render": function ( data, type, row ) {
                             // return data +' ('+ row.sku+')';
                             return '<td>' +
-                                    '<a href="#/' + opts.service  + '/view/' + row[opts.idField] + '">' +
+                                    '<a href="#/' + opts.service  + '/view/' + row[opts.idfield] + '">' +
                                         '<i class="material-icons col-grey">pageview</i>' +
                                     '</a>' +
-                                    '<a onclick="RiotControl.trigger(\'' + viewModelKey + '\',\''+row[opts.idField]+'\')" >' +
+                                    '<a onclick="RiotControl.trigger(\'' + viewModelKey + '\',\''+row[opts.idfield]+'\')" >' +
                                         '<i class="material-icons col-grey">delete</i>' +
                                     '</a>' +
                                 '</td>';

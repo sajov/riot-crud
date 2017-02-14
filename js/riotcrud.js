@@ -202,10 +202,10 @@
 
     function riotCrudModel() {
         this.opts = {
-            idField:'_id',
-            showHeader: true,
-            showPagination: true,
-            changeLimit: true,
+            idfield:'_id',
+            showheader: true,
+            showpagination: true,
+            changelimit: true,
         };
     }
 
@@ -284,7 +284,8 @@
             self.client = feathers()
               .configure(feathers.hooks())
               .configure(feathers.socketio(self.socket));
-            if(typeof self.opts.service != 'undefined' && self.opts.view) {
+            if(typeof self.opts.service != 'undefined' && self.opts.view)
+            {
 
                 self.service = self.client.service(self.opts.service);
 
@@ -353,7 +354,6 @@
                         return false;
                     }
                     delete data.id || data._id;
-                    console.log('datadatadatadatadata',data)
                     self.service.create(data)
                                 .then(function(result){})
                                 .catch(function(error){
@@ -383,9 +383,10 @@
             } else {
                 console.warn('FeatherClientMixin no service');
             }
-
-
         }
+        initService: function() {},
+        initServiceTrigger: function() {}, // init service event trigger
+        destroyServiceTrigger: function() {}, // destroy service event trigger
     }
     if (!window.FeatherClientMixin) {
         window.FeatherClientMixin = FeatherClientMixin;
@@ -442,7 +443,6 @@
                   label: 'Upload'
                 }
             ];
-
 
             // this.on('*', (event) => {
             //     console.error('VIEWACTIONSMIXIN event: ', event)
@@ -521,6 +521,8 @@
                     case 'list':
                     case 'create':
                         route([service, action].join('/'))
+                        break;
+                    case 'upload':
                         break;
                     default:
                         console.error('unknown event: ' + [service, view, action].join('_'))

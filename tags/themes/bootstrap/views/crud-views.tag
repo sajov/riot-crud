@@ -292,7 +292,7 @@
 		self.query = {
 			$limit: opts.limit || 10,
             $skip: opts.skip || 0,
-            $sort: JSON.parse('{"' + (opts.sortfield || opts.idField) + '":' + (opts.sortdir || 1) + '}'),
+            $sort: JSON.parse('{"' + (opts.sortfield || opts.idfield) + '":' + (opts.sortdir || 1) + '}'),
 		};
 		self.data = {
 			'limit': opts.limit,

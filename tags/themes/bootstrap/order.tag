@@ -293,7 +293,7 @@
         changeQty (e) {
             e.preventDefault();
             for (var i = 0; i < opts.data.items.length; i++) {
-                if(opts.data.items[i][opts.idField] == e.item.item[opts.idField]) {
+                if(opts.data.items[i][opts.idfield] == e.item.item[opts.idfield]) {
                    opts.data.items[i].qty = $(e.target).val() * 1;
                    opts.data.items[i].total = opts.data.items[i].qty * opts.data.items[i].price_euro;
                 }
@@ -335,7 +335,7 @@
         deleteItem (e) {
             e.preventDefault();
             for (var i = 0; i < opts.data.items.length; i++) {
-                if(opts.data.items[i][opts.idField] == e.item.item[opts.idField]) {
+                if(opts.data.items[i][opts.idfield] == e.item.item[opts.idfield]) {
                    opts.data.items.splice(i, 1);
                 }
             }

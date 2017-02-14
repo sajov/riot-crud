@@ -32,7 +32,6 @@
         ];
 
         this.on('*', function(event) {
-            console.info('opts.showHeader', event, opts.showHeader || 'df')
         });
 
         this.on('before-mount', function() {
@@ -42,7 +41,6 @@
         });
 
         self.initPlugins = function() {
-            console.info(opts.showHeader)
             // Now with Real-Time Support!
             self.client.service('datauploads').on('created', function(file){
                 console.log('Received file created event!', file);
