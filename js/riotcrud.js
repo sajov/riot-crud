@@ -383,7 +383,7 @@
             } else {
                 console.warn('FeatherClientMixin no service');
             }
-        }
+        },
         initService: function() {},
         initServiceTrigger: function() {}, // init service event trigger
         destroyServiceTrigger: function() {}, // destroy service event trigger
