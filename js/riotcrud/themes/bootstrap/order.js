@@ -44,10 +44,6 @@ riot.tag2('order', '<modal-dialog trigger="order_add_item_modal" trigger-submit=
                 self.initOrder(opts.query.id);
         }
 
-        initPlugins = () => {
-
-        }
-
         self.initOrder = (orderId) => {
           self.service.get(orderId).then((result) => {
                 self.opts.data = result;
@@ -68,10 +64,15 @@ riot.tag2('order', '<modal-dialog trigger="order_add_item_modal" trigger-submit=
             self.update();
         }
 
+        self.getData = () => {
+            console.warn('schema lölkjkljljlkjkljljkl',opts.schema);
+            return opts.data;
+        }
+
         this.changeQty = function (e) {
             e.preventDefault();
             for (var i = 0; i < opts.data.items.length; i++) {
-                if(opts.data.items[i][opts.idField] == e.item.item[opts.idField]) {
+                if(opts.data.items[i][opts.idfield] == e.item.item[opts.idfield]) {
                    opts.data.items[i].qty = $(e.target).val() * 1;
                    opts.data.items[i].total = opts.data.items[i].qty * opts.data.items[i].price_euro;
                 }
@@ -113,21 +114,13 @@ riot.tag2('order', '<modal-dialog trigger="order_add_item_modal" trigger-submit=
         this.deleteItem = function (e) {
             e.preventDefault();
             for (var i = 0; i < opts.data.items.length; i++) {
-                if(opts.data.items[i][opts.idField] == e.item.item[opts.idField]) {
+                if(opts.data.items[i][opts.idfield] == e.item.item[opts.idfield]) {
                    opts.data.items.splice(i, 1);
                 }
             }
             self.calculate();
         }.bind(this)
 
-        self.getData = () => {
-            console.warn('schema lölkjkljljlkjkljljkl',opts.schema);
-            return opts.data;
-        }
-
-        this.confirm = function (e) {
-            alert('confirm')
-        }.bind(this)
 });
 
 

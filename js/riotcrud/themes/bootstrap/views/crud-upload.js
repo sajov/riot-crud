@@ -10,7 +10,6 @@ riot.tag2('crud-upload', '<link rel="stylesheet" href="/bower_components/dropzon
         ];
 
         this.on('*', function(event) {
-            console.info('opts.showHeader', event, opts.showHeader || 'df')
         });
 
         this.on('before-mount', function() {
@@ -20,7 +19,6 @@ riot.tag2('crud-upload', '<link rel="stylesheet" href="/bower_components/dropzon
         });
 
         self.initPlugins = function() {
-            console.info(opts.showHeader)
 
             self.client.service('datauploads').on('created', function(file){
                 console.log('Received file created event!', file);

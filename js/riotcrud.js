@@ -278,115 +278,111 @@
 
     var FeatherClientMixin = {
         observable: riot.observable(),
+        self: false,
         init: function(){
-            var self = this;
+
+            self = this;
+            var defaults = {
+                idfield: '_id'
+            };
+            Object.assign(self.opts, defaults);
+
             self.socket = io(self.opts.endpoint || 'http://' + window.location.hostname + ':3030');
+
             self.client = feathers()
               .configure(feathers.hooks())
               .configure(feathers.socketio(self.socket));
-            if(typeof self.opts.service != 'undefined' && self.opts.view)
-            {
 
-                self.service = self.client.service(self.opts.service);
-
-                var viewModelKey = [self.opts.service, self.opts.view].join('_');
-
-                self.eventKeyDelete = viewModelKey + '_delete';
-                self.eventKeyDeleteConfirmation = viewModelKey + '_delete_confirmation';
-                RiotControl.on(self.eventKeyDeleteConfirmation, (id) => {
-                    RiotControl.trigger('delete_confirmation_modal', self.opts.service, self.opts.view, id || self.opts.query.id || self.selection)
-                });
-
-                self.eventKeyDeleteConfirmed = viewModelKey + '_delete';
-                RiotControl.on(self.eventKeyDeleteConfirmed, (id) => {
-                    if(typeof id === "object") {
-                        var ids = id.map(function(_id){return _id.toString()});
-                        var query = {query:{ _id: { $in: ids}}};
-                        id  = null;
-                    }
-                    self.service.remove(id,query)
-                                .then(function(result){
-                                    console.info(
-                                        'result', result)
-                                    if(self.opts.view != 'list') {
-                                        route([self.opts.service, 'list'].join('/'))
-                                    } else {
-                                        self.refresh();
-                                    }
-                                })
-                                .catch(function(error){
-                                    console.error(error);
-                                    RiotControl.trigger(
-                                        'notification',
-                                        error.errorType + ' ' + self.eventKeyDeleteConfirmed,
-                                        'error',
-                                        error.message
-                                    );
-
-                                });
-                });
-
-
-                self.eventKeyEditSave = self.opts.service + '_save';
-                RiotControl.on(self.eventKeyEditSave, () => {
-                    var data = self.getData();
-                    if(data == false) {
-                        return false;
-                    }
-                    self.service.update(data[self.opts.idField],data)
-                                .then(function(result){})
-                                .catch(function(error){
-                                    RiotControl.trigger(
-                                        'notification',
-                                        error.errorType + ' ' + self.eventKeyEditSave,
-                                        'error',
-                                        error.message
-                                    );
-
-                                });
-
-                });
-
-                self.eventKeyCreateSave = self.opts.service + '_create';
-                RiotControl.on(self.eventKeyCreateSave, () => {
-                    var data = self.getData();
-                    if(data == false) {
-                        return false;
-                    }
-                    delete data.id || data._id;
-                    self.service.create(data)
-                                .then(function(result){})
-                                .catch(function(error){
-                                    RiotControl.trigger(
-                                        'notification',
-                                        error.errorType + ' ' + self.eventKeyCreateSave,
-                                        'error',
-                                        error.message
-                                    );
-
-                                });
-                });
-
-                self.on('ALL', function(event){
-                    console.log('FeatherClientMixin', event)
-                })
-
-                self.on('unmount', () => {
-                    RiotControl.off(self.eventKeyDelete);
-                    RiotControl.off(self.eventKeyDeleteConfirmed);
-                    RiotControl.off(self.eventKeyDeleteConfirmation);
-                    RiotControl.off(self.eventKeyEditSave);
-                    RiotControl.off(self.eventKeyCreateSave);
-                })
-
-                console.info('FeatherClientMixin service loaded ' + self.opts.service);
+            if(typeof self.opts.service != 'undefined' && self.opts.view) {
+                self.initService();
             } else {
-                console.warn('FeatherClientMixin no service');
             }
         },
-        initService: function() {},
-        initServiceTrigger: function() {}, // init service event trigger
-        destroyServiceTrigger: function() {}, // destroy service event trigger
+
+        initService: function() {
+
+            self.service = self.client.service(self.opts.service);
+            // TODO: tag-name or id
+            self.viewModelKey = [self.opts.service, self.opts.view].join('_');
+            self.events = {
+                eventDeleteConfirmation: self.viewModelKey + '_delete_confirmation',
+                eventDeleteConfirmed: self.viewModelKey + '_delete',
+                eventEditSave: self.opts.service + '_save',
+                eventCreateSave: self.opts.service + '_create'
+            }
+
+            self.on('*', function(event){
+                switch(event) {
+                    case 'before-mount':
+                    case 'unmont':
+                        self.serviceTrigger(event);
+                        break;
+                    default:
+                        break;
+
+                }
+            })
+        },
+
+        serviceTrigger: function(event) {
+            for (trigger in self.events) {
+                if(event == 'unmount') {
+                    RiotControl.off(trigger);
+                } else {
+                    RiotControl.on(self.events[trigger], self[trigger]);
+                }
+            }
+        }, // destroy service event trigger
+
+        eventDeleteConfirmation: function(id) {
+            RiotControl.trigger('delete_confirmation_modal', self.opts.service, self.opts.view, id || self.opts.query.id || self.selection)
+        },
+
+        eventDeleteConfirmed: function(id) {
+            if(typeof id === "object") {
+                var ids = id.map(function(_id){return _id.toString()});
+                var query = {query:{ _id: { $in: ids}}};
+                id  = null;
+            }
+            self.service
+                .remove(id,query)
+                .then(function(result){
+                    console.info(
+                        'result', result)
+                    if(self.opts.view != 'list') {
+                        route([self.opts.service, 'list'].join('/'))
+                    } else {
+                        self.refresh();
+                    }
+                })
+                .catch(function(error){
+                    console.error(error);
+                    RiotControl.trigger('notification', error.errorType + ' ' + self.eventKeyDeleteConfirmed, 'error', error.message);
+                });
+        },
+
+        eventEditSave: function() {
+            var data = self.getData();
+            if(data == false) return false;
+            self.service
+                .update(data[self.opts.idfield],data)
+                .then(function(result){})
+                .catch(function(error){
+                    RiotControl.trigger('notification', error.errorType + ' ' + self.eventKeyEditSave, 'error', error.message);
+                });
+        },
+
+        eventCreateSave: function() {
+            var data = self.getData();
+            if(data == false) return false;
+            delete data.id || data._id;
+            self.service
+                .create(data)
+                .then(function(result){})
+                .catch(function(error){
+                    RiotControl.trigger('notification', error.errorType + ' ' + self.eventKeyCreateSave, 'error', error.message);
+                });
+        }
     }
     if (!window.FeatherClientMixin) {
         window.FeatherClientMixin = FeatherClientMixin;
@@ -491,9 +487,7 @@
 
                     return action;
                 });
-
             })
-
 
             self.click = (e) => {
                 e.preventDefault();

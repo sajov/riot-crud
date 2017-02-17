@@ -224,7 +224,7 @@
                     riot.mount('#jsoneditor-container','crud-jsoneditor',
                          {
                             model: 'categories',
-                            idField: '_id',
+                            idfield: '_id',
                             service: 'categories',
                             title: 'Categories',
                             description: 'inline category view with jsoneditor',
@@ -254,7 +254,7 @@
                         riot.mount('#json-forms-container','crud-json-forms',
                          {
                             model: 'products',
-                            idField: '_id',
+                            idfield: '_id',
                             service: 'products',
                             title: 'Products',
                             description: 'inline products view with brutusin:json-forms',

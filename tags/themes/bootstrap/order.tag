@@ -265,11 +265,6 @@
                 self.initOrder(opts.query.id);
         }
 
-        initPlugins = () => {
-
-
-        }
-
         self.initOrder = (orderId) => {
           self.service.get(orderId).then((result) => {
                 self.opts.data = result;
@@ -288,6 +283,11 @@
             self.opts.data.subtotal = subtotal - opts.data.discount;
             self.opts.data.total = (self.opts.data.subtotal + self.opts.data.tax + self.opts.data.shipping)
             self.update();
+        }
+
+        self.getData = () => {
+            console.warn('schema lölkjkljljlkjkljljkl',opts.schema);
+            return opts.data;
         }
 
         changeQty (e) {
@@ -342,14 +342,8 @@
             self.calculate();
         }
 
-        self.getData = () => {
-            console.warn('schema lölkjkljljlkjkljljkl',opts.schema);
-            return opts.data;
-        }
 
-        confirm (e) {
-            alert('confirm')
-        }
+
     </script>
 </order>
 
