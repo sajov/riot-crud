@@ -32,21 +32,10 @@
             self.get(self.opts.query.id);
         },
 
-        self.on('before-mount', function(params, options) {
-            RiotCrudController.loadDependencies(self.dependencies,'crud-json-editor', function (argument) {
-
-                 self.service.get('schema').then((result) => {
-                    delete result.properties.id || result.properties._id;
-                        opts.schema = result;
-                        opts.tableHeader = opts.schema.defaultProperties || opts.schema.required || opts.schema.properties;
-                        self.initJSONEditor();
-                        self.get(self.opts.query.id)
-                        // self.initTable();
-                    }).catch((error) => {
-                        console.error('console.errorconsole.errorconsole.errorconsole.error')
-                    });
-            });
-        });
+        self.initView = () => {
+            self.initJSONEditor();
+            self.get(self.opts.query.id)
+        }
 
 
         this.on('mount', function() {

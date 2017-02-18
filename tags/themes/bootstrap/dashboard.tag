@@ -294,7 +294,7 @@
                 .find({query:{$sort:{orderId:-1},$limit:1}})
                 .then((result) => {
                         var order = result.data[0];
-                        order._id = (result.total + 100).toString();
+                        order._id = (parseInt(order._id) + 100).toString();
                         order.orderId = order.orderId + 1;
                         order.createdAt = new Date();
                         order.total = (Math.random() * (137.50 - 19.5) + 0.0200).toFixed(2);

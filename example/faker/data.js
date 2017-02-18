@@ -47,7 +47,7 @@ exports.category = function(app, count) {
         ],
         images: [
           {
-            href: 'https://www.medic-world.com/skin/frontend/ultimo/mw/images/flags/mwd.png',
+            href: faker.image.fashion(),
             // href: faker.image.fashion(),
             title: faker.random.words(),
             description: faker.random.words(),

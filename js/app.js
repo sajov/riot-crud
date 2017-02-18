@@ -318,7 +318,7 @@ $script.ready(theme, function() {
             },
             create: {
                 tag: 'crud-json-editor',
-                title: 'Edit Products (json-editor demo)',
+                title: 'Edit Categories (json-editor demo)',
                 target: 'div#content',
                 dependencies: [
                     riotCrudTheme + '/views/crud-json-editor.js'
@@ -326,7 +326,7 @@ $script.ready(theme, function() {
             },
             edit: {
                 tag: 'crud-json-editor',
-                title: 'Edit Products (json-editor demo)',
+                title: 'Edit Categories (json-editor demo)',
                 target: 'div#content',
                 dependencies: [
                     riotCrudTheme + '/views/crud-json-editor.js'
