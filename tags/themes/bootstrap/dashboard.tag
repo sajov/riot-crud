@@ -164,7 +164,7 @@
                 service="orders"
                 showheader="true"
                 limit="4"
-                fields="orderId,total,name,createdAt"
+                fields="_id,orderId,total,name,createdAt"
                 sortfield="orderId"
                 sortdir="-1"
                 showpagination="1"
@@ -298,7 +298,7 @@
                         order.orderId = order.orderId + 1;
                         order.createdAt = new Date();
                         order.total = (Math.random() * (137.50 - 19.5) + 0.0200).toFixed(2);
-                        console.info('dashboard order.orderId',order,order.orderId);
+                        if(self.debug) console.info('dashboard order.orderId',order,order.orderId);
                         self.client.service('orders')
                             .create(order)
                             .then((result) => {

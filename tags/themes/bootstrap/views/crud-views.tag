@@ -329,7 +329,7 @@
 	    }
 
 	    self.on('*', (event) => {
-			console.info('TABLE event', event,self.selection);
+			if(self.debug) console.info('TABLE event', event,self.selection);
 		});
 
 		self.on('mount', () => {

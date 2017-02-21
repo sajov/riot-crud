@@ -1,13 +1,14 @@
 
 
-riot.tag2('crud-json-editor', '<link rel="stylesheet" href="http://cdn.jsdelivr.net/select2/3.4.8/select2.css"> <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css"> <div class="card"> <div class="header"> <h2>{opts.title}<small>{opts.description}</small></h2> <crud-header-dropdown if="{opts.actionMenu !== false}" service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown> </div> <div class="body"> <div id="jsoneditor"></div> </div> </div>', '', '', function(opts) {
+riot.tag2('crud-json-editor', '<link rel="stylesheet" href="http://cdn.jsdelivr.net/select2/3.4.8/select2.css"> <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css"> <div class="card"> <div class="header"> <h2>{opts.title}<small>{opts.description}???</small></h2> <crud-header-dropdown if="{opts.actionMenu !== false}" service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown> </div> <div class="body"> <div id="jsoneditor"></div> </div> </div>', '', '', function(opts) {
         var self = this;
-        self.mixin(FeatherClientMixin);
-
+        self.debug = true;
         self.dependencies = [
                 '/bower_components/json-editor/dist/jsoneditor.min.js',
                 'http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js'
         ];
+
+        self.mixin(FeatherClientMixin);
 
         this.refresh = (opts) => {
             self.opts = opts;
@@ -16,11 +17,19 @@ riot.tag2('crud-json-editor', '<link rel="stylesheet" href="http://cdn.jsdelivr.
         },
 
         self.initView = () => {
+
             self.initJSONEditor();
-            self.get(self.opts.query.id)
+            self.editor.setValue(self.data);
+
         }
 
+        this.on('update', function() {
+            self.initJSONEditor();
+            self.editor.setValue(self.data);
+        });
         this.on('mount', function() {
+            console.warn('??? mount', Object.keys(self),self.getOpts())
+
         });
 
         self.get = function(id) {
@@ -61,12 +70,10 @@ riot.tag2('crud-json-editor', '<link rel="stylesheet" href="http://cdn.jsdelivr.
 
             self.editor = new JSONEditor(document.getElementById('jsoneditor'),
                 {
-                    schema: 'http://localhost:3030/schema/product_faker.json',
-                    ajax:true,
+
                     schema: self.opts.schema,
                     theme:'bootstrap3',
-                    object_layout: 'grid',
-                    grid_columns: 10,
+
                     expand_height: true,
                     disable_edit_json: true,
                     disable_collapse: true,

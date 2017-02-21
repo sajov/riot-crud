@@ -62,7 +62,7 @@
 
             self.opts.data = data;
 
-            console.log(self.opts.schema)
+            console.log(self.opts.service, self.opts.schema)
 
             var schema = new Object({
                               "$schema": "http://json-schema.org/draft-04/schema#",

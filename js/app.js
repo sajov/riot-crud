@@ -225,7 +225,6 @@ $script.ready(theme, function() {
         },
         {
             list: {
-
                 description: '#/products/list',
                 selection: true,
                 filterable: true,
@@ -252,6 +251,7 @@ $script.ready(theme, function() {
             view:{
                 tag: 'crud-json-editor',
                 title: 'Product Demo',
+                description: 'json-editor view demo',
                 schema: 'http://' + window.location.hostname + ':3030/schema/product.json',
                 target: 'div#content',
                 dependencies: [
