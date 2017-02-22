@@ -276,8 +276,8 @@
         window.RiotControl = RiotControl;
     }
 
-    var FeatherClientMixin = {
-        self: false,
+    var FeatherClientMixinNEW = {
+        test: [],
         init: function(){
             self = this;
             var defaults = {
@@ -285,52 +285,63 @@
                 dependencies: []
             };
 
-            Object.assign(self.opts, defaults);
+            Object.assign(this.opts, defaults);
 
-            self.socket = io(self.opts.endpoint || 'http://' + window.location.hostname + ':3030');
-            self.client = feathers()
+            this.socket = io(this.opts.endpoint || 'http://' + window.location.hostname + ':3030');
+            this.client = feathers()
               .configure(feathers.hooks())
-              .configure(feathers.socketio(self.socket));
+              .configure(feathers.socketio(this.socket));
 
             /* init feathers service */
-            if(typeof self.opts.service != 'undefined' && self.opts.view) {
+            if(typeof this.opts.service != 'undefined' && this.opts.view) {
 
-                self.service = self.client.service(self.opts.service);
+                this.service = this.client.service(this.opts.service);
 
-                var viewModelKey = [self.opts.service, self.opts.view].join('_');
-                self.events = {
+                var viewModelKey = [this.opts.service, this.opts.view].join('_');
+                this.events = {
                     actionDeleteConfirmation: viewModelKey + '_delete_confirmation',
                     actionDeleteConfirmed: viewModelKey + '_delete',
-                    actionEditSave: self.opts.service + '_save',
-                    actionCreateSave: self.opts.service + '_create'
+                    actionEditSave: this.opts.service + '_save',
+                    actionCreateSave: this.opts.service + '_create'
+                }
+
+                var events = Object.keys(this.events);
+                for (var i = 0; i < events.length; i++) {
+                    if(event == 'unmount') {
+                        RiotControl.off(this.events[events[i]]);
+                    } else {
+                        if(this.debug || 1==1) console.info(this.events[events[i]], events[i]);
+                        RiotControl.on(this.events[events[i]], this[events[i]]);
+                    }
                 }
 
                 /*  events */
-                self.on('*', (event) => {
+                this.on('*', (event) => {
 
                     switch(event) {
                         case 'mount':
-                            self.loadDependencies();
+                            this.loadDependencies();
                             break;
                         case 'before-mount':
                         case 'unmount':
-                            var events = Object.keys(self.events);
-                            for (var i = 0; i < events.length; i++) {
-                                if(event == 'unmount') {
-                                    RiotControl.off(self.events[events[i]]);
-                                } else {
-                                    if(self.debug) console.info(self.events[events[i]], events[i]);
-                                    RiotControl.on(self.events[events[i]], self[events[i]]);
-                                }
-                            }
+                            // var events = Object.keys(this.events);
+                            // for (var i = 0; i < events.length; i++) {
+                            //     if(event == 'unmount') {
+                            //         RiotControl.off(this.events[events[i]]);
+                            //     } else {
+                            //         if(this.debug || 1==1) console.info(this.events[events[i]], events[i]);
+                            //         RiotControl.on(this.events[events[i]], this[events[i]]);
+                            //     }
+                            // }
                             break;
                         default:
+                            console.info('FeatherClientMixin event:' + event, this.opts.title,this.test)
                             break;
                     }
                 })
 
             } else {
-                if(self.debug) console.warn('FeatherClientMixin no service', self.root.tagName);
+                if(this.debug) console.warn('FeatherClientMixin no service', this.root.tagName);
             }
 
         },
@@ -363,6 +374,7 @@
         },
 
         actionEditSave: () => {
+            console.error(Object.keys(self),self.opts.service);
             var data = self.getData();
             if(data == false) return false;
 
@@ -438,28 +450,144 @@
                     break;
             }
         },
+    }
+
+    var FeatherClientMixin = {
+        observable: riot.observable(),
+        init: function(){
+            var self = this;
+            self.socket = io(self.opts.endpoint || 'http://' + window.location.hostname + ':3030');
+            self.client = feathers()
+              .configure(feathers.hooks())
+              .configure(feathers.socketio(self.socket));
+            if(typeof self.opts.service != 'undefined' && self.opts.view)
+            {
+
+                self.service = self.client.service(self.opts.service);
+
+                var viewModelKey = [self.opts.service, self.opts.view].join('_');
+
+                self.eventKeyDelete = viewModelKey + '_delete';
+                self.eventKeyDeleteConfirmation = viewModelKey + '_delete_confirmation';
+                RiotControl.on(self.eventKeyDeleteConfirmation, (id) => {
+                    RiotControl.trigger('delete_confirmation_modal', self.opts.service, self.opts.view, id || self.opts.query.id || self.selection)
+                });
+
+                self.eventKeyDeleteConfirmed = viewModelKey + '_delete';
+                RiotControl.on(self.eventKeyDeleteConfirmed, (id) => {
+                    if(typeof id === "object") {
+                        var ids = id.map(function(_id){return _id.toString()});
+                        var query = {query:{ _id: { $in: ids}}};
+                        id  = null;
+                    }
+                    self.service.remove(id,query)
+                                .then(function(result){
+                                    console.info(
+                                        'result', result)
+                                    if(self.opts.view != 'list') {
+                                        route([self.opts.service, 'list'].join('/'))
+                                    } else {
+                                        self.refresh();
+                                    }
+                                })
+                                .catch(function(error){
+                                    console.error(error);
+                                    RiotControl.trigger('notification',error.errorType + ' ' + self.eventKeyDeleteConfirmed,'error',error.message);
+                                });
+                });
 
 
-        reinitView: (query) => {
+                self.eventKeyEditSave = self.opts.service + '_save';
+                RiotControl.on(self.eventKeyEditSave, () => {
+                    var data = self.getData();
+                    if(data == false) {
+                        return false;
+                    }
 
+                    self.service.update(data[self.opts.idfield],data)
+                                .then(function(result){alert(self.opts.title)})
+                                .catch(function(error){
+                                    RiotControl.trigger('notification',error.errorType + ' ' + self.eventKeyEditSave,'error',error.message);
+                                });
+
+                });
+
+                self.eventKeyCreateSave = self.opts.service + '_create';
+                RiotControl.on(self.eventKeyCreateSave, () => {
+                    var data = self.getData();
+                    if(data == false) {
+                        return false;
+                    }
+                    delete data.id || data._id;
+                    self.service.create(data)
+                                .then(function(result){})
+                                .catch(function(error){
+                                    RiotControl.trigger('notification',error.errorType + ' ' + self.eventKeyCreateSave,'error',error.message);
+                                });
+                });
+
+                self.on('ALL', function(event){
+                    // console.log('FeatherClientMixin', event)
+                })
+
+                self.on('unmount', () => {
+                    RiotControl.off(self.eventKeyDelete);
+                    RiotControl.off(self.eventKeyDeleteConfirmed);
+                    RiotControl.off(self.eventKeyDeleteConfirmation);
+                    RiotControl.off(self.eventKeyEditSave);
+                    RiotControl.off(self.eventKeyCreateSave);
+                })
+
+                console.info('FeatherClientMixin service loaded ' + self.opts.service);
+            } else {
+                console.warn('FeatherClientMixin no service');
+            }
         },
-
-        getOpts: function() {
-            return this.opts
+        loadDependencies: (cb) => {
+            if(self.dependencies && self.dependencies.length == 0) {
+                self.loadSchema(cb);
+            } else {
+                if(self.debug) console.info('loadDependencies: ' + self.opts.service,self.dependencies);
+                RiotCrudController.loadDependencies(
+                    self.dependencies,
+                    'crud-json-editor', // TODO dynamic name
+                    self.loadSchema
+                );
+            }
         },
-
-        setOpts: function(opts, update) {
-            this.opts = opts
-            if (!update) this.update()
-            return this
-        }
-
+        initService: function() {},
+        initServiceTrigger: function() {}, // init service event trigger
+        destroyServiceTrigger: function() {}, // destroy service event trigger
     }
 
     if (!window.FeatherClientMixin) {
         window.FeatherClientMixin = FeatherClientMixin;
     }
     // riot.mixin("FeatherClientMixin", FeatherClientMixin);
+
+        var OptsMixin = {
+      // init method is a special one which can initialize
+      // the mixin when it's loaded to the tag and is not
+      // accessible from the tag its mixed in
+      init: function() {
+        if(!this.mytest)
+            this.mytest = this.opts.title;
+        console.error('optsMixin ',this.mytest);
+        this.on('*', function(event) { console.log(this.opts.title + ' ??? ' +event) })
+      },
+
+      getOpts: function() {
+        return this.opts
+      },
+
+      setOpts: function(opts, update) {
+        this.opts = opts
+        if (!update) this.update()
+        return this
+      }
+    }
+
+    window.optsMixin = OptsMixin;
 
 
     var viewActionsMixin = {

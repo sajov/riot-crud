@@ -64,6 +64,7 @@ $script.ready(theme, function() {
             menuGroup: 'views',
             icon: 'attach_money',
             route: 'orders/view/10',
+            service: 'orders',
             servicename: 'orders',
             endpoint: 'http://' + window.location.hostname + ':3030',
             dependencies: [riotCrudTheme + '/order.js'],

@@ -41,6 +41,16 @@ Each view
 | icon           | string  | all   |           |             |
 | buttons        | array   | all   |           |             |
 | selection      | boolean | list  |           |             |
+| ref            | string  | list  |           |             |
+| limit          | integer | list  |           |             |
+| skip           | integer | list  |           |             |
+| fields         | string  | list  |           |             |
+| sortfield      | string  | list  |           |             |
+| sortdir        | string  | list  |           |             |
+| showheader     | boolean | list  |           |             |
+| showpagination | boolean | list  |           |             |
+| changelimit    | boolean | list  |           | deprecated  |
+| showlimit      | boolean | list  |           |             |
 | filterable     | boolean | list  |           |             |
 | columns        | object  | list  |           |             |
 | fn             | function| all   |           |             |

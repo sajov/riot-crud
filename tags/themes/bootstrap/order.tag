@@ -36,7 +36,7 @@
             <h4 class="modal-title" id="myModalLabel2">Add Product</h4>
         </div>
         <div class="modal-body">
-            <crud-table service="products" limit="3" skip="0" ups={table:'test'}>
+            <crud-table title="crud-table" service="products" limit="3" skip="0" ups={table:'test'}>
                     <yield class="pull-right">
                         <button type="button" class="btn btn-success waves-effect" onclick={triggerData} data-trigger="product_add_items">Add</button>
                         <button type="button" class="btn btn-default waves-effect" data-dismiss="modal"  onclick={abort}>Abbort</button>
@@ -233,12 +233,13 @@
 
     <script>
         var self = this;
-        self.mixin(FeatherClientMixin);
-
+        self.debug = true;
         self.dependencies = [
             '/bower_components/gentelella/vendors/iCheck/icheck.min.js',
             '/bower_components/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.min.js'
         ];
+
+        self.mixin(FeatherClientMixin);
 
         RiotControl.on('product_add_items', (items) => {
             if(items)
@@ -246,11 +247,11 @@
         });
 
         self.on('mount', () => {
-            RiotCrudController.loadDependencies(self.dependencies,'custom-order', function (argument) {
-                console.info('order mount',self.opts.schema);
+            // RiotCrudController.loadDependencies(self.dependencies,'custom-order', function (argument) {
+            //     console.info('order mount',self.opts.schema);
                 if(self.opts.query.id)
                     self.initOrder(self.opts.query.id);
-            });
+            // });
 
 
         });

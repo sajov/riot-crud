@@ -311,7 +311,12 @@
         });
 
 
-		this.mixin(FeatherClientMixin);
+		self.mixin(FeatherClientMixin);
+		self.mixin(optsMixin);
+
+
+
+
 	    /* deprecated use reInit */
 	    self.refresh = () => {
 	    	getData();

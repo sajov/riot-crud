@@ -77,7 +77,8 @@ riot.tag2('crud-table', '<div class="card"> <div if="{opts.showheader}" class="h
             self.update();
         });
 
-		this.mixin(FeatherClientMixin);
+		self.mixin(FeatherClientMixin);
+		self.mixin(optsMixin);
 
 	    self.refresh = () => {
 	    	getData();
