@@ -21,17 +21,66 @@
     <!-- /riot-crud -->
     <script type="text/javascript">
         ;(function(window, riot) {
+
+             window.RiotControl = {
+                _stores: [],
+                addStore: function(store) {
+                    this._stores.push(store);
+                },
+                reset: function() {
+                    this._stores = [];
+                }
+            };
+
+            ['on','one','off','trigger'].forEach(function(api){
+                RiotControl[api] = function() {
+                    var args = [].slice.call(arguments);
+                    this._stores.forEach(function(el){
+                        el[api].apply(el, args);
+                    });
+                };
+            });
+
+            if (typeof(module) !== 'undefined') module.exports = RiotControl;
+
+            function ModelStore() {
+                if (!(this instanceof ModelStore)) return new ModelStore()
+
+                riot.observable(this)
+
+                var self = this;
+
+            }
+
+            RiotControl.addStore(new ModelStore());
+
+            if (!window.RiotControl) {
+                window.RiotControl = RiotControl;
+            }
+
+
             var OptsMixin = {
               init: function() {
-                console.info('INIT',this.opts.mytitle);
                 this.opts.log = [];
                 this.on('updated', function() { console.log('Updated!') })
+                this.on('mount', function(){
+                    var self = this;
+                    console.info('INIT->mounted',this.opts.mytitle);
+                    RiotControl.on(this.opts.mytitle, function(){
+                        self.dump(self.opts.mytitle);
+                    })
+                })
               },
 
               clickTest: function(e) {
                 e.preventDefault();
                 this.opts.log.push(this.opts.mytitle);
-                console.info(this.opts)
+                console.info(this.opts);
+                RiotControl.trigger(this.opts.mytitle,this.opts.mytitle);
+              },
+
+              dump: function(t) {
+                console.info('DUMP',t,this.opts)
               },
 
               getOpts: function() {
@@ -49,6 +98,7 @@
             riot.mixin('OptsMixin',OptsMixin);
             riot.mount('my-custom-tag');
         }(window, riot));
+
 
     </script>
 </body>
