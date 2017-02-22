@@ -482,8 +482,7 @@
                     }
                     self.service.remove(id,query)
                                 .then(function(result){
-                                    console.info(
-                                        'result', result)
+                                    console.info('result', result)
                                     if(self.opts.view != 'list') {
                                         route([self.opts.service, 'list'].join('/'))
                                     } else {
@@ -505,7 +504,7 @@
                     }
 
                     self.service.update(data[self.opts.idfield],data)
-                                .then(function(result){alert(self.opts.title)})
+                                .then(function(result){})
                                 .catch(function(error){
                                     RiotControl.trigger('notification',error.errorType + ' ' + self.eventKeyEditSave,'error',error.message);
                                 });
@@ -538,6 +537,31 @@
                     RiotControl.off(self.eventKeyCreateSave);
                 })
 
+                // /*  events */
+                // self.on('*', (event) => {
+
+                //     switch(event) {
+                //         case 'mount':
+                //             this.loadDependencies();
+                //             break;
+                //         case 'before-mount':
+                //         case 'unmount':
+                //             // var events = Object.keys(this.events);
+                //             // for (var i = 0; i < events.length; i++) {
+                //             //     if(event == 'unmount') {
+                //             //         RiotControl.off(this.events[events[i]]);
+                //             //     } else {
+                //             //         if(this.debug || 1==1) console.info(this.events[events[i]], events[i]);
+                //             //         RiotControl.on(this.events[events[i]], this[events[i]]);
+                //             //     }
+                //             // }
+                //             break;
+                //         default:
+                //             console.info('FeatherClientMixin event:' + event, this.opts.title,this.test)
+                //             break;
+                //     }
+                // })
+
                 console.info('FeatherClientMixin service loaded ' + self.opts.service);
             } else {
                 console.warn('FeatherClientMixin no service');
@@ -553,6 +577,45 @@
                     'crud-json-editor', // TODO dynamic name
                     self.loadSchema
                 );
+            }
+        },
+        loadSchema: (cb) => {
+            alert('loadSchema')
+            if(self.opts.schema === true) {
+                self.service.get('schema').then((result) => {
+                    self.opts.schema = result;
+                    self.loadData();
+                }).catch((error) => {
+                    console.error('loadSchema', error);
+                });
+            } else {
+                self.loadData();
+            }
+        },
+
+        loadData: (query) => {
+
+            switch(self.opts.view) {
+                case 'view':
+                case 'edit':
+                    if(typeof self.opts.query.id != 'undefined')
+                    self.service.get(self.opts.query.id).then(function(result){
+                        self.data = result;
+                        self.update();
+                    }).catch(function(error){
+                      console.error('loadData', error);
+                    });
+                    break;
+                case 'list':
+                    self.service.find(self.opts.query).then(function(result){
+                        self.data = result;
+                        self.update();
+                    }).catch(function(error){
+                      console.error('loadData', error);
+                    });
+                    break;
+                default:
+                    break;
             }
         },
         initService: function() {},

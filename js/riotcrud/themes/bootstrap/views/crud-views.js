@@ -89,10 +89,6 @@ riot.tag2('crud-table', '<div class="card"> <div if="{opts.showheader}" class="h
 	    	getData();
 	    }
 
-	    self.on('*', (event) => {
-			if(self.debug) console.info('TABLE event', event,self.selection);
-		});
-
 		self.on('mount', () => {
 			if(self.opts.service) {
 				initTable();
