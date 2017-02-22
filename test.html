@@ -20,32 +20,35 @@
     <script src="/js/riotcrud/themes/bootstrap/test.js"></script>
     <!-- /riot-crud -->
     <script type="text/javascript">
+        ;(function(window, riot) {
+            var OptsMixin = {
+              init: function() {
+                console.info('INIT',this.opts.mytitle);
+                this.opts.log = [];
+                this.on('updated', function() { console.log('Updated!') })
+              },
 
-        var OptsMixin = {
-          init: function() {
-            console.info('INIT',this.opts.mytitle);
-            this.on('updated', function() { console.log('Updated!') })
-          },
+              clickTest: function(e) {
+                e.preventDefault();
+                this.opts.log.push(this.opts.mytitle);
+                console.info(this.opts)
+              },
 
-          clickTest: function(e) {
-            e.preventDefault();
-            console.info(this.opts)
-          },
+              getOpts: function() {
+                console.info('getOpts',this.opts.mytitle);
+                return this.opts
+              },
 
-          getOpts: function() {
-            console.info('getOpts',this.opts.mytitle);
-            return this.opts
-          },
-
-          setOpts: function(opts, update) {
-            console.info('setOpts',this.opts.mytitle);
-            this.opts = opts
-            if (!update) this.update()
-            return this
-          }
-        }
-        riot.mixin('OptsMixin',OptsMixin);
-        riot.mount('my-custom-tag');
+              setOpts: function(opts, update) {
+                console.info('setOpts',this.opts.mytitle);
+                this.opts = opts
+                if (!update) this.update()
+                return this
+              }
+            }
+            riot.mixin('OptsMixin',OptsMixin);
+            riot.mount('my-custom-tag');
+        }(window, riot));
 
     </script>
 </body>
