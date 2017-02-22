@@ -33,7 +33,7 @@
     </style>
     <script>
         var self = this;
-        self.mixin(FeatherClientMixin);
+        self.mixin('FeatherClientMixin');
 
         self.dependencies = [
                 '/bower_components/jsoneditor/dist/jsoneditor.min.js'

@@ -243,43 +243,44 @@
 (function(window, riot, route) {
 
     window.RiotControl = {
-      _stores: [],
-      addStore: function(store) {
-        this._stores.push(store);
-      },
-      reset: function() {
-        this._stores = [];
-      }
+        _stores: [],
+        addStore: function(store) {
+            this._stores.push(store);
+        },
+        reset: function() {
+            this._stores = [];
+        }
     };
 
     ['on','one','off','trigger'].forEach(function(api){
-      RiotControl[api] = function() {
-        var args = [].slice.call(arguments);
-        this._stores.forEach(function(el){
-          el[api].apply(el, args);
-        });
-      };
+        RiotControl[api] = function() {
+            var args = [].slice.call(arguments);
+            this._stores.forEach(function(el){
+                el[api].apply(el, args);
+            });
+        };
     });
 
     if (typeof(module) !== 'undefined') module.exports = RiotControl;
 
     function ModelStore() {
-      if (!(this instanceof ModelStore)) return new ModelStore()
+        if (!(this instanceof ModelStore)) return new ModelStore()
 
-      riot.observable(this)
+        riot.observable(this)
 
-      var self = this;
+        var self = this;
 
     }
+
     RiotControl.addStore(new ModelStore());
+
     if (!window.RiotControl) {
         window.RiotControl = RiotControl;
     }
 
-    var FeatherClientMixinNEW = {
-        test: [],
+    var FeatherClientMixin = {
         init: function(){
-            self = this;
+            // self = this;
             var defaults = {
                 idfield: '_id',
                 dependencies: []
@@ -305,37 +306,29 @@
                     actionCreateSave: this.opts.service + '_create'
                 }
 
-                var events = Object.keys(this.events);
-                for (var i = 0; i < events.length; i++) {
-                    if(event == 'unmount') {
-                        RiotControl.off(this.events[events[i]]);
-                    } else {
-                        if(this.debug || 1==1) console.info(this.events[events[i]], events[i]);
-                        RiotControl.on(this.events[events[i]], this[events[i]]);
-                    }
-                }
-
                 /*  events */
                 this.on('*', (event) => {
 
                     switch(event) {
                         case 'mount':
-                            this.loadDependencies();
                             break;
                         case 'before-mount':
                         case 'unmount':
-                            // var events = Object.keys(this.events);
-                            // for (var i = 0; i < events.length; i++) {
-                            //     if(event == 'unmount') {
-                            //         RiotControl.off(this.events[events[i]]);
-                            //     } else {
-                            //         if(this.debug || 1==1) console.info(this.events[events[i]], events[i]);
-                            //         RiotControl.on(this.events[events[i]], this[events[i]]);
-                            //     }
-                            // }
+                            if(event == 'before-mount') {
+                                this.loadDependencies();
+                            }
+                            var events = Object.keys(this.events);
+                            for (var i = 0; i < events.length; i++) {
+                                if(event == 'unmount') {
+                                    RiotControl.off(this.events[events[i]]);
+                                } else {
+                                    if(this.debug || 1==1) console.info(this.events[events[i]], events[i]);
+                                    RiotControl.on(this.events[events[i]], self[events[i]]);
+                                }
+                            }
                             break;
                         default:
-                            console.info('FeatherClientMixin event:' + event, this.opts.title,this.test)
+                            console.info('FeatherClientMixin event:' + event, this.opts.title)
                             break;
                     }
                 })
@@ -347,6 +340,7 @@
         },
 
         actionDeleteConfirmation: (id) => {
+            alert(self.opts.service)
             RiotControl.trigger('delete_confirmation_modal', self.opts.service, self.opts.view, id || self.opts.query.id || self.selection)
         },
 
@@ -374,13 +368,13 @@
         },
 
         actionEditSave: () => {
-            console.error(Object.keys(self),self.opts.service);
+            console.error(self.opts.service);
             var data = self.getData();
             if(data == false) return false;
 
             self.service
                 .update(data[self.opts.idfield],data)
-                .then(function(result){console.warn('save'+self.opts.service,result)})
+                .then(function(result){})
                 .catch(function(error){
                     RiotControl.trigger('notification',error.errorType + ' ' + self.events.actionEditSave,'error',error.message);
                 });
@@ -403,7 +397,6 @@
             if(self.dependencies && self.dependencies.length == 0) {
                 self.loadSchema(cb);
             } else {
-                if(self.debug) console.info('loadDependencies: ' + self.opts.service,self.dependencies);
                 RiotCrudController.loadDependencies(
                     self.dependencies,
                     'crud-json-editor', // TODO dynamic name
@@ -433,7 +426,11 @@
                     if(typeof self.opts.query.id != 'undefined')
                     self.service.get(self.opts.query.id).then(function(result){
                         self.data = result;
-                        self.update();
+                        if(typeof self.initView == 'undefined') {
+                            self.update();
+                        } else {
+                            self.initView();
+                        }
                     }).catch(function(error){
                       console.error('loadData', error);
                     });
@@ -441,7 +438,11 @@
                 case 'list':
                     self.service.find(self.opts.query).then(function(result){
                         self.data = result;
-                        self.update();
+                        if(typeof self.initView == 'undefined') {
+                            self.update();
+                        } else {
+                            self.initView();
+                        }
                     }).catch(function(error){
                       console.error('loadData', error);
                     });
@@ -449,215 +450,14 @@
                 default:
                     break;
             }
+
         },
     }
 
-    var FeatherClientMixin = {
-        observable: riot.observable(),
-        init: function(){
-            var self = this;
-            self.socket = io(self.opts.endpoint || 'http://' + window.location.hostname + ':3030');
-            self.client = feathers()
-              .configure(feathers.hooks())
-              .configure(feathers.socketio(self.socket));
-            if(typeof self.opts.service != 'undefined' && self.opts.view)
-            {
-
-                self.service = self.client.service(self.opts.service);
-
-                var viewModelKey = [self.opts.service, self.opts.view].join('_');
-
-                self.eventKeyDelete = viewModelKey + '_delete';
-                self.eventKeyDeleteConfirmation = viewModelKey + '_delete_confirmation';
-                RiotControl.on(self.eventKeyDeleteConfirmation, (id) => {
-                    RiotControl.trigger('delete_confirmation_modal', self.opts.service, self.opts.view, id || self.opts.query.id || self.selection)
-                });
-
-                self.eventKeyDeleteConfirmed = viewModelKey + '_delete';
-                RiotControl.on(self.eventKeyDeleteConfirmed, (id) => {
-                    if(typeof id === "object") {
-                        var ids = id.map(function(_id){return _id.toString()});
-                        var query = {query:{ _id: { $in: ids}}};
-                        id  = null;
-                    }
-                    self.service.remove(id,query)
-                                .then(function(result){
-                                    console.info('result', result)
-                                    if(self.opts.view != 'list') {
-                                        route([self.opts.service, 'list'].join('/'))
-                                    } else {
-                                        self.refresh();
-                                    }
-                                })
-                                .catch(function(error){
-                                    console.error(error);
-                                    RiotControl.trigger('notification',error.errorType + ' ' + self.eventKeyDeleteConfirmed,'error',error.message);
-                                });
-                });
-
-
-                self.eventKeyEditSave = self.opts.service + '_save';
-                RiotControl.on(self.eventKeyEditSave, () => {
-                    var data = self.getData();
-                    if(data == false) {
-                        return false;
-                    }
-
-                    self.service.update(data[self.opts.idfield],data)
-                                .then(function(result){})
-                                .catch(function(error){
-                                    RiotControl.trigger('notification',error.errorType + ' ' + self.eventKeyEditSave,'error',error.message);
-                                });
-
-                });
-
-                self.eventKeyCreateSave = self.opts.service + '_create';
-                RiotControl.on(self.eventKeyCreateSave, () => {
-                    var data = self.getData();
-                    if(data == false) {
-                        return false;
-                    }
-                    delete data.id || data._id;
-                    self.service.create(data)
-                                .then(function(result){})
-                                .catch(function(error){
-                                    RiotControl.trigger('notification',error.errorType + ' ' + self.eventKeyCreateSave,'error',error.message);
-                                });
-                });
-
-                self.on('ALL', function(event){
-                    // console.log('FeatherClientMixin', event)
-                })
-
-                self.on('unmount', () => {
-                    RiotControl.off(self.eventKeyDelete);
-                    RiotControl.off(self.eventKeyDeleteConfirmed);
-                    RiotControl.off(self.eventKeyDeleteConfirmation);
-                    RiotControl.off(self.eventKeyEditSave);
-                    RiotControl.off(self.eventKeyCreateSave);
-                })
-
-                // /*  events */
-                // self.on('*', (event) => {
-
-                //     switch(event) {
-                //         case 'mount':
-                //             this.loadDependencies();
-                //             break;
-                //         case 'before-mount':
-                //         case 'unmount':
-                //             // var events = Object.keys(this.events);
-                //             // for (var i = 0; i < events.length; i++) {
-                //             //     if(event == 'unmount') {
-                //             //         RiotControl.off(this.events[events[i]]);
-                //             //     } else {
-                //             //         if(this.debug || 1==1) console.info(this.events[events[i]], events[i]);
-                //             //         RiotControl.on(this.events[events[i]], this[events[i]]);
-                //             //     }
-                //             // }
-                //             break;
-                //         default:
-                //             console.info('FeatherClientMixin event:' + event, this.opts.title,this.test)
-                //             break;
-                //     }
-                // })
-
-                console.info('FeatherClientMixin service loaded ' + self.opts.service);
-            } else {
-                console.warn('FeatherClientMixin no service');
-            }
-        },
-        loadDependencies: (cb) => {
-            if(self.dependencies && self.dependencies.length == 0) {
-                self.loadSchema(cb);
-            } else {
-                if(self.debug) console.info('loadDependencies: ' + self.opts.service,self.dependencies);
-                RiotCrudController.loadDependencies(
-                    self.dependencies,
-                    'crud-json-editor', // TODO dynamic name
-                    self.loadSchema
-                );
-            }
-        },
-        loadSchema: (cb) => {
-            alert('loadSchema')
-            if(self.opts.schema === true) {
-                self.service.get('schema').then((result) => {
-                    self.opts.schema = result;
-                    self.loadData();
-                }).catch((error) => {
-                    console.error('loadSchema', error);
-                });
-            } else {
-                self.loadData();
-            }
-        },
-
-        loadData: (query) => {
-
-            switch(self.opts.view) {
-                case 'view':
-                case 'edit':
-                    if(typeof self.opts.query.id != 'undefined')
-                    self.service.get(self.opts.query.id).then(function(result){
-                        self.data = result;
-                        self.update();
-                    }).catch(function(error){
-                      console.error('loadData', error);
-                    });
-                    break;
-                case 'list':
-                    self.service.find(self.opts.query).then(function(result){
-                        self.data = result;
-                        self.update();
-                    }).catch(function(error){
-                      console.error('loadData', error);
-                    });
-                    break;
-                default:
-                    break;
-            }
-        },
-        initService: function() {},
-        initServiceTrigger: function() {}, // init service event trigger
-        destroyServiceTrigger: function() {}, // destroy service event trigger
-    }
-
-    if (!window.FeatherClientMixin) {
-        window.FeatherClientMixin = FeatherClientMixin;
-    }
-    // riot.mixin("FeatherClientMixin", FeatherClientMixin);
-
-        var OptsMixin = {
-      // init method is a special one which can initialize
-      // the mixin when it's loaded to the tag and is not
-      // accessible from the tag its mixed in
-      init: function() {
-        if(!this.mytest)
-            this.mytest = this.opts.title;
-        console.error('optsMixin ',this.mytest);
-        this.on('*', function(event) { console.log(this.opts.title + ' ??? ' +event) })
-      },
-
-      getOpts: function() {
-        return this.opts
-      },
-
-      setOpts: function(opts, update) {
-        this.opts = opts
-        if (!update) this.update()
-        return this
-      }
-    }
-
-    window.optsMixin = OptsMixin;
-
+    riot.mixin("FeatherClientMixin", FeatherClientMixin);
 
     var viewActionsMixin = {
-        observable: riot.observable(),
         init: function(){
-            var self = this;
-
             var actions = ['View','Edit','Create','Delete','Save','List','Print','PDF','CSV','Json','Upload'].map((action, index) => {
                 return {name: action.toLowerCase(), label: action};
             });
@@ -666,13 +466,13 @@
 
                 if(event != 'before-mount' || event != 'update')
 
-                var  view = self.opts.view || 'undefined';
+                var  view = this.opts.view || 'undefined';
 
-                self.opts.actions = actions.map((action, index) => {
+                this.opts.actions = actions.map((action, index) => {
 
                     action.active = false;
                     if(['delete','print','pdf','csv','json'].indexOf(action.name) != -1){
-                        action.count = self.opts.selection || 0;
+                        action.count = this.opts.selection || 0;
                     }
 
                     switch(view) {
@@ -703,7 +503,7 @@
 
                     }
 
-                    if(self.opts.buttons && self.opts.buttons[action.name]) {
+                    if(this.opts.buttons && this.opts.buttons[action.name]) {
                         action.active = true;
                     }
 
@@ -711,46 +511,45 @@
                 });
             })
 
-            self.click = (e) => {
-                e.preventDefault();
-                if(e.item.action.count === 0) {
-                    return;
-                }
-                var service = self.opts.service || self.opts.name; // TODO: move name
-                var view = self.opts.view;
-                var action = e.item.action.name;
-                switch(action){
-                    case 'delete':
-                        RiotControl.trigger([service, view, action,'confirmation'].join('_'))
-                        break;
-                    case 'save':
-                    case 'update':
-                        if(view == 'create'){
-                            action = 'create';
-                        }
-                        RiotControl.trigger([service, action].join('_'))
-                        break;
-                    case 'view':
-                    case 'edit':
-                        route([service, action, self.opts.query.id].join('/'))
-                        break;
-                    case 'list':
-                    case 'create':
-                        route([service, action].join('/'))
-                        break;
-                    case 'upload':
-                        break;
-                    default:
-                        console.error('unknown event: ' + [service, view, action].join('_'))
-                        break;
-                }
-            }
-        },
-    };
 
-    if (!window.viewActionsMixin) {
-        window.viewActionsMixin = viewActionsMixin;
-    }
+        },
+
+        actionClick: (e) => {
+            e.preventDefault();
+            if(e.item.action.count === 0) {
+                return;
+            }
+            var service = self.opts.service || self.opts.name; // TODO: move name
+            var view = self.opts.view;
+            var action = e.item.action.name;
+            console.info('click',[service, view, action,'confirmation'].join('_'))
+            switch(action){
+                case 'delete':
+                    RiotControl.trigger([service, view, action,'confirmation'].join('_'))
+                    break;
+                case 'save':
+                case 'update':
+                    if(view == 'create'){
+                        action = 'create';
+                    }
+                    RiotControl.trigger([service, action].join('_'))
+                    break;
+                case 'view':
+                case 'edit':
+                    route([service, action, this.opts.query.id].join('/'))
+                    break;
+                case 'list':
+                case 'create':
+                    route([service, action].join('/'))
+                    break;
+                case 'upload':
+                    break;
+                default:
+                    console.error('unknown event: ' + [service, view, action].join('_'))
+                    break;
+            }
+        }
+    };
 
     // register the ViewActionsMixin throughout the app
     riot.mixin("viewActionsMixin", viewActionsMixin);

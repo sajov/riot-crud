@@ -15,7 +15,7 @@
 
     <script>
         var self = this;
-        self.mixin(FeatherClientMixin);
+        self.mixin('FeatherClientMixin');
 
         self.dependencies = [
                 '/bower_components/json-forms/dist/js/brutusin-json-forms.min.js',
@@ -31,38 +31,12 @@
             }
         },
 
-        this.on('mount', function() {
-            RiotCrudController.loadDependencies(self.dependencies,'crud-json-forms', function (argument) {
-                // self.initPlugins();
-                if(self.opts.query.id) {
-                    self.get(self.opts.query.id)
-                }
-            });
-        });
 
-        self.get = function(id) {
-            if(typeof id != 'undefined') {
-                self.service.get(id).then(function(result){
-                    self.data = result;
-                    self.initPlugins(result);
-                }).catch(function(error){
-                  RiotControl.trigger(
-                        'notification',
-                        error.errorType + ' ' + self.eventKeyDeleteConfirmed,
-                        'error',
-                        error.message
-                    );
-                });
-            } else {
-                self.data = {};
-            }
+        self.initView = () => {
+            self.initPlugins();
         }
 
-        self.initPlugins = function(data) {
-
-            self.opts.data = data;
-
-            console.log(self.opts.service, self.opts.schema)
+        self.initPlugins = function() {
 
             var schema = new Object({
                               "$schema": "http://json-schema.org/draft-04/schema#",
@@ -241,10 +215,8 @@
             self.editor = BrutusinForms.create(schema);
 
             var container = document.getElementById('json-forms');
-            self.editor.render(container, data);
+            self.editor.render(container, self.data);
         }
-
-
 
         self.getData = () => {
             var validation = self.editor.validate();

@@ -24,7 +24,7 @@
     <script>
         var self = this;
 
-        self.mixin(FeatherClientMixin);
+        self.mixin('FeatherClientMixin');
 
         self.dependencies = [
                 '//cdnjs.cloudflare.com/ajax/libs/core-js/2.1.4/core.min.js',

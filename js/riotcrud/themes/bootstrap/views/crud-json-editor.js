@@ -8,7 +8,7 @@ riot.tag2('crud-json-editor', '<link rel="stylesheet" href="http://cdn.jsdelivr.
                 'http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js'
         ];
 
-        self.mixin(FeatherClientMixin);
+        self.mixin('FeatherClientMixin');
 
         this.refresh = (opts) => {
             self.opts = opts;

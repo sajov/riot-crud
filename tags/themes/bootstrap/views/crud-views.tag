@@ -15,19 +15,12 @@
 <crud-action-menu>
 
 	<div class="btn-group">
-		<a each={action in opts.actions} if={ action.active} onclick={ click } class="btn btn-{ action.buttonClass || 'default'} {dropdown-menu: action.options} btn-sm">
+		<a each={action in opts.actions} if={ action.active} onclick={ actionClick } class="btn btn-{ action.buttonClass || 'default'} {dropdown-menu: action.options} btn-sm">
 			{action.label}
 		</a>
 	</div>
 	<script>
-		var self = this;
-		this.mixin(viewActionsMixin);
-		self.on('mount', () => {
-			console.warn('crud-action-menu', self.opts.actioMenu);
-			console.warn('crud-action-menu', self.opts.action);
-			console.warn('crud-action-menu', self.opts);
-
-		})
+		this.mixin('viewActionsMixin');
 	</script>
 </crud-action-menu>
 
@@ -42,7 +35,7 @@
             </a>
             <ul class="dropdown-menu pull-right">
                 <li each={action in opts.actions}>
-	        		<a if={action.active} href="#" onclick={ click }>
+	        		<a if={action.active} href="#" onclick={ actionClick }>
 
 		        		<i if={action.name == 'create'} class="material-icons">add</i>
 						<i if={action.name == 'view'} class="material-icons">view_compact</i>
@@ -70,7 +63,7 @@
 
 	<script>
 		var self = this;
-		this.mixin(viewActionsMixin);
+		self.mixin('viewActionsMixin');
 	</script>
 
 </crud-header-dropdown>
@@ -311,11 +304,7 @@
         });
 
 
-		self.mixin(FeatherClientMixin);
-		self.mixin(optsMixin);
-
-
-
+		self.mixin('FeatherClientMixin');
 
 	    /* deprecated use reInit */
 	    self.refresh = () => {

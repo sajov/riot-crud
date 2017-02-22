@@ -1,7 +1,7 @@
 
 riot.tag2('crud-json-forms', '<link href="/bower_components/json-forms/dist/css/brutusin-json-forms.min.css" rel="stylesheet"> <div class="card"> <div class="header"> <h2>{opts.title}<small>{opts.description}</small></h2> <crud-header-dropdown if="{opts.actionMenu !== false}" service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown> </div> <div class="body"> <div id="json-forms"></div> </div> </div>', '', '', function(opts) {
         var self = this;
-        self.mixin(FeatherClientMixin);
+        self.mixin('FeatherClientMixin');
 
         self.dependencies = [
                 '/bower_components/json-forms/dist/js/brutusin-json-forms.min.js',
@@ -16,38 +16,11 @@ riot.tag2('crud-json-forms', '<link href="/bower_components/json-forms/dist/css/
             }
         },
 
-        this.on('mount', function() {
-            RiotCrudController.loadDependencies(self.dependencies,'crud-json-forms', function (argument) {
-
-                if(self.opts.query.id) {
-                    self.get(self.opts.query.id)
-                }
-            });
-        });
-
-        self.get = function(id) {
-            if(typeof id != 'undefined') {
-                self.service.get(id).then(function(result){
-                    self.data = result;
-                    self.initPlugins(result);
-                }).catch(function(error){
-                  RiotControl.trigger(
-                        'notification',
-                        error.errorType + ' ' + self.eventKeyDeleteConfirmed,
-                        'error',
-                        error.message
-                    );
-                });
-            } else {
-                self.data = {};
-            }
+        self.initView = () => {
+            self.initPlugins();
         }
 
-        self.initPlugins = function(data) {
-
-            self.opts.data = data;
-
-            console.log(self.opts.service, self.opts.schema)
+        self.initPlugins = function() {
 
             var schema = new Object({
                               "$schema": "http://json-schema.org/draft-04/schema#",
@@ -226,7 +199,7 @@ riot.tag2('crud-json-forms', '<link href="/bower_components/json-forms/dist/css/
             self.editor = BrutusinForms.create(schema);
 
             var container = document.getElementById('json-forms');
-            self.editor.render(container, data);
+            self.editor.render(container, self.data);
         }
 
         self.getData = () => {

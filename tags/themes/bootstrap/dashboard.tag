@@ -17,7 +17,7 @@
 
     <script>
         var self = this;
-        self.mixin(FeatherClientMixin);
+        self.mixin('FeatherClientMixin');
         self.color = $('body').attr('class').replace('theme-','');
 
         $('.right-sidebar .demo-choose-skin li').on('click', function () {
@@ -188,7 +188,7 @@
 
     <script>
         var self = this;
-        self.mixin(FeatherClientMixin);
+        self.mixin('FeatherClientMixin');
         self.jsoneditorQuery = {
             id:1
         };
@@ -208,8 +208,8 @@
                 initPlugins();
                 initJsonForms();
                 initJsonEditor();
-                setTimeout(this.fakeOrder, 3000);
-                self.autoOrder = setInterval(this.fakeOrder, 8000);
+                // setTimeout(this.fakeOrder, 3000);
+                // self.autoOrder = setInterval(this.fakeOrder, 8000);
             });
         });
 

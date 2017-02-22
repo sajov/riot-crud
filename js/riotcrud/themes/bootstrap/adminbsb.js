@@ -10,7 +10,7 @@ riot.tag2('top-menu', '<link href="/bower_components/gentelella/vendors/pnotify/
 
         ];
 
-        self.mixin(FeatherClientMixin);
+        self.mixin('FeatherClientMixin');
 
         RiotControl.on('notification', (title, type, text) => {
             this.notify(title, type, text);

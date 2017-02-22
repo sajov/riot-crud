@@ -24,7 +24,7 @@
                 'http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js'
         ];
 
-        self.mixin(FeatherClientMixin);
+        self.mixin('FeatherClientMixin');
         // self.mixin(CrudViewMixins);
 
         // this can move into serviceMixins

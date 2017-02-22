@@ -20,7 +20,7 @@ riot.tag2('order', '<modal-dialog trigger="order_add_item_modal" trigger-submit=
             '/bower_components/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.min.js'
         ];
 
-        self.mixin(FeatherClientMixin);
+        self.mixin('FeatherClientMixin');
 
         RiotControl.on('product_add_items', (items) => {
             if(items)

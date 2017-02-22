@@ -363,7 +363,7 @@
 
     <script>
         var self = this;
-        self.mixin(FeatherClientMixin);
+        self.mixin('FeatherClientMixin');
         RiotCrudController.loadDependencies(
             [
                 '/bower_components/gentelella/vendors/pnotify/dist/pnotify.js',

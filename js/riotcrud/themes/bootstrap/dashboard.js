@@ -1,7 +1,7 @@
 
 riot.tag2('top-widget', '<div onclick="{routeTo}" class="info-box hover-expand-effect"> <div class="icon {opts.bgcolor}"> <i if="{opts.icon}" class="material-icons col-{color}">{opts.icon}</i> <div id="pie-{opts.service}" if="{opts.pie}" class="pie {opts.pie}">{opts.sparklinedata}</div> </div> <div class="content"> <div class="text">{opts.title}</div> <div class="number count-to" data-from="0" data-to="{opts.count}" data-speed="1000" data-fresh-interval="20">{opts.count}</div> </div> </div>', '', '', function(opts) {
         var self = this;
-        self.mixin(FeatherClientMixin);
+        self.mixin('FeatherClientMixin');
         self.color = $('body').attr('class').replace('theme-','');
 
         $('.right-sidebar .demo-choose-skin li').on('click', function () {
@@ -96,7 +96,7 @@ riot.tag2('todo-list', '<div class="card"> <div class="header"> <h2>{opts.title}
 
 riot.tag2('dashboard', '<div class="row top_tiles"> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Orders" description="" pie="chart chart-pie" sortdir="-1" sortfield="orderId" datafield="total" service="orders"></top-widget> </div> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Categories" description="" sparkline="line" sparklinedata="30,35,25,8" color="cyan" icon="list" service="categories"></top-widget> </div> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Products" description="" icon="shopping_cart" color="cyan" service="products"></top-widget> </div> </div> <div class="row"> <div class="col-md-6 col-sm-6 col-xs-12"> <crud-table ref="ordertable" title="Orders List" description="riot-crud Table" service="orders" showheader="true" limit="4" fields="_id,orderId,total,name,createdAt" sortfield="orderId" sortdir="-1" showpagination="1" changelimit="1" skip="0" ups="{table:\'test\'}"> </crud-table> </div> <div class="col-md-6 col-sm-6 col-xs-12"> <todo-list title="Feature List" subtitle="current and following tasks"></todo-list> </div> </div> <div class="row"> <div class="col-md-6 col-sm-6 col-xs-12"> <div id="jsoneditor-container"></div> </div> <div class="col-md-6 col-sm-6 col-xs-12"> <div id="json-forms-container"></div> </div> </div>', '', '', function(opts) {
         var self = this;
-        self.mixin(FeatherClientMixin);
+        self.mixin('FeatherClientMixin');
         self.jsoneditorQuery = {
             id:1
         };
@@ -116,8 +116,7 @@ riot.tag2('dashboard', '<div class="row top_tiles"> <div class="animated flipInY
                 initPlugins();
                 initJsonForms();
                 initJsonEditor();
-                setTimeout(this.fakeOrder, 3000);
-                self.autoOrder = setInterval(this.fakeOrder, 8000);
+
             });
         });
 

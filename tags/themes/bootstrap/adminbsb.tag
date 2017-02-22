@@ -22,7 +22,7 @@
             // '/bower_components/gentelella/vendors/pnotify/dist/pnotify.buttons.js',
         ];
 
-        self.mixin(FeatherClientMixin);
+        self.mixin('FeatherClientMixin');
 
         RiotControl.on('notification', (title, type, text) => {
             this.notify(title, type, text);
