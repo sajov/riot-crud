@@ -15,12 +15,12 @@
 <crud-action-menu>
 
 	<div class="btn-group">
-		<a each={action in opts.actions} if={ action.active} onclick={ actionClick } class="btn btn-{ action.buttonClass || 'default'} {dropdown-menu: action.options} btn-sm">
+		<a each={action in opts.actions} if={ action.active} onclick={ click } class="btn btn-{ action.buttonClass || 'default'} {dropdown-menu: action.options} btn-sm">
 			{action.label}
 		</a>
 	</div>
 	<script>
-		this.mixin('viewActionsMixin');
+		// this.mixin('viewActionsMixin');
 	</script>
 </crud-action-menu>
 
@@ -35,7 +35,7 @@
             </a>
             <ul class="dropdown-menu pull-right">
                 <li each={action in opts.actions}>
-	        		<a if={action.active} href="#" onclick={ actionClick }>
+	        		<a if={action.active} href="#" onclick={ actionClickLocal }>
 
 		        		<i if={action.name == 'create'} class="material-icons">add</i>
 						<i if={action.name == 'view'} class="material-icons">view_compact</i>
@@ -60,10 +60,17 @@
             </ul>
         </li>
     </ul>
+    <a  href="#" onclick={ actionClickLocal }>local</a>
+    <a  href="#" onclick={ actionClick }>mixin</a>
 
 	<script>
 		var self = this;
-		self.mixin('viewActionsMixin');
+		this.mixin('viewActionsMixin');
+
+        self.actionClickLocal = function(e) {
+            e.preventDefault();
+            console.info('actionClickLocal', this.opts)
+        }
 	</script>
 
 </crud-header-dropdown>

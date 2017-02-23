@@ -308,7 +308,7 @@
 
                 /*  events */
                 this.on('*', (event) => {
-
+                    var self = this;
                     switch(event) {
                         case 'mount':
                             break;
@@ -323,7 +323,9 @@
                                     RiotControl.off(this.events[events[i]]);
                                 } else {
                                     if(this.debug || 1==1) console.info(this.events[events[i]], events[i]);
-                                    RiotControl.on(this.events[events[i]], self[events[i]]);
+                                    RiotControl.on(this.events[events[i]], function(){
+                                        self[events[i]]();
+                                    });
                                 }
                             }
                             break;
@@ -458,13 +460,17 @@
 
     var viewActionsMixin = {
         init: function(){
+            console.info(this.opts.service + ' viewActionsMixin init!');
             var actions = ['View','Edit','Create','Delete','Save','List','Print','PDF','CSV','Json','Upload'].map((action, index) => {
                 return {name: action.toLowerCase(), label: action};
             });
+                var self = this;
+            this.actionClick.bind(self);
 
             this.on('*', (event) => {
+                var self = this;
 
-                if(event != 'before-mount' || event != 'update')
+                // if(event != 'before-mount' || event != 'update')
 
                 var  view = this.opts.view || 'undefined';
 
@@ -472,7 +478,7 @@
 
                     action.active = false;
                     if(['delete','print','pdf','csv','json'].indexOf(action.name) != -1){
-                        action.count = this.opts.selection || 0;
+                        action.count = self.opts.selection || 0;
                     }
 
                     switch(view) {
@@ -503,7 +509,7 @@
 
                     }
 
-                    if(this.opts.buttons && this.opts.buttons[action.name]) {
+                    if(self.opts.buttons && self.opts.buttons[action.name]) {
                         action.active = true;
                     }
 
@@ -515,12 +521,13 @@
         },
 
         actionClick: (e) => {
+            console.info('actionclick',self.opts)
             e.preventDefault();
             if(e.item.action.count === 0) {
                 return;
             }
-            var service = self.opts.service || self.opts.name; // TODO: move name
-            var view = self.opts.view;
+            var service = this.opts.service || this.opts.name; // TODO: move name
+            var view = this.opts.view;
             var action = e.item.action.name;
             console.info('click',[service, view, action,'confirmation'].join('_'))
             switch(action){

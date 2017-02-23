@@ -27,7 +27,7 @@ Each view
 | title          | string  | all   |           |             |
 | description    | string  | all   |           |             |
 | showheader     | string  | all   |           |             |
-| showheader     | string  | all   |           |             |
+| actionmenu     | string  | all   |           |             |
 | service        | string  | all   |           |             |
 | servicename    | string  | all   |           | deprecated  |
 | schema         | mixed   | all   |           |             |
