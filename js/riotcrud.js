@@ -300,6 +300,7 @@
                     actionDeleteConfirmed: viewModelKey + '_delete',
                     actionEditSave: this.opts.service + '_save',
                     actionCreateSave: this.opts.service + '_create',
+                    actionQuery: this.opts.service + '_query',
                 }
 
                 /*  events */
@@ -339,6 +340,12 @@
                 // if(this.debug || true) console.info(map[i], this.eventMap[map[i]], e, self.opts, self.eventMap,Object.keys(self))
                 self[fn](e);
             });
+        },
+
+        actionQuery: function(id) {
+            if(this.opts.view == 'list')
+                return;
+            this.loadData({id:id});
         },
 
         actionDeleteConfirmation: function (id) {
@@ -404,7 +411,9 @@
         },
 
         loadDependencies: function (cb)  {
+            var self = this;
             if(self.dependencies && self.dependencies.length == 0) {
+            console.warn(1);
                 self.loadSchema(cb);
             } else {
                 RiotCrudController.loadDependencies(
@@ -415,26 +424,28 @@
             }
         },
 
-        loadSchema: (cb) => {
+        loadSchema: function (cb) {
+            var self = this;
             if(self.opts.schema === true) {
                 self.service.get('schema').then((result) => {
                     self.opts.schema = result;
-                    self.loadData();
+                    self.loadData(self.opts.query);
                 }).catch((error) => {
                     console.error('loadSchema', error);
                 });
             } else {
-                self.loadData();
+                self.loadData(self.opts.query);
             }
         },
 
-        loadData: (query) => {
+        loadData: function (query) {
+            var self = this;
 
             switch(self.opts.view) {
                 case 'view':
                 case 'edit':
-                    if(typeof self.opts.query.id != 'undefined')
-                    self.service.get(self.opts.query.id).then(function(result){
+                    if(typeof query.id != 'undefined')
+                    self.service.get(query.id).then(function(result){
                         self.data = result;
                         if(typeof self.initView == 'undefined') {
                             self.update();
@@ -446,7 +457,7 @@
                     });
                     break;
                 case 'list':
-                    self.service.find(self.opts.query).then(function(result){
+                    self.service.find(query).then(function(result){
                         self.data = result;
                         if(typeof self.initView == 'undefined') {
                             self.update();

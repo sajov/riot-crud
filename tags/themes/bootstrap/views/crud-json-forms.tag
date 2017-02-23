@@ -5,7 +5,7 @@
 
     <div class="card">
         <div class="header">
-            <h2>{opts.title}<small>{opts.description}</small></h2>
+            <h2>{opts.title} <span if={data}>{data._id}</span><small>{opts.description}</small></h2>
             <crud-header-dropdown if={opts.actionMenu !== false} service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown>
         </div>
         <div class="body">
@@ -23,21 +23,28 @@
         ];
 
         // this can move into serviceMixins
-        this.refresh = (opts) => {
-            self.opts = opts;
-            self.update();
-            if(self.opts.query.id) {
-                self.get(self.opts.query.id);
-            }
-        },
-
+        // this.refresh = (opts) => {
+        //     self.opts = opts;
+        //     self.update();
+        //     if(self.opts.query.id) {
+        //         self.get(self.opts.query.id);
+        //     }
+        // },
+        self.on('update', function (){
+            $('#json-forms').html('');
+            self.initPlugins();
+        })
 
         self.initView = () => {
-            self.initPlugins();
+            if(self.editor) {
+                self.update();
+            } else {
+                self.initPlugins();
+            }
         }
 
         self.initPlugins = function() {
-
+            console.log('self.opts.schema',self.opts.schema)
             var schema = new Object({
                               "$schema": "http://json-schema.org/draft-04/schema#",
                               "type": "object",

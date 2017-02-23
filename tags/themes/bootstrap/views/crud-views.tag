@@ -60,8 +60,8 @@
             </ul>
         </li>
     </ul>
-    <a  href="#" onclick={ actionClickLocal }>local</a>
-    <a  href="#" onclick={ actionClick }>mixin</a>
+    <!-- <a  href="#" onclick={ actionClickLocal }>local</a>
+    <a  href="#" onclick={ actionClickMixin }>mixin</a> -->
 
 	<script>
 		var self = this;
@@ -212,7 +212,7 @@
 					        </td>
 					        <td>&nbsp;</td>
 				      	</tr>
-				      	<tr each="{ row in data.data }" class="{ 'selected': selection.indexOf(row._id) != -1 }">
+				      	<tr each="{ row in data.data }" onclick={ selectRow } class="{ 'selected': selection.indexOf(row._id) != -1 }">
 					      	<td if={ selection !== false } class="a-center">
 					      		<div if="{selection.indexOf(row._id) > -1}">
 					      			<input  data-value="{ row._id }" type="checkbox" class="filled-in chk-col-{color}" id="basic_checkbox_on_{row._id}" checked="checked">
@@ -223,7 +223,7 @@
 	                       			<label data-value="{ row._id }" onclick={ selectRow }  data-value="{ selection.length ==  data.data.length ? 1 : 0 }" for="basic_checkbox_{row._id}"></label>
 					      		</div>
 							</td>
-					        <td each="{ colval, colkey in thead }">
+					        <td  data-value="{ row._id }" each="{ colval, colkey in thead }">
 					        	{ row[colkey] }
 					        </td>
 					      	<td>
@@ -415,7 +415,12 @@
 			} else{
 				self.selection.push(value)
 			}
+            RiotControl.trigger([self.opts.service, 'query' ].join('_'), e.item.row._id)
 		}
+
+        triggerSelect = (e) => {
+            console.log('triggerSelect', e.item)
+        }
 
 		deleteRow = (e) => {
 			e.preventDefault();
