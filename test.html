@@ -14,7 +14,8 @@
     <my-custom-tag mytitle="mytag1"></my-custom-tag>
     <my-custom-tag mytitle="mytag2"></my-custom-tag>
     <my-custom-tag mytitle="mytag3"></my-custom-tag>
-    <my-custom-tag-parent mytitle="mytag3"></my-custom-tag-parent>
+    <hr>
+    <my-custom-tag-parent mytitle="mytagN1"></my-custom-tag-parent>
     <!-- <script src="/bower_components/riot/riot+compiler.min.js"></script> -->
     <script src="/bower_components/riot/riot+compiler.js"></script>
     <script src="/bower_components/riot-route/dist/route.min.js"></script>
@@ -98,6 +99,7 @@
             }
             riot.mixin('OptsMixin',OptsMixin);
             riot.mount('my-custom-tag');
+            riot.mount('my-custom-tag-parent');
         }(window, riot));
 
 

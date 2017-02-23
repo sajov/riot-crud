@@ -452,8 +452,7 @@
                 default:
                     break;
             }
-
-        },
+        }
     }
 
     riot.mixin("FeatherClientMixin", FeatherClientMixin);

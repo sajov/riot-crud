@@ -6,10 +6,8 @@
     </script>
 </my-custom-tag>
 
-
-
-<my-custom-tag-parent mytitle="mytag3">
-
+<my-custom-tag-parent>
+    <h2>my-custom-tag-parent</h2>
     <my-custom-tag mytitle="mytagN1"></my-custom-tag>
     <my-custom-tag mytitle="mytagN2"></my-custom-tag>
 </my-custom-tag-parent>
