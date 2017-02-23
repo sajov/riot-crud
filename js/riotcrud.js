@@ -276,7 +276,7 @@
 
     var FeatherClientMixin = {
         init: function(){
-            var self = this;
+
             var defaults = {
                 idfield: '_id',
                 dependencies: []
@@ -299,7 +299,7 @@
                     actionDeleteConfirmation: viewModelKey + '_delete_confirmation',
                     actionDeleteConfirmed: viewModelKey + '_delete',
                     actionEditSave: this.opts.service + '_save',
-                    actionCreateSave: this.opts.service + '_create'
+                    actionCreateSave: this.opts.service + '_create',
                 }
 
                 /*  events */
@@ -312,19 +312,12 @@
                             if(event == 'before-mount') {
                                 this.loadDependencies();
                             }
-                            var events = Object.keys(this.eventMap);
-                            for (var i = 0; i < events.length; i++) {
-                                var action = events[i];
-                                var event = this.eventMap[action];
+                            var map = Object.keys(this.eventMap);
+                            for (var i = 0; i < map.length; i++) {
                                 if(event == 'unmount') {
-                                    RiotControl.off(event);
+                                    RiotControl.off(this.eventMap[map[i]]);
                                 } else {
-                                    if(this.debug) console.info(event, action);
-                                    RiotControl.on(event, function(e){
-                                        alert(action);
-                                        if(this.debug || true) console.info(action, event, e, self.opts, self.eventMap,Object.keys(self))
-                                        self[action](e);
-                                    });
+                                    this.bindEvent(this.eventMap[map[i]], map[i])
                                 }
                             }
                             break;
@@ -338,6 +331,14 @@
                 if(this.debug) console.warn('FeatherClientMixin no service', this.root.tagName);
             }
 
+        },
+
+        bindEvent: function (event, fn) {
+            var self = this;
+            RiotControl.on(event, function(e){
+                // if(this.debug || true) console.info(map[i], this.eventMap[map[i]], e, self.opts, self.eventMap,Object.keys(self))
+                self[fn](e);
+            });
         },
 
         actionDeleteConfirmation: function (id) {
