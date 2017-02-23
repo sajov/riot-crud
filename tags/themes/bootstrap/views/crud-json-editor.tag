@@ -35,7 +35,6 @@
         },
 
         self.initView = () => {
-
             self.initJSONEditor();
             self.editor.setValue(self.data);
             // self.get(self.opts.query.id)

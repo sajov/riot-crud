@@ -172,7 +172,6 @@
                 skip="0"
                 ups={table:'test'}>
             </crud-table>
-            <todo-list title="Feature List" subtitle="current and following tasks"></todo-list>
         </div>
         <div class="col-md-6 col-sm-6 col-xs-12">
             <div id="json-forms-orders"></div>
@@ -189,6 +188,7 @@
     </div>
     <div class="row">
         <div class="col-xs-12">
+            <todo-list title="Feature List" subtitle="current and following tasks"></todo-list>
 
         </div>
     </div>
@@ -259,6 +259,7 @@
             self.client.service('products')
                 .find({query:{$sort:{_id:-1},$limit:1}})
                 .then((result) => {
+
                         riot.mount('#json-forms-products','crud-json-forms',
                          {
                             model: 'products',
@@ -266,8 +267,10 @@
                             service: 'products',
                             title: 'Products',
                             description: 'inline products view with brutusin:json-forms',
-                            schema: 'http://' + window.location.hostname+ ':3030/schema/products.json',
-                            tag: 'crud-json-editor',
+                            schema: true,
+                            // schema: 'http://' + window.location.hostname+ ':3030/schema/products.json',
+                            // schema: 'http://' + window.location.hostname+ ':3030/schema/category.json',
+                            tag: 'crud-json-forms',
                             selection: true,
                             view: 'edit',
                             views: ['save'],
@@ -276,7 +279,6 @@
                             actionMenu: true,
                             menuGroup: 'models',
                             // buttons: ['create','save','list'],
-                            schema: 'http://' + window.location.hostname+ ':3030/schema/category.json',
                             type:'inline',
                             query: {id:result.data[0]._id}
                     });

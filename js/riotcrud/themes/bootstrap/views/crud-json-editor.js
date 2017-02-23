@@ -17,7 +17,6 @@ riot.tag2('crud-json-editor', '<link rel="stylesheet" href="http://cdn.jsdelivr.
         },
 
         self.initView = () => {
-
             self.initJSONEditor();
             self.editor.setValue(self.data);
 

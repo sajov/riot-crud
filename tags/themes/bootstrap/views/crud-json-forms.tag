@@ -9,12 +9,13 @@
             <crud-header-dropdown if={opts.actionMenu !== false} service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown>
         </div>
         <div class="body">
-            <div id="json-forms"></div>
+            <div id="json-forms{opts.service}"></div>
         </div>
     </div>
 
     <script>
         var self = this;
+
         self.mixin('FeatherClientMixin');
 
         self.dependencies = [
@@ -30,12 +31,17 @@
         //         self.get(self.opts.query.id);
         //     }
         // },
+        self.on('mount', function (){
+        })
+
         self.on('update', function (){
-            $('#json-forms').html('');
+
+            $('#json-forms'+self.opts.service).html('');
             self.initPlugins();
         })
 
         self.initView = () => {
+
             if(self.editor) {
                 self.update();
             } else {
@@ -45,7 +51,7 @@
 
         self.initPlugins = function() {
             console.log('self.opts.schema',self.opts.schema)
-            var schema = new Object({
+            var schemaNO = new Object({
                               "$schema": "http://json-schema.org/draft-04/schema#",
                               "type": "object",
                               "title": "Product",
@@ -211,6 +217,7 @@
                               ]
                             })
 
+            var schema = self.opts.schema;
             Object.keys(schema.properties).map(function(objectKey, index) {
                 if(schema.required && schema.required.indexOf(objectKey) !== -1) {
                     if(schema.properties[objectKey].type != 'boolean')
@@ -221,7 +228,7 @@
             var BrutusinForms = brutusin["json-forms"];
             self.editor = BrutusinForms.create(schema);
 
-            var container = document.getElementById('json-forms');
+            var container = document.getElementById('json-forms'+self.opts.service);
             self.editor.render(container, self.data);
         }
 

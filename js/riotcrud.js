@@ -323,7 +323,7 @@
                             }
                             break;
                         default:
-                            console.info('FeatherClientMixin event:' + event, this.opts.title)
+                            if(this.debug) console.info('FeatherClientMixin event:' + event, this.opts.title)
                             break;
                     }
                 })
@@ -413,23 +413,26 @@
         loadDependencies: function (cb)  {
             var self = this;
             if(self.dependencies && self.dependencies.length == 0) {
-            console.warn(1);
                 self.loadSchema(cb);
             } else {
+            console.log('loadDependencies', self.opts.title, self.opts.schema)
                 RiotCrudController.loadDependencies(
                     self.dependencies,
-                    'crud-json-editor', // TODO dynamic name
-                    self.loadSchema
+                    self.opts.title, // TODO dynamic name
+                    self.loadSchema(cb)
                 );
             }
         },
 
         loadSchema: function (cb) {
             var self = this;
+
+            console.log('loadSchema', self.opts.title, self.opts.schema)
             if(self.opts.schema === true) {
                 self.service.get('schema').then((result) => {
                     self.opts.schema = result;
                     self.loadData(self.opts.query);
+
                 }).catch((error) => {
                     console.error('loadSchema', error);
                 });
@@ -444,9 +447,10 @@
             switch(self.opts.view) {
                 case 'view':
                 case 'edit':
-                    if(typeof query.id != 'undefined')
+                    if(query.id)
                     self.service.get(query.id).then(function(result){
                         self.data = result;
+
                         if(typeof self.initView == 'undefined') {
                             self.update();
                         } else {
@@ -478,18 +482,12 @@
 
     var viewActionsMixin = {
         init: function(){
-            console.info(this.opts.service + ' viewActionsMixin init!');
             var actions = ['View','Edit','Create','Delete','Save','List','Print','PDF','CSV','Json','Upload'].map((action, index) => {
                 return {name: action.toLowerCase(), label: action};
             });
 
             this.on('*', (event) => {
                 var self = this;
-                // if(event != 'before-mount' || event != 'update')
-
-                if(event == 'before-mount') {
-                    console.error('EVENT',event,self.opts.service)
-                }
 
                 if(event == 'before-mount' || event == 'update') {
                     var  view = this.opts.view || 'undefined';

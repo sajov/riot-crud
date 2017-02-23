@@ -1,6 +1,7 @@
 
-riot.tag2('crud-json-forms', '<link href="/bower_components/json-forms/dist/css/brutusin-json-forms.min.css" rel="stylesheet"> <div class="card"> <div class="header"> <h2>{opts.title} <span if="{data}">{data._id}</span><small>{opts.description}</small></h2> <crud-header-dropdown if="{opts.actionMenu !== false}" service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown> </div> <div class="body"> <div id="json-forms"></div> </div> </div>', '', '', function(opts) {
+riot.tag2('crud-json-forms', '<link href="/bower_components/json-forms/dist/css/brutusin-json-forms.min.css" rel="stylesheet"> <div class="card"> <div class="header"> <h2>{opts.title} <span if="{data}">{data._id}</span><small>{opts.description}</small></h2> <crud-header-dropdown if="{opts.actionMenu !== false}" service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown> </div> <div class="body"> <div id="json-forms{opts.service}"></div> </div> </div>', '', '', function(opts) {
         var self = this;
+
         self.mixin('FeatherClientMixin');
 
         self.dependencies = [
@@ -8,12 +9,17 @@ riot.tag2('crud-json-forms', '<link href="/bower_components/json-forms/dist/css/
                 '/bower_components/json-forms/dist/js/brutusin-json-forms-bootstrap.min.js'
         ];
 
+        self.on('mount', function (){
+        })
+
         self.on('update', function (){
-            $('#json-forms').html('');
+
+            $('#json-forms'+self.opts.service).html('');
             self.initPlugins();
         })
 
         self.initView = () => {
+
             if(self.editor) {
                 self.update();
             } else {
@@ -23,7 +29,7 @@ riot.tag2('crud-json-forms', '<link href="/bower_components/json-forms/dist/css/
 
         self.initPlugins = function() {
             console.log('self.opts.schema',self.opts.schema)
-            var schema = new Object({
+            var schemaNO = new Object({
                               "$schema": "http://json-schema.org/draft-04/schema#",
                               "type": "object",
                               "title": "Product",
@@ -189,6 +195,7 @@ riot.tag2('crud-json-forms', '<link href="/bower_components/json-forms/dist/css/
                               ]
                             })
 
+            var schema = self.opts.schema;
             Object.keys(schema.properties).map(function(objectKey, index) {
                 if(schema.required && schema.required.indexOf(objectKey) !== -1) {
                     if(schema.properties[objectKey].type != 'boolean')
@@ -199,7 +206,7 @@ riot.tag2('crud-json-forms', '<link href="/bower_components/json-forms/dist/css/
             var BrutusinForms = brutusin["json-forms"];
             self.editor = BrutusinForms.create(schema);
 
-            var container = document.getElementById('json-forms');
+            var container = document.getElementById('json-forms'+self.opts.service);
             self.editor.render(container, self.data);
         }
 
