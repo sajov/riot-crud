@@ -35,7 +35,7 @@
             </a>
             <ul class="dropdown-menu pull-right">
                 <li each={action in opts.actions}>
-	        		<a if={action.active} href="#" onclick={ actionClickLocal }>
+	        		<a if={action.active} href="#" onclick={ actionClick }>
 
 		        		<i if={action.name == 'create'} class="material-icons">add</i>
 						<i if={action.name == 'view'} class="material-icons">view_compact</i>
@@ -67,14 +67,13 @@
 		var self = this;
 		this.mixin('viewActionsMixin');
 
-        self.actionClickLocal = function(e) {
+        actionClickLocal = function(e) {
             e.preventDefault();
             console.info('actionClickLocal', this.opts)
         }
 	</script>
 
 </crud-header-dropdown>
-
 
 <modal-delete-confirmation>
 

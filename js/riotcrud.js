@@ -274,13 +274,9 @@
 
     RiotControl.addStore(new ModelStore());
 
-    if (!window.RiotControl) {
-        window.RiotControl = RiotControl;
-    }
-
     var FeatherClientMixin = {
         init: function(){
-            // self = this;
+            var self = this;
             var defaults = {
                 idfield: '_id',
                 dependencies: []
@@ -299,7 +295,7 @@
                 this.service = this.client.service(this.opts.service);
 
                 var viewModelKey = [this.opts.service, this.opts.view].join('_');
-                this.events = {
+                this.eventMap = {
                     actionDeleteConfirmation: viewModelKey + '_delete_confirmation',
                     actionDeleteConfirmed: viewModelKey + '_delete',
                     actionEditSave: this.opts.service + '_save',
@@ -308,7 +304,6 @@
 
                 /*  events */
                 this.on('*', (event) => {
-                    var self = this;
                     switch(event) {
                         case 'mount':
                             break;
@@ -317,14 +312,18 @@
                             if(event == 'before-mount') {
                                 this.loadDependencies();
                             }
-                            var events = Object.keys(this.events);
+                            var events = Object.keys(this.eventMap);
                             for (var i = 0; i < events.length; i++) {
+                                var action = events[i];
+                                var event = this.eventMap[action];
                                 if(event == 'unmount') {
-                                    RiotControl.off(this.events[events[i]]);
+                                    RiotControl.off(event);
                                 } else {
-                                    if(this.debug || 1==1) console.info(this.events[events[i]], events[i]);
-                                    RiotControl.on(this.events[events[i]], function(){
-                                        self[events[i]]();
+                                    if(this.debug) console.info(event, action);
+                                    RiotControl.on(event, function(e){
+                                        alert(action);
+                                        if(this.debug || true) console.info(action, event, e, self.opts, self.eventMap,Object.keys(self))
+                                        self[action](e);
                                     });
                                 }
                             }
@@ -341,12 +340,12 @@
 
         },
 
-        actionDeleteConfirmation: (id) => {
-            alert(self.opts.service)
-            RiotControl.trigger('delete_confirmation_modal', self.opts.service, self.opts.view, id || self.opts.query.id || self.selection)
+        actionDeleteConfirmation: function (id) {
+            alert(this.opts.service)
+            RiotControl.trigger('delete_confirmation_modal', this.opts.service, this.opts.view, id || this.opts.query.id || this.selection)
         },
 
-        actionDeleteConfirmed: (id) => {
+        actionDeleteConfirmed: function (id) {
             if(typeof id === "object") {
                 var ids = id.map(function(_id){return _id.toString()});
                 var query = {query:{ _id: { $in: ids}}};
@@ -365,11 +364,12 @@
                 })
                 .catch(function(error){
                     console.error(error);
-                    RiotControl.trigger('notification',error.errorType + ' ' + self.events.actionDeleteConfirmed,'error',error.message);
+                    RiotControl.trigger('notification',error.errorType + ' ' + self.eventMap.actionDeleteConfirmed,'error',error.message);
                 });
         },
 
-        actionEditSave: () => {
+        actionEditSave: function () {
+            var self = this;
             console.error(self.opts.service);
             var data = self.getData();
             if(data == false) return false;
@@ -378,24 +378,31 @@
                 .update(data[self.opts.idfield],data)
                 .then(function(result){})
                 .catch(function(error){
-                    RiotControl.trigger('notification',error.errorType + ' ' + self.events.actionEditSave,'error',error.message);
+                    RiotControl.trigger('notification',error.errorType + ' ' + self.eventMap.actionEditSave,'error',error.message);
                 });
         },
 
-        actionCreateSave: () => {
+        actionCreateSave: function () {
+            var self = this;
             var data = self.getData();
             if(data == false) return false;
 
-            delete data.id || data._id;
+            delete data._id;
+            delete data.id;
+            console.error('actionCreateSave',data)
             self.service
                 .create(data)
-                .then(function(result){})
+                .then(function(result){
+                    alert('sucess ' + self.eventMap.actionCreateSave)
+                })
                 .catch(function(error){
-                    RiotControl.trigger('notification',error.errorType + ' ' + self.events.keyactionCreateSave,'error',error.message);
+                    alert('error ' + self.eventMap.actionCreateSave)
+                    console.error(error)
+                    RiotControl.trigger('notification',error.errorType + ' ' + self.eventMap.actionCreateSave,'error',error.message);
                 });
         },
 
-        loadDependencies: (cb) => {
+        loadDependencies: function (cb)  {
             if(self.dependencies && self.dependencies.length == 0) {
                 self.loadSchema(cb);
             } else {
@@ -463,64 +470,65 @@
             var actions = ['View','Edit','Create','Delete','Save','List','Print','PDF','CSV','Json','Upload'].map((action, index) => {
                 return {name: action.toLowerCase(), label: action};
             });
-                var self = this;
-            this.actionClick.bind(self);
 
             this.on('*', (event) => {
                 var self = this;
-
                 // if(event != 'before-mount' || event != 'update')
 
-                var  view = this.opts.view || 'undefined';
+                if(event == 'before-mount') {
+                    console.error('EVENT',event,self.opts.service)
+                }
 
-                this.opts.actions = actions.map((action, index) => {
+                if(event == 'before-mount' || event == 'update') {
+                    var  view = this.opts.view || 'undefined';
+                    this.opts.actions = actions.map((action, index) => {
 
-                    action.active = false;
-                    if(['delete','print','pdf','csv','json'].indexOf(action.name) != -1){
-                        action.count = self.opts.selection || 0;
-                    }
+                        action.active = false;
+                        if(['delete','print','pdf','csv','json'].indexOf(action.name) != -1){
+                            action.count = self.opts.selection || 0;
+                        }
 
-                    switch(view) {
-                        case 'view':
-                            if(['edit','delete','create','list'].indexOf(action.name) != -1){
-                                action.active = true;
-                                delete action.count;
-                            }
-                            break;
-                        case 'edit':
-                            if(['save','view','delete','list'].indexOf(action.name) != -1){
-                                action.active = true;
-                                delete action.count;
-                            }
-                            break;
-                        case 'create':
-                            if(['save','list'].indexOf(action.name) != -1){
-                                action.active = true;
-                            }
-                            break;
-                        case 'list':
-                            if(['delete','create','print','pdf','csv','json','upload'].indexOf(action.name) != -1){
-                                action.active = true;
-                            }
-                            break;
-                        default:
-                            break;
+                        switch(view) {
+                            case 'view':
+                                if(['edit','delete','create','list'].indexOf(action.name) != -1){
+                                    action.active = true;
+                                    delete action.count;
+                                }
+                                break;
+                            case 'edit':
+                                if(['save','view','delete','list'].indexOf(action.name) != -1){
+                                    action.active = true;
+                                    delete action.count;
+                                }
+                                break;
+                            case 'create':
+                                if(['save','list'].indexOf(action.name) != -1){
+                                    action.active = true;
+                                }
+                                break;
+                            case 'list':
+                                if(['delete','create','print','pdf','csv','json','upload'].indexOf(action.name) != -1){
+                                    action.active = true;
+                                }
+                                break;
+                            default:
+                                break;
 
-                    }
+                        }
 
-                    if(self.opts.buttons && self.opts.buttons[action.name]) {
-                        action.active = true;
-                    }
+                        if(self.opts.buttons && self.opts.buttons[action.name]) {
+                            action.active = true;
+                        }
 
-                    return action;
-                });
+                        return action;
+                    });
+                }
             })
 
 
         },
 
-        actionClick: (e) => {
-            console.info('actionclick',self.opts)
+        actionClick: function (e) {
             e.preventDefault();
             if(e.item.action.count === 0) {
                 return;
@@ -528,17 +536,29 @@
             var service = this.opts.service || this.opts.name; // TODO: move name
             var view = this.opts.view;
             var action = e.item.action.name;
-            console.info('click',[service, view, action,'confirmation'].join('_'))
+
+
+
+
             switch(action){
                 case 'delete':
-                    RiotControl.trigger([service, view, action,'confirmation'].join('_'))
+                    var event = [service, view, action,'confirmation'].join('_');
+                    RiotControl.trigger(event,event);
                     break;
                 case 'save':
                 case 'update':
                     if(view == 'create'){
                         action = 'create';
                     }
-                    RiotControl.trigger([service, action].join('_'))
+                    var event = [service, action].join('_');
+                     console.info('EVENT actionClick',{
+                service:service,
+                action:action,
+                view:view,
+                event:event,
+                opts:this.opts
+            })
+                    RiotControl.trigger(event,event);
                     break;
                 case 'view':
                 case 'edit':
