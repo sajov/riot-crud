@@ -23,7 +23,6 @@
                 '/bower_components/json-editor/dist/jsoneditor.min.js',
                 'http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js'
         ];
-
         self.mixin('FeatherClientMixin');
         // self.mixin(CrudViewMixins);
 

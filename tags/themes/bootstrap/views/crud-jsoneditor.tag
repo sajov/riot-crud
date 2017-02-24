@@ -49,6 +49,7 @@
             }
         },
 
+
         self.on('before-mount', function(params, options) {
             RiotCrudController.loadDependencies(self.dependencies,'crud-jsoneditor', function (argument) {
                 self.service.get('schema').then((result) => {
@@ -87,27 +88,17 @@
             }
         }
 
+        self.initView = function(data) {
+            self.initPlugins();
+        },
+
         self.initPlugins = function(data) {
-
-            self.opts.data = data;
-
             var container = document.getElementById("jsoneditor");
-            var options = {};
-            self.editor = new JSONEditor(container, options);
-
-            // set json
-            var json = {
-                "Array": [1, 2, 3],
-                "Boolean": true,
-                "Null": null,
-                "Number": 123,
-                "Object": {"a": "b", "c": "d"},
-                "String": "Hello World"
+            var options = {
+                modes: ['view', 'form', 'code', 'text']
             };
-            self.editor.set(json);
-
-            // get json
-            var json = self.editor.get();
+            self.editor = new JSONEditor(container, options);
+            self.editor.set(self.data);
         }
 
         self.getData = () => {

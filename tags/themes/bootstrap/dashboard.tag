@@ -210,6 +210,10 @@
             initJsonEditorCategories();
         },
 
+        this.initView = () => {
+
+        },
+
         this.on('mount', function() {
              RiotCrudController.loadDependencies(self.dependencies,'crud-jsoneditor', function (argument) {
                 initPlugins();
@@ -298,7 +302,7 @@
                             title: 'Order',
                             description: 'inline orders view with brutusin:json-forms',
                             schema: true,
-                            tag: 'crud-json-editor',
+                            tag: 'crud-json-forms',
                             selection: true,
                             view: 'edit',
                             views: ['save'],

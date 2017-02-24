@@ -53,25 +53,17 @@ riot.tag2('crud-jsoneditor', '<div class="card"> <div class="header"> <h2>{opts.
             }
         }
 
+        self.initView = function(data) {
+            self.initPlugins();
+        },
+
         self.initPlugins = function(data) {
-
-            self.opts.data = data;
-
             var container = document.getElementById("jsoneditor");
-            var options = {};
-            self.editor = new JSONEditor(container, options);
-
-            var json = {
-                "Array": [1, 2, 3],
-                "Boolean": true,
-                "Null": null,
-                "Number": 123,
-                "Object": {"a": "b", "c": "d"},
-                "String": "Hello World"
+            var options = {
+                modes: ['view', 'form', 'code', 'text']
             };
-            self.editor.set(json);
-
-            var json = self.editor.get();
+            self.editor = new JSONEditor(container, options);
+            self.editor.set(self.data);
         }
 
         self.getData = () => {

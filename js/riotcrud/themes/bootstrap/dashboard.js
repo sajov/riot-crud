@@ -112,6 +112,10 @@ riot.tag2('dashboard', '<div class="row top_tiles"> <div class="animated flipInY
             initJsonEditorCategories();
         },
 
+        this.initView = () => {
+
+        },
+
         this.on('mount', function() {
              RiotCrudController.loadDependencies(self.dependencies,'crud-jsoneditor', function (argument) {
                 initPlugins();
@@ -198,7 +202,7 @@ riot.tag2('dashboard', '<div class="row top_tiles"> <div class="animated flipInY
                             title: 'Order',
                             description: 'inline orders view with brutusin:json-forms',
                             schema: true,
-                            tag: 'crud-json-editor',
+                            tag: 'crud-json-forms',
                             selection: true,
                             view: 'edit',
                             views: ['save'],
