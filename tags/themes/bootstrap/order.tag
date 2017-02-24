@@ -52,24 +52,20 @@
 
     <div if={opts.data} class="card">
         <div class="header">
-            <h2>Order<small>{opts.data.orderId}</small></h2>
+            <h2>Order {opts.data.orderId}<small>{opts.data.name}, {opts.data.address.city}</small></h2>
             <crud-header-dropdown if={opts.actionMenu !== false} service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown>
         </div>
         <div class="body">
             <div class="">
                 <div class="x_title hidden-print">
-                    <h2>{opts.data.name} <small>{opts.data.address.city}</small><small class="pull-right">Date: {opts.data.createdAt}</small></h2>
+                    <span class="col-lg-12 text-right">Date: {opts.data.createdAt}</span>
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
                     <section class="invoice">
-                    <div class="clearfix"></div>
-                    <br>
-                    <br>
-                    <br>
                         <!-- info row -->
                         <div class="row invoice-info">
-                            <div class="col-sm-4 invoice-col">
+                            <div class="col-lg-4 col-sm-6 col-xs-12 invoice-col">
                                 From
                                 <address>
                                     <strong if={opts.data.company.name}><a href="">{opts.data.company.name}</a></strong>
@@ -82,7 +78,7 @@
                                 </address>
                             </div>
                             <!-- /.col -->
-                            <div class="col-sm-4 invoice-col">
+                            <div class="col-lg-4 col-sm-6 col-xs-12 invoice-col">
                                 To
                                 <address>
                                     <strong>{opts.data.shippingAddress.name}</strong>
@@ -93,11 +89,13 @@
                                 </address>
                             </div>
                             <!-- /.col -->
-                            <div class="col-sm-4 invoice-col">
+                            <div class="col-lg-4 col-sm-12 col-xs-12 invoice-col">
                                 <b>Invoice #007612</b>
                                 <br>
                                 <br>
                                 <b>Order ID:</b> {opts.data.orderId}
+                                <br>
+                                <b>Order Due:</b> {opts.data.createdAt}
                                 <br>
                                 <b>Payment Due:</b> 2/22/2014
                                 <br>
@@ -110,7 +108,7 @@
 
                         <!-- ITEMS Table row  -->
                         <div class="row">
-                            <div class="col-xs-12 table">
+                            <div class="col-xs-12 table-responsive">
                             <table class="table table-striped">
                                     <thead>
                                         <tr>
@@ -154,21 +152,8 @@
 
 
                         <div class="row">
-                            <!-- accepted payments column -->
-                            <div class="col-xs-9">
-                                <p class="lead">Payment Methods:</p>
-                                <img src="/bower_components/gentelella/production/images/visa.png" alt="Visa">
-                                <img src="/bower_components/gentelella/production/images/mastercard.png" alt="Mastercard">
-                                <img src="/bower_components/gentelella/production/images/american-express.png" alt="American Express">
-                                <img src="/bower_components/gentelella/production/images/paypal2.png" alt="Paypal">
-                                <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
-                                    Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem plugg dopplr jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
-                                </p>
-                            </div>
-                            <!-- /.col -->
-
                             <!-- TOTALS -->
-                            <div class="col-xs-3">
+                            <div class="col-xs-12 col-lg-4 pull-right">
                                 <p class="lead">Amount Due 2/22/2014</p>
                                 <div class="table-responsive">
                                     <table class="table">
@@ -198,6 +183,21 @@
                                 </div>
                             </div>
                             <!-- /.col -->
+
+                            <!-- accepted payments column -->
+                            <div class="col-xs-12 col-lg-6 pull-left">
+                                <p class="lead">Payment Methods:</p>
+                                <img src="/bower_components/gentelella/production/images/visa.png" alt="Visa">
+                                <img src="/bower_components/gentelella/production/images/mastercard.png" alt="Mastercard">
+                                <img src="/bower_components/gentelella/production/images/american-express.png" alt="American Express">
+                                <img src="/bower_components/gentelella/production/images/paypal2.png" alt="Paypal">
+                                <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
+                                    Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem plugg dopplr jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
+                                </p>
+                            </div>
+                            <!-- /.col -->
+
+
                         </div>
                         <!-- /.row -->
                         <!-- this row will not appear when printing -->

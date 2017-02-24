@@ -349,7 +349,7 @@
         },
 
         actionDeleteConfirmation: function (id) {
-            alert(this.opts.service)
+            console.info('actionDeleteConfirmation',id)
             RiotControl.trigger('delete_confirmation_modal', this.opts.service, this.opts.view, id || this.opts.query.id || this.selection)
         },
 
@@ -359,7 +359,6 @@
                 var query = {query:{ _id: { $in: ids}}};
                 id  = null;
             }
-            console.error('actionDeleteConfirmed',{id:id,ids:ids,query:query});
 
             self.service
                 .remove(id,query)
@@ -400,11 +399,8 @@
             console.error('actionCreateSave',data)
             self.service
                 .create(data)
-                .then(function(result){
-                    alert('sucess ' + self.eventMap.actionCreateSave)
-                })
+                .then(function(result){})
                 .catch(function(error){
-                    alert('error ' + self.eventMap.actionCreateSave)
                     console.error(error)
                     RiotControl.trigger('notification',error.errorType + ' ' + self.eventMap.actionCreateSave,'error',error.message);
                 });
@@ -546,14 +542,11 @@
             var service = this.opts.service || this.opts.name; // TODO: move name
             var view = this.opts.view;
             var action = e.item.action.name;
-
-
-
-
+            console.info(Object.keys(e.item));
             switch(action){
                 case 'delete':
                     var event = [service, view, action,'confirmation'].join('_');
-                    RiotControl.trigger(event,event);
+                    RiotControl.trigger(event,service, view, self.data._id || self.selected);
                     break;
                 case 'save':
                 case 'update':
@@ -561,13 +554,6 @@
                         action = 'create';
                     }
                     var event = [service, action].join('_');
-                     console.info('EVENT actionClick',{
-                service:service,
-                action:action,
-                view:view,
-                event:event,
-                opts:this.opts
-            })
                     RiotControl.trigger(event,event);
                     break;
                 case 'view':

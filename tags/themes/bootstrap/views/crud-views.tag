@@ -116,8 +116,8 @@
         })
 
         confirm() {
-            $('#deleteConfirmation').modal('hide');
             RiotControl.trigger([opts.model, opts.view, 'delete'].join('_'), opts.id);
+            $('#deleteConfirmation').modal('hide');
         }
 
     </script>

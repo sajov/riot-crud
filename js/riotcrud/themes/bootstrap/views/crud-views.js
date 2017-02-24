@@ -35,8 +35,8 @@ riot.tag2('modal-delete-confirmation', '<div id="deleteConfirmation" class="moda
         })
 
         this.confirm = function() {
-            $('#deleteConfirmation').modal('hide');
             RiotControl.trigger([opts.model, opts.view, 'delete'].join('_'), opts.id);
+            $('#deleteConfirmation').modal('hide');
         }.bind(this)
 
 });
