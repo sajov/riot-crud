@@ -274,7 +274,7 @@
 
     RiotControl.addStore(new ModelStore());
 
-    var FeatherClientMixin = {
+    riot.mixin("FeatherClientMixin", {
         init: function(){
 
             var defaults = {
@@ -337,7 +337,9 @@
         bindEvent: function (event, fn) {
             var self = this;
             RiotControl.on(event, function(e){
-                // if(this.debug || true) console.info(map[i], this.eventMap[map[i]], e, self.opts, self.eventMap,Object.keys(self))
+                if(this.debug) {
+                    console.info(map[i], this.eventMap[map[i]], e, self.opts, self.eventMap,Object.keys(self))
+                }
                 self[fn](e);
             });
         },
@@ -349,11 +351,13 @@
         },
 
         actionDeleteConfirmation: function (id) {
-            console.info('actionDeleteConfirmation',id)
-            RiotControl.trigger('delete_confirmation_modal', this.opts.service, this.opts.view, id || this.opts.query.id || this.selection)
+            console.info('actionDeleteConfirmation',id,this.data)
+            RiotControl.trigger('delete_confirmation_modal', this.opts.service, this.opts.view, id || this.data._id || this.selection)
+            // RiotControl.trigger('delete_confirmation_modal', this.opts.service, this.opts.view, id || this.opts.query.id || this.selection)
         },
 
         actionDeleteConfirmed: function (id) {
+            var self = this;
             if(typeof id === "object") {
                 var ids = id.map(function(_id){return _id.toString()});
                 var query = {query:{ _id: { $in: ids}}};
@@ -472,11 +476,9 @@
                     break;
             }
         }
-    }
+    });
 
-    riot.mixin("FeatherClientMixin", FeatherClientMixin);
-
-    var viewActionsMixin = {
+    riot.mixin("ViewActionsMixin", {
         init: function(){
             var actions = ['View','Edit','Create','Delete','Save','List','Print','PDF','CSV','Json','Upload'].map((action, index) => {
                 return {name: action.toLowerCase(), label: action};
@@ -530,8 +532,6 @@
                     });
                 }
             })
-
-
         },
 
         actionClick: function (e) {
@@ -546,7 +546,7 @@
             switch(action){
                 case 'delete':
                     var event = [service, view, action,'confirmation'].join('_');
-                    RiotControl.trigger(event,service, view, self.data._id || self.selected);
+                    RiotControl.trigger(event);
                     break;
                 case 'save':
                 case 'update':
@@ -554,7 +554,7 @@
                         action = 'create';
                     }
                     var event = [service, action].join('_');
-                    RiotControl.trigger(event,event);
+                    RiotControl.trigger(event);
                     break;
                 case 'view':
                 case 'edit':
@@ -571,9 +571,7 @@
                     break;
             }
         }
-    };
+    });
 
-    // register the ViewActionsMixin throughout the app
-    riot.mixin("viewActionsMixin", viewActionsMixin);
 
 }(window, riot, route));

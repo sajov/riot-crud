@@ -28,7 +28,7 @@ gulp.task('riot', function() {
 gulp.task("compress", function () {
   return gulp.src("js/riotcrud.js")
     .pipe(babel())
-    // .pipe(minify())
+    .pipe(minify())
     .pipe(rename({
             suffix: '.min'
         }))

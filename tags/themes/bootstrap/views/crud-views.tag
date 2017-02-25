@@ -65,7 +65,7 @@
 
 	<script>
 		var self = this;
-		this.mixin('viewActionsMixin');
+		this.mixin('ViewActionsMixin');
 
         actionClickLocal = function(e) {
             e.preventDefault();
