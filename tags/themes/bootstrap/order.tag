@@ -1,3 +1,32 @@
+<modal-dialog>
+
+    <div id="modal-dialog" class="modal fade bs-example-modal-{ opts.size || 'lg'}" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-{ opts.size || 'lg'}">
+        <div class="modal-content">
+
+          <yield/>
+
+        </div>
+      </div>
+    </div>
+
+    <script>
+
+        this.on('mount', () => {
+            RiotControl.on(opts.trigger, () => {
+                $('#modal-dialog').modal('toggle');
+            });
+        });
+
+        this.on('unmount', () => {
+            RiotControl.off(opts.trigger);
+        });
+
+
+    </script>
+
+</modal-dialog>
+
 <order>
 
     <modal-dialog trigger="order_add_item_modal" trigger-submit="crud-table-trigger-selected">
