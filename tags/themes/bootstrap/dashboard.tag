@@ -162,7 +162,7 @@
                 title="Orders List"
                 description="riot-crud Table"
                 service="orders"
-                showheader="true"
+                showheader="1"
                 limit="4"
                 fields="_id,orderId,total,name,createdAt"
                 sortfield="orderId"
@@ -297,6 +297,7 @@
                             model: 'orders',
                             idfield: '_id',
                             service: 'orders',
+                            showheader: '1',
                             title: 'Order',
                             description: 'inline orders view with brutusin:json-forms',
                             schema: true,
