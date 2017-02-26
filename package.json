@@ -18,6 +18,8 @@
     "gulp-sass": "^2.2.0"
   },
   "devDependencies": {
+    "babili": "0.0.11",
+    "gulp-babel": "^6.1.2",
     "gulp-babel-minify": "^0.1.12",
     "gulp-rename": "^1.2.2",
     "gulp-util": "^3.0.7"

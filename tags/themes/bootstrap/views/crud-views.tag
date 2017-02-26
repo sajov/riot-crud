@@ -20,21 +20,74 @@
 		</a>
 	</div>
 	<script>
-		var self = this;
-		this.mixin(viewActionsMixin);
-		self.on('mount', () => {
-			console.warn('crud-action-menu', self.opts.actioMenu);
-			console.warn('crud-action-menu', self.opts.action);
-			console.warn('crud-action-menu', self.opts);
-
-		})
+		// this.mixin('viewActionsMixin');
 	</script>
 </crud-action-menu>
+
+<crud-modal-dialog>
+
+    <div id="modal-dialog" class="modal fade bs-example-modal-{ opts.size || 'lg'}" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-{ opts.size || 'lg'}">
+        <div class="modal-content">
+
+           <div class="modal-header">
+                <button type="button" class="close waves-effect" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel2">{ opts.title }</h4>
+            </div>
+
+
+            <div class="modal-body">
+                <yield from="body"/>
+            </div>
+            <div class="modal-footer">
+                <yield from="footer"/>
+            </div>
+
+        </div>
+      </div>
+    </div>
+
+    <style type="text/css">
+        #modal-dialog .card{
+            /*border: 1px #909090 solid;*/
+            box-shadow: none;
+        }
+        #modal-dialog .card .body {
+            font-size: 14px;
+            color: #555;
+            padding: 0;
+        }
+    </style>
+    <script>
+
+        this.on('mount', () => {
+            RiotControl.on(opts.trigger, () => {
+                $('#modal-dialog').modal('toggle');
+            });
+        });
+
+        this.on('unmount', () => {
+            RiotControl.off(opts.trigger);
+        });
+
+
+    </script>
+
+</crud-modal-dialog>
+
 
 <crud-header-dropdown>
 
 	<modal-delete-confirmation></modal-delete-confirmation>
-
+    <crud-modal-dialog title="Upload" trigger="{opts.service}_upload_modal" trigger-submit="fg">
+        <yield to="body">
+            <crud-upload></crud-upload>
+        </yield>
+        <yield to="footer">
+            <button type="button" class="btn btn-default  waves-effect" data-dismiss="modal"  onclick={abort}>Abbort</button>
+            <button type="button" class="btn btn-info waves-effect" onclick={triggerData} data-trigger="product_add_items">Upload</button>
+        </yield>
+    </crud-modal-dialog>
 	<ul class="header-dropdown m-r--5">
         <li class="dropdown">
             <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -42,7 +95,7 @@
             </a>
             <ul class="dropdown-menu pull-right">
                 <li each={action in opts.actions}>
-	        		<a if={action.active} href="#" onclick={ click }>
+	        		<a if={action.active} href="#" onclick={ actionClick }>
 
 		        		<i if={action.name == 'create'} class="material-icons">add</i>
 						<i if={action.name == 'view'} class="material-icons">view_compact</i>
@@ -67,14 +120,20 @@
             </ul>
         </li>
     </ul>
+    <!-- <a  href="#" onclick={ actionClickLocal }>local</a>
+    <a  href="#" onclick={ actionClickMixin }>mixin</a> -->
 
 	<script>
 		var self = this;
-		this.mixin(viewActionsMixin);
+		this.mixin('ViewActionsMixin');
+
+        actionClickLocal = function(e) {
+            e.preventDefault();
+            console.info('actionClickLocal', this.opts)
+        }
 	</script>
 
 </crud-header-dropdown>
-
 
 <modal-delete-confirmation>
 
@@ -89,36 +148,54 @@
             <h4 class="modal-title" id="myModalLabel2">Delete <i>{opts.model}</i></h4>
           </div>
           <div class="modal-body">
-            id:{opts.id} {opts.text}
+            ID: {opts.id}
+            <br>
+            {opts.text}
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Abbort</button>
-            <button type="button" class="btn btn-warning" onclick="{confirm}">Delete</button>
+            <button type="button" class="btn btn-danger" onclick="{confirm}">Delete</button>
           </div>
         </div>
       </div>
     </div>
+    <link href="/bower_components/adminbsb-materialdesign/plugins/sweetalert/sweetalert.css" rel="stylesheet" />
     <!-- /modals -->
     <style type="text/css">
         div.modal-backdrop.fade.in {
             z-index: 7!important;
         }
+        div.modal-body {
+            word-break: break-all;
+        }
     </style>
     <script>
         var self = this;
+        // self.dependencies = ['/bower_components/adminbsb-materialdesign/plugins/sweetalert/sweetalert.min.js'];
 
-         RiotControl.on('delete_confirmation_modal', (model, view, id, text) => {
+        RiotControl.on('delete_confirmation_modal', (model, view, id, text) => {
             self.opts.model = model;
             self.opts.view = view;
             self.opts.id = id;
             self.opts.text = text || 'please confirm';
             self.update();
             $('#deleteConfirmation').modal('show');
+            // swal({
+            //     title: "Are you sure?",
+            //     text: "You will not be able to recover this imaginary file!",
+            //     type: "warning",
+            //     showCancelButton: true,
+            //     confirmButtonColor: "#DD6B55",
+            //     confirmButtonText: "Yes, delete it!",
+            //     closeOnConfirm: false
+            // }, function () {
+            //     swal("Deleted!", "Your imaginary file has been deleted.", "success");
+            // });
         })
 
         confirm() {
-            $('#deleteConfirmation').modal('hide');
             RiotControl.trigger([opts.model, opts.view, 'delete'].join('_'), opts.id);
+            $('#deleteConfirmation').modal('hide');
         }
 
     </script>
@@ -169,7 +246,7 @@
 	</style>
 
 	<div class="card">
-        <div if={opts.showheader} class="header">
+        <div if={opts.showheader == 1 || opts.showheader == true} class="header">
             <h2>{opts.title}<small>{opts.description}</small></h2>
             <span if={selection.length > 0} class="label-count bg-pink font-6">{selection.length}</span>
             <crud-header-dropdown if={opts.actionMenu !== false} selection="{selection.length}" service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown>
@@ -213,7 +290,7 @@
 					        </td>
 					        <td>&nbsp;</td>
 				      	</tr>
-				      	<tr each="{ row in data.data }" class="{ 'selected': selection.indexOf(row._id) != -1 }">
+				      	<tr each="{ row in data.data }" onclick={ selectRow } class="{ 'selected': selection.indexOf(row._id) != -1 }">
 					      	<td if={ selection !== false } class="a-center">
 					      		<div if="{selection.indexOf(row._id) > -1}">
 					      			<input  data-value="{ row._id }" type="checkbox" class="filled-in chk-col-{color}" id="basic_checkbox_on_{row._id}" checked="checked">
@@ -224,7 +301,7 @@
 	                       			<label data-value="{ row._id }" onclick={ selectRow }  data-value="{ selection.length ==  data.data.length ? 1 : 0 }" for="basic_checkbox_{row._id}"></label>
 					      		</div>
 							</td>
-					        <td each="{ colval, colkey in thead }">
+					        <td  data-value="{ row._id }" each="{ colval, colkey in thead }">
 					        	{ row[colkey] }
 					        </td>
 					      	<td>
@@ -311,11 +388,7 @@
         });
 
 
-		self.mixin(FeatherClientMixin);
-		self.mixin(optsMixin);
-
-
-
+		self.mixin('FeatherClientMixin');
 
 	    /* deprecated use reInit */
 	    self.refresh = () => {
@@ -332,10 +405,6 @@
 	    self.reInit = (query) => {
 	    	getData();
 	    }
-
-	    self.on('*', (event) => {
-			if(self.debug) console.info('TABLE event', event,self.selection);
-		});
 
 		self.on('mount', () => {
 			if(self.opts.service) {
@@ -424,7 +493,12 @@
 			} else{
 				self.selection.push(value)
 			}
+            RiotControl.trigger([self.opts.service, 'query' ].join('_'), e.item.row._id)
 		}
+
+        triggerSelect = (e) => {
+            console.log('triggerSelect', e.item)
+        }
 
 		deleteRow = (e) => {
 			e.preventDefault();

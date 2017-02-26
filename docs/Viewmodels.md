@@ -27,7 +27,8 @@ Each view
 | title          | string  | all   |           |             |
 | description    | string  | all   |           |             |
 | showheader     | string  | all   |           |             |
-| showheader     | string  | all   |           |             |
+| inline         | boolean | all   | true      | Inline usage without routing. RiotCrudModel will set false by default|
+| actionmenu     | string  | all   |           |             |
 | service        | string  | all   |           |             |
 | servicename    | string  | all   |           | deprecated  |
 | schema         | mixed   | all   |           |             |

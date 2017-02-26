@@ -22,7 +22,7 @@
             // '/bower_components/gentelella/vendors/pnotify/dist/pnotify.buttons.js',
         ];
 
-        self.mixin(FeatherClientMixin);
+        self.mixin('FeatherClientMixin');
 
         RiotControl.on('notification', (title, type, text) => {
             this.notify(title, type, text);
@@ -117,7 +117,7 @@
             <span>{group.title}</span>
         </a>
         <ul class="ml-menu">
-            <li each={route, key in group.routes} class="{active: window.location.hash == ('#'+route.route)}">
+            <li each={route, key in group.routes}>
                  <a href="#{ route.route }" onclick="{ routeTo }" style="" view="#{ route.route }">
                     <i class="material-icons">{route.icon || 'list'}</i>
                     <span>{route.title}</span>
@@ -132,8 +132,8 @@
     <script>
 
         RiotControl.on('routeStateChange',(path) => {
-            $('.menu').find('li.active, a.active').removeClass('active');
-            $('.menu').find('a[href="' + window.location.hash + '"]').parent('li').addClass('active');
+            $('.menu').find('a').removeClass('col-cyan');
+            $('.menu').find('a[href="' + window.location.hash + '"]').addClass('col-cyan');
         });
 
         this.on('update', (event) => {
@@ -141,6 +141,7 @@
         });
 
         this.on('mount', () => {
+            console.info('sidemen ',opts.routes)
             this.initPlugins();
         });
 

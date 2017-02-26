@@ -1,32 +1,3 @@
-<modal-dialog>
-
-    <div id="modal-dialog" class="modal fade bs-example-modal-{ opts.size || 'lg'}" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-{ opts.size || 'lg'}">
-        <div class="modal-content">
-
-          <yield/>
-
-        </div>
-      </div>
-    </div>
-
-    <script>
-
-        this.on('mount', () => {
-            RiotControl.on(opts.trigger, () => {
-                $('#modal-dialog').modal('toggle');
-            });
-        });
-
-        this.on('unmount', () => {
-            RiotControl.off(opts.trigger);
-        });
-
-
-    </script>
-
-</modal-dialog>
-
 <order>
 
     <modal-dialog trigger="order_add_item_modal" trigger-submit="crud-table-trigger-selected">
@@ -35,11 +6,15 @@
             <button type="button" class="close waves-effect" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             <h4 class="modal-title" id="myModalLabel2">Add Product</h4>
         </div>
+
+
         <div class="modal-body">
-            <crud-table title="crud-table" service="products" limit="3" skip="0" ups={table:'test'}>
+            <crud-table title="crud-table" service="products" showheader="0" limit="3" skip="0" ups={table:'test'}>
                     <yield class="pull-right">
-                        <button type="button" class="btn btn-success waves-effect" onclick={triggerData} data-trigger="product_add_items">Add</button>
-                        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal"  onclick={abort}>Abbort</button>
+                        <div class="clearfix"></div>
+                        <br>
+                        <button type="button" class="btn btn-default  waves-effect" data-dismiss="modal"  onclick={abort}>Abbort</button>
+                        <button type="button" class="btn btn-info waves-effect" onclick={triggerData} data-trigger="product_add_items">Add</button>
                     </yield>
             </crud-table>
         </div>
@@ -52,24 +27,20 @@
 
     <div if={opts.data} class="card">
         <div class="header">
-            <h2>Order<small>{opts.data.orderId}</small></h2>
+            <h2>Order {opts.data.orderId}<small>{opts.data.name}, {opts.data.address.city}</small></h2>
             <crud-header-dropdown if={opts.actionMenu !== false} service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown>
         </div>
         <div class="body">
             <div class="">
                 <div class="x_title hidden-print">
-                    <h2>{opts.data.name} <small>{opts.data.address.city}</small><small class="pull-right">Date: {opts.data.createdAt}</small></h2>
+                    <span class="col-lg-12 text-right">Date: {opts.data.createdAt}</span>
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
                     <section class="invoice">
-                    <div class="clearfix"></div>
-                    <br>
-                    <br>
-                    <br>
                         <!-- info row -->
                         <div class="row invoice-info">
-                            <div class="col-sm-4 invoice-col">
+                            <div class="col-lg-4 col-sm-6 col-xs-12 invoice-col">
                                 From
                                 <address>
                                     <strong if={opts.data.company.name}><a href="">{opts.data.company.name}</a></strong>
@@ -82,7 +53,7 @@
                                 </address>
                             </div>
                             <!-- /.col -->
-                            <div class="col-sm-4 invoice-col">
+                            <div class="col-lg-4 col-sm-6 col-xs-12 invoice-col">
                                 To
                                 <address>
                                     <strong>{opts.data.shippingAddress.name}</strong>
@@ -93,11 +64,13 @@
                                 </address>
                             </div>
                             <!-- /.col -->
-                            <div class="col-sm-4 invoice-col">
+                            <div class="col-lg-4 col-sm-12 col-xs-12 invoice-col">
                                 <b>Invoice #007612</b>
                                 <br>
                                 <br>
                                 <b>Order ID:</b> {opts.data.orderId}
+                                <br>
+                                <b>Order Due:</b> {opts.data.createdAt}
                                 <br>
                                 <b>Payment Due:</b> 2/22/2014
                                 <br>
@@ -110,7 +83,7 @@
 
                         <!-- ITEMS Table row  -->
                         <div class="row">
-                            <div class="col-xs-12 table">
+                            <div class="col-xs-12 table-responsive">
                             <table class="table table-striped">
                                     <thead>
                                         <tr>
@@ -137,12 +110,12 @@
                                             <td align="right">{item.price_euro} €</td>
                                             <td align="right">{item.total} €</td>
                                             <td align="right"><a href="#" itemKey="{key}" onclick={ deleteItem } class="btn btn-danger btn-xs hidden-print">
-                                                <i class="material-icons">remove</i>
+                                                <i class="material-icons col-white">remove</i>
                                             </a></td>
                                         </tr>
                                         <tr>
                                             <td colspan="8">
-                                                <button class="btn btn-primary pull-right hidden-print waves-effect" onclick={ addItemModal } ><i class="material-icons">add</i></button>
+                                                <button class="btn btn-primary pull-right hidden-print waves-effect" onclick={ addItemModal } ><i class="material-icons col-white">add</i></button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -154,21 +127,8 @@
 
 
                         <div class="row">
-                            <!-- accepted payments column -->
-                            <div class="col-xs-9">
-                                <p class="lead">Payment Methods:</p>
-                                <img src="/bower_components/gentelella/production/images/visa.png" alt="Visa">
-                                <img src="/bower_components/gentelella/production/images/mastercard.png" alt="Mastercard">
-                                <img src="/bower_components/gentelella/production/images/american-express.png" alt="American Express">
-                                <img src="/bower_components/gentelella/production/images/paypal2.png" alt="Paypal">
-                                <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
-                                    Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem plugg dopplr jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
-                                </p>
-                            </div>
-                            <!-- /.col -->
-
                             <!-- TOTALS -->
-                            <div class="col-xs-3">
+                            <div class="col-xs-12 col-lg-4 pull-right">
                                 <p class="lead">Amount Due 2/22/2014</p>
                                 <div class="table-responsive">
                                     <table class="table">
@@ -198,6 +158,21 @@
                                 </div>
                             </div>
                             <!-- /.col -->
+
+                            <!-- accepted payments column -->
+                            <div class="col-xs-12 col-lg-6 pull-left">
+                                <p class="lead">Payment Methods:</p>
+                                <img src="/bower_components/gentelella/production/images/visa.png" alt="Visa">
+                                <img src="/bower_components/gentelella/production/images/mastercard.png" alt="Mastercard">
+                                <img src="/bower_components/gentelella/production/images/american-express.png" alt="American Express">
+                                <img src="/bower_components/gentelella/production/images/paypal2.png" alt="Paypal">
+                                <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
+                                    Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem plugg dopplr jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
+                                </p>
+                            </div>
+                            <!-- /.col -->
+
+
                         </div>
                         <!-- /.row -->
                         <!-- this row will not appear when printing -->
@@ -239,7 +214,7 @@
             '/bower_components/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.min.js'
         ];
 
-        self.mixin(FeatherClientMixin);
+        self.mixin('FeatherClientMixin');
 
         RiotControl.on('product_add_items', (items) => {
             if(items)

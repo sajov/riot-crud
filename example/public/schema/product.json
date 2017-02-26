@@ -4,30 +4,38 @@
   "title": "Product",
   "properties": {
     "_id": {
-      "type": "string"
+      "type": "string",
+      "title": "_ID"
     },
     "active": {
-      "type": "boolean"
+      "type": "boolean",
+      "title": "Active"
     },
     "sku": {
-      "type": "string"
+      "type": "string",
+      "title": "SKU"
     },
     "name": {
-      "type": "string"
+      "type": "string",
+      "title": "Name"
     },
     "url": {
-      "type": "string"
+      "type": "string",
+      "title": "URL"
     },
     "price_euro": {
-      "type": "number"
+      "type": "number",
+      "title": "PRICE €"
     },
     "price_dollar": {
-      "type": "number"
+      "type": "number",
+      "title": "PRICE $"
     },
     "image": {
-      "type": "string"
+      "type": "string",
+      "title": "Image"
     },
-   "images": {
+    "images": {
       "type": "array",
       "format": "table",
       "title": "Images",
@@ -60,10 +68,10 @@
         }
       }
     },
-     "locales": {
+    "locales": {
       "type": "array",
       "format": "table",
-      "title": "locales",
+      "title": "Locales",
       "uniqueItems": true,
       "items": {
         "type": "object",
@@ -80,10 +88,12 @@
             ]
           },
           "title": {
-            "type": "string"
+            "type": "string",
+            "title": "Title"
           },
           "description": {
             "type": "string",
+            "title": "Description",
             "format": "html",
             "options": {
                 "wysiwyg": true

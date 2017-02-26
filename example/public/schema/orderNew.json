@@ -1,0 +1,357 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "username": {
+      "type": "string"
+    },
+    "avatar": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "dob": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "address": {
+      "type": "object",
+      "properties": {
+        "street": {
+          "type": "string"
+        },
+        "suite": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "zipcode": {
+          "type": "string"
+        },
+        "geo": {
+          "type": "object",
+          "properties": {
+            "lat": {
+              "type": "string"
+            },
+            "lng": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "lat",
+            "lng"
+          ]
+        }
+      },
+      "required": [
+        "street",
+        "suite",
+        "city",
+        "zipcode",
+        "geo"
+      ]
+    },
+    "website": {
+      "type": "string"
+    },
+    "company": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "catchPhrase": {
+          "type": "string"
+        },
+        "bs": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "catchPhrase",
+        "bs"
+      ]
+    },
+    "_id": {
+      "type": "string"
+    },
+    "orderId": {
+      "type": "integer"
+    },
+    "account": {
+      "type": "string"
+    },
+    "comment": {
+      "type": "string"
+    },
+    "shippingAddress": {
+      "type": "object",
+      "properties": {
+        "street": {
+          "type": "string"
+        },
+        "suite": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "zipcode": {
+          "type": "string"
+        },
+        "geo": {
+          "type": "object",
+          "properties": {
+            "lat": {
+              "type": "string"
+            },
+            "lng": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "lat",
+            "lng"
+          ]
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "street",
+        "suite",
+        "city",
+        "zipcode",
+        "geo",
+        "name"
+      ]
+    },
+    "createdAt": {
+      "type": "string"
+    },
+    "updatedAt": {
+      "type": "string"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "sku": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "price_euro": {
+            "type": "integer"
+          },
+          "price_dollar": {
+            "type": "integer"
+          },
+          "image": {
+            "type": "string"
+          },
+          "locales": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "lang": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "lang",
+                "title",
+                "description"
+              ]
+            }
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "href": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "mediaType": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "href",
+                "title",
+                "description",
+                "mediaType"
+              ]
+            }
+          },
+          "attributes": {
+            "type": "object",
+            "properties": {
+              "color": {
+                "type": "string"
+              },
+              "material": {
+                "type": "string"
+              },
+              "adjective": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "color",
+              "material",
+              "adjective"
+            ]
+          },
+          "base_color": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          },
+          "qty": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "_id",
+          "active",
+          "sku",
+          "name",
+          "description",
+          "url",
+          "price_euro",
+          "price_dollar",
+          "image",
+          "locales",
+          "images",
+          "attributes",
+          "base_color",
+          "createdAt",
+          "updatedAt",
+          "qty",
+          "total"
+        ]
+      }
+    },
+    "transaction": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "business": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "account": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "amount",
+        "date",
+        "business",
+        "name",
+        "type",
+        "account"
+      ]
+    },
+    "subtotal": {
+      "type": "integer"
+    },
+    "taxRate": {
+      "type": "integer"
+    },
+    "tax": {
+      "type": "integer"
+    },
+    "shipping": {
+      "type": "integer"
+    },
+    "discount": {
+      "type": "integer"
+    },
+    "total": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "name",
+    "username",
+    "avatar",
+    "email",
+    "dob",
+    "phone",
+    "address",
+    "website",
+    "company",
+    "_id",
+    "orderId",
+    "account",
+    "comment",
+    "shippingAddress",
+    "createdAt",
+    "updatedAt",
+    "items",
+    "transaction",
+    "subtotal",
+    "taxRate",
+    "tax",
+    "shipping",
+    "discount",
+    "total"
+  ]
+}

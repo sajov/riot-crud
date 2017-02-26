@@ -5,22 +5,20 @@
   "moduleType": [],
   "license": "MIT",
   "dependencies": {
-    "motion-ui": "~1.1.0",
     "script.js": "^2.5.8",
     "riot": "riotjs#^3.2.0",
     "what-input": "^2.0.1",
-    "foundation-sites": "^6.2.3",
     "json-editor": "^0.7.28",
     "datatables.net": "^1.10.12",
-    "bootstrap": "^3.3.7",
-    "gentelella": "1.3.0",
     "jsoneditor": "^5.5.11",
     "json-forms": "^1.5.2",
     "dropzone": "^4.3.0",
     "x-editable": "^1.5.1",
     "adminbsb-materialdesign": "^1.0.4",
     "material-design-lite": "^1.3.0",
-    "riot-route": "^3.1.0"
+    "riot-route": "^3.1.0",
+    "json-form": "^1.1.11",
+    "jsonform": "*"
   },
   "ignore": [
     "**/.*",

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>TEST</title>
+    <!-- Favicon-->
+</head>
+
+<body class="theme-cyan">
+
+    <my-custom-tag mytitle="mytag1"></my-custom-tag>
+    <my-custom-tag mytitle="mytag2"></my-custom-tag>
+    <my-custom-tag mytitle="mytag3"></my-custom-tag>
+    <hr>
+    <my-custom-tag-parent mytitle="mytagN1"></my-custom-tag-parent>
+    <!-- <script src="/bower_components/riot/riot+compiler.min.js"></script> -->
+    <script src="/bower_components/riot/riot+compiler.js"></script>
+    <script src="/bower_components/riot-route/dist/route.min.js"></script>
+    <script src="/js/riotcrud/themes/bootstrap/test.js"></script>
+    <!-- /riot-crud -->
+    <script type="text/javascript">
+        ;(function(window, riot) {
+
+             window.RiotControl = {
+                _stores: [],
+                addStore: function(store) {
+                    this._stores.push(store);
+                },
+                reset: function() {
+                    this._stores = [];
+                }
+            };
+
+            ['on','one','off','trigger'].forEach(function(api){
+                RiotControl[api] = function() {
+                    var args = [].slice.call(arguments);
+                    this._stores.forEach(function(el){
+                        el[api].apply(el, args);
+                    });
+                };
+            });
+
+            if (typeof(module) !== 'undefined') module.exports = RiotControl;
+
+            function ModelStore() {
+                if (!(this instanceof ModelStore)) return new ModelStore()
+
+                riot.observable(this)
+
+                var self = this;
+
+            }
+
+            RiotControl.addStore(new ModelStore());
+
+            if (!window.RiotControl) {
+                window.RiotControl = RiotControl;
+            }
+
+
+            var OptsMixin = {
+              init: function() {
+                this.opts.log = [];
+                this.on('updated', function() { console.log('Updated!') })
+                this.on('mount', function(){
+                    var self = this;
+                    console.info('INIT->mounted',this.opts.mytitle);
+                    RiotControl.on(this.opts.mytitle, function(){
+                        self.dump(self.opts.mytitle);
+                    })
+                })
+              },
+
+              clickTest: function(e) {
+                e.preventDefault();
+                this.opts.log.push(this.opts.mytitle);
+                console.info(this.opts);
+                RiotControl.trigger(this.opts.mytitle,this.opts.mytitle);
+              },
+
+              dump: function(t) {
+                console.info('DUMP',t,this.opts)
+              },
+
+              getOpts: function() {
+                console.info('getOpts',this.opts.mytitle);
+                return this.opts
+              },
+
+              setOpts: function(opts, update) {
+                console.info('setOpts',this.opts.mytitle);
+                this.opts = opts
+                if (!update) this.update()
+                return this
+              }
+            }
+            riot.mixin('OptsMixin',OptsMixin);
+            riot.mount('my-custom-tag');
+            riot.mount('my-custom-tag-parent');
+        }(window, riot));
+
+
+    </script>
+</body>
+
+</html>

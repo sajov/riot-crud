@@ -22,7 +22,7 @@ riot.tag2('modal-delete-confirmation', '<div id="deleteConfirmation" class="moda
 
 riot.tag2('top-menu', '<link href="/bower_components/gentelella/vendors/pnotify/dist/pnotify.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/pnotify/dist/pnotify.buttons.css" rel="stylesheet"> <link href="/bower_components/gentelella/vendors/pnotify/dist/pnotify.nonblock.css" rel="stylesheet"> <modal-delete-confirmation></modal-delete-confirmation>', '', '', function(opts) {
         var self = this;
-        self.mixin(FeatherClientMixin);
+        self.mixin('FeatherClientMixin');
         RiotCrudController.loadDependencies(
             [
                 '/bower_components/gentelella/vendors/pnotify/dist/pnotify.js',

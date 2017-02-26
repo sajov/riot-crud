@@ -10,7 +10,7 @@ riot.tag2('top-menu', '<link href="/bower_components/gentelella/vendors/pnotify/
 
         ];
 
-        self.mixin(FeatherClientMixin);
+        self.mixin('FeatherClientMixin');
 
         RiotControl.on('notification', (title, type, text) => {
             this.notify(title, type, text);
@@ -71,11 +71,11 @@ riot.tag2('top-menu', '<link href="/bower_components/gentelella/vendors/pnotify/
 
 });
 
-riot.tag2('side-menu', '<li class="header">RIOT+FEATHERS CRUD DEMO</li> <li each="{route, key in opts.routes.default.routes}"> <a href="#{route.route}" onclick="{routeTo}" style="" view="#{route.route}"> <i class="material-icons">{route.icon}</i> <span>{route.title}</span> </a> </li> <li each="{group, key in opts.routes}" if="{key!=\'default\'}"> <a if="{group.title}" href="javascript:void(0);" class="menu-toggle"> <i class="material-icons">{group.icon}</i> <span>{group.title}</span> </a> <ul class="ml-menu"> <li each="{route, key in group.routes}" class="{active: window.location.hash == (\'#\'+route.route)}"> <a href="#{route.route}" onclick="{routeTo}" style="" view="#{route.route}"> <i class="material-icons">{route.icon || \'list\'}</i> <span>{route.title}</span> </a> </li> </ul> </li> <yield></yield>', '', '', function(opts) {
+riot.tag2('side-menu', '<li class="header">RIOT+FEATHERS CRUD DEMO</li> <li each="{route, key in opts.routes.default.routes}"> <a href="#{route.route}" onclick="{routeTo}" style="" view="#{route.route}"> <i class="material-icons">{route.icon}</i> <span>{route.title}</span> </a> </li> <li each="{group, key in opts.routes}" if="{key!=\'default\'}"> <a if="{group.title}" href="javascript:void(0);" class="menu-toggle"> <i class="material-icons">{group.icon}</i> <span>{group.title}</span> </a> <ul class="ml-menu"> <li each="{route, key in group.routes}"> <a href="#{route.route}" onclick="{routeTo}" style="" view="#{route.route}"> <i class="material-icons">{route.icon || \'list\'}</i> <span>{route.title}</span> </a> </li> </ul> </li> <yield></yield>', '', '', function(opts) {
 
         RiotControl.on('routeStateChange',(path) => {
-            $('.menu').find('li.active, a.active').removeClass('active');
-            $('.menu').find('a[href="' + window.location.hash + '"]').parent('li').addClass('active');
+            $('.menu').find('a').removeClass('col-cyan');
+            $('.menu').find('a[href="' + window.location.hash + '"]').addClass('col-cyan');
         });
 
         this.on('update', (event) => {
@@ -83,6 +83,7 @@ riot.tag2('side-menu', '<li class="header">RIOT+FEATHERS CRUD DEMO</li> <li each
         });
 
         this.on('mount', () => {
+            console.info('sidemen ',opts.routes)
             this.initPlugins();
         });
 
