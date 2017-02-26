@@ -94,7 +94,7 @@ riot.tag2('todo-list', '<div class="card"> <div class="header"> <h2>{opts.title}
         ];
 });
 
-riot.tag2('dashboard', '<div class="row top_tiles"> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Orders" description="" pie="chart chart-pie" sortdir="-1" sortfield="orderId" datafield="total" service="orders"></top-widget> </div> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Categories" description="" sparkline="line" sparklinedata="30,35,25,8" color="cyan" icon="list" service="categories"></top-widget> </div> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Products" description="" icon="shopping_cart" color="cyan" service="products"></top-widget> </div> </div> <div class="row"> <div class="col-md-6 col-sm-6 col-xs-12"> <crud-table ref="ordertable" title="Orders List" description="riot-crud Table" service="orders" showheader="true" limit="4" fields="_id,orderId,total,name,createdAt" sortfield="orderId" sortdir="-1" showpagination="1" changelimit="1" skip="0" ups="{table:\'test\'}"> </crud-table> </div> <div class="col-md-6 col-sm-6 col-xs-12"> <div id="json-forms-orders"></div> </div> </div> <div class="row"> <div class="col-md-6 col-sm-6 col-xs-12"> <div id="jsoneditor-categories"></div> </div> <div class="col-md-6 col-sm-6 col-xs-12"> <div id="json-forms-products"></div> </div> </div> <div class="row"> <div class="col-xs-12"> <todo-list title="Feature List" subtitle="current and following tasks"></todo-list> </div> </div>', '', '', function(opts) {
+riot.tag2('dashboard', '<div class="row top_tiles"> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Orders" description="" pie="chart chart-pie" sortdir="-1" sortfield="orderId" datafield="total" service="orders"></top-widget> </div> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Categories" description="" sparkline="line" sparklinedata="30,35,25,8" color="cyan" icon="list" service="categories"></top-widget> </div> <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12"> <top-widget title="Products" description="" icon="shopping_cart" color="cyan" service="products"></top-widget> </div> </div> <div class="row"> <div class="col-md-6 col-sm-6 col-xs-12"> <crud-table ref="ordertable" title="Orders List" description="riot-crud Table" service="orders" showheader="true" limit="4" fields="_id,orderId,total,name,createdAt" sortfield="orderId" sortdir="-1" showpagination="1" changelimit="1" skip="0" ups="{table:\'test\'}"> </crud-table> </div> <div class="col-md-6 col-sm-6 col-xs-12"> <div id="json-forms-orders"></div> </div> </div> <div class="row"> <div class="col-md-6 col-sm-6 col-xs-12"> <div id="jsoneditor-categories"></div> </div> <div class="col-md-6 col-sm-6 col-xs-12"> <div id="demo-products"></div> </div> </div> <div class="row"> <div class="col-xs-12"> <todo-list title="Feature List" subtitle="current and following tasks"></todo-list> </div> </div>', '', '', function(opts) {
         var self = this;
         self.mixin('FeatherClientMixin');
         self.jsoneditorQuery = {
@@ -103,13 +103,15 @@ riot.tag2('dashboard', '<div class="row top_tiles"> <div class="animated flipInY
 
         self.dependencies = [
             riotCrudTheme + '/views/crud-jsoneditor.js',
+            riotCrudTheme + '/views/crud-json-editor.js',
+            riotCrudTheme + '/views/crud-json-forms.js',
             '/bower_components/gentelella/vendors/iCheck/icheck.min.js',
         ];
 
         this.refresh = (opts) => {
             initJsonFormsOrders();
             initJsonFormsProducts();
-            initJsonEditorCategories();
+
         },
 
         this.initView = () => {
@@ -121,8 +123,9 @@ riot.tag2('dashboard', '<div class="row top_tiles"> <div class="animated flipInY
                 initPlugins();
                 initJsonFormsOrders();
                 initJsonFormsProducts();
-                initJsonEditorCategories();
 
+                setTimeout(this.fakeOrder, 3000);
+                self.autoOrder = setInterval(this.fakeOrder, 8000);
             });
         });
 
@@ -141,7 +144,7 @@ riot.tag2('dashboard', '<div class="row top_tiles"> <div class="animated flipInY
                             service: 'categories',
                             title: 'Categories',
                             description: 'inline category view with jsoneditor',
-                            schema: 'http://' + window.location.hostname+ ':3030/schema/category.json',
+                            schema: true,
                             tag: 'crud-json-editor',
                             selection: true,
                             view: 'edit',
@@ -152,7 +155,6 @@ riot.tag2('dashboard', '<div class="row top_tiles"> <div class="animated flipInY
                             menuGroup: 'models',
 
                             title: 'Categories',
-                            schema: 'http://' + window.location.hostname+ ':3030/schema/category.json',
                             type:'inline',
                             query: {id:result.data[0]._id}
                     });
@@ -164,17 +166,15 @@ riot.tag2('dashboard', '<div class="row top_tiles"> <div class="animated flipInY
             self.client.service('products')
                 .find({query:{$sort:{_id:-1},$limit:1}})
                 .then((result) => {
-
-                        riot.mount('#json-forms-products','crud-json-forms',
+                        riot.mount('#demo-products','crud-json-editor',
                          {
                             model: 'products',
                             idfield: '_id',
                             service: 'products',
                             title: 'Products',
-                            description: 'inline products view with brutusin:json-forms',
+                            description: 'inline products view with json-editor',
                             schema: true,
-
-                            tag: 'crud-json-forms',
+                            tag: 'crud-json-editor',
                             selection: true,
                             view: 'edit',
                             views: ['save'],

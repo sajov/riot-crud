@@ -49,60 +49,24 @@
             }
         },
 
+        self.updateView = function(data) {
 
-        self.on('before-mount', function(params, options) {
-            RiotCrudController.loadDependencies(self.dependencies,'crud-jsoneditor', function (argument) {
-                self.service.get('schema').then((result) => {
-                    opts.schema = result;
-                    self.initPlugins();
-                    if(self.opts.query && self.opts.query.id) {
-                        self.get(self.opts.query.id)
-                    }
-                }).catch((error) => {
-                    console.error('console.errorconsole.errorconsole.errorconsole.error')
-                });
-
-            });
-        });
-
-
-        self.get = function(id) {
-            if(typeof id != 'undefined') {
-                self.service.get(id).then(function(result){
-                    if(typeof self.editor == 'undefined') {
-                        self.initPlugins();
-                    }
-
-                    self.data = result;
-                    self.editor.set(result);
-                }).catch(function(error){
-                  RiotControl.trigger(
-                        'notification',
-                        error.errorType + ' ' + self.eventKeyDeleteConfirmed,
-                        'error',
-                        error.message
-                    );
-                });
-            } else {
-                self.data = {};
-            }
-        }
-
-        self.initView = function(data) {
             self.initPlugins();
         },
 
         self.initPlugins = function(data) {
+
             var container = document.getElementById("jsoneditor");
             var options = {
                 modes: ['view', 'form', 'code', 'text']
             };
-            self.editor = new JSONEditor(container, options);
-            self.editor.set(self.data);
+
+            self.josdejongJsoneditor = new JSONEditor(container, options);
+            self.josdejongJsoneditor.set(self.data);
         }
 
         self.getData = () => {
-            return self.editor.get();
+            return self.josdejongJsoneditor.get();
         }
 
 

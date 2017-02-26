@@ -183,7 +183,7 @@
             <div id="jsoneditor-categories"></div>
         </div>
         <div class="col-md-6 col-sm-6 col-xs-12">
-            <div id="json-forms-products"></div>
+            <div id="demo-products"></div>
         </div>
     </div>
     <div class="row">
@@ -201,13 +201,15 @@
 
         self.dependencies = [
             riotCrudTheme + '/views/crud-jsoneditor.js', // TODO: bugfix
+            riotCrudTheme + '/views/crud-json-editor.js', // TODO: bugfix
+            riotCrudTheme + '/views/crud-json-forms.js', // TODO: bugfix
             '/bower_components/gentelella/vendors/iCheck/icheck.min.js',
         ];
 
         this.refresh = (opts) => {
             initJsonFormsOrders();
             initJsonFormsProducts();
-            initJsonEditorCategories();
+            // initJsonEditorCategories();
         },
 
         this.initView = () => {
@@ -219,9 +221,9 @@
                 initPlugins();
                 initJsonFormsOrders();
                 initJsonFormsProducts();
-                initJsonEditorCategories();
-                // setTimeout(this.fakeOrder, 3000);
-                // self.autoOrder = setInterval(this.fakeOrder, 8000);
+                // initJsonEditorCategories();
+                setTimeout(this.fakeOrder, 3000);
+                self.autoOrder = setInterval(this.fakeOrder, 8000);
             });
         });
 
@@ -240,7 +242,7 @@
                             service: 'categories',
                             title: 'Categories',
                             description: 'inline category view with jsoneditor',
-                            schema: 'http://' + window.location.hostname+ ':3030/schema/category.json',
+                            schema: true,
                             tag: 'crud-json-editor',
                             selection: true,
                             view: 'edit',
@@ -251,7 +253,6 @@
                             menuGroup: 'models',
                             // buttons: ['create','save','list'],
                             title: 'Categories',
-                            schema: 'http://' + window.location.hostname+ ':3030/schema/category.json',
                             type:'inline',
                             query: {id:result.data[0]._id}
                     });
@@ -263,18 +264,15 @@
             self.client.service('products')
                 .find({query:{$sort:{_id:-1},$limit:1}})
                 .then((result) => {
-
-                        riot.mount('#json-forms-products','crud-json-forms',
+                        riot.mount('#demo-products','crud-json-editor',
                          {
                             model: 'products',
                             idfield: '_id',
                             service: 'products',
                             title: 'Products',
-                            description: 'inline products view with brutusin:json-forms',
+                            description: 'inline products view with json-editor',
                             schema: true,
-                            // schema: 'http://' + window.location.hostname+ ':3030/schema/products.json',
-                            // schema: 'http://' + window.location.hostname+ ':3030/schema/category.json',
-                            tag: 'crud-json-forms',
+                            tag: 'crud-json-editor',
                             selection: true,
                             view: 'edit',
                             views: ['save'],

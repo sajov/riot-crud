@@ -8,11 +8,11 @@
 
     <div class="card">
         <div class="header">
-            <h2>{opts.title}<small>{opts.description}???</small></h2>
+            <h2>{opts.title}<small>{opts.description}   ???</small></h2>
             <crud-header-dropdown if={opts.actionMenu !== false} service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown>
         </div>
-        <div class="body">
-            <div id="jsoneditor"></div>
+        <div class="body" onclick={fake}>
+            <div id="jsoneditor-container"></div>
         </div>
     </div>
 
@@ -32,87 +32,58 @@
             self.update();
             self.get(self.opts.query.id);
         },
-
-        self.initView = () => {
+        self.fake = () => {
             self.initJSONEditor();
-            self.editor.setValue(self.data);
+        }
+        self.updateView = () => {
+            self.initJSONEditor();
+            // self.editor.setValue(self.data);
             // self.get(self.opts.query.id)
         }
 
-        this.on('update', function() {
-            self.initJSONEditor();
-            self.editor.setValue(self.data);
-        });
-        this.on('mount', function() {
-            console.warn('??? mount', Object.keys(self),self.getOpts())
-            // self.testMe();
-        });
+        self.initJSONEditor = function() {
 
-        self.get = function(id) {
+            // self.editor = new JSONEditor(element, options);
+            // JSONEditor.defaults.options.theme = "bootstrap3";
+            // // JSONEditor.defaults.options.theme = "foundation6";
+            // JSONEditor.plugins.selectize.enable = true;
+            // JSONEditor.defaults.iconlib = 'fontawesome4';
+            // JSONEditor.plugins.selectize.enable = true;
+            // JSONEditor.plugins.select2.width = "300px";
+            // // JSONEditor.plugins.sceditor.emoticonsEnabled = true;
+            // // JSONEditor.plugins.epiceditor.basePath = 'epiceditor';
 
-            if(typeof self.opts.query.id != 'undefined') {
-
-                self.service.get(id).then(function(result){
-                    if(typeof self.editor == 'undefined') {
-                      self.initJSONEditor();
-                    }
-                    self.data = result;
-                    self.editor.setValue(self.data);
-
-                }).catch(function(error){
-                  console.error('Error crud-json-editor get', error);
-                });
-            } else {
-                self.data = {};
-                self.editor.setValue(self.data);
-            }
-        }
-
-        self.initJSONEditor = function(data) {
-
-            self.opts.data = data;
-
-            JSONEditor.defaults.options.theme = "bootstrap3";
-            // JSONEditor.defaults.options.theme = "foundation6";
-            JSONEditor.plugins.selectize.enable = true;
-            JSONEditor.defaults.iconlib = 'fontawesome4';
-            JSONEditor.plugins.selectize.enable = true;
-            JSONEditor.plugins.select2.width = "300px";
-            // JSONEditor.plugins.sceditor.emoticonsEnabled = true;
-            // JSONEditor.plugins.epiceditor.basePath = 'epiceditor';
-
-            JSONEditor.defaults.disable_collapse = true;
-            JSONEditor.defaults.disable_edit_json = true;
-            JSONEditor.defaults.disable_properties = true;
-            JSONEditor.defaults.no_additional_properties = true;
-
-            self.editor = new JSONEditor(document.getElementById('jsoneditor'),
+            // JSONEditor.defaults.disable_collapse = true;
+            // JSONEditor.defaults.disable_edit_json = true;
+            // JSONEditor.defaults.disable_properties = true;
+            // JSONEditor.defaults.no_additional_properties = true;
+            if(!self.JSONEditor)
+            self.JSONEditor = new JSONEditor(document.getElementById('jsoneditor-container'),
                 {
                     // schema: 'http://localhost:3030/schema/product_faker.json',
-                    // ajax:true,
                     schema: self.opts.schema,
                     theme:'bootstrap3',
-                    // object_layout: 'grid',
                     // grid_columns: 10,
-                    expand_height: true,
-                    disable_edit_json: true,
-                    disable_collapse: true,
-                    disable_edit_json: true,
-                    disable_properties: true,
-                    // no_additional_properties: true,
-                    form_name_root:'root[product][name]'
+                    // expand_height: true,
+                    // disable_edit_json: true,
+                    // disable_collapse: true,
+                    // disable_edit_json: true,
+                    // disable_properties: true,
+                    // // no_additional_properties: true,
+                    // form_name_root:'root[product][name]'
 
                 }
             );
-
+            console.error('self.JSONEditor',self.JSONEditor)
+            self.JSONEditor.setValue(self.data);
             $('[data-schemaformat="html"]').summernote();
         }
 
         self.saveJSONEditor = function(e) {
             e.preventDefault();
 
-            var json = self.editor.getValue();
-            var validation_errors = self.editor.validate();
+            var json = self.JSONEditor.getValue();
+            var validation_errors = self.JSONEditor.validate();
             if(validation_errors.length) {
                 console.error(JSON.stringify(validation_errors,null,2));
             } else {

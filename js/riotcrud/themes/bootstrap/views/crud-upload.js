@@ -1,18 +1,15 @@
 
-riot.tag2('crud-upload', '<link rel="stylesheet" href="/bower_components/dropzone/dist/dropzone.css"> <div class="card"> <div class="header"> <h2>{opts.title}<small>{opts.description}</small></h2> <span if="{selection.length > 0}" class="label-count bg-pink font-6">{selection.length}</span> <crud-header-dropdown if="{opts.actionMenu !== false}" selection="{selection.length}" service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown> </div> <div class="body"> <form action="http://localhost:3030/datauploads" class="dropzone" id="my-awesome-dropzone"> <label for="model-selection">Models</label> <select id="model-selection"> <option>Products</option> <option>Categories</option> <option>Orders</option> </select> </form> </div> </div>', '', '', function(opts) {
+riot.tag2('crud-upload', '<link rel="stylesheet" href="/bower_components/dropzone/dist/dropzone.css"> <div class="card"> <div class="header"> <h2>{opts.title}<small>{opts.description}</small></h2> </div> <div class="body"> <form action="http://localhost:3030/datauploads" class="dropzone" id="my-awesome-dropzone"> <input name="file" type="file" multiple> <label for="model-selection">Models</label> <select id="model-selection"> <option>Products</option> <option>Categories</option> <option>Orders</option> </select> </form> </div> </div>', '', '', function(opts) {
         var self = this;
 
         self.mixin('FeatherClientMixin');
 
         self.dependencies = [
-                '//cdnjs.cloudflare.com/ajax/libs/core-js/2.1.4/core.min.js',
+                'http://cdnjs.cloudflare.com/ajax/libs/core-js/2.1.4/core.min.js',
                 '/bower_components/dropzone/dist/dropzone.js'
         ];
 
-        this.on('*', function(event) {
-        });
-
-        this.on('before-mount', function() {
+        self.on('mount', function() {
             RiotCrudController.loadDependencies(self.dependencies,'crud-upload', function (argument) {
                 self.initPlugins();
             });

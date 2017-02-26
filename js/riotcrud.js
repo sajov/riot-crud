@@ -240,7 +240,7 @@
  * @return {[type]}      [description]
  */
 ;
-(function(window, riot, route) {
+(function(window, riot, route, $script) {
 
     window.RiotControl = {
         _stores: [],
@@ -276,7 +276,6 @@
 
     riot.mixin("FeatherClientMixin", {
         init: function(){
-
             var defaults = {
                 idfield: '_id',
                 dependencies: []
@@ -331,7 +330,72 @@
             } else {
                 if(this.debug) console.warn('FeatherClientMixin no service', this.root.tagName);
             }
+        },
 
+        loadDependencies: function ()  {
+            var self = this;
+            if(!self.dependencies || (self.dependencies && self.dependencies.length == 0)) {
+                self.loadSchema();
+            } else {
+                var bundle = self.root.tagName + self.opts.service + self.opts.view + self.opts.title;
+                if (self.debug) console.log('loadDependencies', self.root.tagName, self.opts.title,bundle, self.dependencies)
+                $script(self.dependencies,bundle);
+                $script.ready(bundle, function() {
+                    self.loadSchema();
+                })
+            }
+        },
+
+        loadSchema: function () {
+            var self = this;
+            console.log('loadSchema', self.opts.title, self.opts.schema)
+            if(self.opts.schema === true) {
+                self.service.get('schema').then((result) => {
+                    self.opts.schema = result;
+                    self.loadData(self.opts.query);
+
+                }).catch((error) => {
+                    console.error('loadSchema', error);
+                });
+            } else {
+                self.loadData(self.opts.query);
+            }
+        },
+
+        loadData: function (query) {
+            var self = this;
+            console.log('loadData', self.opts.title, self.opts.schema)
+            switch(self.opts.view) {
+                case 'view':
+                case 'edit':
+                    if(query.id)
+                    self.service.get(query.id).then(function(result){
+                        self.data = result;
+
+                        if(typeof self.updateView == 'undefined') {
+                            self.update();
+                        } else {
+                            self.updateView();
+                        }
+                    }).catch(function(error){
+                      console.error('loadData', error);
+                    });
+                    break;
+                case 'list':
+                    self.service.find(query).then(function(result){
+                        self.data = result;
+                        if(typeof self.updateView == 'undefined') {
+                            self.update();
+                        } else {
+                            self.updateView();
+                        }
+                    }).catch(function(error){
+                      console.error('loadData', error);
+                    });
+                    break;
+                default:
+                    break;
+            }
         },
 
         bindEvent: function (event, fn) {
@@ -408,73 +472,6 @@
                     console.error(error)
                     RiotControl.trigger('notification',error.errorType + ' ' + self.eventMap.actionCreateSave,'error',error.message);
                 });
-        },
-
-        loadDependencies: function (cb)  {
-            var self = this;
-            if(self.dependencies && self.dependencies.length == 0) {
-                self.loadSchema(cb);
-            } else {
-            console.log('loadDependencies', self.opts.title, self.opts.schema)
-                RiotCrudController.loadDependencies(
-                    self.dependencies,
-                    self.opts.title, // TODO dynamic name
-                    self.loadSchema(cb)
-                );
-            }
-        },
-
-        loadSchema: function (cb) {
-            var self = this;
-
-            console.log('loadSchema', self.opts.title, self.opts.schema)
-            if(self.opts.schema === true) {
-                self.service.get('schema').then((result) => {
-                    self.opts.schema = result;
-                    self.loadData(self.opts.query);
-
-                }).catch((error) => {
-                    console.error('loadSchema', error);
-                });
-            } else {
-                self.loadData(self.opts.query);
-            }
-        },
-
-        loadData: function (query) {
-            var self = this;
-
-            switch(self.opts.view) {
-                case 'view':
-                case 'edit':
-                    if(query.id)
-                    self.service.get(query.id).then(function(result){
-                        self.data = result;
-
-                        if(typeof self.initView == 'undefined') {
-                            self.update();
-                        } else {
-                            self.initView();
-                        }
-                    }).catch(function(error){
-                      console.error('loadData', error);
-                    });
-                    break;
-                case 'list':
-                    self.service.find(query).then(function(result){
-                        self.data = result;
-                        if(typeof self.initView == 'undefined') {
-                            self.update();
-                        } else {
-                            self.initView();
-                        }
-                    }).catch(function(error){
-                      console.error('loadData', error);
-                    });
-                    break;
-                default:
-                    break;
-            }
         }
     });
 
@@ -565,6 +562,7 @@
                     route([service, action].join('/'))
                     break;
                 case 'upload':
+                    RiotControl.trigger([service, 'upload','modal'].join('_'));
                     break;
                 default:
                     console.error('unknown event: ' + [service, view, action].join('_'))
@@ -574,4 +572,4 @@
     });
 
 
-}(window, riot, route));
+}(window, riot, route, $script));

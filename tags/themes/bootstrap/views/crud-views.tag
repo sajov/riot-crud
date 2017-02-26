@@ -24,10 +24,70 @@
 	</script>
 </crud-action-menu>
 
+<crud-modal-dialog>
+
+    <div id="modal-dialog" class="modal fade bs-example-modal-{ opts.size || 'lg'}" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-{ opts.size || 'lg'}">
+        <div class="modal-content">
+
+           <div class="modal-header">
+                <button type="button" class="close waves-effect" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel2">{ opts.title }</h4>
+            </div>
+
+
+            <div class="modal-body">
+                <yield from="body"/>
+            </div>
+            <div class="modal-footer">
+                <yield from="footer"/>
+            </div>
+
+        </div>
+      </div>
+    </div>
+
+    <style type="text/css">
+        #modal-dialog .card{
+            /*border: 1px #909090 solid;*/
+            box-shadow: none;
+        }
+        #modal-dialog .card .body {
+            font-size: 14px;
+            color: #555;
+            padding: 0;
+        }
+    </style>
+    <script>
+
+        this.on('mount', () => {
+            RiotControl.on(opts.trigger, () => {
+                $('#modal-dialog').modal('toggle');
+            });
+        });
+
+        this.on('unmount', () => {
+            RiotControl.off(opts.trigger);
+        });
+
+
+    </script>
+
+</crud-modal-dialog>
+
+
 <crud-header-dropdown>
 
 	<modal-delete-confirmation></modal-delete-confirmation>
-
+    <crud-modal-dialog title="Upload" trigger="{opts.service}_upload_modal" trigger-submit="fg">
+        <yield to="body">
+            <crud-upload></crud-upload>
+        </yield>
+        <yield to="footer">
+            <button type="button" class="btn btn-default  waves-effect" data-dismiss="modal"  onclick={abort}>Abbort</button>
+            <button type="button" class="btn btn-info waves-effect" onclick={triggerData} data-trigger="product_add_items">Upload</button>
+        </yield>
+    </crud-modal-dialog>
 	<ul class="header-dropdown m-r--5">
         <li class="dropdown">
             <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -88,31 +148,49 @@
             <h4 class="modal-title" id="myModalLabel2">Delete <i>{opts.model}</i></h4>
           </div>
           <div class="modal-body">
-            id:{opts.id} {opts.text}
+            ID: {opts.id}
+            <br>
+            {opts.text}
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Abbort</button>
-            <button type="button" class="btn btn-warning" onclick="{confirm}">Delete</button>
+            <button type="button" class="btn btn-danger" onclick="{confirm}">Delete</button>
           </div>
         </div>
       </div>
     </div>
+    <link href="/bower_components/adminbsb-materialdesign/plugins/sweetalert/sweetalert.css" rel="stylesheet" />
     <!-- /modals -->
     <style type="text/css">
         div.modal-backdrop.fade.in {
             z-index: 7!important;
         }
+        div.modal-body {
+            word-break: break-all;
+        }
     </style>
     <script>
         var self = this;
+        // self.dependencies = ['/bower_components/adminbsb-materialdesign/plugins/sweetalert/sweetalert.min.js'];
 
-         RiotControl.on('delete_confirmation_modal', (model, view, id, text) => {
+        RiotControl.on('delete_confirmation_modal', (model, view, id, text) => {
             self.opts.model = model;
             self.opts.view = view;
             self.opts.id = id;
             self.opts.text = text || 'please confirm';
             self.update();
             $('#deleteConfirmation').modal('show');
+            // swal({
+            //     title: "Are you sure?",
+            //     text: "You will not be able to recover this imaginary file!",
+            //     type: "warning",
+            //     showCancelButton: true,
+            //     confirmButtonColor: "#DD6B55",
+            //     confirmButtonText: "Yes, delete it!",
+            //     closeOnConfirm: false
+            // }, function () {
+            //     swal("Deleted!", "Your imaginary file has been deleted.", "success");
+            // });
         })
 
         confirm() {
@@ -168,7 +246,7 @@
 	</style>
 
 	<div class="card">
-        <div if={opts.showheader} class="header">
+        <div if={opts.showheader == 1 || opts.showheader == true} class="header">
             <h2>{opts.title}<small>{opts.description}</small></h2>
             <span if={selection.length > 0} class="label-count bg-pink font-6">{selection.length}</span>
             <crud-header-dropdown if={opts.actionMenu !== false} selection="{selection.length}" service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown>

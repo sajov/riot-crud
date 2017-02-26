@@ -1,32 +1,3 @@
-<modal-dialog>
-
-    <div id="modal-dialog" class="modal fade bs-example-modal-{ opts.size || 'lg'}" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-{ opts.size || 'lg'}">
-        <div class="modal-content">
-
-          <yield/>
-
-        </div>
-      </div>
-    </div>
-
-    <script>
-
-        this.on('mount', () => {
-            RiotControl.on(opts.trigger, () => {
-                $('#modal-dialog').modal('toggle');
-            });
-        });
-
-        this.on('unmount', () => {
-            RiotControl.off(opts.trigger);
-        });
-
-
-    </script>
-
-</modal-dialog>
-
 <order>
 
     <modal-dialog trigger="order_add_item_modal" trigger-submit="crud-table-trigger-selected">
@@ -35,11 +6,15 @@
             <button type="button" class="close waves-effect" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             <h4 class="modal-title" id="myModalLabel2">Add Product</h4>
         </div>
+
+
         <div class="modal-body">
-            <crud-table title="crud-table" service="products" limit="3" skip="0" ups={table:'test'}>
+            <crud-table title="crud-table" service="products" showheader="0" limit="3" skip="0" ups={table:'test'}>
                     <yield class="pull-right">
-                        <button type="button" class="btn btn-success waves-effect" onclick={triggerData} data-trigger="product_add_items">Add</button>
-                        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal"  onclick={abort}>Abbort</button>
+                        <div class="clearfix"></div>
+                        <br>
+                        <button type="button" class="btn btn-default  waves-effect" data-dismiss="modal"  onclick={abort}>Abbort</button>
+                        <button type="button" class="btn btn-info waves-effect" onclick={triggerData} data-trigger="product_add_items">Add</button>
                     </yield>
             </crud-table>
         </div>
@@ -135,12 +110,12 @@
                                             <td align="right">{item.price_euro} €</td>
                                             <td align="right">{item.total} €</td>
                                             <td align="right"><a href="#" itemKey="{key}" onclick={ deleteItem } class="btn btn-danger btn-xs hidden-print">
-                                                <i class="material-icons">remove</i>
+                                                <i class="material-icons col-white">remove</i>
                                             </a></td>
                                         </tr>
                                         <tr>
                                             <td colspan="8">
-                                                <button class="btn btn-primary pull-right hidden-print waves-effect" onclick={ addItemModal } ><i class="material-icons">add</i></button>
+                                                <button class="btn btn-primary pull-right hidden-print waves-effect" onclick={ addItemModal } ><i class="material-icons col-white">add</i></button>
                                             </td>
                                         </tr>
                                     </tbody>
