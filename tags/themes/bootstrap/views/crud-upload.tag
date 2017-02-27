@@ -17,13 +17,11 @@
         </div>
     </div>
 
-
-
     <script>
         var self = this;
         self.progress = 0;
         self.mixin('FeatherClientMixin');
-        slef.opts.hostname = window.location.hostname;
+        self.opts.hostname = window.location.hostname;
         self.dependencies = [
                 'http://cdnjs.cloudflare.com/ajax/libs/core-js/2.1.4/core.min.js',
                 '/bower_components/dropzone/dist/dropzone.js'
