@@ -1,9 +1,9 @@
 
-riot.tag2('crud-upload', '<link rel="stylesheet" href="/bower_components/dropzone/dist/dropzone.css"> <div> <small>{opts.description || opts.service + ⁗uploads data in CSV or JSON⁗}</small> <form action="http://" window location hostname :3030 datauploads class="dropzone" id="my-awesome-dropzone"></form> <div class="progress"> <div class="progress-bar bg-cyan progress-bar-striped active" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" riot-style="width: {progress}%"> CYAN PROGRESS BAR </div> </div> </div>', '.dropzone { padding: 0!important; }', '', function(opts) {
+riot.tag2('crud-upload', '<link rel="stylesheet" href="/bower_components/dropzone/dist/dropzone.css"> <div> <small>{opts.description || opts.service + ⁗uploads data in CSV or JSON⁗}</small> <form action="http://{opts.hostname}:3030/datauploads" class="dropzone" id="my-awesome-dropzone"></form> <div class="progress"> <div class="progress-bar bg-cyan progress-bar-striped active" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" riot-style="width: {progress}%"> CYAN PROGRESS BAR </div> </div> </div>', '.dropzone { padding: 0!important; }', '', function(opts) {
         var self = this;
         self.progress = 0;
         self.mixin('FeatherClientMixin');
-
+        slef.opts.hostname = window.location.hostname;
         self.dependencies = [
                 'http://cdnjs.cloudflare.com/ajax/libs/core-js/2.1.4/core.min.js',
                 '/bower_components/dropzone/dist/dropzone.js'
