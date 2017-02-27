@@ -29,32 +29,26 @@ class Service {
 
 class Upload {
 
-
-    import(app, file, params) {
-
-        console.log('Upload.import',file,params);
-        this.importCsv(app, file, params)
-        // service.create
-    }
-
-    importCsv(app, file, params ) {
+    importCsv(app, file, service ) {
+        var self = this;
         var csv=require('csvtojson')
-        var uploadFile = uploadDir +'/' + file;
 
         csv({
             delimiter:";"
         })
-        .fromFile(uploadFile)
+        .fromFile(file)
         .on('json',(jsonObj)=>{
             // combine csv header row and csv line to a json object
             // jsonObj.a ==> 1 or 4
-            console.log('jsonObj',jsonObj)
+            // console.log('jsonObj',jsonObj)
         })
-        .on('end_parsed', (jsonArrObj)=>{
-            app.service('categories').create(jsonArrObj, {}).then(function(data) {
+        .on('end_parsed', (data)=>{
+            app.service(service).create(data, {}).then(function(data) {
                 console.info('Upload.importCsv' , data);
+                self.deleteUpload(file);
             }).catch(function(error){
                 console.error('Upload.importCsv' , error);
+                self.deleteUpload(file);
             });
         })
         .on('done',(error)=>{
@@ -62,13 +56,26 @@ class Upload {
         })
     }
 
-    importJson(app, file, params ) {
-        // app.service('categories').create(jsonArrObj, {}).then(function(data) {
-        //     console.info('Upload.importCsv' , data);
-        // }).catch(function(error){
-        //     console.error('Upload.importCsv' , error);
-        // });
+    importJson(app, file, service ) {
+        var self = this;
+        const data = require(file);
+        app.service(service).create(data, {}).then(function(data) {
+            console.info('Upload.importJson' , data);
+            self.deleteUpload(file);
+        }).catch(function(error){
+            console.error('Upload.importJson' , error);
+            self.deleteUpload(file);
+        });
 
+    }
+
+    deleteUpload(file) {
+        const fs = require('fs');
+
+        fs.unlink(file, (err) => {
+          if (err) throw err;
+          console.log('successfully deleted /tmp/hello');
+        });
     }
 }
 
@@ -126,12 +133,17 @@ module.exports = function(){
   datauploadService.after({
       create: [
           function(hook) {
+            console.log('datauploadService.after',hook);
             let upload = new Upload();
-            upload.import(app, hook.result.id, hook.params.params);
-            console.log('datauploadService.after',hook.params.params,hook.result.id)
-              // if (!hook.data.uri && hook.params.file){
-              //     // console.log('hook','hook')
-              // }
+            let file = uploadDir + '/' + hook.result.id;
+            let service = hook.params.params.service;
+            let type = hook.params.file.mimetype;
+            if(type == 'text/csv') {
+                upload.importCsv(app, file, service);
+            }
+            if(type == 'application/json') {
+                upload.importJson(app, file, service);
+            }
           }
       ]
   });

@@ -83,8 +83,7 @@
             <crud-upload service="{opts.service}" title="{opts.name}"></crud-upload>
         </yield>
         <yield to="footer">
-            <button type="button" class="btn btn-default  waves-effect" data-dismiss="modal"  onclick={abort}>Abbort</button>
-            <button type="button" class="btn btn-info waves-effect" onclick={triggerData} data-trigger="product_add_items">Upload</button>
+            <button type="button" class="btn btn-info  waves-effect" data-dismiss="modal"  onclick={abort}>Close</button>
         </yield>
     </crud-modal-dialog>
 	<ul class="header-dropdown m-r--5">

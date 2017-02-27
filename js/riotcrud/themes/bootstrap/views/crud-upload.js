@@ -36,7 +36,7 @@ riot.tag2('crud-upload', '<link rel="stylesheet" href="/bower_components/dropzon
                 params: { foo: "bar" },
                 accept: function(file, done) {
 
-                    if(file.type == 'text/json' || file.type == 'text/csv') {
+                    if(file.type == 'application/json' || file.type == 'text/csv') {
                         done();
                     } else {
                         done("Only accept CSV and JSON file types.");
@@ -66,7 +66,12 @@ riot.tag2('crud-upload', '<link rel="stylesheet" href="/bower_components/dropzon
                 }
             };
 
-            new Dropzone(document.querySelector("#my-awesome-dropzone"),DropzoneOPTS);
+            self.dropzone = new Dropzone(document.querySelector("#my-awesome-dropzone"),DropzoneOPTS);
+            self.dropzone.on("complete", function(file) {
+              setTimeout(function(){
+                self.dropzone.removeFile(file)
+            },3000)
+            });
         }
 
 });

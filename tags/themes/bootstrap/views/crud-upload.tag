@@ -59,7 +59,7 @@
                 params: { foo: "bar" },
                 accept: function(file, done) {
                     // console.log('accept', file)
-                    if(file.type == 'text/json' || file.type == 'text/csv') {
+                    if(file.type == 'application/json' || file.type == 'text/csv') {
                         done();
                     } else {
                         done("Only accept CSV and JSON file types.");
@@ -89,7 +89,12 @@
                 }
             };
 
-            new Dropzone(document.querySelector("#my-awesome-dropzone"),DropzoneOPTS);
+            self.dropzone = new Dropzone(document.querySelector("#my-awesome-dropzone"),DropzoneOPTS);
+            self.dropzone.on("complete", function(file) {
+              setTimeout(function(){
+                self.dropzone.removeFile(file)
+            },3000)
+            });
         }
 
     </script>
