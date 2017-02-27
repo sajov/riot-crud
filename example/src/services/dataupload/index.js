@@ -60,30 +60,16 @@ class Upload {
         .on('done',(error)=>{
             console.log('end',error)
         })
-
-
-
     }
 
-    importCsvOLD(app, file, params ) {
-        var fs = require('fs');
-        var parse = require('csv-parse');
-
-        var parser = parse({delimiter: ';',objectMode: true}, function(err, data){
-          console.log('importCsv!!!', data);
-            // app.service('categories').create(data, {}).then(function(data) {
-
-            //     console.info('Upload.importCsv' , data);
-            // }).catch(function(error){
-            //     console.error('Upload.importCsv' , error);
-            // });
-        });
-
-        fs.createReadStream(uploadDir+'/' + file).pipe(parser);
+    importJson(app, file, params ) {
+        // app.service('categories').create(jsonArrObj, {}).then(function(data) {
+        //     console.info('Upload.importCsv' , data);
+        // }).catch(function(error){
+        //     console.error('Upload.importCsv' , error);
+        // });
 
     }
-
-
 }
 
 module.exports = function(){
