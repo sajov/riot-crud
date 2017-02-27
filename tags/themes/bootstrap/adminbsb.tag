@@ -141,7 +141,6 @@
         });
 
         this.on('mount', () => {
-            console.info('sidemen ',opts.routes)
             this.initPlugins();
         });
 

@@ -77,11 +77,10 @@
 
 
 <crud-header-dropdown>
-
 	<modal-delete-confirmation></modal-delete-confirmation>
-    <crud-modal-dialog title="Upload" trigger="{opts.service}_upload_modal" trigger-submit="fg">
+    <crud-modal-dialog title="Upload {opts.title}" service="{opts.service}" trigger="{opts.service}_upload_modal" trigger-submit="fg">
         <yield to="body">
-            <crud-upload></crud-upload>
+            <crud-upload service="{opts.service}" title="{opts.name}"></crud-upload>
         </yield>
         <yield to="footer">
             <button type="button" class="btn btn-default  waves-effect" data-dismiss="modal"  onclick={abort}>Abbort</button>
@@ -108,7 +107,7 @@
 						<i if={action.name == 'csv'} class="material-icons">insert_drive_file</i>
 						<i if={action.name == 'json'} class="material-icons">insert_drive_file</i>
 
-						<hr if={action.name == 'upload'} />
+						<hr style="margin:0;" if={action.name == 'upload'} />
 						<i if={action.name == 'upload'} class="material-icons">file_upload</i>
 
 						<span  if={action.active}  class="{action.count === 0 ? 'font-line-through font-italic' : 'font-bold'}">
@@ -249,7 +248,7 @@
         <div if={opts.showheader == 1 || opts.showheader == true} class="header">
             <h2>{opts.title}<small>{opts.description}</small></h2>
             <span if={selection.length > 0} class="label-count bg-pink font-6">{selection.length}</span>
-            <crud-header-dropdown if={opts.actionMenu !== false} selection="{selection.length}" service="{opts.service}" name="{opts.name}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown>
+            <crud-header-dropdown if={opts.actionMenu !== false} selection="{selection.length}" service="{opts.service}" name="{opts.name}" title="{opts.title}" views="{opts.views}" view="{opts.view}" query="{opts.query}" buttons="{opts.buttons}"></crud-header-dropdown>
         </div>
 
         <div class="body">
@@ -390,6 +389,9 @@
 
 		self.mixin('FeatherClientMixin');
 
+        RiotControl.on(opts.service + '_list_update', function() {
+            self.reInit();
+        });
 	    /* deprecated use reInit */
 	    self.refresh = () => {
 	    	getData();

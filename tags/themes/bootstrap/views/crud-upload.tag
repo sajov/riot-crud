@@ -2,28 +2,26 @@
 <crud-upload>
 
     <link rel="stylesheet" href="/bower_components/dropzone/dist/dropzone.css">
-
-    <div class="card">
-        <div class="header">
-            <h2>{opts.title}<small>{opts.description}</small></h2>
-        </div>
-        <div class="body">
-            <form action="http://localhost:3030/datauploads" class="dropzone"
-              id="my-awesome-dropzone">
-                <input name="file" type="file" multiple />
-                    <label for="model-selection">Models</label>
-                    <select id="model-selection">
-                        <option>Products</option>
-                        <option>Categories</option>
-                        <option>Orders</option>
-                    </select>
-            </form>
+    <style type="text/css">
+        .dropzone {
+            padding: 0!important;
+        }
+    </style>
+    <div>
+        <small>{opts.description || opts.service + "uploads data in CSV or JSON"}</small>
+        <form action="http://localhost:3030/datauploads" class="dropzone" id="my-awesome-dropzone"></form>
+        <div class="progress">
+            <div class="progress-bar bg-cyan progress-bar-striped active" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: {progress}%">
+                CYAN PROGRESS BAR
+            </div>
         </div>
     </div>
 
+
+
     <script>
         var self = this;
-
+        self.progress = 0;
         self.mixin('FeatherClientMixin');
 
         self.dependencies = [
@@ -32,52 +30,66 @@
         ];
 
         self.on('mount', function() {
+            console.log('püts',opts)
             RiotCrudController.loadDependencies(self.dependencies,'crud-upload', function (argument) {
+                self.update();
                 self.initPlugins();
             });
         });
 
         self.initPlugins = function() {
             // Now with Real-Time Support!
+            // TODO:  ADD this to service event listener
             self.client.service('datauploads').on('created', function(file){
                 console.log('Received file created event!', file);
-                // RiotControl.trigger(
-                //             'notification',
-                //             'uploaded',
-                //             'success',
-                //             'File'
-                //         );
+                RiotControl.trigger(opts.service + '_list_update');
             });
 
             self.client.service('datauploads').on('error', function(file){
                 console.log('Received file created event!', file);
+
+                // self.refs.ordertable.reInit();
             });
 
             // Let's use DropZone!
-            Dropzone.options.myAwesomeDropzone = {
+            DropzoneOPTS = {
                 paramName: "uri",
                 uploadMultiple: false,
                 maxFilesize: 2000,
                 params: { foo: "bar" },
+                accept: function(file, done) {
+                    // console.log('accept', file)
+                    if(file.type == 'text/json' || file.type == 'text/csv') {
+                        done();
+                    } else {
+                        done("Only accept CSV and JSON file types.");
+                    }
+                },
                 init: function(){
                     this.on('uploadprogress', function(file, progress){
                         console.log('progresss', progress);
-                        // NProgress.set(progress)
+                        self.progress = progress;
+                        self.update();
                     });
                     this.on('sending', function(file, xhr, formData) {
-                        formData.append("dyndata", 'dude');
+                        formData.append("service", opts.service);
                     });
                     this.on('complete', function(file) {
                         console.log('complete', file);
+                        // TODO:  ADD this to service event listener
                         RiotControl.trigger(
                             'notification',
                             'File Upload Success',
                             'success',
                             'File ' + file.name + ' cerated'
                         );
+                        self.progress = 0;
+                        self.update();
                     });
                 }
             };
+
+            new Dropzone(document.querySelector("#my-awesome-dropzone"),DropzoneOPTS);
         }
 
     </script>

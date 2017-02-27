@@ -83,7 +83,6 @@ riot.tag2('side-menu', '<li class="header">RIOT+FEATHERS CRUD DEMO</li> <li each
         });
 
         this.on('mount', () => {
-            console.info('sidemen ',opts.routes)
             this.initPlugins();
         });
 

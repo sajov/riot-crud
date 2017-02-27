@@ -348,12 +348,10 @@
 
         loadSchema: function () {
             var self = this;
-            console.log('loadSchema', self.opts.title, self.opts.schema)
             if(self.opts.schema === true) {
                 self.service.get('schema').then((result) => {
                     self.opts.schema = result;
                     self.loadData(self.opts.query);
-
                 }).catch((error) => {
                     console.error('loadSchema', error);
                 });
@@ -490,7 +488,7 @@
 
                         action.active = false;
                         if(['delete','print','pdf','csv','json'].indexOf(action.name) != -1){
-                            action.count = self.opts.selection || 0;
+                            action.count = self.opts.selection || 'all';
                         }
 
                         switch(view) {

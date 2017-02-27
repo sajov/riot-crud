@@ -27,6 +27,7 @@
     "cors": "^2.8.1",
     "csv-parse": "^1.2.0",
     "csv-stringify": "^1.0.4",
+    "csvtojson": "^1.1.4",
     "dauria": "^1.1.4",
     "faker": "^3.1.0",
     "feathers": "^2.0.3",
