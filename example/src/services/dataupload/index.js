@@ -140,9 +140,10 @@ module.exports = function(){
             let type = hook.params.file.mimetype;
             if(type == 'text/csv') {
                 upload.importCsv(app, file, service);
-            }
-            if(type == 'application/json') {
+            } else if(type == 'application/json') {
                 upload.importJson(app, file, service);
+            } else {
+                upload.deleteUpload(file);
             }
           }
       ]

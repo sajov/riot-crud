@@ -562,6 +562,10 @@
                 case 'upload':
                     RiotControl.trigger([service, 'upload','modal'].join('_'));
                     break;
+                case 'csv':
+                case 'json':
+                    window.location = "http://" +  window.location.hostname + ":3030/download/" + action + "/" + service;
+                    break;
                 default:
                     console.error('unknown event: ' + [service, view, action].join('_'))
                     break;
