@@ -390,29 +390,70 @@
         RiotControl.on(opts.service + '_list_update', function() {
             self.reInit();
         });
-	    /* deprecated use reInit */
-	    self.refresh = () => {
-	    	getData();
+        /* deprecated use reInit */
+	    /* merge request params over self.query move to mixin */
+	    self.refresh = (opts) => {
+            console.error('REFRESH',opts.query, self.query);
+            if(opts.query.id!="") {
+                self.query.id = opts.query.id
+            } else if(opts.query && opts.query.query && opts.query.query.query){
+                console.error('opts.query.query',opts.query.query, JSON.parse(opts.query.query.query))
+                self.query = JSON.parse(opts.query.query.query);
+                // self.query = opts.query.query;
+                // self.query = decodeURIComponent(opts.query.query.query);
+            }
+            getData();
 
-	    }
+        }
 
-	    /**
-	     * Reinit view
-	     * list, edit and show requery
-	     * @param  {[type]} query [description]
-	     * @return {[type]}       [description]
-	     */
-	    self.reInit = (query) => {
-	    	getData();
-	    }
+        /**
+         * Reinit view
+         * list, edit and show requery
+         * @param  {[type]} query [description]
+         * @return {[type]}       [description]
+         */
+        self.reInit = (query) => {
+            console.error('reInit');
+            getData();
+        }
 
-		self.on('mount', () => {
-			if(self.opts.service) {
-				initTable();
-			}
-		});
+        self.on('mount', () => {
+            console.error('mount',self.opts);
+            if(self.opts.service) {
+                initTable();
+            }
+        });
+
+        initTable = () => {
+            console.error('initTable');
+            self.service.get('schema').then((result) => {
+                self.schema = result;
+                initSchema();
+                getData();
+            }).catch((error) => {
+              console.error('Error', error);
+            });
+        }
+
+        initSchema = () => {
+            console.error('initSchema');
+            self.thead = {};
+            if(opts.fields) {
+                opts.fields = opts.fields.split(',');
+                for (var i = 0; i < opts.fields.length; i++) {
+                    self.thead[opts.fields[i]] = self.schema.properties[opts.fields[i]]
+                }
+            } else if(self.schema.defaultProperties) {
+                for (var i = 0; i < self.schema.defaultProperties.length; i++) {
+                    self.thead[self.schema.defaultProperties[i]] = self.schema.properties[self.schema.defaultProperties[i]]
+                }
+            } else {
+                self.thead = self.schema.properties;
+            }
+        }
 
 		triggerData = (e) => {
+            console.error('triggerData');
 			RiotControl.trigger(e.target.getAttribute('data-trigger'),
 				self.data.data.reduce(function(prev, curr) {
 					if (self.selection.indexOf(curr._id) === -1)
@@ -436,7 +477,7 @@
             } else {
             	delete self.query.$or;
             }
-            getData();
+            updateRoute();
 	    }
 
 	    filter = (e) => {
@@ -452,7 +493,7 @@
 	    	} else {
 	    		delete self.query[e.target.name];
 	    	}
-    		getData();
+    		updateRoute();
 	    }
 
 	    toggleFilter = (e) => {
@@ -470,7 +511,7 @@
 	    	}
 	    	self.theadSort = self.query.$sort[e.item.colkey] == 1 ? 'asc' : 'desc';
 
-            getData();
+            updateRoute();
 	    }
 
 		selectall = (e) => {
@@ -510,31 +551,7 @@
 			route(opts.service + '/view/' + e.item.row._id);
 		}
 
-	    initSchema = () => {
-	    	self.thead = {};
-		    if(opts.fields) {
-		    	opts.fields = opts.fields.split(',');
-		    	for (var i = 0; i < opts.fields.length; i++) {
-		    		self.thead[opts.fields[i]] = self.schema.properties[opts.fields[i]]
-		    	}
-		    } else if(self.schema.defaultProperties) {
-		    	for (var i = 0; i < self.schema.defaultProperties.length; i++) {
-		    		self.thead[self.schema.defaultProperties[i]] = self.schema.properties[self.schema.defaultProperties[i]]
-		    	}
-		    } else {
-		    	self.thead = self.schema.properties;
-		    }
-	    }
 
-	    initTable = () => {
-	    	self.service.get('schema').then((result) => {
-	        	self.schema = result;
-	        	initSchema();
-	        	getData();
-	        }).catch((error) => {
-	          console.error('Error', error);
-	        });
-	    }
 
 	    initPagination = () => {
 	    	self.next = 2;
@@ -569,7 +586,7 @@
 	    paginate = (e) => {
 	    	e.preventDefault();
 	    	self.query.$skip = parseInt(e.target.getAttribute('data-page')) * self.query.$limit;
-	    	getData();
+	    	updateRoute();
 	    }
 
 	    changeLimit = (e)  => {
@@ -580,10 +597,26 @@
 	    	} else {
 	    		self.query.$limit = parseInt(limit);
 	    	}
-	    	getData();
+	    	updateRoute();
 	    }
 
+        updateRoute = () => {
+            var query = self.query;
+            route(opts.service + '/' + opts.view + '/?query=' + JSON.stringify(query));
+
+            var test = Object.keys(query).map(function(k) {
+                return encodeURIComponent(k) + "=" + encodeURIComponent(query[k]);
+            }).join('&');
+            console.info('updateRoute test',decodeURIComponent(test))
+            console.info('updateRoute test',$.param( self.query ))
+            // => "format=json&auth_token=token&room_id=1&from=Notifications&message=Message"
+            // route(opts.service + '/' + opts.view + '/?' + decodeURIComponent(test));
+            // route(opts.service + '/' + opts.view + '/?' + decodeURIComponent($.param( self.query )));
+            // route(opts.service + '/' + opts.view + '/');
+        }
+
 	    getData = () => {
+            console.error('getData');
 	        self.service.find({query:self.query}).then((result) => {
 	        	self.selection = [];
 	            self.data = result;

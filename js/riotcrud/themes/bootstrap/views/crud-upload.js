@@ -10,7 +10,6 @@ riot.tag2('crud-upload', '<link rel="stylesheet" href="/bower_components/dropzon
         ];
 
         self.on('mount', function() {
-            console.log('püts',opts)
             RiotCrudController.loadDependencies(self.dependencies,'crud-upload', function (argument) {
                 self.update();
                 self.initPlugins();

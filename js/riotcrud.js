@@ -109,7 +109,7 @@
 
     function mount(target, tag, options) {
         if(
-            currentTag!=null && tag == currentTag.root.getAttribute('riot-tag')
+            currentTag!=null && tag == currentTag.root.getAttribute('data-is')
             && options.model == currentTag.opts.model
             ) {
             currentTag.refresh(options);
@@ -302,6 +302,10 @@
                     actionQuery: this.opts.service + '_query',
                 }
 
+                if(this.opts && this.opts.view && this.opts.view == 'list') {
+                    this.eventMap['actionDownload'] = this.opts.service + '_download';
+                }
+
                 /*  events */
                 this.on('*', (event) => {
                     switch(event) {
@@ -317,7 +321,7 @@
                                 if(event == 'unmount') {
                                     RiotControl.off(this.eventMap[map[i]]);
                                 } else {
-                                    this.bindEvent(this.eventMap[map[i]], map[i])
+                                    this.bindEvent(this.eventMap[map[i]], map[i]);
                                 }
                             }
                             break;
@@ -362,7 +366,7 @@
 
         loadData: function (query) {
             var self = this;
-            console.log('loadData', self.opts.title, self.opts.schema)
+            console.log('loadData', self.opts.title, self.opts.schema, self.opts)
             switch(self.opts.view) {
                 case 'view':
                 case 'edit':
@@ -470,6 +474,26 @@
                     console.error(error)
                     RiotControl.trigger('notification',error.errorType + ' ' + self.eventMap.actionCreateSave,'error',error.message);
                 });
+        },
+
+        actionDownload: function (format) {
+            // RiotControl.trigger([service, 'download','action'].join('_'));
+            var uri = "http://" +  window.location.hostname + ":3030/download/" + format + "/" + this.opts.service;
+            var query = this.query;
+            if(this.selection && this.selection.length > 0) {
+                var ids = this.selection.map(function(_id){return _id.toString()});
+                // var query = { _id: { $in: ids}};
+                query = Object.assign({},query, { _id: { $in: ids}});
+                query.$limit = this.selection.length;
+                // console.info($.param(query))
+                // uri += '?' + decodeURIComponent($.param(query));
+            } else {
+                query.$limit = this.data.total;
+            }
+            uri += '?' + JSON.stringify(query);
+            console.info(query, uri)
+            window.location = uri;
+
         }
     });
 
@@ -564,7 +588,8 @@
                     break;
                 case 'csv':
                 case 'json':
-                    window.location = "http://" +  window.location.hostname + ":3030/download/" + action + "/" + service;
+                    RiotControl.trigger([service, 'download'].join('_'), action);
+                    // window.location = "http://" +  window.location.hostname + ":3030/download/" + action + "/" + service;
                     break;
                 default:
                     console.error('unknown event: ' + [service, view, action].join('_'))

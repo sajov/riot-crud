@@ -57,9 +57,18 @@ module.exports = function(){
         //     // res.end(`The Message is: "${res.data.text}"`);
         //   }
         // });
+        //
+        var query = {};
+        var queryString = decodeURIComponent(req.url);
+        var queryString = queryString.split('?');
+        if(queryString[1]) {
+            query = JSON.parse(queryString[1]);
+            // console.log('req.body',req.url);
+            console.log('req.body',query);
+        }
 
         app.service(req.params.service)
-        .find({query:{$limit:100000}})
+        .find({query:query})
         .then(function(data) {
             res.set({
                 'Content-Type': 'application/octet-stream',
@@ -94,22 +103,18 @@ module.exports = function(){
     });
 
     app.get('/download/json/:service', function(req, res){
-        // res.format({
-        //   "text/plain": function() {
-        //         stringify([['name','age'],['sajov',45]], function(err, csv) {
-        //             if (err) {
-        //                 res.send('error');
-        //             } else {
-        //                 res.send(csv);
-        //             }
-        //         });
-        //     // res.end(`The Message is: "${res.data.text}"`);
-        //     // res.end(`The Message is: "${res.data.text}"`);
-        //   }
-        // });
+
+        var query = {};
+        var queryString = decodeURIComponent(req.url);
+        var queryString = queryString.split('?');
+        if(queryString[1]) {
+            query = JSON.parse(queryString[1]);
+            // console.log('req.body',req.url);
+            console.log('query',query);
+        }
 
         app.service(req.params.service)
-        .find({query:{$limit:100000}})
+        .find({query:query})
         .then(function(data) {
             res.set({
                 'Content-Type': 'application/octet-stream',

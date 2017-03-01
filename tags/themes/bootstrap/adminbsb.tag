@@ -133,7 +133,7 @@
 
         RiotControl.on('routeStateChange',(path) => {
             $('.menu').find('a').removeClass('col-cyan');
-            $('.menu').find('a[href="' + window.location.hash + '"]').addClass('col-cyan');
+            $('.menu').find('a[href="' + window.location.hash.split('?')[0] + '"]').addClass('col-cyan');
         });
 
         this.on('update', (event) => {

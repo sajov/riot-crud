@@ -28,7 +28,6 @@
         ];
 
         self.on('mount', function() {
-            console.log('püts',opts)
             RiotCrudController.loadDependencies(self.dependencies,'crud-upload', function (argument) {
                 self.update();
                 self.initPlugins();

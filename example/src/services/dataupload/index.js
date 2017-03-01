@@ -94,7 +94,6 @@ module.exports = function(){
       // another middleware, this time to
       // transfer the received file to feathers
       function(req,res,next){
-          // console.log('req.body',req);
           req.feathers.file = req.file;
           req.feathers.params = req.body;
 
