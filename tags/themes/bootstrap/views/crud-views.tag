@@ -594,8 +594,13 @@
 	    }
 
         updateRoute = () => {
-            var query = self.query;
-            route(opts.service + '/' + opts.view + '/?query=' + JSON.stringify(query));
+            var currentRoute = window.location.href;
+            if(currentRoute == currentRoute.replace(self.opts.service+'/'+self.opts.view)) {
+                getData();
+            } else {
+                var query = self.query;
+                route(opts.service + '/' + opts.view + '/?query=' + JSON.stringify(query));
+            }
         }
 
 	    getData = () => {
