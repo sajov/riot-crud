@@ -1,5 +1,5 @@
 
-riot.tag2('crud-upload', '<link rel="stylesheet" href="/bower_components/dropzone/dist/dropzone.css"> <div> <small>{opts.description || opts.service + ⁗uploads data in CSV or JSON⁗}</small> <form action="http://{opts.hostname}:3030/datauploads" class="dropzone" id="my-awesome-dropzone"></form> <div class="progress"> <div class="progress-bar bg-cyan progress-bar-striped active" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" riot-style="width: {progress}%"> CYAN PROGRESS BAR </div> </div> </div>', '.dropzone { padding: 0!important; }', '', function(opts) {
+riot.tag2('crud-upload', '<link rel="stylesheet" href="/bower_components/dropzone/dist/dropzone.css"> <div> <small>{opts.description || opts.service + ⁗uploads data in CSV or JSON⁗}</small> <form action="http://{opts.hostname}:3030/datauploads" class="dropzone" id="my-awesome-dropzone{opts.service}"></form> <div class="progress"> <div class="progress-bar bg-cyan progress-bar-striped active" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" riot-style="width: {progress}%"> CYAN PROGRESS BAR </div> </div> </div>', '.dropzone { padding: 0!important; }', '', function(opts) {
         var self = this;
         self.progress = 0;
         self.mixin('FeatherClientMixin');
@@ -65,7 +65,7 @@ riot.tag2('crud-upload', '<link rel="stylesheet" href="/bower_components/dropzon
                 }
             };
 
-            self.dropzone = new Dropzone(document.querySelector("#my-awesome-dropzone"),DropzoneOPTS);
+            self.dropzone = new Dropzone(document.querySelector("#my-awesome-dropzone" + opts.service),DropzoneOPTS);
             self.dropzone.on("complete", function(file) {
               setTimeout(function(){
                 self.dropzone.removeFile(file)
