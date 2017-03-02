@@ -77,7 +77,7 @@
 
 <crud-header-dropdown>
 	<modal-delete-confirmation></modal-delete-confirmation>
-    <crud-modal-dialog title="Upload {opts.title}" service="{opts.service}" trigger="{opts.service}_upload_modal" trigger-submit="fg">
+    <crud-modal-dialog if={opts.view == 'list'} title="Upload {opts.title}" service="{opts.service}" trigger="{opts.service}_upload_modal" trigger-submit="fg">
         <yield to="body">
             <crud-upload service="{opts.service}" title="{opts.name}"></crud-upload>
         </yield>
