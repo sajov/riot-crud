@@ -477,16 +477,12 @@
         },
 
         actionDownload: function (format) {
-            // RiotControl.trigger([service, 'download','action'].join('_'));
             var uri = "http://" +  window.location.hostname + ":3030/download/" + format + "/" + this.opts.service;
             var query = this.query;
             if(this.selection && this.selection.length > 0) {
                 var ids = this.selection.map(function(_id){return _id.toString()});
-                // var query = { _id: { $in: ids}};
                 query = Object.assign({},query, { _id: { $in: ids}});
                 query.$limit = this.selection.length;
-                // console.info($.param(query))
-                // uri += '?' + decodeURIComponent($.param(query));
             } else {
                 query.$limit = this.data.total;
             }

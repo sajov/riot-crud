@@ -393,7 +393,6 @@
         /* deprecated use reInit */
 	    /* merge request params over self.query move to mixin */
 	    self.refresh = (opts) => {
-            console.error('REFRESH',opts.query, self.query);
             if(opts.query.id!="") {
                 self.query.id = opts.query.id
             } else if(opts.query && opts.query.query && opts.query.query.query){
@@ -413,19 +412,16 @@
          * @return {[type]}       [description]
          */
         self.reInit = (query) => {
-            console.error('reInit');
             getData();
         }
 
         self.on('mount', () => {
-            console.error('mount',self.opts);
             if(self.opts.service) {
                 initTable();
             }
         });
 
         initTable = () => {
-            console.error('initTable');
             self.service.get('schema').then((result) => {
                 self.schema = result;
                 initSchema();
@@ -436,7 +432,6 @@
         }
 
         initSchema = () => {
-            console.error('initSchema');
             self.thead = {};
             if(opts.fields) {
                 opts.fields = opts.fields.split(',');
@@ -453,7 +448,6 @@
         }
 
 		triggerData = (e) => {
-            console.error('triggerData');
 			RiotControl.trigger(e.target.getAttribute('data-trigger'),
 				self.data.data.reduce(function(prev, curr) {
 					if (self.selection.indexOf(curr._id) === -1)
@@ -502,7 +496,6 @@
 	    }
 
 	    sort = (e) => {
-	    	console.log(e.item);
 	    	if(self.query.$sort[e.item.colkey]) {
             	self.query.$sort[e.item.colkey] = self.query.$sort[e.item.colkey] == 1 ? -1 : 1;
 	    	} else {
@@ -603,20 +596,9 @@
         updateRoute = () => {
             var query = self.query;
             route(opts.service + '/' + opts.view + '/?query=' + JSON.stringify(query));
-
-            var test = Object.keys(query).map(function(k) {
-                return encodeURIComponent(k) + "=" + encodeURIComponent(query[k]);
-            }).join('&');
-            console.info('updateRoute test',decodeURIComponent(test))
-            console.info('updateRoute test',$.param( self.query ))
-            // => "format=json&auth_token=token&room_id=1&from=Notifications&message=Message"
-            // route(opts.service + '/' + opts.view + '/?' + decodeURIComponent(test));
-            // route(opts.service + '/' + opts.view + '/?' + decodeURIComponent($.param( self.query )));
-            // route(opts.service + '/' + opts.view + '/');
         }
 
 	    getData = () => {
-            console.error('getData');
 	        self.service.find({query:self.query}).then((result) => {
 	        	self.selection = [];
 	            self.data = result;
