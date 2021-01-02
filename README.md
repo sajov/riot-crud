@@ -1,4 +1,7 @@
-# riot-crud
+# DEPRECATED
+
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+
 A flexible CRUD Admin Project.
 Inspired by [ng-admin](https://github.com/marmelab/ng-admin), great if you are familiar with Angular.
 Also check out [rfx-stack](https://github.com/foxhound87/rfx-stack) if you like React.
